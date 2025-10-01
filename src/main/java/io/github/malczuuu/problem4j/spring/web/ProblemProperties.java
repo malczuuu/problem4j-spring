@@ -6,21 +6,22 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 @ConfigurationProperties(prefix = "problem4j")
 public class ProblemProperties {
 
-  private final boolean loggingEnabled;
-  private final String defaultDetailFormat;
+  private final String detailFormat;
 
-  public ProblemProperties(
-      @DefaultValue("true") boolean loggingEnabled,
-      @DefaultValue(DetailFormat.CAPITALIZED) String defaultDetailFormat) {
-    this.loggingEnabled = loggingEnabled;
-    this.defaultDetailFormat = defaultDetailFormat;
+  public ProblemProperties(@DefaultValue(DetailFormat.CAPITALIZED) String detailFormat) {
+    this.detailFormat = detailFormat;
   }
 
-  public boolean isLoggingEnabled() {
-    return loggingEnabled;
+  public String getDetailFormat() {
+    return detailFormat;
   }
 
-  public String getDefaultDetailFormat() {
-    return defaultDetailFormat;
+  public static final class DetailFormat {
+
+    public static final String LOWERCASE = "lowercase";
+    public static final String CAPITALIZED = "capitalized";
+    public static final String UPPERCASE = "uppercase";
+
+    private DetailFormat() {}
   }
 }

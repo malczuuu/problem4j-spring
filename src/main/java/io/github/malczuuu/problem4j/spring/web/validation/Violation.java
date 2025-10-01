@@ -1,4 +1,4 @@
-package io.github.malczuuu.problem4j.spring.web;
+package io.github.malczuuu.problem4j.spring.web.validation;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
