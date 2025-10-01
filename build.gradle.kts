@@ -1,47 +1,62 @@
 import com.diffplug.spotless.LineEnding
 
 plugins {
-    `java-library`
-    `maven-publish`
-    id("com.diffplug.spotless") version "7.2.1"
+    id("java-library")
+    id("maven-publish")
+    id("signing")
+    id("com.diffplug.spotless").version("8.0.0")
+    id("com.gradleup.nmcp.aggregation").version("1.2.0")
 }
 
-group = "com.github.malczuuu"
+group = "io.github.malczuuu.problem4j"
 
-if (version == "unspecified") {
-    version = Versioning.getSnapshotVersion(rootProject.rootDir)
-}
+/**
+ * In order to avoid hardcoding snapshot versions, we derive the version from the current Git commit hash. For CI/CD add
+ * -Pversion={releaseVersion} parameter to match Git tag.
+ */
+version =
+    if (version == "unspecified")
+        getSnapshotVersion(rootProject.rootDir)
+    else
+        version
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+    toolchain.languageVersion=JavaLanguageVersion.of(17)
     withSourcesJar()
     withJavadocJar()
 }
 
 repositories {
     mavenCentral()
-    maven { url = uri("https://jitpack.io/") }
 }
 
+val problem4jCoreVersion = "1.1.0"
+val problem4jJacksonVersion = "1.0.0"
+val springBootVersion = "3.5.6"
+
 dependencies {
-    api("org.springframework.boot:spring-boot-autoconfigure:3.5.5")
-    api("org.springframework:spring-webmvc:6.2.10")
-    api("org.slf4j:slf4j-api:2.0.17")
+    // Main
+    implementation(platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"))
 
-    api("com.github.malczuuu:problem4j-core:3.2.0-rc1")
-    api("com.github.malczuuu:problem4j-jackson:3.2.0-rc1")
+    api("org.springframework.boot:spring-boot-autoconfigure")
+    api("org.springframework:spring-webmvc")
 
-    compileOnly("jakarta.servlet:jakarta.servlet-api:6.1.0")
-    compileOnly("jakarta.validation:jakarta.validation-api:3.1.1")
-    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:3.5.5")
+    api("io.github.malczuuu.problem4j:problem4j-core:${problem4jCoreVersion}")
+    api("io.github.malczuuu.problem4j:problem4j-jackson:${problem4jJacksonVersion}")
 
-    testImplementation("jakarta.servlet:jakarta.servlet-api:6.1.0")
-    testImplementation("jakarta.validation:jakarta.validation-api:3.1.1")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.13.4")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.13.4")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.13.4")
+    compileOnly("jakarta.servlet:jakarta.servlet-api")
+    compileOnly("jakarta.validation:jakarta.validation-api")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test:3.5.5")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}")
+
+    // Test
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-validation")
+
+    testImplementation("jakarta.servlet:jakarta.servlet-api")
+    testImplementation("jakarta.validation:jakarta.validation-api")
+
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 publishing {
@@ -53,17 +68,54 @@ publishing {
             from(components["java"])
 
             pom {
-                name.set(project.name)
-                description.set("Spring Web MVC integration for library implementing RFC7807")
-                url.set("https://github.com/malczuuu/${project.name}")
+                name=project.name
+                description="Spring Web MVC integration for library implementing RFC7807"
+                url= "https://github.com/malczuuu/${project.name}"
+                inceptionYear = "2025"
                 licenses {
                     license {
-                        name.set("MIT License")
-                        url.set("https://opensource.org/licenses/MIT")
+                        name = "MIT License"
+                        url = "https://opensource.org/licenses/MIT"
                     }
+                }
+                developers {
+                    developer {
+                        id = "malczuuu"
+                        name = "Damian Malczewski"
+                        url = "https://github.com/malczuuu"
+                    }
+                }
+                issueManagement {
+                    system = "GitHub Issues"
+                    url = "https://github.com/malczuuu/${project.name}/issues"
+                }
+                scm {
+                    connection = "scm:git:git://github.com/malczuuu/${project.name}.git"
+                    developerConnection = "scm:git:git@github.com:malczuuu/${project.name}.git"
+                    url = "https://github.com/malczuuu/${project.name}"
                 }
             }
         }
+    }
+}
+
+nmcpAggregation {
+    centralPortal {
+        username = System.getenv("PUBLISHING_USERNAME")
+        password = System.getenv("PUBLISHING_PASSWORD")
+
+        publishingType = "USER_MANAGED"
+    }
+    publishAllProjectsProbablyBreakingProjectIsolation()
+}
+
+signing {
+    if (project.hasProperty("sign")) {
+        useInMemoryPgpKeys(
+            System.getenv("SIGNING_KEY"),
+            System.getenv("SIGNING_PASSWORD")
+        )
+        sign(publishing.publications["maven"])
     }
 }
 
@@ -81,6 +133,7 @@ spotless {
         target("src/**/*.java")
 
         googleJavaFormat("1.28.0")
+        forbidWildcardImports()
         lineEndings = LineEnding.UNIX
     }
 }
