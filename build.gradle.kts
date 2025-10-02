@@ -5,7 +5,7 @@ plugins {
     id("maven-publish")
     id("signing")
     id("com.diffplug.spotless").version("8.0.0")
-    id("com.gradleup.nmcp.aggregation").version("1.2.0")
+    id("com.gradleup.nmcp").version("1.2.0")
 }
 
 group = "io.github.malczuuu.problem4j"
@@ -21,7 +21,7 @@ version =
         version
 
 java {
-    toolchain.languageVersion=JavaLanguageVersion.of(17)
+    toolchain.languageVersion = JavaLanguageVersion.of(17)
     withSourcesJar()
     withJavadocJar()
 }
@@ -30,32 +30,37 @@ repositories {
     mavenCentral()
 }
 
+val jakartaServletApiVersion = "6.0.0"
+val jakartaValidationApiVersion = "3.0.2"
+
 val problem4jCoreVersion = "1.1.0"
 val problem4jJacksonVersion = "1.0.0"
+
 val springBootVersion = "3.5.6"
+val springVersion = "6.2.11"
+
+val junitVersion = "5.13.4"
 
 dependencies {
     // Main
-    implementation(platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"))
-
-    api("org.springframework.boot:spring-boot-autoconfigure")
-    api("org.springframework:spring-webmvc")
+    api("org.springframework.boot:spring-boot-autoconfigure:${springBootVersion}")
+    api("org.springframework:spring-webmvc:${springVersion}")
 
     api("io.github.malczuuu.problem4j:problem4j-core:${problem4jCoreVersion}")
     api("io.github.malczuuu.problem4j:problem4j-jackson:${problem4jJacksonVersion}")
 
-    compileOnly("jakarta.servlet:jakarta.servlet-api")
-    compileOnly("jakarta.validation:jakarta.validation-api")
+    compileOnly("jakarta.servlet:jakarta.servlet-api:${jakartaServletApiVersion}")
+    compileOnly("jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}")
 
     // Test
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.boot:spring-boot-starter-validation")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+    testImplementation("org.springframework.boot:spring-boot-starter-validation:${springBootVersion}")
 
-    testImplementation("jakarta.servlet:jakarta.servlet-api")
-    testImplementation("jakarta.validation:jakarta.validation-api")
+    testImplementation("jakarta.servlet:jakarta.servlet-api:${jakartaServletApiVersion}")
 
+    testImplementation(platform("org.junit:junit-bom:${junitVersion}"))
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
@@ -68,9 +73,9 @@ publishing {
             from(components["java"])
 
             pom {
-                name=project.name
-                description="Spring Web MVC integration for library implementing RFC7807"
-                url= "https://github.com/malczuuu/${project.name}"
+                name = project.name
+                description = "Spring Web MVC integration for library implementing RFC7807"
+                url = "https://github.com/malczuuu/${project.name}"
                 inceptionYear = "2025"
                 licenses {
                     license {
@@ -99,14 +104,13 @@ publishing {
     }
 }
 
-nmcpAggregation {
-    centralPortal {
+nmcp {
+    publishAllPublicationsToCentralPortal {
         username = System.getenv("PUBLISHING_USERNAME")
         password = System.getenv("PUBLISHING_PASSWORD")
 
         publishingType = "USER_MANAGED"
     }
-    publishAllProjectsProbablyBreakingProjectIsolation()
 }
 
 signing {

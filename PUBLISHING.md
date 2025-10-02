@@ -19,7 +19,7 @@ SIGNING_PASSWORD=<PGP password>
 Artifacts are published to Maven Central via Sonatype, using following Gradle task.
 
 ```bash
-./gradlew -Pversion=<version> -Psign publishAggregationToCentralPortal
+./gradlew -Pversion=<version> -Psign publishAllPublicationsToCentralPortal
 ```
 
 This command uses `nmcp` Gradle plugin - [link](https://github.com/GradleUp/nmcp).
