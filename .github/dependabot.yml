@@ -3,9 +3,10 @@ updates:
   - package-ecosystem: "gradle"
     directory: "/"
     schedule:
-      interval: "cron"
-      cronjob: "0 0 * * 0"  # Every Sunday at midnight UTC
-    open-pull-requests-limit: 5
+      interval: "daily"
+      time: "18:00"
+      timezone: "Europe/Warsaw"
+    open-pull-requests-limit: 10
     allow:
       - dependency-type: "direct"
     ignore:
