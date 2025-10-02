@@ -6,6 +6,9 @@
 /buildSrc/build/
 /buildSrc/out/
 
+/problem4j-spring-*/build/
+/problem4j-spring-*/out/
+
 ### IDEs ###
 /.idea/
 /.vscode/
