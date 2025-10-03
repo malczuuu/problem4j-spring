@@ -7,7 +7,8 @@ registers these mappings.
 These error mappings to disallow leaking too much information to the client application. It more information is
 necessary, feel free to override specific [`ExceptionMapping`][ExceptionMapping], register it as `@Serivce`,
 `@Component` or `@Bean` and exclude specific nested[`ExceptionMappingConfiguration`][ExceptionMappingConfiguration]
-configuration class.
+configuration class with `@ConditionalOnClass`, per appropriate exception. Therefore, if using this library with
+previous versions, mappings for exception classes that are not present in classpath are silently ignored.
 
 Overriding whole `ProblemEnhancedExceptionHandler` is not recommended, although such necessities are sometimes
 understandable.
@@ -74,8 +75,8 @@ or not. For `true` it will use value from `@RequestParam` (if able) (the same go
 
 <table>
 <tr>
-<td align="center"><code>ConstraintViolationException</code></td>
-<td align="center"><code>MethodValidationException</code></td>
+<td style="text-align:center"><code>ConstraintViolationException</code></td>
+<td style="text-align:center"><code>MethodValidationException</code></td>
 </tr>
 <tr>
 <td><pre lang="json">

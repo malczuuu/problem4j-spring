@@ -114,27 +114,19 @@ compatible down to `3.0.0`. Integration with Spring Boot 4 (once its released) w
    }
    ```
 
-Overriding of build-in exceptions is performed by custom [`ExceptionMapping`][ExceptionMapping] and its implementations.
-These mappings are instantiated in [`ExceptionMappingConfiguration`][ExceptionMappingConfiguration] with
-`@ConditionalOnClass`, per appropriate exception. Therefore, if using this library with previous versions, mappings for
-exception classes that are not present in classpath are silently ignored.
-
-Details on what exception responses are overwritten are located following `README.md` files:
-
-- [`problem4j-spring-web/README.md`][problem4j-spring-web-readme],
-- [`problem4j-spring-webflux/README.md`][problem4j-spring-webflux-readme],
-- [`problem4j-spring-webmvc/README.md`][problem4j-spring-webmvc-readme].
+Details on library usability can be found in [`problem4j-spring-web/README.md`][problem4j-spring-web-readme].
 
 While creating your own `@RestControllerAdvice`, make sure to position it with right `@Order`. In order for your custom
 implementation to work seamlessly, make sure to position it on at least **`Ordered.LOWEST_PRECEDENCE - 1`** (the lower
 the value, the higher the priority), as **`ExceptionAdvice`** covers the most generic **`Exception`** class.
 
-| `@RestControllerAdvice`              | covered exceptions             | `@Order(...)`                    |
-|--------------------------------------|--------------------------------|----------------------------------|
-| `ProblemEnhancedExceptionHandler`    | Spring's internal exceptions   | `Ordered.LOWEST_PRECEDENCE - 10` |
-| `ProblemExceptionAdvice`             | `ProblemException`             | `Ordered.LOWEST_PRECEDENCE - 10` |
-| `ConstraintViolationExceptionAdvice` | `ConstraintViolationException` | `Ordered.LOWEST_PRECEDENCE - 10` |
-| `ExceptionAdvice`                    | `Exception`                    | `Ordered.LOWEST_PRECEDENCE`      |
+| <center>covered exceptions</center> | <center>`@Order(...)`</center>   |
+|-------------------------------------|----------------------------------|
+| Spring's internal exceptions        | `Ordered.LOWEST_PRECEDENCE - 10` |
+| `ConstraintViolationException`      | `Ordered.LOWEST_PRECEDENCE - 10` |
+| `DecodingException`                 | `Ordered.LOWEST_PRECEDENCE - 10` |
+| `ProblemException`                  | `Ordered.LOWEST_PRECEDENCE - 10` |
+| `Exception`                         | `Ordered.LOWEST_PRECEDENCE`      |
 
 ## Configuration
 
@@ -150,24 +142,16 @@ library and your application.
 
 - [`problem4j-core`][problem4j-core] - Core library defining `Problem` model and `ProblemException`.
 - [`problem4j-jackson`][problem4j-jackson] - Jackson module for serializing and deserializing `Problem` objects.
-- [`problem4j-spring`][problem4j-spring] - Spring Web module extending `ResponseEntityExceptionHandler` for
-  handling exceptions and returning `Problem` responses.
-
-[ExceptionMapping]: problem4j-spring-web/src/main/java/io/github/malczuuu/problem4j/spring/web/mapping/ExceptionMapping.java
-
-[ExceptionMappingConfiguration]: problem4j-spring-web/src/main/java/io/github/malczuuu/problem4j/spring/web/mapping/ExceptionMappingConfiguration.java
-
-[problem4j-spring-web-readme]: problem4j-spring-web/README.md
-
-[problem4j-spring-webflux-readme]: problem4j-spring-webflux/README.md
-
-[problem4j-spring-webmvc-readme]: problem4j-spring-webmvc/README.md
+- [`problem4j-spring`][problem4j-spring] - Spring modules extending `ResponseEntityExceptionHandler` for handling
+  exceptions and returning `Problem` responses.
 
 [maven-central]: https://central.sonatype.com/artifact/io.github.malczuuu.problem4j/problem4j-spring-bom
 
 [problem4j-core]: https://github.com/malczuuu/problem4j-core
 
 [problem4j-spring]: https://github.com/malczuuu/problem4j-spring
+
+[problem4j-spring-web-readme]: problem4j-spring-web/README.md
 
 [problem4j-jackson]: https://github.com/malczuuu/problem4j-jackson
 
