@@ -20,16 +20,17 @@ controller never leaks.
 
 ## Main Test Scenarios
 
-1. What happens if `@PathVariable`, `@RequestParam`, etc. is missing - [`MissingParameterTest`][MissingParameterTest]
-2. What happens if `@PathVariable`, etc. is invalid - [`ValidateParameterTest`][ValidateParameterTest]
-3. What happens if `@PathVariable`, etc. has incorrect type - [`TypeMismatchTest`][TypeMismatchTest]
-4. What happens if `@RequestPart` is malformed - [`MalformedMultipartTest`][MalformedMultipartTest]
-5. What happens if `@RequestBody` is invalid - [`ValidateRequestBodyTest`][ValidateRequestBodyTest]
-6. What happens if `Accept` is invalid - [`NotAcceptableTest`][NotAcceptableTest]
-7. What happens if `Content-Type` is invalid - [`UnsupportedMediaTypeTest`][UnsupportedMediaTypeTest]
-8. What happens if HTTP method (`GET`,`POST`, etc.) is invalid - [`MethodNotAllowedTest`][MethodNotAllowedTest]
-9. What happens if unknown endpoint (or resource) is accessed - [`NotFoundTest`][NotFoundTest]
-10. What happens if `ErrorResponseException` is thrown - [`ErrorResponseTest`][ErrorResponseTest]
+1. What happens if `@PathVariable`, `@RequestParam`, etc. is missing - [`MissingParameterTest`][MissingParameterTest].
+2. What happens if `@PathVariable`, etc. is invalid - [`ValidateParameterTest`][ValidateParameterTest] (covers both
+   situations for `spring.validation.method.adapt-constraint-violations`).
+3. What happens if `@PathVariable`, etc. has incorrect type - [`TypeMismatchTest`][TypeMismatchTest].
+4. What happens if `@RequestPart` is malformed - [`MalformedMultipartTest`][MalformedMultipartTest].
+5. What happens if `@RequestBody` is invalid - [`ValidateRequestBodyTest`][ValidateRequestBodyTest].
+6. What happens if `Accept` is invalid - [`NotAcceptableTest`][NotAcceptableTest].
+7. What happens if `Content-Type` is invalid - [`UnsupportedMediaTypeTest`][UnsupportedMediaTypeTest].
+8. What happens if HTTP method (`GET`,`POST`, etc.) is invalid - [`MethodNotAllowedTest`][MethodNotAllowedTest].
+9. What happens if unknown endpoint (or resource) is accessed - [`NotFoundTest`][NotFoundTest].
+10. What happens if `ErrorResponseException` is thrown - [`ErrorResponseTest`][ErrorResponseTest].
 
 [MissingParameterTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/MissingParameterTest.java
 
