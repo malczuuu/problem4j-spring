@@ -5,9 +5,10 @@ import io.github.malczuuu.problem4j.spring.web.ProblemConfiguration;
 import io.github.malczuuu.problem4j.spring.web.ProblemProperties;
 import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
 import io.github.malczuuu.problem4j.spring.web.mapping.ConstraintViolationMapping;
-import io.github.malczuuu.problem4j.spring.webflux.error.ProblemErrorWebFluxAutoConfiguration;
+import io.github.malczuuu.problem4j.spring.webflux.error.ProblemErrorWebFluxConfiguration;
 import io.github.malczuuu.problem4j.spring.webflux.mapping.ExceptionMappingFluxConfiguration;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -44,10 +45,10 @@ import org.springframework.web.reactive.result.method.annotation.ResponseEntityE
  * <p>The configuration also imports ({@link ProblemConfiguration}) from {@code commons} library.
  */
 @ConditionalOnClass(ResponseEntityExceptionHandler.class)
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @AutoConfigureBefore({ErrorWebFluxAutoConfiguration.class, WebFluxAutoConfiguration.class})
 @Import({
-  ProblemErrorWebFluxAutoConfiguration.class,
+  ProblemErrorWebFluxConfiguration.class,
   ExceptionMappingFluxConfiguration.class,
   ProblemConfiguration.class
 })

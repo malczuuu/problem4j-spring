@@ -15,11 +15,11 @@ import org.springframework.http.codec.ServerCodecConfigurer;
 import org.springframework.web.reactive.result.view.ViewResolver;
 
 @Configuration
-public class ProblemErrorWebFluxAutoConfiguration {
+public class ProblemErrorWebFluxConfiguration {
 
   private final ServerProperties serverProperties;
 
-  public ProblemErrorWebFluxAutoConfiguration(ServerProperties serverProperties) {
+  public ProblemErrorWebFluxConfiguration(ServerProperties serverProperties) {
     this.serverProperties = serverProperties;
   }
 

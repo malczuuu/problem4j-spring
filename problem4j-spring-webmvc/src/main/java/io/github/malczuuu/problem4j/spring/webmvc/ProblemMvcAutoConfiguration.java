@@ -5,14 +5,16 @@ import io.github.malczuuu.problem4j.spring.web.ProblemConfiguration;
 import io.github.malczuuu.problem4j.spring.web.ProblemProperties;
 import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
 import io.github.malczuuu.problem4j.spring.web.mapping.ConstraintViolationMapping;
-import io.github.malczuuu.problem4j.spring.webmvc.error.ProblemErrorMvcAutoConfiguration;
+import io.github.malczuuu.problem4j.spring.webmvc.error.ProblemErrorMvcConfiguration;
 import io.github.malczuuu.problem4j.spring.webmvc.mapping.ExceptionMappingMvcConfiguration;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -43,10 +45,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  * <p>The configuration also imports ({@link ProblemConfiguration}) from {@code commons} library.
  */
 @ConditionalOnClass(ResponseEntityExceptionHandler.class)
-@Configuration(proxyBeanMethods = false)
-@AutoConfigureBefore(WebMvcAutoConfiguration.class)
+@AutoConfiguration
+@AutoConfigureBefore({ErrorMvcAutoConfiguration.class, WebMvcAutoConfiguration.class})
 @Import({
-  ProblemErrorMvcAutoConfiguration.class,
+  ProblemErrorMvcConfiguration.class,
   ExceptionMappingMvcConfiguration.class,
   ProblemConfiguration.class
 })
