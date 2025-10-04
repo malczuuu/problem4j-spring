@@ -48,7 +48,7 @@ publishing {
 
             pom {
                 name = project.name
-                description = "Spring Web MVC integration for library implementing RFC7807"
+                description = "Spring Web integration for library implementing RFC7807"
                 url = "https://github.com/malczuuu/${rootProject.name}"
                 inceptionYear = "2025"
                 licenses {
