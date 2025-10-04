@@ -15,10 +15,25 @@ flexible enough for custom exceptions and business-specific details.
 
 ## Table of Contents
 
+- [Why bother with Problem4J](#why-bother-with-problem4j)
 - [Features](#features)
 - [Usage](#usage)
 - [Configuration](#configuration)
 - [Problem4J Links](#problem4j-links)
+
+## Why bother with Problem4J
+
+Even though Spring provides `ProblemDetail` and `ErrorResponseException` for **RFC 7807**-compliant error responses,
+they are mutable, minimal, and often require manual population of fields. In contrast, **Problem4J** was created to:
+
+- Provide a **fully immutable, fluent `Problem` model** with support for extensions.
+- Support **declarative exception mapping** via `@ProblemMapping` or **programmatic one** via `ProblemException`.
+- Automatically **interpolate exception fields and context metadata** (e.g., `traceId`) into responses.
+- Offer **consistent error responses** across WebMVC and WebFlux, including validation and framework exceptions.
+- Allow **custom extensions** without boilerplate, making structured errors easier to trace and consume.
+
+In short, Problem4J is designed for developers who want **robust, traceable, and fully configurable REST API errors**,
+while keeping everything RFC 7807-compliant.
 
 ## Features
 
