@@ -1,4 +1,15 @@
-# Built-in Spring Exception Mappings
+# Mapping exceptions to `application/problem+json` responses
+
+1. [Overview](#overview)
+2. [Returning response bodies from custom exceptions](#returning-response-bodies-from-custom-exceptions)
+    1. [Extending `ProblemException`](#extending-problemexception)
+    2. [Annotating `@ProblemMapping`](#annotating-problemmapping)
+3. [Validation](#validation)
+4. [Occurrences of `TypeMismatchException`](#occurrences-of-typemismatchexception)
+5. [Occurrences of `ErrorResponseException`](#occurrences-of-errorresponseexception)
+6. [General HTTP Stuff](#general-http-stuff)
+
+## Overview
 
 This module overrides Spring Web's default (often minimal or plain-text) responses for many framework exceptions and
 produces structured RFC 7807 `Problem` objects. [`ExceptionMappingConfiguration`][ExceptionMappingConfiguration]
@@ -20,9 +31,9 @@ your exception class.
 
 ### Extending `ProblemException`
 
-**Extend `ProblemException`.** If your exceptions extend `ProblemException`, the library will automatically use the
-`Problem` instance provided by the exception when building the response. This is useful when you want full
-programmatic control over the `Problem` object.
+If you use `ProblemException`, or your exceptions extend `ProblemException`, the library will automatically use the
+`Problem` instance provided by the exception when building the response. This is useful when you want full programmatic
+control over the `Problem` object.
 
 ```java
 /**
@@ -53,8 +64,8 @@ public class Example {
 
 ### Annotating `@ProblemMapping`
 
-**Use `@ProblemMapping` annotation.**  For exceptions that cannot extend `ProblemException`, you can annotate them with
-`@ProblemMapping`. This allows you to declaratively map exception fields to a `Problem`.
+For exceptions that cannot extend `ProblemException`, you can annotate them with `@ProblemMapping`. This allows you to
+declaratively map exception fields to a `Problem`.
 
 To extract values from target exception, it's possible to use placeholders for interpolation.
 
@@ -67,7 +78,7 @@ To extract values from target exception, it's possible to use placeholders for i
 
 ```java
 /**
-  * <pre>{@code
+ * <pre>{@code
  * {
  *   "type": "https://example.com/errors/invalid-request",
  *   "title": "Invalid Request",
@@ -127,7 +138,9 @@ property `spring.validation.method.adapt-constraint-violations` to `true`. Enabl
 not rely on raw `ConstraintViolationException`, but rather on `MethodValidationException`, which contains more details
 about validated element.
 
-Let's say we have following `@RestController`, where `idx` query param has different Java parameter name.
+Let's say we have following `@RestController`, where `customerId` query param has different Java parameter name (its
+`String customerIdParam`). We would like to have `customerId` in our response body as potential API clients do not have
+knowledge about internal technologies used by backend.
 
 ```java
 @Validated
@@ -174,6 +187,8 @@ or not. For `true` it will use value from `@RequestParam` (if able) (the same go
 </pre></td>
 </tr>
 </table>
+
+*Note* that this is not build-in behaviour. It was implemented in [`MethodValidationMapping`][MethodValidationMapping].
 
 ## Occurrences of `TypeMismatchException`
 
@@ -240,7 +255,7 @@ Example:
    }
    ```
 5. If passing request that's too large by configuration, service will write following response. Note that reason phrase
-   for `413` was changed into `Content Too Large` in [RFC 9110 §15.5.14][rfc9110-15.5.4]. 
+   for `413` was changed into `Content Too Large` in [RFC 9110 §15.5.14][rfc9110-15.5.4].
    ```json
    {
      "status": 413,
@@ -253,3 +268,5 @@ Example:
 [ExceptionMapping]: src/main/java/io/github/malczuuu/problem4j/spring/web/mapping/ExceptionMapping.java
 
 [ExceptionMappingConfiguration]: src/main/java/io/github/malczuuu/problem4j/spring/web/mapping/ExceptionMappingConfiguration.java
+
+[MethodValidationMapping]: src/main/java/io/github/malczuuu/problem4j/spring/web/mapping/MethodValidationMapping.java

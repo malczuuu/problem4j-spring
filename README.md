@@ -49,24 +49,24 @@ import org.springframework.web.context.request.WebRequest;
 @RestControllerAdvice
 public class ExampleExceptionAdvice {
 
-    @ExceptionHandler(ExampleException.class)
-    public ResponseEntity<Problem> method(ExampleException ex, WebRequest request) {
-        Problem problem =
-                Problem.builder()
-                        .type("http://example.com/errors/example-error")
-                        .title("Example Title")
-                        .status(400)
-                        .detail(ex.getMessage())
-                        .instance("https://example.com/instances/example-instance")
-                        .build();
+  @ExceptionHandler(ExampleException.class)
+  public ResponseEntity<Problem> method(ExampleException ex, WebRequest request) {
+    Problem problem =
+        Problem.builder()
+            .type("http://example.com/errors/example-error")
+            .title("Example Title")
+            .status(400)
+            .detail(ex.getMessage())
+            .instance("https://example.com/instances/example-instance")
+            .build();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
-        HttpStatus status = HttpStatus.valueOf(problem.getStatus());
+    HttpStatus status = HttpStatus.valueOf(problem.getStatus());
 
-        return new ResponseEntity<>(problem, headers, status);
-    }
+    return new ResponseEntity<>(problem, headers, status);
+  }
 }
 ```
 

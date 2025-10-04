@@ -31,6 +31,8 @@ controller never leaks.
 8. What happens if HTTP method (`GET`,`POST`, etc.) is invalid - [`MethodNotAllowedTest`][MethodNotAllowedTest].
 9. What happens if unknown endpoint (or resource) is accessed - [`NotFoundTest`][NotFoundTest].
 10. What happens if `ErrorResponseException` is thrown - [`ErrorResponseTest`][ErrorResponseTest].
+11. What happens if `ProblemException` is thrown [`ProblemMvcAdviceTest`][ProblemMvcAdviceTest] (or exception
+    annotated with`@ProblemMapping`).
 
 [MissingParameterTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/MissingParameterTest.java
 
@@ -51,3 +53,5 @@ controller never leaks.
 [NotFoundTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/NotFoundTest.java
 
 [ErrorResponseTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/ErrorResponseTest.java
+
+[ProblemMvcAdviceTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/ProblemMvcAdviceTest.java

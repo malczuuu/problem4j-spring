@@ -16,6 +16,8 @@ RFC 7807 `Problem` objects, with exceptions that are specific to `spring-webflux
 8. What happens if HTTP method (`GET`,`POST`, etc.) is invalid - [`MethodNotAllowedTest`][MethodNotAllowedTest].
 9. What happens if unknown endpoint (or resource) is accessed - [`NotFoundTest`][NotFoundTest].
 10. What happens if `ErrorResponseException` is thrown - [`ErrorResponseTest`][ErrorResponseTest].
+11. What happens if `ProblemException` is thrown [`ProblemFluxAdviceTest`][ProblemFluxAdviceTest] (or exception
+    annotated with`@ProblemMapping`).
 
 [MissingParameterTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/MissingParameterTest.java
 
@@ -36,3 +38,5 @@ RFC 7807 `Problem` objects, with exceptions that are specific to `spring-webflux
 [NotFoundTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/NotFoundTest.java
 
 [ErrorResponseTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/ErrorResponseTest.java
+
+[ProblemFluxAdviceTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/ProblemFluxAdviceTest.java
