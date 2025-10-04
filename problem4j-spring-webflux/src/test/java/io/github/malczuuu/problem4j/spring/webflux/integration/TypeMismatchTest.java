@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootTest(classes = {_TestApp.class})
-@Import({TypeMismatchTest.TestController.class})
+@Import({TypeMismatchTest.TypeMismatchController.class})
 @AutoConfigureWebTestClient
 class TypeMismatchTest {
 
   @RestController
-  static class TestController {
+  static class TypeMismatchController {
     @GetMapping("/type-mismatch")
     String endpoint(@RequestParam("id") Integer id) {
       return "OK";

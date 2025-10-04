@@ -2,6 +2,7 @@ package io.github.malczuuu.problem4j.spring.webflux;
 
 import io.github.malczuuu.problem4j.spring.web.ExceptionMappingStore;
 import io.github.malczuuu.problem4j.spring.web.ProblemConfiguration;
+import io.github.malczuuu.problem4j.spring.web.ProblemProperties;
 import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
 import io.github.malczuuu.problem4j.spring.web.mapping.ConstraintViolationMapping;
 import io.github.malczuuu.problem4j.spring.webflux.mapping.ExceptionMappingFluxConfiguration;
@@ -9,6 +10,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.web.reactive.WebFluxAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,22 +51,25 @@ public class ProblemFluxAutoConfiguration {
   @ConditionalOnMissingBean(ResponseEntityExceptionHandler.class)
   @Bean
   public ResponseEntityExceptionHandler responseEntityExceptionHandler(
-      ExceptionMappingStore exceptionMappingStore) {
-    return new ProblemEnhancedFluxHandler(exceptionMappingStore);
+      ExceptionMappingStore exceptionMappingStore, ProblemProperties problemProperties) {
+    return new ProblemEnhancedFluxHandler(
+        exceptionMappingStore, problemProperties.getInstanceOverride());
   }
 
   @Order(Ordered.LOWEST_PRECEDENCE)
   @ConditionalOnMissingBean(ExceptionFluxAdvice.class)
   @Bean
-  public ExceptionFluxAdvice exceptionAdvice(ProblemMappingProcessor problemMappingProcessor) {
-    return new ExceptionFluxAdvice(problemMappingProcessor);
+  public ExceptionFluxAdvice exceptionAdvice(
+      ProblemMappingProcessor problemMappingProcessor, ProblemProperties problemProperties) {
+    return new ExceptionFluxAdvice(
+        problemMappingProcessor, problemProperties.getInstanceOverride());
   }
 
   @Order(Ordered.LOWEST_PRECEDENCE - 10)
   @ConditionalOnMissingBean(ProblemExceptionFluxAdvice.class)
   @Bean
-  public ProblemExceptionFluxAdvice problemExceptionAdvice() {
-    return new ProblemExceptionFluxAdvice();
+  public ProblemExceptionFluxAdvice problemExceptionAdvice(ProblemProperties problemProperties) {
+    return new ProblemExceptionFluxAdvice(problemProperties.getInstanceOverride());
   }
 
   @ConditionalOnClass(ConstraintViolationException.class)
@@ -75,9 +80,18 @@ public class ProblemFluxAutoConfiguration {
     @ConditionalOnMissingBean(ConstraintViolationExceptionFluxAdvice.class)
     @Bean
     public ConstraintViolationExceptionFluxAdvice constraintViolationExceptionWebMvcAdvice(
-        ConstraintViolationMapping constraintViolationMapping) {
-      return new ConstraintViolationExceptionFluxAdvice(constraintViolationMapping);
+        ConstraintViolationMapping constraintViolationMapping,
+        ProblemProperties problemProperties) {
+      return new ConstraintViolationExceptionFluxAdvice(
+          constraintViolationMapping, problemProperties.getInstanceOverride());
     }
+  }
+
+  @ConditionalOnProperty(name = "problem4j.tracing-header-name")
+  @ConditionalOnMissingBean(TraceIdFluxFilter.class)
+  @Bean
+  public TraceIdFluxFilter traceIdFluxFilter(ProblemProperties problemProperties) {
+    return new TraceIdFluxFilter(problemProperties.getTracingHeaderName());
   }
 
   @ConditionalOnClass(DecodingException.class)
@@ -87,8 +101,9 @@ public class ProblemFluxAutoConfiguration {
     @Order(Ordered.LOWEST_PRECEDENCE - 10)
     @ConditionalOnMissingBean(DecodingExceptionFluxAdvice.class)
     @Bean
-    public DecodingExceptionFluxAdvice decodingExceptionFluxAdvice() {
-      return new DecodingExceptionFluxAdvice();
+    public DecodingExceptionFluxAdvice decodingExceptionFluxAdvice(
+        ProblemProperties problemProperties) {
+      return new DecodingExceptionFluxAdvice(problemProperties.getInstanceOverride());
     }
   }
 }

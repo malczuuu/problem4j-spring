@@ -22,12 +22,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootTest(classes = {_TestApp.class})
-@Import({UnsupportedMediaTypeTest.TestController.class})
+@Import({UnsupportedMediaTypeTest.UnsupportedMediaTypeController.class})
 @AutoConfigureMockMvc
 class UnsupportedMediaTypeTest {
 
   @RestController
-  static class TestController {
+  static class UnsupportedMediaTypeController {
 
     @PostMapping(path = "/unsupported-media-type", consumes = MediaType.APPLICATION_JSON_VALUE)
     String endpoint(@RequestBody Map<String, Object> body) {

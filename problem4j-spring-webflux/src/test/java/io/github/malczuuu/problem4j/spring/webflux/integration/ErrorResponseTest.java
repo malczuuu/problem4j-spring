@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootTest(classes = {_TestApp.class})
-@Import({ErrorResponseTest.TestController.class})
+@Import({ErrorResponseTest.ErrorResponseController.class})
 @AutoConfigureWebTestClient
 class ErrorResponseTest {
 
   @RestController
-  static class TestController {
+  static class ErrorResponseController {
     @GetMapping("/error-response")
     String endpoint() {
       throw new ErrorResponseException(

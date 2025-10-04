@@ -18,6 +18,7 @@ RFC 7807 `Problem` objects, with exceptions that are specific to `spring-webflux
 10. What happens if `ErrorResponseException` is thrown - [`ErrorResponseTest`][ErrorResponseTest].
 11. What happens if `ProblemException` is thrown [`ProblemFluxAdviceTest`][ProblemFluxAdviceTest] (or exception
     annotated with`@ProblemMapping`).
+12. What happens if we enable `instance-override` [`InstanceOverrideTest`][InstanceOverrideTest].
 
 [MissingParameterTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/MissingParameterTest.java
 
@@ -40,3 +41,5 @@ RFC 7807 `Problem` objects, with exceptions that are specific to `spring-webflux
 [ErrorResponseTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/ErrorResponseTest.java
 
 [ProblemFluxAdviceTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/ProblemFluxAdviceTest.java
+
+[InstanceOverrideTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/InstanceOverrideTest.java

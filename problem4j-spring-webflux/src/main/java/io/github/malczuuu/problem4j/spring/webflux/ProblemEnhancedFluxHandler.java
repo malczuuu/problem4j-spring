@@ -1,8 +1,13 @@
 package io.github.malczuuu.problem4j.spring.webflux;
 
+import static io.github.malczuuu.problem4j.spring.web.util.InstanceSupport.overrideInstance;
+
 import io.github.malczuuu.problem4j.core.Problem;
+import io.github.malczuuu.problem4j.core.ProblemBuilder;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.web.ExceptionMappingStore;
+import io.github.malczuuu.problem4j.spring.web.util.StaticProblemContext;
+import io.github.malczuuu.problem4j.spring.web.util.TracingSupport;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -33,8 +38,12 @@ public class ProblemEnhancedFluxHandler extends ResponseEntityExceptionHandler {
 
   private final ExceptionMappingStore exceptionMappingStore;
 
-  public ProblemEnhancedFluxHandler(ExceptionMappingStore exceptionMappingStore) {
+  private final String instanceOverride;
+
+  public ProblemEnhancedFluxHandler(
+      ExceptionMappingStore exceptionMappingStore, String instanceOverride) {
     this.exceptionMappingStore = exceptionMappingStore;
+    this.instanceOverride = instanceOverride;
   }
 
   @Override
@@ -44,13 +53,19 @@ public class ProblemEnhancedFluxHandler extends ResponseEntityExceptionHandler {
       HttpHeaders headers,
       HttpStatusCode status,
       ServerWebExchange exchange) {
+    StaticProblemContext context =
+        new StaticProblemContext(exchange.getAttribute(TracingSupport.TRACE_ID_ATTR));
+
     headers = headers != null ? new HttpHeaders(headers) : new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
-    Problem problem = overrideBody(ex, headers, status);
+    ProblemBuilder builder = overrideBody(ex, headers, status).toBuilder();
+    builder = overrideInstance(builder, instanceOverride, context);
+    Problem problem = builder.build();
 
-    return super.handleExceptionInternal(
-        ex, problem, headers, HttpStatus.valueOf(problem.getStatus()), exchange);
+    status = HttpStatus.valueOf(problem.getStatus());
+
+    return super.handleExceptionInternal(ex, problem, headers, status, exchange);
   }
 
   private Problem overrideBody(Exception ex, HttpHeaders headers, HttpStatusCode status) {

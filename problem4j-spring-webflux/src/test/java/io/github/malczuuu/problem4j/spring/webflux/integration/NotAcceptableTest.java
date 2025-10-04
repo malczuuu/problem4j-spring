@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootTest(classes = {_TestApp.class})
-@Import({NotAcceptableTest.TestController.class})
+@Import({NotAcceptableTest.NotAcceptableController.class})
 @AutoConfigureWebTestClient
 class NotAcceptableTest {
 
   @RestController
-  static class TestController {
+  static class NotAcceptableController {
 
     @GetMapping(path = "/not-acceptable", produces = MediaType.TEXT_PLAIN_VALUE)
     String endpoint() {

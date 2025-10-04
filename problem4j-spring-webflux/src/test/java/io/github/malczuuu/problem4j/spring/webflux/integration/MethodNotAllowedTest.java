@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootTest(classes = {_TestApp.class})
-@Import({MethodNotAllowedTest.TestController.class})
+@Import({MethodNotAllowedTest.MethodNotAllowedController.class})
 @AutoConfigureWebTestClient
 class MethodNotAllowedTest {
 
   @RestController
-  static class TestController {
+  static class MethodNotAllowedController {
 
-    @GetMapping(path = "/endpoint")
+    @GetMapping(path = "/method-not-allowed")
     String endpoint() {
       return "OK";
     }
@@ -32,7 +32,7 @@ class MethodNotAllowedTest {
   void givenException_shouldOverrideIt() {
     webTestClient
         .post()
-        .uri("/endpoint")
+        .uri("/method-not-allowed")
         .exchange()
         .expectStatus()
         .isEqualTo(HttpStatus.METHOD_NOT_ALLOWED)

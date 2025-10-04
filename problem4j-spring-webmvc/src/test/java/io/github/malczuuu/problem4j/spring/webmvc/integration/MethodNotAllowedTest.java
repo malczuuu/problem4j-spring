@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootTest(classes = {_TestApp.class})
-@Import({MethodNotAllowedTest.TestController.class})
+@Import({MethodNotAllowedTest.MethodNotAllowedController.class})
 @AutoConfigureMockMvc
 class MethodNotAllowedTest {
 
   @RestController
-  static class TestController {
+  static class MethodNotAllowedController {
 
     @GetMapping(path = "/method-not-allowed")
     String endpoint() {

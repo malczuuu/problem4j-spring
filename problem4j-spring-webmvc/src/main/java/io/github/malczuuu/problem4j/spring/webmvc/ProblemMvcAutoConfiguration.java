@@ -2,6 +2,7 @@ package io.github.malczuuu.problem4j.spring.webmvc;
 
 import io.github.malczuuu.problem4j.spring.web.ExceptionMappingStore;
 import io.github.malczuuu.problem4j.spring.web.ProblemConfiguration;
+import io.github.malczuuu.problem4j.spring.web.ProblemProperties;
 import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
 import io.github.malczuuu.problem4j.spring.web.mapping.ConstraintViolationMapping;
 import io.github.malczuuu.problem4j.spring.webmvc.mapping.ExceptionMappingMvcConfiguration;
@@ -9,6 +10,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,22 +51,31 @@ public class ProblemMvcAutoConfiguration {
   @ConditionalOnMissingBean(ResponseEntityExceptionHandler.class)
   @Bean
   public ResponseEntityExceptionHandler responseEntityExceptionHandler(
-      ExceptionMappingStore exceptionMappingStore) {
-    return new ProblemEnhancedMvcHandler(exceptionMappingStore);
+      ExceptionMappingStore exceptionMappingStore, ProblemProperties problemProperties) {
+    return new ProblemEnhancedMvcHandler(
+        exceptionMappingStore, problemProperties.getInstanceOverride());
   }
 
   @Order(Ordered.LOWEST_PRECEDENCE)
   @ConditionalOnMissingBean(ExceptionMvcAdvice.class)
   @Bean
-  public ExceptionMvcAdvice exceptionAdvice(ProblemMappingProcessor problemMappingProcessor) {
-    return new ExceptionMvcAdvice(problemMappingProcessor);
+  public ExceptionMvcAdvice exceptionAdvice(
+      ProblemMappingProcessor problemMappingProcessor, ProblemProperties problemProperties) {
+    return new ExceptionMvcAdvice(problemMappingProcessor, problemProperties.getInstanceOverride());
   }
 
   @Order(Ordered.LOWEST_PRECEDENCE - 10)
   @ConditionalOnMissingBean(ProblemExceptionMvcAdvice.class)
   @Bean
-  public ProblemExceptionMvcAdvice problemExceptionAdvice() {
-    return new ProblemExceptionMvcAdvice();
+  public ProblemExceptionMvcAdvice problemExceptionAdvice(ProblemProperties problemProperties) {
+    return new ProblemExceptionMvcAdvice(problemProperties.getInstanceOverride());
+  }
+
+  @ConditionalOnProperty(name = "problem4j.tracing-header-name")
+  @ConditionalOnMissingBean(TraceIdMvcFilter.class)
+  @Bean
+  public TraceIdMvcFilter traceIdMvcFilter(ProblemProperties properties) {
+    return new TraceIdMvcFilter(properties.getTracingHeaderName());
   }
 
   @ConditionalOnClass(ConstraintViolationException.class)
@@ -75,8 +86,10 @@ public class ProblemMvcAutoConfiguration {
     @ConditionalOnMissingBean(ConstraintViolationExceptionMvcAdvice.class)
     @Bean
     public ConstraintViolationExceptionMvcAdvice constraintViolationExceptionWebMvcAdvice(
-        ConstraintViolationMapping constraintViolationMapping) {
-      return new ConstraintViolationExceptionMvcAdvice(constraintViolationMapping);
+        ConstraintViolationMapping constraintViolationMapping,
+        ProblemProperties problemProperties) {
+      return new ConstraintViolationExceptionMvcAdvice(
+          constraintViolationMapping, problemProperties.getInstanceOverride());
     }
   }
 }

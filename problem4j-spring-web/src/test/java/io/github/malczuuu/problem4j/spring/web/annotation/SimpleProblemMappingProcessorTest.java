@@ -3,7 +3,7 @@ package io.github.malczuuu.problem4j.spring.web.annotation;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.spring.web.ProblemContext;
+import io.github.malczuuu.problem4j.spring.web.util.StaticProblemContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -106,7 +106,7 @@ class SimpleProblemMappingProcessorTest {
     }
     ContextException ex = new ContextException("v");
 
-    Problem problem = processor.toProblem(ex, new StaticContext(traceId));
+    Problem problem = processor.toProblem(ex, new StaticProblemContext(traceId));
 
     assertThat(problem).isNotNull();
     assertThat(problem)
@@ -234,20 +234,6 @@ class SimpleProblemMappingProcessorTest {
 
     Problem p = processor.toProblem(ex, null);
     assertThat(p).isNotNull();
-  }
-
-  private static class StaticContext implements ProblemContext {
-
-    private final String traceId;
-
-    private StaticContext(String traceId) {
-      this.traceId = traceId;
-    }
-
-    @Override
-    public String getTraceId() {
-      return traceId;
-    }
   }
 
   @Test

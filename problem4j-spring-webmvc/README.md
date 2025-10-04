@@ -33,6 +33,7 @@ controller never leaks.
 10. What happens if `ErrorResponseException` is thrown - [`ErrorResponseTest`][ErrorResponseTest].
 11. What happens if `ProblemException` is thrown [`ProblemMvcAdviceTest`][ProblemMvcAdviceTest] (or exception
     annotated with`@ProblemMapping`).
+12. What happens if we enable `instance-override` [`InstanceOverrideTest`][InstanceOverrideTest].
 
 [MissingParameterTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/MissingParameterTest.java
 
@@ -55,3 +56,5 @@ controller never leaks.
 [ErrorResponseTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/ErrorResponseTest.java
 
 [ProblemMvcAdviceTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/ProblemMvcAdviceTest.java
+
+[InstanceOverrideTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/InstanceOverrideTest.java

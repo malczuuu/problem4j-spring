@@ -119,7 +119,8 @@ Details on library usability can be found in [`problem4j-spring-web/README.md`][
 
 While creating your own `@RestControllerAdvice`, make sure to position it with right `@Order`. In order for your custom
 implementation to work seamlessly, make sure to position it on at least **`Ordered.LOWEST_PRECEDENCE - 1`** (the lower
-the value, the higher the priority), as **`ExceptionAdvice`** covers the most generic **`Exception`** class.
+the value, the higher the priority), as **`ExceptionAdvice`** covers the most generic **`Exception`** class. You may
+browse existing advices for inspiration to implement a matching behaviour.
 
 | <center>covered exceptions</center> | <center>`@Order(...)`</center>   |
 |-------------------------------------|----------------------------------|
@@ -138,6 +139,18 @@ Library can be configured with following properties.
 Property that specifies how exception handling imported with this module should print `"detail"` field of `Problem`
 model (`lowercase`, **`capitalized` - default**, `uppercase`). Useful for keeping the same style of errors coming from
 library and your application.
+
+### `problem4j.tracing-header-name`
+
+Property that specifies the name of the HTTP header used for tracing requests. If set, the trace identifier from this
+header can be injected into the `Problem` response, for example into the`instance` field when combined with
+[`problem4j.instance-override`](#problem4jinstance-override). Defaults to `null` (disabled).
+
+### `problem4j.instance-override`
+
+Property that defines a template for overriding the `instance` field in `Problem` responses.The value may contain the
+special placeholder `{traceId}`, which will be replaced at runtime with the trace identifier from the current request (
+see [`problem4j.tracing-header-name`](#problem4jtracing-header-name)). Defaults to `null` (no override applied).
 
 ## Problem4J Links
 

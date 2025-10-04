@@ -2,8 +2,8 @@ package io.github.malczuuu.problem4j.spring.web.mapping;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
-import io.github.malczuuu.problem4j.spring.web.ProblemSupport;
 import io.github.malczuuu.problem4j.spring.web.format.DetailFormat;
+import io.github.malczuuu.problem4j.spring.web.util.ProblemSupport;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpHeaders;

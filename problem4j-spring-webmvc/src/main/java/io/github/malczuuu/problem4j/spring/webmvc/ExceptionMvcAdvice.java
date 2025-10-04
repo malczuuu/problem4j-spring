@@ -1,8 +1,15 @@
 package io.github.malczuuu.problem4j.spring.webmvc;
 
+import static io.github.malczuuu.problem4j.spring.web.util.InstanceSupport.overrideInstance;
+import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
+
 import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.spring.web.ProblemSupport;
+import io.github.malczuuu.problem4j.core.ProblemBuilder;
+import io.github.malczuuu.problem4j.core.ProblemStatus;
+import io.github.malczuuu.problem4j.spring.web.ProblemContext;
 import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
+import io.github.malczuuu.problem4j.spring.web.util.StaticProblemContext;
+import io.github.malczuuu.problem4j.spring.web.util.TracingSupport;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,22 +39,34 @@ public class ExceptionMvcAdvice {
 
   private final ProblemMappingProcessor problemMappingProcessor;
 
-  public ExceptionMvcAdvice(ProblemMappingProcessor problemMappingProcessor) {
+  private final String instanceOverride;
+
+  public ExceptionMvcAdvice(
+      ProblemMappingProcessor problemMappingProcessor, String instanceOverride) {
     this.problemMappingProcessor = problemMappingProcessor;
+    this.instanceOverride = instanceOverride;
   }
 
   @ExceptionHandler(Exception.class)
   public ResponseEntity<Object> handleException(Exception ex, WebRequest request) {
-    Problem problem = ProblemSupport.INTERNAL_SERVER_ERROR;
-
-    if (problemMappingProcessor.isAnnotated(ex)) {
-      problem = problemMappingProcessor.toProblem(ex, null);
-    }
-
-    HttpStatus status = HttpStatus.valueOf(problem.getStatus());
+    ProblemContext context =
+        new StaticProblemContext(request.getAttribute(TracingSupport.TRACE_ID_ATTR, SCOPE_REQUEST));
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
+
+    Problem problem;
+
+    if (problemMappingProcessor.isAnnotated(ex)) {
+      problem = problemMappingProcessor.toProblem(ex, context);
+      problem = overrideInstance(problem, instanceOverride, context);
+    } else {
+      ProblemBuilder builder = Problem.builder().status(ProblemStatus.INTERNAL_SERVER_ERROR);
+      builder = overrideInstance(builder, instanceOverride, context);
+      problem = builder.build();
+    }
+
+    HttpStatus status = HttpStatus.valueOf(problem.getStatus());
 
     return new ResponseEntity<>(problem, headers, status);
   }
