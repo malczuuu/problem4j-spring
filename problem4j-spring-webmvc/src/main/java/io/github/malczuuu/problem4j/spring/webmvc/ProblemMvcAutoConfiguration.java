@@ -52,8 +52,7 @@ public class ProblemMvcAutoConfiguration {
   @Bean
   public ResponseEntityExceptionHandler responseEntityExceptionHandler(
       ExceptionMappingStore exceptionMappingStore, ProblemProperties problemProperties) {
-    return new ProblemEnhancedMvcHandler(
-        exceptionMappingStore, problemProperties.getInstanceOverride());
+    return new ProblemEnhancedMvcHandler(exceptionMappingStore);
   }
 
   @Order(Ordered.LOWEST_PRECEDENCE)
@@ -61,21 +60,22 @@ public class ProblemMvcAutoConfiguration {
   @Bean
   public ExceptionMvcAdvice exceptionAdvice(
       ProblemMappingProcessor problemMappingProcessor, ProblemProperties problemProperties) {
-    return new ExceptionMvcAdvice(problemMappingProcessor, problemProperties.getInstanceOverride());
+    return new ExceptionMvcAdvice(problemMappingProcessor);
   }
 
   @Order(Ordered.LOWEST_PRECEDENCE - 10)
   @ConditionalOnMissingBean(ProblemExceptionMvcAdvice.class)
   @Bean
-  public ProblemExceptionMvcAdvice problemExceptionAdvice(ProblemProperties problemProperties) {
-    return new ProblemExceptionMvcAdvice(problemProperties.getInstanceOverride());
+  public ProblemExceptionMvcAdvice problemExceptionAdvice() {
+    return new ProblemExceptionMvcAdvice();
   }
 
   @ConditionalOnProperty(name = "problem4j.tracing-header-name")
   @ConditionalOnMissingBean(TraceIdMvcFilter.class)
   @Bean
   public TraceIdMvcFilter traceIdMvcFilter(ProblemProperties properties) {
-    return new TraceIdMvcFilter(properties.getTracingHeaderName());
+    return new TraceIdMvcFilter(
+        properties.getTracingHeaderName(), properties.getInstanceOverride());
   }
 
   @ConditionalOnClass(ConstraintViolationException.class)
@@ -88,8 +88,7 @@ public class ProblemMvcAutoConfiguration {
     public ConstraintViolationExceptionMvcAdvice constraintViolationExceptionWebMvcAdvice(
         ConstraintViolationMapping constraintViolationMapping,
         ProblemProperties problemProperties) {
-      return new ConstraintViolationExceptionMvcAdvice(
-          constraintViolationMapping, problemProperties.getInstanceOverride());
+      return new ConstraintViolationExceptionMvcAdvice(constraintViolationMapping);
     }
   }
 }

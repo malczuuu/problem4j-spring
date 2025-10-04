@@ -1,5 +1,7 @@
 package io.github.malczuuu.problem4j.spring.webflux;
 
+import io.github.malczuuu.problem4j.spring.web.util.InstanceSupport;
+import io.github.malczuuu.problem4j.spring.web.util.StaticProblemContext;
 import io.github.malczuuu.problem4j.spring.web.util.TracingSupport;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
@@ -10,9 +12,11 @@ import reactor.core.publisher.Mono;
 public class TraceIdFluxFilter implements WebFilter {
 
   private final String tracingHeaderName;
+  private final String instanceOverride;
 
-  public TraceIdFluxFilter(String tracingHeaderName) {
+  public TraceIdFluxFilter(String tracingHeaderName, String instanceOverride) {
     this.tracingHeaderName = tracingHeaderName;
+    this.instanceOverride = instanceOverride;
   }
 
   @Override
@@ -20,7 +24,12 @@ public class TraceIdFluxFilter implements WebFilter {
 
     String traceId = readTraceId(exchange);
 
+    String instanceOverrideValue =
+        InstanceSupport.overrideInstance(instanceOverride, new StaticProblemContext(traceId));
+
     exchange.getAttributes().put(TracingSupport.TRACE_ID_ATTR, traceId);
+    exchange.getAttributes().put(TracingSupport.INSTANCE_OVERRIDE_ATTR, instanceOverrideValue);
+
     exchange.getResponse().getHeaders().set(tracingHeaderName, traceId);
 
     return chain

@@ -1,12 +1,9 @@
 package io.github.malczuuu.problem4j.spring.webmvc;
 
-import static io.github.malczuuu.problem4j.spring.web.util.InstanceSupport.overrideInstance;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemException;
-import io.github.malczuuu.problem4j.spring.web.ProblemContext;
-import io.github.malczuuu.problem4j.spring.web.util.StaticProblemContext;
 import io.github.malczuuu.problem4j.spring.web.util.TracingSupport;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,22 +24,18 @@ import org.springframework.web.context.request.WebRequest;
 @RestControllerAdvice
 public class ProblemExceptionMvcAdvice {
 
-  private final String instanceOverride;
-
-  public ProblemExceptionMvcAdvice(String instanceOverride) {
-    this.instanceOverride = instanceOverride;
-  }
-
   @ExceptionHandler(ProblemException.class)
   public ResponseEntity<Problem> handleProblemException(ProblemException ex, WebRequest request) {
-    ProblemContext context =
-        new StaticProblemContext(request.getAttribute(TracingSupport.TRACE_ID_ATTR, SCOPE_REQUEST));
-
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
+    Object instanceOverride =
+        request.getAttribute(TracingSupport.INSTANCE_OVERRIDE_ATTR, SCOPE_REQUEST);
+
     Problem problem = ex.getProblem();
-    problem = overrideInstance(problem, instanceOverride, context);
+    if (instanceOverride != null) {
+      problem = problem.toBuilder().instance(instanceOverride.toString()).build();
+    }
 
     HttpStatus status = HttpStatus.valueOf(problem.getStatus());
 

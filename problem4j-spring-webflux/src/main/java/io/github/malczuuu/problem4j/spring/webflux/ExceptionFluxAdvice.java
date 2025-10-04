@@ -1,7 +1,5 @@
 package io.github.malczuuu.problem4j.spring.webflux;
 
-import static io.github.malczuuu.problem4j.spring.web.util.InstanceSupport.overrideInstance;
-
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemBuilder;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
@@ -39,12 +37,8 @@ public class ExceptionFluxAdvice {
 
   private final ProblemMappingProcessor problemMappingProcessor;
 
-  private final String instanceOverride;
-
-  public ExceptionFluxAdvice(
-      ProblemMappingProcessor problemMappingProcessor, String instanceOverride) {
+  public ExceptionFluxAdvice(ProblemMappingProcessor problemMappingProcessor) {
     this.problemMappingProcessor = problemMappingProcessor;
-    this.instanceOverride = instanceOverride;
   }
 
   @ExceptionHandler(Exception.class)
@@ -55,14 +49,20 @@ public class ExceptionFluxAdvice {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
+    Object instanceOverride = exchange.getAttribute(TracingSupport.INSTANCE_OVERRIDE_ATTR);
+
     Problem problem;
 
     if (problemMappingProcessor.isAnnotated(ex)) {
       problem = problemMappingProcessor.toProblem(ex, context);
-      problem = overrideInstance(problem, instanceOverride, context);
+      if (instanceOverride != null) {
+        problem = problem.toBuilder().instance(instanceOverride.toString()).build();
+      }
     } else {
       ProblemBuilder builder = Problem.builder().status(ProblemStatus.INTERNAL_SERVER_ERROR);
-      builder = overrideInstance(builder, instanceOverride, context);
+      if (instanceOverride != null) {
+        builder = builder.instance(instanceOverride.toString());
+      }
       problem = builder.build();
     }
 

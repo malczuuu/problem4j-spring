@@ -1,11 +1,7 @@
 package io.github.malczuuu.problem4j.spring.webflux;
 
-import static io.github.malczuuu.problem4j.spring.web.util.InstanceSupport.overrideInstance;
-
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemException;
-import io.github.malczuuu.problem4j.spring.web.ProblemContext;
-import io.github.malczuuu.problem4j.spring.web.util.StaticProblemContext;
 import io.github.malczuuu.problem4j.spring.web.util.TracingSupport;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,23 +23,19 @@ import reactor.core.publisher.Mono;
 @RestControllerAdvice
 public class ProblemExceptionFluxAdvice {
 
-  private final String instanceOverride;
-
-  public ProblemExceptionFluxAdvice(String instanceOverride) {
-    this.instanceOverride = instanceOverride;
-  }
-
   @ExceptionHandler(ProblemException.class)
   public Mono<ResponseEntity<Problem>> handleProblemException(
       ProblemException ex, ServerWebExchange exchange) {
-    ProblemContext context =
-        new StaticProblemContext(exchange.getAttribute(TracingSupport.TRACE_ID_ATTR));
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
+    Object instanceOverride = exchange.getAttribute(TracingSupport.INSTANCE_OVERRIDE_ATTR);
+
     Problem problem = ex.getProblem();
-    problem = overrideInstance(problem, instanceOverride, context);
+    if (instanceOverride != null) {
+      problem = problem.toBuilder().instance(instanceOverride.toString()).build();
+    }
 
     HttpStatus status = HttpStatus.valueOf(problem.getStatus());
 

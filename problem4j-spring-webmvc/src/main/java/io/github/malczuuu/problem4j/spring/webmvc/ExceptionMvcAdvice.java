@@ -1,6 +1,5 @@
 package io.github.malczuuu.problem4j.spring.webmvc;
 
-import static io.github.malczuuu.problem4j.spring.web.util.InstanceSupport.overrideInstance;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
 import io.github.malczuuu.problem4j.core.Problem;
@@ -39,12 +38,8 @@ public class ExceptionMvcAdvice {
 
   private final ProblemMappingProcessor problemMappingProcessor;
 
-  private final String instanceOverride;
-
-  public ExceptionMvcAdvice(
-      ProblemMappingProcessor problemMappingProcessor, String instanceOverride) {
+  public ExceptionMvcAdvice(ProblemMappingProcessor problemMappingProcessor) {
     this.problemMappingProcessor = problemMappingProcessor;
-    this.instanceOverride = instanceOverride;
   }
 
   @ExceptionHandler(Exception.class)
@@ -55,14 +50,21 @@ public class ExceptionMvcAdvice {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
+    Object instanceOverride =
+        request.getAttribute(TracingSupport.INSTANCE_OVERRIDE_ATTR, SCOPE_REQUEST);
+
     Problem problem;
 
     if (problemMappingProcessor.isAnnotated(ex)) {
       problem = problemMappingProcessor.toProblem(ex, context);
-      problem = overrideInstance(problem, instanceOverride, context);
+      if (instanceOverride != null) {
+        problem = problem.toBuilder().instance(instanceOverride.toString()).build();
+      }
     } else {
       ProblemBuilder builder = Problem.builder().status(ProblemStatus.INTERNAL_SERVER_ERROR);
-      builder = overrideInstance(builder, instanceOverride, context);
+      if (instanceOverride != null) {
+        builder = builder.instance(instanceOverride.toString());
+      }
       problem = builder.build();
     }
 

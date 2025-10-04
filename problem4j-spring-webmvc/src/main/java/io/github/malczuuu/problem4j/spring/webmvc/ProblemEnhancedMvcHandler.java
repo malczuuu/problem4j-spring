@@ -1,13 +1,11 @@
 package io.github.malczuuu.problem4j.spring.webmvc;
 
-import static io.github.malczuuu.problem4j.spring.web.util.InstanceSupport.overrideInstance;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemBuilder;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.web.ExceptionMappingStore;
-import io.github.malczuuu.problem4j.spring.web.util.StaticProblemContext;
 import io.github.malczuuu.problem4j.spring.web.util.TracingSupport;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -38,25 +36,32 @@ public class ProblemEnhancedMvcHandler extends ResponseEntityExceptionHandler {
 
   private final ExceptionMappingStore exceptionMappingStore;
 
-  private final String instanceOverride;
-
-  public ProblemEnhancedMvcHandler(
-      ExceptionMappingStore exceptionMappingStore, String instanceOverride) {
+  public ProblemEnhancedMvcHandler(ExceptionMappingStore exceptionMappingStore) {
     this.exceptionMappingStore = exceptionMappingStore;
-    this.instanceOverride = instanceOverride;
   }
 
+  /**
+   * <b>Note</b> that even though {@link HttpHeaders#writableHttpHeaders(HttpHeaders)} is
+   * deprecated, it's used for backwards compatibility with Spring Boot versions from before its
+   * deprecation.
+   *
+   * <p>They marked method as deprecated, provided an alternative but that alternative <b>does not
+   * work in versions {@code 6.1.*} and {@code 6.0.*}</b> (version of Spring Framework, not Spring
+   * Boot).
+   */
   @Override
   protected ResponseEntity<Object> handleExceptionInternal(
       Exception ex, Object body, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-    StaticProblemContext context =
-        new StaticProblemContext(request.getAttribute(TracingSupport.TRACE_ID_ATTR, SCOPE_REQUEST));
-
-    headers = headers != null ? new HttpHeaders(headers) : new HttpHeaders();
+    headers = headers != null ? HttpHeaders.writableHttpHeaders(headers) : new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
+    Object instanceOverride =
+        request.getAttribute(TracingSupport.INSTANCE_OVERRIDE_ATTR, SCOPE_REQUEST);
+
     ProblemBuilder builder = overrideBody(ex, headers, status).toBuilder();
-    builder = overrideInstance(builder, instanceOverride, context);
+    if (instanceOverride != null) {
+      builder = builder.instance(instanceOverride.toString());
+    }
     Problem problem = builder.build();
 
     status = HttpStatus.valueOf(problem.getStatus());

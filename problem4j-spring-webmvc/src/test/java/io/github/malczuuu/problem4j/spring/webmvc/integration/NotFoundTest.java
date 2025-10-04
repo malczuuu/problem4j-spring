@@ -22,7 +22,10 @@ class NotFoundTest {
   @Nested
   @SpringBootTest(
       classes = {_TestApp.class},
-      properties = {"spring.web.resources.add-mappings=false"})
+      properties = {
+        "spring.mvc.throw-exception-if-no-handler-found=true",
+        "spring.web.resources.add-mappings=false"
+      })
   @AutoConfigureMockMvc
   class NoHandlerFound {
 
