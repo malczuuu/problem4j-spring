@@ -4,73 +4,38 @@
 [![Sonatype](https://img.shields.io/maven-central/v/io.github.malczuuu.problem4j/problem4j-spring-bom)](https://central.sonatype.com/artifact/io.github.malczuuu.problem4j/problem4j-spring-bom)
 [![License](https://img.shields.io/github/license/malczuuu/problem4j-spring)](https://github.com/malczuuu/problem4j-spring/blob/main/LICENSE)
 
-Spring integration module for [`problem4j-core`][problem4j-core]. library that integrates the RFC Problem Details model
-with exception handling in Spring Boot.
+Designing clear and consistent error responses in a REST API is often harder than it looks. Without a shared standard,
+each application ends up inventing its own ad-hoc format, which quickly leads to inconsistency and confusion.
+[RFC 7807 - Problem Details for HTTP APIs][rfc7807] solves this by defining a simple, extensible JSON structure for
+error messages.
+
+**Problem4J** brings this specification into the Spring ecosystem, offering a practical way to model, throw, and handle
+API errors using `Problem` objects. It helps you enforce a consistent error contract across your services, while staying
+flexible enough for custom exceptions and business-specific details.
 
 ## Table of Contents
 
 - [Features](#features)
-- [Example](#example)
 - [Usage](#usage)
 - [Configuration](#configuration)
 - [Problem4J Links](#problem4j-links)
 
 ## Features
 
+This module provides Spring integration for [`problem4j-core`][problem4j-core]. library that integrates the RFC Problem
+Details model with exception handling in Spring Boot.
+
 - ✅ Automatic mapping of exceptions to responses with `Problem` objects compliant with [RFC 7807][rfc7807].
 - ✅ Mapping of exceptions extending `ProblemException` to responses with `Problem` objects.
+- ✅ Mapping of exceptions annotated with `@ProblemMapping` to responses with `Problem` objects.
 - ✅ Fallback mapping of `Exception` to `Problem` objects representing `500 Internal Server Error`.
 - ✅ Simple configuration thanks to Spring Boot autoconfiguration.
 
-## Example
+## Usage
 
 The library provides two ways to convert exceptions into RFC 7807-compliant `Problem` responses. You can either extend
 `ProblemException` or use `@ProblemMapping` annotation on your own exception if modifying inheritance tree is not an
 option for. For more details and examples visit [`problem4j-spring-web/README.md`][problem4j-spring-web-readme].
-
-If that's not possible for your application, add a custom `@RestControllerAdvice` that returns a `Problem` object, but
-take note at `@Order` as explained in [Usage](#usage) chapter.
-
-```java
-import io.github.malczuuu.problem4j.core.Problem;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
-
-@Order(Ordered.LOWEST_PRECEDENCE - 20)
-@Component
-@RestControllerAdvice
-public class ExampleExceptionAdvice {
-
-  @ExceptionHandler(ExampleException.class)
-  public ResponseEntity<Problem> method(ExampleException ex, WebRequest request) {
-    Problem problem =
-        Problem.builder()
-            .type("http://example.com/errors/example-error")
-            .title("Example Title")
-            .status(400)
-            .detail(ex.getMessage())
-            .instance("https://example.com/instances/example-instance")
-            .build();
-
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
-
-    HttpStatus status = HttpStatus.valueOf(problem.getStatus());
-
-    return new ResponseEntity<>(problem, headers, status);
-  }
-}
-```
-
-## Usage
 
 Add library as dependency to Maven or Gradle. See the actual versions on [Maven Central][maven-central]. Add it along
 with repository in your dependency manager. **Java 17** or higher is required to use this library.
@@ -81,54 +46,28 @@ compatible down to `3.0.0`. Integration with Spring Boot 4 (once its released) w
 
 1. Maven:
    ```xml
-   <dependencyManagement>
-       <dependencies>
-           <dependency>
-               <groupId>io.github.malczuuu.problem4j</groupId>
-               <artifactId>problem4j-spring-bom</artifactId>
-               <version>${problem4j-spring-bom.version}</version>
-               <type>pom</type>      
-               <scope>import</scope> 
-           </dependency>
-       </dependencies>
-   </dependencyManagement>
    <dependencies>
        <!-- pick the one for your project -->
        <dependency>
            <groupId>io.github.malczuuu.problem4j</groupId>
            <artifactId>problem4j-spring-webflux</artifactId>
+           <version>1.0.0-alpha1</version>
        </dependency>
        <dependency>
            <groupId>io.github.malczuuu.problem4j</groupId>
            <artifactId>problem4j-spring-webmvc</artifactId>
+           <version>1.0.0-alpha1</version>
        </dependency>
    </dependencies>
    ```
 2. Gradle (Groovy or Kotlin DSL):
    ```groovy
    dependencies {
-       implementation(platform("io.github.malczuuu.problem4j:problem4j-spring-bom:${problem4j-spring-bom.version}"))
-   
        // pick the one for your project
-       implementation("io.github.malczuuu.problem4j:problem4j-spring-webflux")
-       implementation("io.github.malczuuu.problem4j:problem4j-spring-webmvc")
+       implementation("io.github.malczuuu.problem4j:problem4j-spring-webflux:1.0.0-alpha1")
+       implementation("io.github.malczuuu.problem4j:problem4j-spring-webmvc:1.0.0-alpha1")
    }
    ```
-
-Details on library usability can be found in [`problem4j-spring-web/README.md`][problem4j-spring-web-readme].
-
-While creating your own `@RestControllerAdvice`, make sure to position it with right `@Order`. In order for your custom
-implementation to work seamlessly, make sure to position it on at least **`Ordered.LOWEST_PRECEDENCE - 1`** (the lower
-the value, the higher the priority), as **`ExceptionAdvice`** covers the most generic **`Exception`** class. You may
-browse existing advices for inspiration to implement a matching behaviour.
-
-| <center>covered exceptions</center> | <center>`@Order(...)`</center>   |
-|-------------------------------------|----------------------------------|
-| Spring's internal exceptions        | `Ordered.LOWEST_PRECEDENCE - 10` |
-| `ConstraintViolationException`      | `Ordered.LOWEST_PRECEDENCE - 10` |
-| `DecodingException`                 | `Ordered.LOWEST_PRECEDENCE - 10` |
-| `ProblemException`                  | `Ordered.LOWEST_PRECEDENCE - 10` |
-| `Exception`                         | `Ordered.LOWEST_PRECEDENCE`      |
 
 ## Configuration
 

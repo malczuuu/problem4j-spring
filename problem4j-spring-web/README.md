@@ -4,6 +4,7 @@
 2. [Returning response bodies from custom exceptions](#returning-response-bodies-from-custom-exceptions)
     1. [Extending `ProblemException`](#extending-problemexception)
     2. [Annotating `@ProblemMapping`](#annotating-problemmapping)
+    3. [Custom `@RestControllerAdvice`](#custom-restcontrolleradvice) 
 3. [Validation](#validation)
 4. [Occurrences of `TypeMismatchException`](#occurrences-of-typemismatchexception)
 5. [Occurrences of `ErrorResponseException`](#occurrences-of-errorresponseexception)
@@ -112,6 +113,54 @@ public class ExampleException extends RuntimeException {
 
 **Note** that the main reason behind this project is to make `ProblemException` a base class for all custom exception in
 your application code.
+
+### Custom `RestControllerAdvice`
+
+For exceptions, you can't modify, add a custom `@RestControllerAdvice` that returns a `Problem` object, but take note at
+`@Order`.
+
+While creating your own `@RestControllerAdvice`, make sure to position it with right `@Order`. In order for your custom
+implementation to work seamlessly, make sure to position it on at least **`Ordered.LOWEST_PRECEDENCE - 11`** (the lower
+the value, the higher the priority). All `@RestControllerAdvice` provided by `problem4j-spring` library use ordering
+from `Ordered.LOWEST_PRECEDENCE` to `Ordered.LOWEST_PRECEDENCE - 10`. By setting at lest `-11`, you make sure that your
+exception will not fall into predefined advices.
+
+But let's be honest, you'll probably use `Ordered.HIGHEST_PRECEDENCE` :D.
+
+| <center>covered exceptions</center> | <center>`@Order(...)`</center>   |
+|-------------------------------------|----------------------------------|
+| Spring's internal exceptions        | `Ordered.LOWEST_PRECEDENCE - 10` |
+| `ConstraintViolationException`      | `Ordered.LOWEST_PRECEDENCE - 10` |
+| `DecodingException`                 | `Ordered.LOWEST_PRECEDENCE - 10` |
+| `ProblemException`                  | `Ordered.LOWEST_PRECEDENCE - 10` |
+| `Exception`                         | `Ordered.LOWEST_PRECEDENCE`      |
+
+```java
+@Order(Ordered.LOWEST_PRECEDENCE - 20)
+@Component
+@RestControllerAdvice
+public class ExampleExceptionAdvice {
+
+  @ExceptionHandler(ExampleException.class)
+  public ResponseEntity<Problem> method(ExampleException ex, WebRequest request) {
+    Problem problem =
+        Problem.builder()
+            .type("http://example.com/errors/example-error")
+            .title("Example Title")
+            .status(400)
+            .detail(ex.getMessage())
+            .instance("https://example.com/instances/example-instance")
+            .build();
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
+
+    HttpStatus status = HttpStatus.valueOf(problem.getStatus());
+
+    return new ResponseEntity<>(problem, headers, status);
+  }
+}
+```
 
 ## Validation
 
