@@ -39,13 +39,12 @@ public class ProblemEnhancedFluxHandler extends ResponseEntityExceptionHandler {
   }
 
   /**
-   * <b>Note</b> that even though {@link HttpHeaders#writableHttpHeaders(HttpHeaders)} is
-   * deprecated, it's used for backwards compatibility with Spring Boot versions from before its
-   * deprecation.
+   * <b>Note:</b> Although {@link HttpHeaders#writableHttpHeaders(HttpHeaders)} is deprecated, it is
+   * used here for backward compatibility with older Spring Framework versions.
    *
-   * <p>They marked method as deprecated, provided an alternative but that alternative <b>does not
-   * work in versions {@code 6.1.*} and {@code 6.0.*}</b> (version of Spring Framework, not Spring
-   * Boot).
+   * <p>The deprecation alternative provided by Spring does not work in versions {@code 6.0.*} and
+   * {@code 6.1.*} (Spring Framework versions, not Spring Boot). Therefore, this method is retained
+   * to ensure compatibility across those versions.
    */
   @Override
   protected Mono<ResponseEntity<Object>> handleExceptionInternal(

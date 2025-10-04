@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @SpringBootApplication
 class _TestApp {
 
-  @Configuration
+  @Configuration(proxyBeanMethods = false)
   public static class TestLocaleConfig {
 
     @PostConstruct

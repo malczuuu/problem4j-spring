@@ -7,15 +7,39 @@ import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+/**
+ * Configures MVC error handling to return {@code application/problem+json} responses according to
+ * RFC 7807.
+ *
+ * <p>This setup replaces Spring Boot’s default error controller with {@link
+ * ProblemErrorController}, which renders {@link io.github.malczuuu.problem4j.core.Problem} objects
+ * instead of HTML or plain JSON errors.
+ */
+@Configuration(proxyBeanMethods = false)
 public class ProblemErrorMvcConfiguration {
 
+  /**
+   * Registers a default {@link ErrorAttributes} bean if none exists.
+   *
+   * <p>Used to expose error details to the {@link ProblemErrorController}.
+   *
+   * @return a default {@link DefaultErrorAttributes} instance
+   */
   @ConditionalOnMissingBean(value = ErrorAttributes.class)
   @Bean
   public ErrorAttributes errorAttributes() {
     return new DefaultErrorAttributes();
   }
 
+  /**
+   * Registers a custom {@link ErrorController} that renders Problem JSON responses.
+   *
+   * <p>Replaces the default error controller when no other implementation is present.
+   *
+   * @param errorAttributes provides error information for requests
+   * @return a new {@link ProblemErrorController} instance
+   * @see org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration
+   */
   @ConditionalOnMissingBean(value = ErrorController.class)
   @Bean
   public ErrorController errorController(ErrorAttributes errorAttributes) {

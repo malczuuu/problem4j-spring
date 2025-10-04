@@ -13,14 +13,31 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * A simple {@link org.springframework.boot.web.servlet.error.ErrorController} implementation that
+ * returns HTTP problems (RFC 7807) instead of HTML error pages.
+ *
+ * <p>It converts generic servlet errors into {@link Problem} responses with the appropriate HTTP
+ * status and content type {@code application/problem+json}.
+ */
 @Controller
 @RequestMapping("${server.error.path:${error.path:/error}}")
 public class ProblemErrorController extends AbstractErrorController {
-
+  /**
+   * Creates a new {@code ProblemErrorController}.
+   *
+   * @param errorAttributes the error attributes used to obtain error information
+   */
   public ProblemErrorController(ErrorAttributes errorAttributes) {
     super(errorAttributes);
   }
 
+  /**
+   * Handles all requests to the error path and converts them into {@link Problem} responses.
+   *
+   * @param request the current HTTP request
+   * @return a {@link ResponseEntity} containing a {@link Problem} body and proper HTTP status
+   */
   @RequestMapping
   public ResponseEntity<Problem> error(HttpServletRequest request) {
     HttpStatus status = getStatus(request);

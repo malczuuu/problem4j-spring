@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.SearchStrategy;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.autoconfigure.web.WebProperties;
+import org.springframework.boot.web.reactive.error.DefaultErrorAttributes;
 import org.springframework.boot.web.reactive.error.ErrorAttributes;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
 import org.springframework.context.ApplicationContext;
@@ -14,13 +15,34 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.codec.ServerCodecConfigurer;
 import org.springframework.web.reactive.result.view.ViewResolver;
 
-@Configuration
+/**
+ * Configures a custom {@link ErrorWebExceptionHandler} that produces {@code
+ * application/problem+json} responses according to RFC 7807.
+ *
+ * <p>This configuration replaces Spring Boot’s default WebFlux error handler defined in {@link
+ * org.springframework.boot.autoconfigure.web.reactive.error.ErrorWebFluxAutoConfiguration}.
+ */
+@Configuration(proxyBeanMethods = false)
 public class ProblemErrorWebFluxConfiguration {
 
   private final ServerProperties serverProperties;
 
   public ProblemErrorWebFluxConfiguration(ServerProperties serverProperties) {
     this.serverProperties = serverProperties;
+  }
+
+  /**
+   * Registers a default {@link ErrorAttributes} bean if none is already defined.
+   *
+   * <p>Provides the error details used by the {@link ProblemErrorWebExceptionHandler} to build
+   * {@code application/problem+json} responses.
+   *
+   * @return a default {@link DefaultErrorAttributes} instance
+   */
+  @ConditionalOnMissingBean(value = ErrorAttributes.class)
+  @Bean
+  public ErrorAttributes errorAttributes() {
+    return new DefaultErrorAttributes();
   }
 
   /**
