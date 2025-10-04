@@ -5,6 +5,7 @@ import io.github.malczuuu.problem4j.spring.web.ProblemConfiguration;
 import io.github.malczuuu.problem4j.spring.web.ProblemProperties;
 import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
 import io.github.malczuuu.problem4j.spring.web.mapping.ConstraintViolationMapping;
+import io.github.malczuuu.problem4j.spring.webmvc.error.ProblemErrorMvcAutoConfiguration;
 import io.github.malczuuu.problem4j.spring.webmvc.mapping.ExceptionMappingMvcConfiguration;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -44,7 +45,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ConditionalOnClass(ResponseEntityExceptionHandler.class)
 @Configuration(proxyBeanMethods = false)
 @AutoConfigureBefore(WebMvcAutoConfiguration.class)
-@Import({ExceptionMappingMvcConfiguration.class, ProblemConfiguration.class})
+@Import({
+  ProblemErrorMvcAutoConfiguration.class,
+  ExceptionMappingMvcConfiguration.class,
+  ProblemConfiguration.class
+})
 public class ProblemMvcAutoConfiguration {
 
   @Order(Ordered.LOWEST_PRECEDENCE - 10)
