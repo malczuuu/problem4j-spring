@@ -2,6 +2,7 @@ package io.github.malczuuu.problem4j.spring.webflux;
 
 import io.github.malczuuu.problem4j.spring.web.ExceptionMappingStore;
 import io.github.malczuuu.problem4j.spring.web.ProblemConfiguration;
+import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
 import io.github.malczuuu.problem4j.spring.web.mapping.ConstraintViolationMapping;
 import io.github.malczuuu.problem4j.spring.webflux.mapping.ExceptionMappingFluxConfiguration;
 import jakarta.validation.ConstraintViolationException;
@@ -55,8 +56,8 @@ public class ProblemFluxAutoConfiguration {
   @Order(Ordered.LOWEST_PRECEDENCE)
   @ConditionalOnMissingBean(ExceptionFluxAdvice.class)
   @Bean
-  public ExceptionFluxAdvice exceptionAdvice() {
-    return new ExceptionFluxAdvice();
+  public ExceptionFluxAdvice exceptionAdvice(ProblemMappingProcessor problemMappingProcessor) {
+    return new ExceptionFluxAdvice(problemMappingProcessor);
   }
 
   @Order(Ordered.LOWEST_PRECEDENCE - 10)

@@ -2,6 +2,7 @@ package io.github.malczuuu.problem4j.spring.webflux;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.spring.web.ProblemSupport;
+import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,14 +31,24 @@ import reactor.core.publisher.Mono;
 @RestControllerAdvice
 public class ExceptionFluxAdvice {
 
+  private final ProblemMappingProcessor problemMappingProcessor;
+
+  public ExceptionFluxAdvice(ProblemMappingProcessor problemMappingProcessor) {
+    this.problemMappingProcessor = problemMappingProcessor;
+  }
+
   @ExceptionHandler(Exception.class)
   public Mono<ResponseEntity<Problem>> handleException(Exception ex, ServerWebExchange exchange) {
-    HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+    Problem problem = ProblemSupport.INTERNAL_SERVER_ERROR;
+
+    if (problemMappingProcessor.isAnnotated(ex)) {
+      problem = problemMappingProcessor.toProblem(ex, null);
+    }
+
+    HttpStatus status = HttpStatus.valueOf(problem.getStatus());
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
-
-    Problem problem = ProblemSupport.INTERNAL_SERVER_ERROR;
 
     return Mono.just(new ResponseEntity<>(problem, headers, status));
   }

@@ -2,6 +2,7 @@ package io.github.malczuuu.problem4j.spring.webmvc;
 
 import io.github.malczuuu.problem4j.spring.web.ExceptionMappingStore;
 import io.github.malczuuu.problem4j.spring.web.ProblemConfiguration;
+import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
 import io.github.malczuuu.problem4j.spring.web.mapping.ConstraintViolationMapping;
 import io.github.malczuuu.problem4j.spring.webmvc.mapping.ExceptionMappingMvcConfiguration;
 import jakarta.validation.ConstraintViolationException;
@@ -55,8 +56,8 @@ public class ProblemMvcAutoConfiguration {
   @Order(Ordered.LOWEST_PRECEDENCE)
   @ConditionalOnMissingBean(ExceptionMvcAdvice.class)
   @Bean
-  public ExceptionMvcAdvice exceptionAdvice() {
-    return new ExceptionMvcAdvice();
+  public ExceptionMvcAdvice exceptionAdvice(ProblemMappingProcessor problemMappingProcessor) {
+    return new ExceptionMvcAdvice(problemMappingProcessor);
   }
 
   @Order(Ordered.LOWEST_PRECEDENCE - 10)

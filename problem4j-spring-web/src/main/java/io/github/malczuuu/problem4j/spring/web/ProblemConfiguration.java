@@ -1,6 +1,8 @@
 package io.github.malczuuu.problem4j.spring.web;
 
 import io.github.malczuuu.problem4j.jackson.ProblemModule;
+import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
+import io.github.malczuuu.problem4j.spring.web.annotation.SimpleProblemMappingProcessor;
 import io.github.malczuuu.problem4j.spring.web.format.DetailFormat;
 import io.github.malczuuu.problem4j.spring.web.format.JacksonPropertyNameFormat;
 import io.github.malczuuu.problem4j.spring.web.format.PropertyNameFormat;
@@ -29,6 +31,17 @@ public class ProblemConfiguration {
   @Bean
   public ProblemModule problemModule() {
     return new ProblemModule();
+  }
+
+  /**
+   * Provides a {@link ProblemMappingProcessor} if none is defined.
+   *
+   * @return a new {@link SimpleProblemMappingProcessor}
+   */
+  @ConditionalOnMissingBean(ProblemMappingProcessor.class)
+  @Bean
+  public ProblemMappingProcessor problemMappingProcessor() {
+    return new SimpleProblemMappingProcessor();
   }
 
   /**

@@ -13,18 +13,89 @@ previous versions, mappings for exception classes that are not present in classp
 Overriding whole `ProblemEnhancedExceptionHandler` is not recommended, although such necessities are sometimes
 understandable.
 
-## Occurrences of `ProblemException`
+## Returning response bodies from custom exceptions
 
-Explicitly thrown `ProblemException` (or subclasses created by its users). Each of these exceptions carry HTTP status
-within it as well as details to be used in `application/problem+json` response.
+As mentioned in main [`README.md`](../README.md), you can either extend `ProblemException` or add `@ProblemMapping` to
+your exception class.
 
-```json
-{
-  "type": "https://example.org/problem-type",
-  "title": "Some Error",
-  "status": 400,
-  "detail": "Explanation of the error",
-  "instance": "https://example.org/instances/123"
+### Extending `ProblemException`
+
+**Extend `ProblemException`.** If your exceptions extend `ProblemException`, the library will automatically use the
+`Problem` instance provided by the exception when building the response. This is useful when you want full
+programmatic control over the `Problem` object.
+
+```java
+/**
+ * <pre>{@code
+ * {
+ *   "type": "https://example.com/errors/invalid-request",
+ *   "title": "Invalid Request",
+ *   "status": 400,
+ *   "detail": "not a valid json",
+ *   "instance": "https://example.com/instances/1234"
+ * }
+ * }</pre>
+ */
+public class Example {
+  public void method() {
+    Problem problem =
+        Problem.builder()
+            .type("https://example.com/errors/invalid-request")
+            .title("Invalid Request")
+            .status(400)
+            .detail("not a valid json")
+            .instance("https://example.com/instances/1234")
+            .build();
+    throw new ProblemException(problem);
+  }
+}
+```
+
+### Annotating `@ProblemMapping`
+
+**Use `@ProblemMapping` annotation.**  For exceptions that cannot extend `ProblemException`, you can annotate them with
+`@ProblemMapping`. This allows you to declaratively map exception fields to a `Problem`.
+
+To extract values from target exception, it's possible to use placeholders for interpolation.
+
+- `{message}` - the exact `getMessage()` result from your exception,
+- `{traceId}` - the `context.getTraceId()` result for tracking error response with the actual request. The `context` is
+  something that is build in `@RestControllerAdvice`s and it contains processing metadata. Currently only `traceId` is
+  supported,
+- `{fieldName}` - any field name declared in exceptions and its superclasses (scanned from current class to its most
+  outer one).
+
+```java
+/**
+  * <pre>{@code
+ * {
+ *   "type": "https://example.com/errors/invalid-request",
+ *   "title": "Invalid Request",
+ *   "status": 400,
+ *   "detail": "bad input for user 123: email",
+ *   "instance": "https://example.com/instances/trace-789",
+ *   "userId": "123",
+ *   "fieldName": "email"
+ * }
+ * }</pre>
+ */
+@ProblemMapping(
+    type = "https://example.com/errors/invalid-request",
+    title = "Invalid Request",
+    status = 400,
+    detail = "{message}: {fieldName}",
+    instance = "https://example.com/instances/{traceId}",
+    extensions = {"userId", "fieldName"})
+public class ExampleException extends RuntimeException {
+
+  private final String userId;
+  private final String fieldName;
+
+  public ExampleException(String userId, String fieldName) {
+    super("bad input for user " + userId);
+    this.userId = userId;
+    this.fieldName = fieldName;
+  }
 }
 ```
 

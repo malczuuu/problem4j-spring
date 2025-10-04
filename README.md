@@ -24,11 +24,12 @@ with exception handling in Spring Boot.
 
 ## Example
 
-The general idea is to make all exceptions in your application to originate from `ProblemException`. This way, you can
-assign an appropriate `Problem` response to each exception.
+The library provides two ways to convert exceptions into RFC 7807-compliant `Problem` responses. You can either extend
+`ProblemException` or use `@ProblemMapping` annotation on your own exception if modifying inheritance tree is not an
+option for. For more details and examples visit [`problem4j-spring-web/README.md`][problem4j-spring-web-readme].
 
-If that's not possible, add a custom `@RestControllerAdvice` that returns a `Problem` object, but take note at `@Order`
-as explained in [Usage](#usage) chapter.
+If that's not possible for your application, add a custom `@RestControllerAdvice` that returns a `Problem` object, but
+take note at `@Order` as explained in [Usage](#usage) chapter.
 
 ```java
 import io.github.malczuuu.problem4j.core.Problem;
@@ -48,24 +49,24 @@ import org.springframework.web.context.request.WebRequest;
 @RestControllerAdvice
 public class ExampleExceptionAdvice {
 
-  @ExceptionHandler(ExampleException.class)
-  public ResponseEntity<Problem> method(ExampleException ex, WebRequest request) {
-    Problem problem =
-        Problem.builder()
-            .type("http://example.com/errors/example-error")
-            .title("Example Title")
-            .status(400)
-            .detail(ex.getMessage())
-            .instance("https://example.com/instances/example-instance")
-            .build();
+    @ExceptionHandler(ExampleException.class)
+    public ResponseEntity<Problem> method(ExampleException ex, WebRequest request) {
+        Problem problem =
+                Problem.builder()
+                        .type("http://example.com/errors/example-error")
+                        .title("Example Title")
+                        .status(400)
+                        .detail(ex.getMessage())
+                        .instance("https://example.com/instances/example-instance")
+                        .build();
 
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
-    HttpStatus status = HttpStatus.valueOf(problem.getStatus());
+        HttpStatus status = HttpStatus.valueOf(problem.getStatus());
 
-    return new ResponseEntity<>(problem, headers, status);
-  }
+        return new ResponseEntity<>(problem, headers, status);
+    }
 }
 ```
 

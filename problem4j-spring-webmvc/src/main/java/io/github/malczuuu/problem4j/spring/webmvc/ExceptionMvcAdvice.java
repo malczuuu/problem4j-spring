@@ -2,6 +2,7 @@ package io.github.malczuuu.problem4j.spring.webmvc;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.spring.web.ProblemSupport;
+import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,14 +30,24 @@ import org.springframework.web.context.request.WebRequest;
 @RestControllerAdvice
 public class ExceptionMvcAdvice {
 
+  private final ProblemMappingProcessor problemMappingProcessor;
+
+  public ExceptionMvcAdvice(ProblemMappingProcessor problemMappingProcessor) {
+    this.problemMappingProcessor = problemMappingProcessor;
+  }
+
   @ExceptionHandler(Exception.class)
   public ResponseEntity<Object> handleException(Exception ex, WebRequest request) {
-    HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+    Problem problem = ProblemSupport.INTERNAL_SERVER_ERROR;
+
+    if (problemMappingProcessor.isAnnotated(ex)) {
+      problem = problemMappingProcessor.toProblem(ex, null);
+    }
+
+    HttpStatus status = HttpStatus.valueOf(problem.getStatus());
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
-
-    Problem problem = ProblemSupport.INTERNAL_SERVER_ERROR;
 
     return new ResponseEntity<>(problem, headers, status);
   }
