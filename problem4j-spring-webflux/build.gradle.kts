@@ -74,15 +74,6 @@ publishing {
     }
 }
 
-nmcp {
-    publishAllPublicationsToCentralPortal {
-        username = System.getenv("PUBLISHING_USERNAME")
-        password = System.getenv("PUBLISHING_PASSWORD")
-
-        publishingType = "USER_MANAGED"
-    }
-}
-
 signing {
     if (project.hasProperty("sign")) {
         useInMemoryPgpKeys(

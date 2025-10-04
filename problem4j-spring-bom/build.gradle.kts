@@ -18,6 +18,7 @@ dependencies {
         api(project(":problem4j-spring-webmvc"))
     }
 }
+
 publishing {
     publications {
         create<MavenPublication>("maven") {
@@ -55,15 +56,6 @@ publishing {
                 }
             }
         }
-    }
-}
-
-nmcp {
-    publishAllPublicationsToCentralPortal {
-        username = System.getenv("PUBLISHING_USERNAME")
-        password = System.getenv("PUBLISHING_PASSWORD")
-
-        publishingType = "USER_MANAGED"
     }
 }
 

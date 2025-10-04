@@ -2,6 +2,7 @@ import com.diffplug.spotless.LineEnding
 
 plugins {
     id("com.diffplug.spotless").version("8.0.0")
+    id("com.gradleup.nmcp.aggregation").version("1.2.0")
     id("com.gradleup.nmcp").version("1.2.0").apply(false)
 }
 
@@ -33,6 +34,22 @@ subprojects {
 
 repositories {
     mavenCentral()
+}
+
+dependencies {
+    nmcpAggregation(project(":problem4j-spring-bom"))
+    nmcpAggregation(project(":problem4j-spring-web"))
+    nmcpAggregation(project(":problem4j-spring-webflux"))
+    nmcpAggregation(project(":problem4j-spring-webmvc"))
+}
+
+nmcpAggregation {
+    centralPortal  {
+        username = System.getenv("PUBLISHING_USERNAME")
+        password = System.getenv("PUBLISHING_PASSWORD")
+
+        publishingType = "USER_MANAGED"
+    }
 }
 
 spotless {
