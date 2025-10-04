@@ -66,12 +66,12 @@ compatible down to `3.0.0`. Integration with Spring Boot 4 (once its released) w
        <dependency>
            <groupId>io.github.malczuuu.problem4j</groupId>
            <artifactId>problem4j-spring-webflux</artifactId>
-           <version>1.0.0-alpha1</version>
+           <version>1.0.0-alpha2</version>
        </dependency>
        <dependency>
            <groupId>io.github.malczuuu.problem4j</groupId>
            <artifactId>problem4j-spring-webmvc</artifactId>
-           <version>1.0.0-alpha1</version>
+           <version>1.0.0-alpha2</version>
        </dependency>
    </dependencies>
    ```
@@ -79,8 +79,8 @@ compatible down to `3.0.0`. Integration with Spring Boot 4 (once its released) w
    ```groovy
    dependencies {
        // pick the one for your project
-       implementation("io.github.malczuuu.problem4j:problem4j-spring-webflux:1.0.0-alpha1")
-       implementation("io.github.malczuuu.problem4j:problem4j-spring-webmvc:1.0.0-alpha1")
+       implementation("io.github.malczuuu.problem4j:problem4j-spring-webflux:1.0.0-alpha2")
+       implementation("io.github.malczuuu.problem4j:problem4j-spring-webmvc:1.0.0-alpha2")
    }
    ```
 
