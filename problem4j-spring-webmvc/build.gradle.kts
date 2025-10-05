@@ -29,7 +29,6 @@ dependencies {
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test:${property("spring-boot.version")}")
     testImplementation("org.springframework.boot:spring-boot-starter-validation:${property("spring-boot.version")}")
-    testImplementation("org.springframework.boot:spring-boot-starter-webflux:${property("spring-boot.version")}")
 
     testImplementation("jakarta.servlet:jakarta.servlet-api:${property("jakarta.servlet-api.version")}")
 
@@ -102,4 +101,6 @@ tasks.withType<Javadoc>().configureEach {
 
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
+    systemProperty("user.language", "en")
+    systemProperty("user.country", "US")
 }

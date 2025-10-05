@@ -104,4 +104,6 @@ tasks.withType<Javadoc>().configureEach {
 
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
+    systemProperty("user.language", "en")
+    systemProperty("user.country", "US")
 }
