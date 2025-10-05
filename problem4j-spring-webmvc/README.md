@@ -1,4 +1,4 @@
-# Built-in Spring Exception Mappings
+# Overrides for Spring WebMVC
 
 This module extends `problem4j-spring-web` overrides of responses for many framework exceptions and produces structured
 RFC 7807 `Problem` objects, with exceptions that are specific to `spring-webmvc`.
@@ -18,6 +18,25 @@ controller never leaks.
 }
 ```
 
+## Override `ProblemErrorController`
+
+[`ProblemErrorController`][ProblemErrorController] overrides default error fallback for `spring-webmvc`. Default one
+distinguishes between `Accept` header to display a formatted page or JSON with build-in `ErrorAttributes`.
+
+```json
+{
+  "timestamp": 1426615606,
+  "exception": "org.springframework.web.bind.MissingServletRequestParameterException",
+  "status": 400,
+  "error": "Bad Request",
+  "path": "/welcome",
+  "message": "Required String parameter 'name' is not present"
+}
+```
+
+- It can be overwritten by declaring a custom `ErrorController` component.
+- Exclude [`ProblemErrorMvcConfiguration`][ProblemErrorMvcConfiguration] do disable this override.
+
 ## Main Test Scenarios
 
 1. What happens if `@PathVariable`, `@RequestParam`, etc. is missing - [`MissingParameterTest`][MissingParameterTest].
@@ -33,7 +52,12 @@ controller never leaks.
 10. What happens if `ErrorResponseException` is thrown - [`ErrorResponseTest`][ErrorResponseTest].
 11. What happens if `ProblemException` is thrown [`ProblemMvcAdviceTest`][ProblemMvcAdviceTest] (or exception
     annotated with`@ProblemMapping`).
-12. What happens if we enable `instance-override` [`InstanceOverrideTest`][InstanceOverrideTest].
+12. What happens if we enable tracing and `instance-override` [`InstanceOverrideTest`][InstanceOverrideTest] (it should
+    include `"instance"` field and add tracing header.
+
+[ProblemErrorController]: src/main/java/io/github/malczuuu/problem4j/spring/webmvc/error/ProblemErrorController.java
+
+[ProblemErrorMvcConfiguration]: src/main/java/io/github/malczuuu/problem4j/spring/webmvc/error/ProblemErrorMvcConfiguration.java
 
 [MissingParameterTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/MissingParameterTest.java
 

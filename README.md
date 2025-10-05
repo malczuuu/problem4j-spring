@@ -50,14 +50,20 @@ Details model with exception handling in Spring Boot.
 
 The library provides two ways to convert exceptions into RFC 7807-compliant `Problem` responses. You can either extend
 `ProblemException` or use `@ProblemMapping` annotation on your own exception if modifying inheritance tree is not an
-option for. For more details and examples visit [`problem4j-spring-web/README.md`][problem4j-spring-web-readme].
+option for.
+
+For more details and usage examples, see the submodule `README.md` files:
+
+- [`problem4j-spring-web/README.md`][problem4j-spring-web-readme],
+- [`problem4j-spring-webflux/README.md`][problem4j-spring-webflux-readme],
+- [`problem4j-spring-webmvc/README.md`][problem4j-spring-webmvc-readme].
 
 Add library as dependency to Maven or Gradle. See the actual versions on [Maven Central][maven-central]. Add it along
 with repository in your dependency manager. **Java 17** or higher is required to use this library.
 
 Tested with Spring Boot `3+`, but mostly on `3.5.x`. However, the idea for `v1.x` of this library was to be backwards
-compatible down to `3.0.0`. Integration with Spring Boot 4 (once its released) will most likely be released as `v2.x` if
-`v1.x` won't be compatible.
+compatible down to Spring Boot `3.0.0`. Integration with **Spring Boot 4** (once its released) will most likely be
+released as `v2.x` if `v1.x` won't be compatible.
 
 1. Maven:
    ```xml
@@ -120,6 +126,10 @@ see [`problem4j.tracing-header-name`](#problem4jtracing-header-name)). Defaults 
 [problem4j-spring]: https://github.com/malczuuu/problem4j-spring
 
 [problem4j-spring-web-readme]: problem4j-spring-web/README.md
+
+[problem4j-spring-webflux-readme]: problem4j-spring-webflux/README.md
+
+[problem4j-spring-webmvc-readme]: problem4j-spring-webmvc/README.md
 
 [problem4j-jackson]: https://github.com/malczuuu/problem4j-jackson
 
