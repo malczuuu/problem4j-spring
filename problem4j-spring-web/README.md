@@ -9,7 +9,7 @@
 4. [Occurrences of `TypeMismatchException`](#occurrences-of-typemismatchexception)
 5. [Occurrences of `ErrorResponseException`](#occurrences-of-errorresponseexception)
 6. [General HTTP Stuff](#general-http-stuff)
-7. [Known Issues](#known-issues)
+7. [FAQ](#faq)
 
 ## Overview
 
@@ -313,7 +313,7 @@ Example:
    }
    ```
 
-## Known Issues
+## FAQ
 
 ### Accessing unregistered HTTP path doesn't return proper response body
 
@@ -322,11 +322,25 @@ Example:
    ```properties
    spring.mvc.throw-exception-if-no-handler-found=true
    ```
+   See `org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties` class to debug it yourself.
 2. By default, Spring Boot includes mappings to static resources. If you want to disable them and make Spring return 404
-   on `src/main/resources/static/*` (and others), disable it.
+   on `src/main/resources/static/*` (and others), set following property.
    ```properties
    spring.web.resources.add-mappings=false
    ```
+   See `org.springframework.boot.autoconfigure.web.SpringWebProperties` class to debug it yourself.
+
+### Messages of `jakarta.validation` errors are localized
+
+By default, `spring.web.locale-resolved` use `accept_header`, to prioritize `Accept` header. Consider updating it as it
+follows.
+
+```properties
+spring.web.locale=en_US
+spring.web.locale-resolver=fixed
+```
+
+See `org.springframework.boot.autoconfigure.web.SpringWebProperties` class to debug it yourself.
 
 [rfc9110-15.5.4]: https://datatracker.ietf.org/doc/html/rfc9110#section-15.5.14
 
