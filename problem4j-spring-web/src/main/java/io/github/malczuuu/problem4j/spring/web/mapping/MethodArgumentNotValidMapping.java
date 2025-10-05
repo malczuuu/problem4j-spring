@@ -1,10 +1,12 @@
 package io.github.malczuuu.problem4j.spring.web.mapping;
 
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.ERRORS_EXTENSION;
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.VALIDATION_FAILED_DETAIL;
+
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemBuilder;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
-import io.github.malczuuu.problem4j.spring.web.format.DetailFormat;
-import io.github.malczuuu.problem4j.spring.web.format.PropertyNameFormat;
+import io.github.malczuuu.problem4j.spring.web.format.ProblemFormat;
 import io.github.malczuuu.problem4j.spring.web.model.Violation;
 import java.util.ArrayList;
 import org.springframework.http.HttpHeaders;
@@ -12,20 +14,10 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
-public class MethodArgumentNotValidMapping implements ExceptionMapping {
+public class MethodArgumentNotValidMapping extends AbstractExceptionMapping {
 
-  private final DetailFormat detailFormat;
-  private final PropertyNameFormat propertyNameFormat;
-
-  public MethodArgumentNotValidMapping(
-      DetailFormat detailFormat, PropertyNameFormat propertyNameFormat) {
-    this.detailFormat = detailFormat;
-    this.propertyNameFormat = propertyNameFormat;
-  }
-
-  @Override
-  public Class<MethodArgumentNotValidException> getExceptionClass() {
-    return MethodArgumentNotValidException.class;
+  public MethodArgumentNotValidMapping(ProblemFormat problemFormat) {
+    super(MethodArgumentNotValidException.class, problemFormat);
   }
 
   @Override
@@ -38,15 +30,12 @@ public class MethodArgumentNotValidMapping implements ExceptionMapping {
     ArrayList<Violation> details = new ArrayList<>();
     bindingResult
         .getFieldErrors()
-        .forEach(
-            f ->
-                details.add(
-                    new Violation(propertyNameFormat.format(f.getField()), f.getDefaultMessage())));
+        .forEach(f -> details.add(new Violation(f.getField(), f.getDefaultMessage())));
     bindingResult
         .getGlobalErrors()
         .forEach(g -> details.add(new Violation(null, g.getDefaultMessage())));
     return Problem.builder()
-        .detail(detailFormat.format("Validation failed"))
-        .extension("errors", details);
+        .detail(formatDetail(VALIDATION_FAILED_DETAIL))
+        .extension(ERRORS_EXTENSION, details);
   }
 }

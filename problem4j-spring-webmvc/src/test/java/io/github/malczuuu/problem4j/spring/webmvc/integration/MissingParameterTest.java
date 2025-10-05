@@ -1,5 +1,18 @@
 package io.github.malczuuu.problem4j.spring.webmvc.integration;
 
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.ATTRIBUTE_EXTENSION;
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.COOKIE_EXTENSION;
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.HEADER_EXTENSION;
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.KIND_EXTENSION;
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.MISSING_COOKIE_DETAIL;
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.MISSING_HEADER_DETAIL;
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.MISSING_PATH_VARIABLE_DETAIL;
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.MISSING_REQUEST_ATTRIBUTE_DETAIL;
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.MISSING_REQUEST_PARAM_DETAIL;
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.MISSING_REQUEST_PART_DETAIL;
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.MISSING_SESSION_ATTRIBUTE_DETAIL;
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.NAME_EXTENSION;
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.PARAM_EXTENSION;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
@@ -78,8 +91,8 @@ class MissingParameterTest {
                   .isEqualTo(
                       Problem.builder()
                           .status(ProblemStatus.BAD_REQUEST)
-                          .detail("Missing path variable")
-                          .extension("name", "var")
+                          .detail(MISSING_PATH_VARIABLE_DETAIL)
+                          .extension(NAME_EXTENSION, "var")
                           .build());
             });
   }
@@ -118,9 +131,9 @@ class MissingParameterTest {
                   .isEqualTo(
                       Problem.builder()
                           .status(ProblemStatus.BAD_REQUEST)
-                          .detail("Missing request param")
-                          .extension("param", "param")
-                          .extension("kind", "string")
+                          .detail(MISSING_REQUEST_PARAM_DETAIL)
+                          .extension(PARAM_EXTENSION, "param")
+                          .extension(KIND_EXTENSION, "string")
                           .build());
             });
   }
@@ -160,8 +173,8 @@ class MissingParameterTest {
                   .isEqualTo(
                       Problem.builder()
                           .status(ProblemStatus.BAD_REQUEST)
-                          .detail("Missing request part")
-                          .extension("param", "file")
+                          .detail(MISSING_REQUEST_PART_DETAIL)
+                          .extension(PARAM_EXTENSION, "file")
                           .build());
             });
   }
@@ -202,8 +215,8 @@ class MissingParameterTest {
                   .isEqualTo(
                       Problem.builder()
                           .status(ProblemStatus.BAD_REQUEST)
-                          .detail("Missing header")
-                          .extension("header", "X-Custom-Header")
+                          .detail(MISSING_HEADER_DETAIL)
+                          .extension(HEADER_EXTENSION, "X-Custom-Header")
                           .build());
             });
   }
@@ -243,8 +256,8 @@ class MissingParameterTest {
                   .isEqualTo(
                       Problem.builder()
                           .status(ProblemStatus.BAD_REQUEST)
-                          .detail("Missing cookie")
-                          .extension("cookie", "x_session")
+                          .detail(MISSING_COOKIE_DETAIL)
+                          .extension(COOKIE_EXTENSION, "x_session")
                           .build());
             });
   }
@@ -284,8 +297,8 @@ class MissingParameterTest {
                   .isEqualTo(
                       Problem.builder()
                           .status(ProblemStatus.BAD_REQUEST)
-                          .detail("Missing request attribute")
-                          .extension("attribute", "attr")
+                          .detail(MISSING_REQUEST_ATTRIBUTE_DETAIL)
+                          .extension(ATTRIBUTE_EXTENSION, "attr")
                           .build());
             });
   }
@@ -325,8 +338,8 @@ class MissingParameterTest {
                   .isEqualTo(
                       Problem.builder()
                           .status(ProblemStatus.BAD_REQUEST)
-                          .detail("Missing session attribute")
-                          .extension("attribute", "attr")
+                          .detail(MISSING_SESSION_ATTRIBUTE_DETAIL)
+                          .extension(ATTRIBUTE_EXTENSION, "attr")
                           .build());
             });
   }

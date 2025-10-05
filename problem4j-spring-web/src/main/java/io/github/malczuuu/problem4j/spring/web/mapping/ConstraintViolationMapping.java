@@ -1,9 +1,11 @@
 package io.github.malczuuu.problem4j.spring.web.mapping;
 
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.ERRORS_EXTENSION;
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.VALIDATION_FAILED_DETAIL;
+
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
-import io.github.malczuuu.problem4j.spring.web.format.DetailFormat;
-import io.github.malczuuu.problem4j.spring.web.format.PropertyNameFormat;
+import io.github.malczuuu.problem4j.spring.web.format.ProblemFormat;
 import io.github.malczuuu.problem4j.spring.web.model.Violation;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -21,26 +23,14 @@ import org.springframework.http.HttpStatusCode;
  *
  * <ul>
  *   <li>Extracts property paths and violation messages from each {@link ConstraintViolation}.
- *   <li>Formats field names using {@link PropertyNameFormat}.
- *   <li>Formats overall detail message using {@link DetailFormat}.
  *   <li>Includes all validation errors in the {@code errors} extension property of the {@link
  *       Problem} object.
  * </ul>
  */
-public class ConstraintViolationMapping implements ExceptionMapping {
+public class ConstraintViolationMapping extends AbstractExceptionMapping {
 
-  private final DetailFormat detailFormat;
-  private final PropertyNameFormat propertyNameFormat;
-
-  public ConstraintViolationMapping(
-      DetailFormat detailFormat, PropertyNameFormat propertyNameFormat) {
-    this.detailFormat = detailFormat;
-    this.propertyNameFormat = propertyNameFormat;
-  }
-
-  @Override
-  public Class<ConstraintViolationException> getExceptionClass() {
-    return ConstraintViolationException.class;
+  public ConstraintViolationMapping(ProblemFormat problemFormat) {
+    super(ConstraintViolationException.class, problemFormat);
   }
 
   @Override
@@ -50,15 +40,13 @@ public class ConstraintViolationMapping implements ExceptionMapping {
         e.getConstraintViolations().stream()
             .map(
                 violation ->
-                    new Violation(
-                        propertyNameFormat.format(fetchViolationProperty(violation)),
-                        violation.getMessage()))
+                    new Violation(fetchViolationProperty(violation), violation.getMessage()))
             .toList();
 
     return Problem.builder()
         .status(ProblemStatus.BAD_REQUEST)
-        .detail(detailFormat.format("Validation failed"))
-        .extension("errors", errors)
+        .detail(formatDetail(VALIDATION_FAILED_DETAIL))
+        .extension(ERRORS_EXTENSION, errors)
         .build();
   }
 

@@ -24,23 +24,16 @@ import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.SESSIO
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemBuilder;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
-import io.github.malczuuu.problem4j.spring.web.format.DetailFormat;
+import io.github.malczuuu.problem4j.spring.web.format.ProblemFormat;
 import java.util.Locale;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.server.MissingRequestValueException;
 
-public class MissingRequestValueMapping implements ExceptionMapping {
+public class MissingRequestValueMapping extends AbstractExceptionMapping {
 
-  private final DetailFormat detailFormat;
-
-  public MissingRequestValueMapping(DetailFormat detailFormat) {
-    this.detailFormat = detailFormat;
-  }
-
-  @Override
-  public Class<MissingRequestValueException> getExceptionClass() {
-    return MissingRequestValueException.class;
+  public MissingRequestValueMapping(ProblemFormat problemFormat) {
+    super(MissingRequestValueException.class, problemFormat);
   }
 
   @Override
@@ -57,38 +50,38 @@ public class MissingRequestValueMapping implements ExceptionMapping {
       case QUERY_PARAMETER_LABEL ->
           builder =
               builder
-                  .detail(detailFormat.format(MISSING_REQUEST_PARAM_DETAIL))
+                  .detail(formatDetail(MISSING_REQUEST_PARAM_DETAIL))
                   .extension(PARAM_EXTENSION, e.getName())
                   .extension(KIND_EXTENSION, e.getType().getSimpleName().toLowerCase(Locale.ROOT));
       case REQUEST_PART_LABEL ->
           builder =
               builder
-                  .detail(detailFormat.format(MISSING_REQUEST_PART_DETAIL))
+                  .detail(formatDetail(MISSING_REQUEST_PART_DETAIL))
                   .extension(PARAM_EXTENSION, e.getName());
       case HEADER_LABEL ->
           builder =
               builder
-                  .detail(detailFormat.format(MISSING_HEADER_DETAIL))
+                  .detail(formatDetail(MISSING_HEADER_DETAIL))
                   .extension(HEADER_EXTENSION, e.getName());
       case PATH_PARAMETER_LABEL ->
           builder =
               builder
-                  .detail(detailFormat.format(MISSING_PATH_VARIABLE_DETAIL))
+                  .detail(formatDetail(MISSING_PATH_VARIABLE_DETAIL))
                   .extension(NAME_EXTENSION, e.getName());
       case COOKIE_LABEL ->
           builder =
               builder
-                  .detail(detailFormat.format(MISSING_COOKIE_DETAIL))
+                  .detail(formatDetail(MISSING_COOKIE_DETAIL))
                   .extension(COOKIE_EXTENSION, e.getName());
       case REQUEST_ATTRIBUTE_LABEL ->
           builder =
               builder
-                  .detail(detailFormat.format(MISSING_REQUEST_ATTRIBUTE_DETAIL))
+                  .detail(formatDetail(MISSING_REQUEST_ATTRIBUTE_DETAIL))
                   .extension(ATTRIBUTE_EXTENSION, e.getName());
       case SESSION_ATTRIBUTE_LABEL ->
           builder =
               builder
-                  .detail(detailFormat.format(MISSING_SESSION_ATTRIBUTE_DETAIL))
+                  .detail(formatDetail(MISSING_SESSION_ATTRIBUTE_DETAIL))
                   .extension(ATTRIBUTE_EXTENSION, e.getName());
     }
 

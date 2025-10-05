@@ -3,15 +3,12 @@ package io.github.malczuuu.problem4j.spring.web;
 import io.github.malczuuu.problem4j.jackson.ProblemModule;
 import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
 import io.github.malczuuu.problem4j.spring.web.annotation.SimpleProblemMappingProcessor;
-import io.github.malczuuu.problem4j.spring.web.format.DetailFormat;
-import io.github.malczuuu.problem4j.spring.web.format.JacksonPropertyNameFormat;
-import io.github.malczuuu.problem4j.spring.web.format.PropertyNameFormat;
-import io.github.malczuuu.problem4j.spring.web.format.SimpleDetailFormat;
+import io.github.malczuuu.problem4j.spring.web.format.DefaultProblemFormat;
+import io.github.malczuuu.problem4j.spring.web.format.ProblemFormat;
 import io.github.malczuuu.problem4j.spring.web.mapping.ExceptionMapping;
 import io.github.malczuuu.problem4j.spring.web.mapping.ExceptionMappingConfiguration;
 import java.util.List;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.jackson.JacksonProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,27 +42,15 @@ public class ProblemConfiguration {
   }
 
   /**
-   * Provides a {@link DetailFormat} based on {@link ProblemProperties} if none is defined.
+   * Provides a {@link ProblemFormat} based on {@link ProblemProperties} if none is defined.
    *
    * @param properties the configuration properties
-   * @return a new {@link SimpleDetailFormat}
+   * @return a new {@link DefaultProblemFormat}
    */
-  @ConditionalOnMissingBean(DetailFormat.class)
+  @ConditionalOnMissingBean(ProblemFormat.class)
   @Bean
-  public DetailFormat detailFormat(ProblemProperties properties) {
-    return new SimpleDetailFormat(properties.getDetailFormat());
-  }
-
-  /**
-   * Provides a {@link PropertyNameFormat} based on {@link JacksonProperties}.
-   *
-   * @param jacksonProperties the Jackson configuration properties
-   * @return a new {@link JacksonPropertyNameFormat}
-   */
-  @ConditionalOnMissingBean(PropertyNameFormat.class)
-  @Bean
-  public PropertyNameFormat propertyNameFormat(JacksonProperties jacksonProperties) {
-    return new JacksonPropertyNameFormat(jacksonProperties.getPropertyNamingStrategy());
+  public ProblemFormat problemFormat(ProblemProperties properties) {
+    return new DefaultProblemFormat(properties.getDetailFormat());
   }
 
   /**

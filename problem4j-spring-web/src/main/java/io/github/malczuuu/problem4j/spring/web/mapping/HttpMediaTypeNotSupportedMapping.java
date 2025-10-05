@@ -2,15 +2,15 @@ package io.github.malczuuu.problem4j.spring.web.mapping;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
+import io.github.malczuuu.problem4j.spring.web.format.ProblemFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 
-public class HttpMediaTypeNotSupportedMapping implements ExceptionMapping {
+public class HttpMediaTypeNotSupportedMapping extends AbstractExceptionMapping {
 
-  @Override
-  public Class<HttpMediaTypeNotSupportedException> getExceptionClass() {
-    return HttpMediaTypeNotSupportedException.class;
+  public HttpMediaTypeNotSupportedMapping(ProblemFormat problemFormat) {
+    super(HttpMediaTypeNotSupportedException.class, problemFormat);
   }
 
   @Override

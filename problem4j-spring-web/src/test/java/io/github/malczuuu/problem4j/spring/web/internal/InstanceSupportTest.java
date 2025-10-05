@@ -1,4 +1,4 @@
-package io.github.malczuuu.problem4j.spring.web.util;
+package io.github.malczuuu.problem4j.spring.web.internal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

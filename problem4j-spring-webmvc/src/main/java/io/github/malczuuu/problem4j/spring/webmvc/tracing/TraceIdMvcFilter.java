@@ -1,8 +1,8 @@
-package io.github.malczuuu.problem4j.spring.webmvc;
+package io.github.malczuuu.problem4j.spring.webmvc.tracing;
 
-import io.github.malczuuu.problem4j.spring.web.util.InstanceSupport;
-import io.github.malczuuu.problem4j.spring.web.util.StaticProblemContext;
-import io.github.malczuuu.problem4j.spring.web.util.TracingSupport;
+import io.github.malczuuu.problem4j.spring.web.internal.InstanceSupport;
+import io.github.malczuuu.problem4j.spring.web.internal.StaticProblemContext;
+import io.github.malczuuu.problem4j.spring.web.internal.TracingSupport;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,17 +11,6 @@ import java.io.IOException;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-/**
- * String traceId = readTraceId(exchange);
- *
- * <p>String instanceOverrideValue = InstanceSupport.overrideInstance(instanceOverride, new
- * StaticProblemContext(traceId));
- *
- * <p>exchange.getAttributes().put(TracingSupport.TRACE_ID_ATTR, traceId);
- * exchange.getAttributes().put(TracingSupport.INSTANCE_OVERRIDE_ATTR, instanceOverrideValue);
- *
- * <p>exchange.getResponse().getHeaders().set(tracingHeaderName, traceId);
- */
 public class TraceIdMvcFilter extends OncePerRequestFilter {
 
   private final String tracingHeaderName;

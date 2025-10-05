@@ -7,6 +7,7 @@ import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcesso
 import io.github.malczuuu.problem4j.spring.web.mapping.ConstraintViolationMapping;
 import io.github.malczuuu.problem4j.spring.webflux.error.ProblemErrorWebFluxConfiguration;
 import io.github.malczuuu.problem4j.spring.webflux.mapping.ExceptionMappingWebFluxConfiguration;
+import io.github.malczuuu.problem4j.spring.webflux.tracing.TraceIdWebFluxFilter;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;

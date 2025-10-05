@@ -2,16 +2,16 @@ package io.github.malczuuu.problem4j.spring.webmvc.mapping;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
-import io.github.malczuuu.problem4j.spring.web.mapping.ExceptionMapping;
+import io.github.malczuuu.problem4j.spring.web.format.ProblemFormat;
+import io.github.malczuuu.problem4j.spring.web.mapping.AbstractExceptionMapping;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-public class NoResourceFoundMapping implements ExceptionMapping {
+public class NoResourceFoundMapping extends AbstractExceptionMapping {
 
-  @Override
-  public Class<NoResourceFoundException> getExceptionClass() {
-    return NoResourceFoundException.class;
+  public NoResourceFoundMapping(ProblemFormat problemFormat) {
+    super(NoResourceFoundException.class, problemFormat);
   }
 
   @Override

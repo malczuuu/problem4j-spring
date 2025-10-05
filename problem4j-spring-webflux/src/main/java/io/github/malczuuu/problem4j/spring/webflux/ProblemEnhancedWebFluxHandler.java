@@ -3,9 +3,9 @@ package io.github.malczuuu.problem4j.spring.webflux;
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.web.ExceptionMappingStore;
-import io.github.malczuuu.problem4j.spring.web.util.TracingSupport;
+import io.github.malczuuu.problem4j.spring.web.internal.TracingSupport;
+import io.github.malczuuu.problem4j.spring.web.util.ProblemSupport;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -42,9 +42,9 @@ public class ProblemEnhancedWebFluxHandler extends ResponseEntityExceptionHandle
    * <b>Note:</b> Although {@link HttpHeaders#writableHttpHeaders(HttpHeaders)} is deprecated, it is
    * used here for backward compatibility with older Spring Framework versions.
    *
-   * <p>The deprecation alternative provided by Spring does not work in versions {@code 6.0.*} and
-   * {@code 6.1.*} (Spring Framework versions, not Spring Boot). Therefore, this method is retained
-   * to ensure compatibility across those versions.
+   * <p>The deprecation alternative provided by Spring is not available in versions {@code 6.0.*}
+   * and {@code 6.1.*} (Spring Framework versions, not Spring Boot). Therefore, this method is
+   * retained to ensure compatibility across those versions.
    */
   @Override
   protected Mono<ResponseEntity<Object>> handleExceptionInternal(
@@ -63,7 +63,7 @@ public class ProblemEnhancedWebFluxHandler extends ResponseEntityExceptionHandle
       problem = problem.toBuilder().instance(instanceOverride.toString()).build();
     }
 
-    status = HttpStatus.valueOf(problem.getStatus());
+    status = ProblemSupport.resolveStatus(problem);
 
     return super.handleExceptionInternal(ex, problem, headers, status, exchange);
   }

@@ -9,43 +9,43 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class SimpleDetailFormatTest {
+class DefaultDetailFormatTest {
 
   @Test
   void givenLowercaseFormat_whenFormatting_thenReturnsLowercase() {
-    SimpleDetailFormat formatting =
-        new SimpleDetailFormat(ProblemProperties.DetailFormats.LOWERCASE);
+    DefaultProblemFormat format =
+        new DefaultProblemFormat(ProblemProperties.DetailFormat.LOWERCASE);
 
-    String result = formatting.format("TeSt StrIng");
+    String result = format.formatDetail("TeSt StrIng");
 
     assertThat(result).isEqualTo("test string");
   }
 
   @Test
   void givenUppercaseFormat_whenFormatting_thenReturnsUppercase() {
-    SimpleDetailFormat formatting =
-        new SimpleDetailFormat(ProblemProperties.DetailFormats.UPPERCASE);
+    DefaultProblemFormat formatting =
+        new DefaultProblemFormat(ProblemProperties.DetailFormat.UPPERCASE);
 
-    String result = formatting.format("TeSt StrIng");
+    String result = formatting.formatDetail("TeSt StrIng");
 
     assertThat(result).isEqualTo("TEST STRING");
   }
 
   @Test
   void givenCapitalizedFormat_whenFormatting_thenReturnsUppercase() {
-    SimpleDetailFormat formatting =
-        new SimpleDetailFormat(ProblemProperties.DetailFormats.CAPITALIZED);
+    DefaultProblemFormat formatting =
+        new DefaultProblemFormat(ProblemProperties.DetailFormat.CAPITALIZED);
 
-    String result = formatting.format("test string");
+    String result = formatting.formatDetail("test string");
 
     assertThat(result).isEqualTo("Test string");
   }
 
   @Test
   void givenUnknownFormat_whenFormatting_thenReturnsUnchanged() {
-    SimpleDetailFormat formatting = new SimpleDetailFormat("something-else");
+    DefaultProblemFormat formatting = new DefaultProblemFormat("something-else");
 
-    String result = formatting.format("TeSt StrIng");
+    String result = formatting.formatDetail("TeSt StrIng");
 
     assertThat(result).isEqualTo("TeSt StrIng");
   }
@@ -53,16 +53,16 @@ class SimpleDetailFormatTest {
   @ParameterizedTest
   @ValueSource(
       strings = {
-        ProblemProperties.DetailFormats.LOWERCASE,
-        ProblemProperties.DetailFormats.UPPERCASE,
-        ProblemProperties.DetailFormats.CAPITALIZED,
+        ProblemProperties.DetailFormat.LOWERCASE,
+        ProblemProperties.DetailFormat.UPPERCASE,
+        ProblemProperties.DetailFormat.CAPITALIZED,
         ""
       })
   @NullSource
   void givenEmptyString_whenFormatting_thenReturnsEmpty(String detailFormat) {
-    SimpleDetailFormat formatting = new SimpleDetailFormat(detailFormat);
+    DefaultProblemFormat formatting = new DefaultProblemFormat(detailFormat);
 
-    String result = formatting.format("");
+    String result = formatting.formatDetail("");
 
     assertThat(result).isEqualTo("");
   }
@@ -70,15 +70,15 @@ class SimpleDetailFormatTest {
   @ParameterizedTest
   @ValueSource(
       strings = {
-        ProblemProperties.DetailFormats.LOWERCASE,
-        ProblemProperties.DetailFormats.UPPERCASE,
-        ProblemProperties.DetailFormats.CAPITALIZED,
+        ProblemProperties.DetailFormat.LOWERCASE,
+        ProblemProperties.DetailFormat.UPPERCASE,
+        ProblemProperties.DetailFormat.CAPITALIZED,
         ""
       })
   @NullSource
   void givenNullInput_whenFormatting_thenReturnsNull(String detailFormat) {
-    SimpleDetailFormat formatting = new SimpleDetailFormat(detailFormat);
+    DefaultProblemFormat formatting = new DefaultProblemFormat(detailFormat);
 
-    assertNull(formatting.format(null));
+    assertNull(formatting.formatDetail(null));
   }
 }

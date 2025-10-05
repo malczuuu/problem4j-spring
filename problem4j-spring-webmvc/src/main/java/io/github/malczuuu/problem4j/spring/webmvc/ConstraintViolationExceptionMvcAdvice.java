@@ -3,8 +3,9 @@ package io.github.malczuuu.problem4j.spring.webmvc;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
 import io.github.malczuuu.problem4j.core.Problem;
+import io.github.malczuuu.problem4j.spring.web.internal.TracingSupport;
 import io.github.malczuuu.problem4j.spring.web.mapping.ConstraintViolationMapping;
-import io.github.malczuuu.problem4j.spring.web.util.TracingSupport;
+import io.github.malczuuu.problem4j.spring.web.util.ProblemSupport;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,7 @@ public class ConstraintViolationExceptionMvcAdvice {
       problem = problem.toBuilder().instance(instanceOverride.toString()).build();
     }
 
-    status = HttpStatus.valueOf(problem.getStatus());
+    status = ProblemSupport.resolveStatus(problem);
 
     return new ResponseEntity<>(problem, headers, status);
   }

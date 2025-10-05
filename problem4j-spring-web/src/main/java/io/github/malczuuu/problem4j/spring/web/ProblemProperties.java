@@ -21,7 +21,7 @@ public class ProblemProperties {
    * @param detailFormat the format for the {@code "detail"} field
    */
   public ProblemProperties(
-      @DefaultValue(DetailFormats.CAPITALIZED) String detailFormat,
+      @DefaultValue(DetailFormat.CAPITALIZED) String detailFormat,
       String tracingHeaderName,
       String instanceOverride) {
     this.detailFormat = detailFormat;
@@ -71,7 +71,7 @@ public class ProblemProperties {
   }
 
   /** Supported values for {@code detailFormat}. */
-  public static final class DetailFormats {
+  public static final class DetailFormat {
 
     /** All detail messages in lowercase. */
     public static final String LOWERCASE = "lowercase";
@@ -82,6 +82,6 @@ public class ProblemProperties {
     /** All detail messages in uppercase. */
     public static final String UPPERCASE = "uppercase";
 
-    private DetailFormats() {}
+    private DetailFormat() {}
   }
 }

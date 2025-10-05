@@ -1,5 +1,7 @@
 package io.github.malczuuu.problem4j.spring.webmvc.integration;
 
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.ERRORS_EXTENSION;
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.VALIDATION_FAILED_DETAIL;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -71,9 +73,9 @@ class ValidateRequestBodyTest {
                   .isEqualTo(
                       Problem.builder()
                           .status(ProblemStatus.BAD_REQUEST)
-                          .detail("Validation failed")
+                          .detail(VALIDATION_FAILED_DETAIL)
                           .extension(
-                              "errors",
+                              ERRORS_EXTENSION,
                               List.of(Map.of("field", "name", "error", "must not be blank")))
                           .build());
             });

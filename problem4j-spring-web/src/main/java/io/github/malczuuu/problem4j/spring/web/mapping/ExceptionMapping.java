@@ -18,6 +18,9 @@ import org.springframework.http.HttpStatusCode;
  *   <li>{@link #map(Exception, HttpHeaders, HttpStatusCode)} – produces the {@link Problem}
  *       response for the given exception.
  * </ul>
+ *
+ * <p>Implementations are supposed to be stateless, especially as one mapping may directly want to
+ * use another one for processing its {@code cause}.
  */
 public interface ExceptionMapping {
 

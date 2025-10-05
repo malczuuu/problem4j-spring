@@ -2,7 +2,7 @@ package io.github.malczuuu.problem4j.spring.webmvc.error;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemBuilder;
-import io.github.malczuuu.problem4j.spring.web.util.TracingSupport;
+import io.github.malczuuu.problem4j.spring.web.internal.TracingSupport;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;

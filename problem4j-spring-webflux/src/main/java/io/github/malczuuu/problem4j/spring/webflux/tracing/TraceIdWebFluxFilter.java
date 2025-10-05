@@ -1,8 +1,8 @@
-package io.github.malczuuu.problem4j.spring.webflux;
+package io.github.malczuuu.problem4j.spring.webflux.tracing;
 
-import io.github.malczuuu.problem4j.spring.web.util.InstanceSupport;
-import io.github.malczuuu.problem4j.spring.web.util.StaticProblemContext;
-import io.github.malczuuu.problem4j.spring.web.util.TracingSupport;
+import io.github.malczuuu.problem4j.spring.web.internal.InstanceSupport;
+import io.github.malczuuu.problem4j.spring.web.internal.StaticProblemContext;
+import io.github.malczuuu.problem4j.spring.web.internal.TracingSupport;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;

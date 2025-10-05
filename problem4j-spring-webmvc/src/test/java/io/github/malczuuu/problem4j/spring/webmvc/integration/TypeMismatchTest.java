@@ -1,5 +1,8 @@
 package io.github.malczuuu.problem4j.spring.webmvc.integration;
 
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.KIND_EXTENSION;
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.PROPERTY_EXTENSION;
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.TYPE_MISMATCH_DETAIL;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -62,9 +65,9 @@ class TypeMismatchTest {
                   .isEqualTo(
                       Problem.builder()
                           .status(ProblemStatus.BAD_REQUEST)
-                          .detail("Type mismatch")
-                          .extension("property", "id")
-                          .extension("kind", "integer")
+                          .detail(TYPE_MISMATCH_DETAIL)
+                          .extension(PROPERTY_EXTENSION, "id")
+                          .extension(KIND_EXTENSION, "integer")
                           .build());
             });
   }
@@ -104,9 +107,9 @@ class TypeMismatchTest {
                   .isEqualTo(
                       Problem.builder()
                           .status(ProblemStatus.BAD_REQUEST)
-                          .detail("Type mismatch")
-                          .extension("property", "id")
-                          .extension("kind", "integer")
+                          .detail(TYPE_MISMATCH_DETAIL)
+                          .extension(PROPERTY_EXTENSION, "id")
+                          .extension(KIND_EXTENSION, "integer")
                           .build());
             });
   }
@@ -144,9 +147,9 @@ class TypeMismatchTest {
                   .isEqualTo(
                       Problem.builder()
                           .status(ProblemStatus.BAD_REQUEST)
-                          .detail("Type mismatch")
-                          .extension("property", "X-Id")
-                          .extension("kind", "integer")
+                          .detail(TYPE_MISMATCH_DETAIL)
+                          .extension(PROPERTY_EXTENSION, "X-Id")
+                          .extension(KIND_EXTENSION, "integer")
                           .build());
             });
   }
@@ -184,9 +187,9 @@ class TypeMismatchTest {
                   .isEqualTo(
                       Problem.builder()
                           .status(ProblemStatus.BAD_REQUEST)
-                          .detail("Type mismatch")
-                          .extension("property", "id")
-                          .extension("kind", "integer")
+                          .detail(TYPE_MISMATCH_DETAIL)
+                          .extension(PROPERTY_EXTENSION, "id")
+                          .extension(KIND_EXTENSION, "integer")
                           .build());
             });
   }

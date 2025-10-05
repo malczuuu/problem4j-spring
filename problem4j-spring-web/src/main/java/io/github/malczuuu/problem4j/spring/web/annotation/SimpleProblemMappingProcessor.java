@@ -90,6 +90,13 @@ public class SimpleProblemMappingProcessor implements ProblemMappingProcessor {
     }
   }
 
+  /**
+   * Checks whether the given exception class is annotated with {@link ProblemMapping}.
+   *
+   * @param t {@link Throwable} to check (allows {@code null} value)
+   * @return {@code true} if the exception class has a {@link ProblemMapping} annotation, {@code
+   *     false} otherwise
+   */
   @Override
   public boolean isAnnotated(Throwable t) {
     return t != null && t.getClass().isAnnotationPresent(ProblemMapping.class);

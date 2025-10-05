@@ -1,8 +1,11 @@
 package io.github.malczuuu.problem4j.spring.web.mapping;
 
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.MISSING_REQUEST_PART_DETAIL;
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.PARAM_EXTENSION;
+
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
-import io.github.malczuuu.problem4j.spring.web.format.DetailFormat;
+import io.github.malczuuu.problem4j.spring.web.format.ProblemFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
@@ -17,25 +20,17 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
  * {@link org.springframework.web.bind.ServletRequestBindingException}.
  *
  * <p>The produced {@code Problem} has status {@code 400 Bad Request}, a human-readable detail
- * message determined by the configured {@link DetailFormat}, and an extension containing the
- * missing part name.
+ * message, and an extension containing the missing part name.
  *
  * @see MissingServletRequestPartException
  * @see Problem
  * @see ProblemStatus#BAD_REQUEST
  * @see ServletRequestBindingMapping
  */
-public class MissingServletRequestPartMapping implements ExceptionMapping {
+public class MissingServletRequestPartMapping extends AbstractExceptionMapping {
 
-  private final DetailFormat detailFormat;
-
-  public MissingServletRequestPartMapping(DetailFormat detailFormat) {
-    this.detailFormat = detailFormat;
-  }
-
-  @Override
-  public Class<MissingServletRequestPartException> getExceptionClass() {
-    return MissingServletRequestPartException.class;
+  public MissingServletRequestPartMapping(ProblemFormat problemFormat) {
+    super(MissingServletRequestPartException.class, problemFormat);
   }
 
   /**
@@ -45,7 +40,6 @@ public class MissingServletRequestPartMapping implements ExceptionMapping {
    *
    * <ul>
    *   <li>Status {@code 400 Bad Request}
-   *   <li>A detail message formatted via the configured {@link DetailFormat}
    *   <li>An extension named {@code "param"} containing the missing request part name
    * </ul>
    *
@@ -59,8 +53,8 @@ public class MissingServletRequestPartMapping implements ExceptionMapping {
     MissingServletRequestPartException e = (MissingServletRequestPartException) ex;
     return Problem.builder()
         .status(ProblemStatus.BAD_REQUEST)
-        .detail(detailFormat.format("Missing request part"))
-        .extension("param", e.getRequestPartName())
+        .detail(formatDetail(MISSING_REQUEST_PART_DETAIL))
+        .extension(PARAM_EXTENSION, e.getRequestPartName())
         .build();
   }
 }

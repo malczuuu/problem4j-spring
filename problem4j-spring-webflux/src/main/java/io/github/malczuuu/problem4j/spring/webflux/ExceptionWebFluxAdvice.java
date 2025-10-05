@@ -5,8 +5,9 @@ import io.github.malczuuu.problem4j.core.ProblemBuilder;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.web.ProblemContext;
 import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
-import io.github.malczuuu.problem4j.spring.web.util.StaticProblemContext;
-import io.github.malczuuu.problem4j.spring.web.util.TracingSupport;
+import io.github.malczuuu.problem4j.spring.web.internal.StaticProblemContext;
+import io.github.malczuuu.problem4j.spring.web.internal.TracingSupport;
+import io.github.malczuuu.problem4j.spring.web.util.ProblemSupport;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -66,7 +67,7 @@ public class ExceptionWebFluxAdvice {
       problem = builder.build();
     }
 
-    HttpStatus status = HttpStatus.valueOf(problem.getStatus());
+    HttpStatus status = ProblemSupport.resolveStatus(problem);
 
     return Mono.just(new ResponseEntity<>(problem, headers, status));
   }

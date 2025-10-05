@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Represents a validation violation with a specific field and its corresponding error message.
@@ -47,5 +48,27 @@ public class Violation implements Serializable {
   @JsonProperty("error")
   public String getError() {
     return error;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+    Violation violation = (Violation) obj;
+    return Objects.equals(field, violation.field) && Objects.equals(error, violation.error);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(field, error);
+  }
+
+  @Override
+  public String toString() {
+    return "Violation{field='" + field + "', error='" + error + "'}";
   }
 }

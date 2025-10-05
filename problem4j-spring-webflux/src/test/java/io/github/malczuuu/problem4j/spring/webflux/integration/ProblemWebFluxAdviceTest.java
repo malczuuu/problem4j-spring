@@ -3,6 +3,7 @@ package io.github.malczuuu.problem4j.spring.webflux.integration;
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemException;
 import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMapping;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootTest(classes = {_TestApp.class})
 @Import({
   ProblemWebFluxAdviceTest.ProblemExceptionController.class,
-  ProblemWebFluxAdviceTest.ProblemAnnotationController.class
+  ProblemWebFluxAdviceTest.ProblemAnnotationController.class,
+  ProblemWebFluxAdviceTest.AnnotationEmptyController.class
 })
 @AutoConfigureWebTestClient
 class ProblemWebFluxAdviceTest {
@@ -55,6 +57,20 @@ class ProblemWebFluxAdviceTest {
     }
   }
 
+  @ProblemMapping
+  static class AnnotationEmptyException extends RuntimeException {
+
+    private final String value1;
+    private final Long value2;
+    private final boolean value3;
+
+    AnnotationEmptyException(String value1, Long value2, boolean value3) {
+      this.value1 = value1;
+      this.value2 = value2;
+      this.value3 = value3;
+    }
+  }
+
   @RestController
   static class ProblemExceptionController {
     @GetMapping("/problem/exception")
@@ -74,6 +90,14 @@ class ProblemWebFluxAdviceTest {
         @RequestParam("value2") Long value2,
         @RequestParam("value3") boolean value3) {
       throw new AnnotatedException(value1, value2, value3);
+    }
+  }
+
+  @RestController
+  static class AnnotationEmptyController {
+    @GetMapping("/problem/annotation-empty")
+    String endpoint() {
+      throw new AnnotationEmptyException("does not matter", -1L, false);
     }
   }
 
@@ -135,5 +159,19 @@ class ProblemWebFluxAdviceTest {
                 .detail("value2:" + value2)
                 .instance("https://example.com/annotated/instance/" + value3)
                 .build());
+  }
+
+  @Test
+  void givenAnnotationEmptyException_shouldOverrideIt() {
+    webTestClient
+        .get()
+        .uri(uriBuilder -> uriBuilder.path("/problem/annotation-empty").build())
+        .exchange()
+        .expectStatus()
+        .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
+        .expectHeader()
+        .contentType(Problem.CONTENT_TYPE)
+        .expectBody(Problem.class)
+        .isEqualTo(Problem.builder().status(0).build());
   }
 }

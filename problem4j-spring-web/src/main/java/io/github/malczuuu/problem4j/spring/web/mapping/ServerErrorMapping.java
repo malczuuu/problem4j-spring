@@ -1,9 +1,11 @@
 package io.github.malczuuu.problem4j.spring.web.mapping;
 
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.MISSING_PATH_VARIABLE_DETAIL;
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.NAME_EXTENSION;
+
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
-import io.github.malczuuu.problem4j.spring.web.format.DetailFormat;
-import io.github.malczuuu.problem4j.spring.web.util.ProblemSupport;
+import io.github.malczuuu.problem4j.spring.web.format.ProblemFormat;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpHeaders;
@@ -13,17 +15,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ServerErrorException;
 
-public class ServerErrorMapping implements ExceptionMapping {
+public class ServerErrorMapping extends AbstractExceptionMapping {
 
-  private final DetailFormat detailFormat;
-
-  public ServerErrorMapping(DetailFormat detailFormat) {
-    this.detailFormat = detailFormat;
-  }
-
-  @Override
-  public Class<ServerErrorException> getExceptionClass() {
-    return ServerErrorException.class;
+  public ServerErrorMapping(ProblemFormat problemFormat) {
+    super(ServerErrorException.class, problemFormat);
   }
 
   @Override
@@ -34,12 +29,12 @@ public class ServerErrorMapping implements ExceptionMapping {
       String name = findParameterName(e.getMethodParameter());
       return Problem.builder()
           .status(ProblemStatus.BAD_REQUEST)
-          .detail(detailFormat.format("Missing path variable"))
-          .extension("name", name)
+          .detail(formatDetail(MISSING_PATH_VARIABLE_DETAIL))
+          .extension(NAME_EXTENSION, name)
           .build();
     }
 
-    return ProblemSupport.INTERNAL_SERVER_ERROR;
+    return Problem.builder().status(ProblemStatus.INTERNAL_SERVER_ERROR).build();
   }
 
   /**

@@ -1,39 +1,51 @@
 package io.github.malczuuu.problem4j.spring.web.mapping;
 
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.KIND_EXTENSION;
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.PROPERTY_EXTENSION;
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.TYPE_MISMATCH_DETAIL;
+
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemBuilder;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
-import io.github.malczuuu.problem4j.spring.web.format.DetailFormat;
+import io.github.malczuuu.problem4j.spring.web.format.ProblemFormat;
+import java.util.Locale;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-public class TypeMismatchMapping implements ExceptionMapping {
+public class TypeMismatchMapping extends AbstractExceptionMapping {
 
-  private final DetailFormat detailFormat;
-
-  public TypeMismatchMapping(DetailFormat detailFormat) {
-    this.detailFormat = detailFormat;
-  }
-
-  @Override
-  public Class<TypeMismatchException> getExceptionClass() {
-    return TypeMismatchException.class;
+  public TypeMismatchMapping(ProblemFormat problemFormat) {
+    super(TypeMismatchException.class, problemFormat);
   }
 
   @Override
   public Problem map(Exception ex, HttpHeaders headers, HttpStatusCode status) {
-    TypeMismatchException e = (TypeMismatchException) ex;
     ProblemBuilder builder =
         Problem.builder()
             .status(ProblemStatus.BAD_REQUEST)
-            .detail(detailFormat.format("Type mismatch"));
+            .detail(formatDetail(TYPE_MISMATCH_DETAIL));
 
-    if (e.getPropertyName() != null) {
-      builder = builder.extension("property", e.getPropertyName());
+    TypeMismatchException ex1 = (TypeMismatchException) ex;
+
+    String property = ex1.getPropertyName();
+    String kind =
+        ex1.getRequiredType() != null
+            ? ex1.getRequiredType().getSimpleName().toLowerCase(Locale.ROOT)
+            : null;
+
+    // could happen in some early 3.0.x versions of Spring Boot, cannot add tests for it as newer
+    // versions assign it to propertyName in constructor
+    if (property == null && ex instanceof MethodArgumentTypeMismatchException ex2) {
+      property = ex2.getName();
     }
-    if (e.getRequiredType() != null) {
-      builder = builder.extension("kind", e.getRequiredType().getSimpleName().toLowerCase());
+
+    if (property != null) {
+      builder = builder.extension(PROPERTY_EXTENSION, property);
+    }
+    if (kind != null) {
+      builder = builder.extension(KIND_EXTENSION, kind);
     }
     return builder.build();
   }

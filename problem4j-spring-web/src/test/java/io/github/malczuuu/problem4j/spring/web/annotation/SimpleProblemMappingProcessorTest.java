@@ -3,7 +3,7 @@ package io.github.malczuuu.problem4j.spring.web.annotation;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.spring.web.util.StaticProblemContext;
+import io.github.malczuuu.problem4j.spring.web.internal.StaticProblemContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -218,7 +218,23 @@ class SimpleProblemMappingProcessorTest {
   }
 
   @Test
-  void malformedPlaceholderDoesNotCrash() {
+  void givenEmptyAnnotation_shouldCreateProblemObject() {
+    @ProblemMapping
+    class MessageException extends RuntimeException {
+      MessageException(String message) {
+        super(message);
+      }
+    }
+    MessageException ex = new MessageException("boom");
+
+    Problem problem = processor.toProblem(ex, null);
+
+    assertThat(problem).isNotNull();
+    assertThat(problem).isEqualTo(Problem.builder().status(0).build());
+  }
+
+  @Test
+  void malformedPlaceholder_shouldNotCrash() {
     @ProblemMapping(
         type = "https://example.com",
         title = "Bad {notClosed",
@@ -232,8 +248,16 @@ class SimpleProblemMappingProcessorTest {
 
     MalformedPlaceholderException ex = new MalformedPlaceholderException();
 
-    Problem p = processor.toProblem(ex, null);
-    assertThat(p).isNotNull();
+    Problem problem = processor.toProblem(ex, null);
+    assertThat(problem).isNotNull();
+    assertThat(problem)
+        .isEqualTo(
+            Problem.builder()
+                .type("https://example.com")
+                .title("Bad {notClosed")
+                .status(400)
+                .detail("d")
+                .build());
   }
 
   @Test

@@ -1,4 +1,4 @@
-package io.github.malczuuu.problem4j.spring.web.util;
+package io.github.malczuuu.problem4j.spring.web.internal;
 
 import io.github.malczuuu.problem4j.spring.web.ProblemContext;
 import org.jetbrains.annotations.ApiStatus;
@@ -19,7 +19,6 @@ import org.springframework.util.StringUtils;
 @ApiStatus.Internal
 public final class InstanceSupport {
 
-  @ApiStatus.Internal
   public static String overrideInstance(String instanceOverride, ProblemContext context) {
     if (!StringUtils.hasLength(instanceOverride)) {
       return null;

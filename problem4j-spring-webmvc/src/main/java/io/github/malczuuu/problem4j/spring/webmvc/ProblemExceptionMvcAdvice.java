@@ -4,7 +4,8 @@ import static org.springframework.web.context.request.RequestAttributes.SCOPE_RE
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemException;
-import io.github.malczuuu.problem4j.spring.web.util.TracingSupport;
+import io.github.malczuuu.problem4j.spring.web.internal.TracingSupport;
+import io.github.malczuuu.problem4j.spring.web.util.ProblemSupport;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,7 +38,7 @@ public class ProblemExceptionMvcAdvice {
       problem = problem.toBuilder().instance(instanceOverride.toString()).build();
     }
 
-    HttpStatus status = HttpStatus.valueOf(problem.getStatus());
+    HttpStatus status = ProblemSupport.resolveStatus(problem);
 
     return new ResponseEntity<>(problem, headers, status);
   }

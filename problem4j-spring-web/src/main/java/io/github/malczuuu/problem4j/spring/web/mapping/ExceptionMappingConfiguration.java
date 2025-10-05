@@ -1,7 +1,6 @@
 package io.github.malczuuu.problem4j.spring.web.mapping;
 
-import io.github.malczuuu.problem4j.spring.web.format.DetailFormat;
-import io.github.malczuuu.problem4j.spring.web.format.PropertyNameFormat;
+import io.github.malczuuu.problem4j.spring.web.format.ProblemFormat;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -33,9 +32,6 @@ import org.springframework.web.server.ServerWebInputException;
  * <p>Each nested configuration class is annotated with {@link ConditionalOnClass} to ensure that
  * only mappings for classes present on the classpath are created. This design allows the library to
  * remain compatible previous versions.
- *
- * <p>Some mappings optionally use {@link DetailFormat} or {@link PropertyNameFormat} to produce
- * consistent, detailed error responses.
  */
 @Configuration(proxyBeanMethods = false)
 public class ExceptionMappingConfiguration {
@@ -44,9 +40,8 @@ public class ExceptionMappingConfiguration {
   @Configuration(proxyBeanMethods = false)
   public static class ConstraintViolationConfiguration {
     @Bean
-    public ConstraintViolationMapping constraintViolationMapping(
-        DetailFormat detailFormat, PropertyNameFormat propertyNameFormat) {
-      return new ConstraintViolationMapping(detailFormat, propertyNameFormat);
+    public ConstraintViolationMapping constraintViolationMapping(ProblemFormat problemFormat) {
+      return new ConstraintViolationMapping(problemFormat);
     }
   }
 
@@ -54,8 +49,8 @@ public class ExceptionMappingConfiguration {
   @Configuration(proxyBeanMethods = false)
   public static class ErrorResponseConfiguration {
     @Bean
-    public ErrorResponseMapping errorResponseMapping() {
-      return new ErrorResponseMapping();
+    public ErrorResponseMapping errorResponseMapping(ProblemFormat problemFormat) {
+      return new ErrorResponseMapping(problemFormat);
     }
   }
 
@@ -63,8 +58,9 @@ public class ExceptionMappingConfiguration {
   @Configuration(proxyBeanMethods = false)
   public static class HandlerMethodValidationConfiguration {
     @Bean
-    public HandlerMethodValidationMapping handlerMethodValidationMapping() {
-      return new HandlerMethodValidationMapping();
+    public HandlerMethodValidationMapping handlerMethodValidationMapping(
+        ProblemFormat problemFormat) {
+      return new HandlerMethodValidationMapping(problemFormat);
     }
   }
 
@@ -72,8 +68,9 @@ public class ExceptionMappingConfiguration {
   @Configuration(proxyBeanMethods = false)
   public static class HttpMediaTypeNotAcceptableConfiguration {
     @Bean
-    public HttpMediaTypeNotAcceptableMapping httpMediaTypeNotAcceptableMapping() {
-      return new HttpMediaTypeNotAcceptableMapping();
+    public HttpMediaTypeNotAcceptableMapping httpMediaTypeNotAcceptableMapping(
+        ProblemFormat problemFormat) {
+      return new HttpMediaTypeNotAcceptableMapping(problemFormat);
     }
   }
 
@@ -81,8 +78,9 @@ public class ExceptionMappingConfiguration {
   @Configuration(proxyBeanMethods = false)
   public static class HttpMediaTypeNotSupportedConfiguration {
     @Bean
-    public HttpMediaTypeNotSupportedMapping httpMediaTypeNotSupportedMapping() {
-      return new HttpMediaTypeNotSupportedMapping();
+    public HttpMediaTypeNotSupportedMapping httpMediaTypeNotSupportedMapping(
+        ProblemFormat problemFormat) {
+      return new HttpMediaTypeNotSupportedMapping(problemFormat);
     }
   }
 
@@ -90,8 +88,9 @@ public class ExceptionMappingConfiguration {
   @Configuration(proxyBeanMethods = false)
   public static class HttpMessageNotReadableConfiguration {
     @Bean
-    public HttpMessageNotReadableMapping httpMessageNotReadableMapping() {
-      return new HttpMessageNotReadableMapping();
+    public HttpMessageNotReadableMapping httpMessageNotReadableMapping(
+        ProblemFormat problemFormat) {
+      return new HttpMessageNotReadableMapping(problemFormat);
     }
   }
 
@@ -99,8 +98,9 @@ public class ExceptionMappingConfiguration {
   @Configuration(proxyBeanMethods = false)
   public static class HttpRequestMethodNotSupportedConfiguration {
     @Bean
-    public HttpRequestMethodNotSupportedMapping httpRequestMethodNotSupportedMapping() {
-      return new HttpRequestMethodNotSupportedMapping();
+    public HttpRequestMethodNotSupportedMapping httpRequestMethodNotSupportedMapping(
+        ProblemFormat problemFormat) {
+      return new HttpRequestMethodNotSupportedMapping(problemFormat);
     }
   }
 
@@ -108,8 +108,8 @@ public class ExceptionMappingConfiguration {
   @Configuration(proxyBeanMethods = false)
   public static class MaxUploadSizeExceededConfiguration {
     @Bean
-    public MaxUploadSizeExceededMapping maxUploadSizeExceededMapping(DetailFormat detailFormat) {
-      return new MaxUploadSizeExceededMapping(detailFormat);
+    public MaxUploadSizeExceededMapping maxUploadSizeExceededMapping(ProblemFormat problemFormat) {
+      return new MaxUploadSizeExceededMapping(problemFormat);
     }
   }
 
@@ -118,8 +118,8 @@ public class ExceptionMappingConfiguration {
   public static class MethodArgumentNotValidConfiguration {
     @Bean
     public MethodArgumentNotValidMapping methodArgumentNotValidMapping(
-        DetailFormat detailFormat, PropertyNameFormat propertyNameFormat) {
-      return new MethodArgumentNotValidMapping(detailFormat, propertyNameFormat);
+        ProblemFormat problemFormat) {
+      return new MethodArgumentNotValidMapping(problemFormat);
     }
   }
 
@@ -127,8 +127,8 @@ public class ExceptionMappingConfiguration {
   @Configuration(proxyBeanMethods = false)
   public static class MethodValidationConfiguration {
     @Bean
-    public MethodValidationMapping methodValidationMapping(DetailFormat detailFormat) {
-      return new MethodValidationMapping(detailFormat);
+    public MethodValidationMapping methodValidationMapping(ProblemFormat problemFormat) {
+      return new MethodValidationMapping(problemFormat);
     }
   }
 
@@ -136,8 +136,8 @@ public class ExceptionMappingConfiguration {
   @Configuration(proxyBeanMethods = false)
   public static class MissingRequestValueConfiguration {
     @Bean
-    public MissingRequestValueMapping missingRequestValueMapping(DetailFormat detailFormat) {
-      return new MissingRequestValueMapping(detailFormat);
+    public MissingRequestValueMapping missingRequestValueMapping(ProblemFormat problemFormat) {
+      return new MissingRequestValueMapping(problemFormat);
     }
   }
 
@@ -146,8 +146,8 @@ public class ExceptionMappingConfiguration {
   public static class MissingServletRequestPartConfiguration {
     @Bean
     public MissingServletRequestPartMapping missingServletRequestPartMapping(
-        DetailFormat detailFormat) {
-      return new MissingServletRequestPartMapping(detailFormat);
+        ProblemFormat problemFormat) {
+      return new MissingServletRequestPartMapping(problemFormat);
     }
   }
 
@@ -155,8 +155,8 @@ public class ExceptionMappingConfiguration {
   @Configuration(proxyBeanMethods = false)
   public static class ResponseStatusConfiguration {
     @Bean
-    public ResponseStatusMapping responseStatusMapping() {
-      return new ResponseStatusMapping();
+    public ResponseStatusMapping responseStatusMapping(ProblemFormat problemFormat) {
+      return new ResponseStatusMapping(problemFormat);
     }
   }
 
@@ -164,8 +164,8 @@ public class ExceptionMappingConfiguration {
   @Configuration(proxyBeanMethods = false)
   public static class ServerErrorConfiguration {
     @Bean
-    public ServerErrorMapping serverErrorMapping(DetailFormat detailFormat) {
-      return new ServerErrorMapping(detailFormat);
+    public ServerErrorMapping serverErrorMapping(ProblemFormat problemFormat) {
+      return new ServerErrorMapping(problemFormat);
     }
   }
 
@@ -173,8 +173,8 @@ public class ExceptionMappingConfiguration {
   @Configuration(proxyBeanMethods = false)
   public static class ServerWebInputConfiguration {
     @Bean
-    public ServerWebInputMapping serverWebInputMapping(DetailFormat detailFormat) {
-      return new ServerWebInputMapping(detailFormat);
+    public ServerWebInputMapping serverWebInputMapping(ProblemFormat problemFormat) {
+      return new ServerWebInputMapping(problemFormat);
     }
   }
 
@@ -182,8 +182,8 @@ public class ExceptionMappingConfiguration {
   @Configuration(proxyBeanMethods = false)
   public static class ServletRequestBindingConfiguration {
     @Bean
-    public ServletRequestBindingMapping servletRequestBindingMapping(DetailFormat detailFormat) {
-      return new ServletRequestBindingMapping(detailFormat);
+    public ServletRequestBindingMapping servletRequestBindingMapping(ProblemFormat problemFormat) {
+      return new ServletRequestBindingMapping(problemFormat);
     }
   }
 
@@ -191,8 +191,8 @@ public class ExceptionMappingConfiguration {
   @Configuration(proxyBeanMethods = false)
   public static class TypeMismatchConfiguration {
     @Bean
-    public TypeMismatchMapping typeMismatchMapping(DetailFormat detailFormat) {
-      return new TypeMismatchMapping(detailFormat);
+    public TypeMismatchMapping typeMismatchMapping(ProblemFormat problemFormat) {
+      return new TypeMismatchMapping(problemFormat);
     }
   }
 
@@ -200,9 +200,8 @@ public class ExceptionMappingConfiguration {
   @Configuration(proxyBeanMethods = false)
   public static class WebExchangeBindConfiguration {
     @Bean
-    public WebExchangeBindMapping webExchangeBindMapping(
-        DetailFormat detailFormat, PropertyNameFormat propertyNameFormat) {
-      return new WebExchangeBindMapping(detailFormat, propertyNameFormat);
+    public WebExchangeBindMapping webExchangeBindMapping(ProblemFormat problemFormat) {
+      return new WebExchangeBindMapping(problemFormat);
     }
   }
 }

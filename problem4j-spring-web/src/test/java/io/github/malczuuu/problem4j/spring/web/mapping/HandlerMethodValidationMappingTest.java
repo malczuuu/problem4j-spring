@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 
 import io.github.malczuuu.problem4j.core.Problem;
+import io.github.malczuuu.problem4j.spring.web.format.IdentityProblemFormat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,7 @@ class HandlerMethodValidationMappingTest {
 
   @BeforeEach
   void beforeEach() {
-    mapping = new HandlerMethodValidationMapping();
+    mapping = new HandlerMethodValidationMapping(new IdentityProblemFormat());
   }
 
   @Test

@@ -1,5 +1,7 @@
 package io.github.malczuuu.problem4j.spring.webmvc.integration;
 
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.MISSING_REQUEST_PART_DETAIL;
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.PARAM_EXTENSION;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -56,8 +58,8 @@ class MalformedMultipartTest {
                   .isEqualTo(
                       Problem.builder()
                           .status(ProblemStatus.BAD_REQUEST)
-                          .detail("Missing request part")
-                          .extension("param", "file")
+                          .detail(MISSING_REQUEST_PART_DETAIL)
+                          .extension(PARAM_EXTENSION, "file")
                           .build());
             });
   }

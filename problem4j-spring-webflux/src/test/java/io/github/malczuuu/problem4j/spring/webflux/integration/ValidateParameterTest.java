@@ -1,5 +1,7 @@
 package io.github.malczuuu.problem4j.spring.webflux.integration;
 
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.ERRORS_EXTENSION;
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.VALIDATION_FAILED_DETAIL;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.InstanceOfAssertFactories.LIST;
 
@@ -261,9 +263,9 @@ class ValidateParameterTest {
                       .isEqualTo(
                           Problem.builder()
                               .status(ProblemStatus.BAD_REQUEST)
-                              .detail("Validation failed")
+                              .detail(VALIDATION_FAILED_DETAIL)
                               .extension(
-                                  "errors",
+                                  ERRORS_EXTENSION,
                                   List.of(Map.of("field", "idVar", "error", VIOLATION_ERROR)))
                               .build()));
     }
@@ -293,9 +295,9 @@ class ValidateParameterTest {
                       .isEqualTo(
                           Problem.builder()
                               .status(ProblemStatus.BAD_REQUEST)
-                              .detail("Validation failed")
+                              .detail(VALIDATION_FAILED_DETAIL)
                               .extension(
-                                  "errors",
+                                  ERRORS_EXTENSION,
                                   List.of(Map.of("field", "queryParam", "error", VIOLATION_ERROR)))
                               .build()));
     }
@@ -321,9 +323,9 @@ class ValidateParameterTest {
                       .isEqualTo(
                           Problem.builder()
                               .status(ProblemStatus.BAD_REQUEST)
-                              .detail("Validation failed")
+                              .detail(VALIDATION_FAILED_DETAIL)
                               .extension(
-                                  "errors",
+                                  ERRORS_EXTENSION,
                                   List.of(
                                       Map.of("field", "xCustomHeader", "error", VIOLATION_ERROR)))
                               .build()));
@@ -350,9 +352,9 @@ class ValidateParameterTest {
                       .isEqualTo(
                           Problem.builder()
                               .status(ProblemStatus.BAD_REQUEST)
-                              .detail("Validation failed")
+                              .detail(VALIDATION_FAILED_DETAIL)
                               .extension(
-                                  "errors",
+                                  ERRORS_EXTENSION,
                                   List.of(Map.of("field", "xSession", "error", VIOLATION_ERROR)))
                               .build()));
     }
@@ -378,7 +380,9 @@ class ValidateParameterTest {
           .expectBody(Problem.class)
           .value(
               problem ->
-                  assertThat(problem.getExtensionValue("errors")).asInstanceOf(LIST).hasSize(2));
+                  assertThat(problem.getExtensionValue(ERRORS_EXTENSION))
+                      .asInstanceOf(LIST)
+                      .hasSize(2));
     }
 
     /**
@@ -403,7 +407,9 @@ class ValidateParameterTest {
           .expectBody(Problem.class)
           .value(
               problem ->
-                  assertThat(problem.getExtensionValue("errors")).asInstanceOf(LIST).hasSize(1));
+                  assertThat(problem.getExtensionValue(ERRORS_EXTENSION))
+                      .asInstanceOf(LIST)
+                      .hasSize(1));
     }
 
     /**
@@ -428,7 +434,7 @@ class ValidateParameterTest {
           .expectBody(Problem.class)
           .value(
               problem ->
-                  assertThat(problem.getExtensionValue("errors"))
+                  assertThat(problem.getExtensionValue(ERRORS_EXTENSION))
                       .asInstanceOf(LIST)
                       .hasSize(1)
                       .allSatisfy(
@@ -458,7 +464,7 @@ class ValidateParameterTest {
           .expectBody(Problem.class)
           .value(
               problem ->
-                  assertThat(problem.getExtensionValue("errors"))
+                  assertThat(problem.getExtensionValue(ERRORS_EXTENSION))
                       .asInstanceOf(LIST)
                       .hasSize(1)
                       .allSatisfy(
@@ -525,9 +531,9 @@ class ValidateParameterTest {
                       .isEqualTo(
                           Problem.builder()
                               .status(ProblemStatus.BAD_REQUEST)
-                              .detail("Validation failed")
+                              .detail(VALIDATION_FAILED_DETAIL)
                               .extension(
-                                  "errors",
+                                  ERRORS_EXTENSION,
                                   List.of(Map.of("field", "id", "error", VIOLATION_ERROR)))
                               .build()));
     }
@@ -557,9 +563,9 @@ class ValidateParameterTest {
                       .isEqualTo(
                           Problem.builder()
                               .status(ProblemStatus.BAD_REQUEST)
-                              .detail("Validation failed")
+                              .detail(VALIDATION_FAILED_DETAIL)
                               .extension(
-                                  "errors",
+                                  ERRORS_EXTENSION,
                                   List.of(Map.of("field", "query", "error", VIOLATION_ERROR)))
                               .build()));
     }
@@ -585,9 +591,9 @@ class ValidateParameterTest {
                       .isEqualTo(
                           Problem.builder()
                               .status(ProblemStatus.BAD_REQUEST)
-                              .detail("Validation failed")
+                              .detail(VALIDATION_FAILED_DETAIL)
                               .extension(
-                                  "errors",
+                                  ERRORS_EXTENSION,
                                   List.of(
                                       Map.of("field", "X-Custom-Header", "error", VIOLATION_ERROR)))
                               .build()));
@@ -614,9 +620,9 @@ class ValidateParameterTest {
                       .isEqualTo(
                           Problem.builder()
                               .status(ProblemStatus.BAD_REQUEST)
-                              .detail("Validation failed")
+                              .detail(VALIDATION_FAILED_DETAIL)
                               .extension(
-                                  "errors",
+                                  ERRORS_EXTENSION,
                                   List.of(Map.of("field", "x_session", "error", VIOLATION_ERROR)))
                               .build()));
     }
@@ -642,7 +648,9 @@ class ValidateParameterTest {
           .expectBody(Problem.class)
           .value(
               problem ->
-                  assertThat(problem.getExtensionValue("errors")).asInstanceOf(LIST).hasSize(2));
+                  assertThat(problem.getExtensionValue(ERRORS_EXTENSION))
+                      .asInstanceOf(LIST)
+                      .hasSize(2));
     }
 
     /**
@@ -667,7 +675,9 @@ class ValidateParameterTest {
           .expectBody(Problem.class)
           .value(
               problem ->
-                  assertThat(problem.getExtensionValue("errors")).asInstanceOf(LIST).hasSize(1));
+                  assertThat(problem.getExtensionValue(ERRORS_EXTENSION))
+                      .asInstanceOf(LIST)
+                      .hasSize(1));
     }
 
     /**
@@ -692,7 +702,7 @@ class ValidateParameterTest {
           .expectBody(Problem.class)
           .value(
               problem ->
-                  assertThat(problem.getExtensionValue("errors"))
+                  assertThat(problem.getExtensionValue(ERRORS_EXTENSION))
                       .asInstanceOf(LIST)
                       .hasSize(1)
                       .allSatisfy(
@@ -722,7 +732,7 @@ class ValidateParameterTest {
           .expectBody(Problem.class)
           .value(
               problem ->
-                  assertThat(problem.getExtensionValue("errors"))
+                  assertThat(problem.getExtensionValue(ERRORS_EXTENSION))
                       .asInstanceOf(LIST)
                       .hasSize(1)
                       .allSatisfy(

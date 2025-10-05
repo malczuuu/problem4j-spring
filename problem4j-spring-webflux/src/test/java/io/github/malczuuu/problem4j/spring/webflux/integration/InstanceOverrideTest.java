@@ -1,5 +1,7 @@
 package io.github.malczuuu.problem4j.spring.webflux.integration;
 
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.ERRORS_EXTENSION;
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.VALIDATION_FAILED_DETAIL;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.github.malczuuu.problem4j.core.Problem;
@@ -68,10 +70,10 @@ class InstanceOverrideTest {
                     .isEqualTo(
                         Problem.builder()
                             .status(ProblemStatus.BAD_REQUEST)
-                            .detail("Validation failed")
+                            .detail(VALIDATION_FAILED_DETAIL)
                             .instance("https://example.com/trace/" + traceId)
                             .extension(
-                                "errors",
+                                ERRORS_EXTENSION,
                                 List.of(Map.of("field", "name", "error", "must not be blank")))
                             .build()));
   }

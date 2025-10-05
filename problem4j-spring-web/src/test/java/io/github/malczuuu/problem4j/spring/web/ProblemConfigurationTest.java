@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(classes = {JacksonAutoConfiguration.class, ProblemConfiguration.class})
-public class ProblemConfigurationTest {
+class ProblemConfigurationTest {
 
   @Test
   void contextLoads() {}

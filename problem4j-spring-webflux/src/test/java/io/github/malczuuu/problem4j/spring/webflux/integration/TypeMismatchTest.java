@@ -1,5 +1,9 @@
 package io.github.malczuuu.problem4j.spring.webflux.integration;
 
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.KIND_EXTENSION;
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.PROPERTY_EXTENSION;
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.TYPE_MISMATCH_DETAIL;
+
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
 import org.junit.jupiter.api.Test;
@@ -42,9 +46,9 @@ class TypeMismatchTest {
         .isEqualTo(
             Problem.builder()
                 .status(ProblemStatus.BAD_REQUEST)
-                .detail("Type mismatch")
-                .extension("property", "id")
-                .extension("kind", "integer")
+                .detail(TYPE_MISMATCH_DETAIL)
+                .extension(PROPERTY_EXTENSION, "id")
+                .extension(KIND_EXTENSION, "integer")
                 .build());
   }
 }

@@ -2,15 +2,15 @@ package io.github.malczuuu.problem4j.spring.web.mapping;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemBuilder;
+import io.github.malczuuu.problem4j.spring.web.format.ProblemFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.ErrorResponseException;
 
-public class ErrorResponseMapping implements ExceptionMapping {
+public class ErrorResponseMapping extends AbstractExceptionMapping {
 
-  @Override
-  public Class<ErrorResponseException> getExceptionClass() {
-    return ErrorResponseException.class;
+  protected ErrorResponseMapping(ProblemFormat problemFormat) {
+    super(ErrorResponseException.class, problemFormat);
   }
 
   @Override
