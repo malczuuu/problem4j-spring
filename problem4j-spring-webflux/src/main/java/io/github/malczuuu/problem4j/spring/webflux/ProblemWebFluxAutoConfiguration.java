@@ -59,7 +59,8 @@ public class ProblemWebFluxAutoConfiguration {
   @Order(Ordered.LOWEST_PRECEDENCE)
   @ConditionalOnMissingBean(ExceptionWebFluxAdvice.class)
   @Bean
-  public ExceptionWebFluxAdvice exceptionWebFluxAdvice(ProblemMappingProcessor problemMappingProcessor) {
+  public ExceptionWebFluxAdvice exceptionWebFluxAdvice(
+      ProblemMappingProcessor problemMappingProcessor) {
     return new ExceptionWebFluxAdvice(problemMappingProcessor);
   }
 
