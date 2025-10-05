@@ -36,7 +36,7 @@ RFC 7807 `Problem` objects, with exceptions that are specific to `spring-webflux
 8. What happens if HTTP method (`GET`,`POST`, etc.) is invalid - [`MethodNotAllowedTest`][MethodNotAllowedTest].
 9. What happens if unknown endpoint (or resource) is accessed - [`NotFoundTest`][NotFoundTest].
 10. What happens if `ErrorResponseException` is thrown - [`ErrorResponseTest`][ErrorResponseTest].
-11. What happens if `ProblemException` is thrown [`ProblemFluxAdviceTest`][ProblemFluxAdviceTest] (or exception
+11. What happens if `ProblemException` is thrown [`ProblemWebFluxAdviceTest`][ProblemWebFluxAdviceTest] (or exception
     annotated with`@ProblemMapping`).
 12. What happens if we enable tracing and `instance-override` [`InstanceOverrideTest`][InstanceOverrideTest] (it should
     include `"instance"` field and add tracing header.
@@ -44,7 +44,6 @@ RFC 7807 `Problem` objects, with exceptions that are specific to `spring-webflux
 [ProblemErrorWebExceptionHandler]: src/main/java/io/github/malczuuu/problem4j/spring/webflux/error/ProblemErrorWebExceptionHandler.java
 
 [ProblemErrorWebFluxConfiguration]: src/main/java/io/github/malczuuu/problem4j/spring/webflux/error/ProblemErrorWebFluxConfiguration.java
-
 
 [MissingParameterTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/MissingParameterTest.java
 
@@ -66,6 +65,6 @@ RFC 7807 `Problem` objects, with exceptions that are specific to `spring-webflux
 
 [ErrorResponseTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/ErrorResponseTest.java
 
-[ProblemFluxAdviceTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/ProblemFluxAdviceTest.java
+[ProblemWebFluxAdviceTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/ProblemWebFluxAdviceTest.java
 
 [InstanceOverrideTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/InstanceOverrideTest.java

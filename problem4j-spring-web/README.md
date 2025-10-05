@@ -64,6 +64,8 @@ public class Example {
 }
 ```
 
+For convenience, consider subclassing `ProblemException` and encapsulating building `Problem` object in constructor.
+
 ### Annotating `@ProblemMapping`
 
 For exceptions that cannot extend `ProblemException`, you can annotate them with `@ProblemMapping`. This allows you to
@@ -156,7 +158,7 @@ public class ExampleExceptionAdvice {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
-    HttpStatus status = HttpStatus.valueOf(problem.getStatus());
+    HttpStatus status = ProblemSupport.resolveStatus(problem.getStatus());
 
     return new ResponseEntity<>(problem, headers, status);
   }
@@ -203,14 +205,14 @@ static class RequestParamController {
 }
 ```
 
-The `errors.$.field` will differ, depending on whether `spring.validation.method.adapt-constraint-violations` is enabled
-or not. For `true` it will use value from `@RequestParam` (if able) (the same goes for `@PathVariable`,
-`@RequestHeader`, `@CookieValue` etc.).
+The `.errors[].field` will differ, depending on whether `spring.validation.method.adapt-constraint-violations` is
+enabled or not. For `true` it will use value from `@RequestParam` (if able), and not from Java method argument name (the
+same goes for `@PathVariable`, `@RequestHeader`, `@CookieValue` etc.).
 
 <table>
 <tr>
-<td style="text-align:center"><code>ConstraintViolationException</code></td>
-<td style="text-align:center"><code>MethodValidationException</code></td>
+<td align="center"><code>ConstraintViolationException</code></td>
+<td align="center"><code>MethodValidationException</code></td>
 </tr>
 <tr>
 <td><pre lang="json">
@@ -238,7 +240,27 @@ or not. For `true` it will use value from `@RequestParam` (if able) (the same go
 </tr>
 </table>
 
-*Note* that this is not build-in behaviour. It was implemented in [`MethodValidationMapping`][MethodValidationMapping].
+Creating response body with adapting turned on was implemented in [`MethodValidationMapping`][MethodValidationMapping].
+
+For Spring Boot versions lower than `3.5`, the above-mentioned property is not available and one must configure it
+programmatically. Consider checking up `org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration`
+and [Method Validation Exceptions][method-validation-exceptions] chapter of Spring Framework documentation.
+
+Example on how to enable it directly is below.
+
+```java
+@Configuration
+public class ApplicationConfiguration {
+  @Bean
+  public MethodValidationPostProcessor methodValidationPostProcessor() {
+    MethodValidationPostProcessor processor = new MethodValidationPostProcessor();
+    processor.setAdaptConstraintViolations(true);
+    return processor;
+  }
+}
+```
+
+Method `setAdaptConstraintViolations` is available since Spring Framework `6.1` (therefore since Spring Boot `3.2`).
 
 ## Occurrences of `TypeMismatchException`
 
@@ -317,8 +339,8 @@ Example:
 
 ### Accessing unregistered HTTP path doesn't return proper response body
 
-1. Spring Boot versions before `3.2.0`, Spring WebMVC required setting following property for `NoHandlerFoundException`
-   to ever be thrown.
+1. In Spring Boot versions before `3.2.0`, Spring WebMVC required setting following property for
+   `NoHandlerFoundException` to ever be thrown.
    ```properties
    spring.mvc.throw-exception-if-no-handler-found=true
    ```
@@ -332,8 +354,8 @@ Example:
 
 ### Messages of `jakarta.validation` errors are localized
 
-By default, `spring.web.locale-resolved` use `accept_header`, to prioritize `Accept` header. Consider updating it as it
-follows.
+Property `spring.web.locale-resolved` default has `accept_header`, to prioritize `Accept` header. Consider updating it
+as it follows.
 
 ```properties
 spring.web.locale=en_US
@@ -349,3 +371,5 @@ See `org.springframework.boot.autoconfigure.web.SpringWebProperties` class to de
 [ExceptionMappingConfiguration]: src/main/java/io/github/malczuuu/problem4j/spring/web/mapping/ExceptionMappingConfiguration.java
 
 [MethodValidationMapping]: src/main/java/io/github/malczuuu/problem4j/spring/web/mapping/MethodValidationMapping.java
+
+[method-validation-exceptions]: https://docs.spring.io/spring-framework/reference/core/validation/beanvalidation.html#validation-beanvalidation-spring-method-exceptions

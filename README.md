@@ -1,7 +1,7 @@
 # Problem4J Spring
 
 [![Build Status](https://github.com/malczuuu/problem4j-spring/actions/workflows/gradle-build.yml/badge.svg)](https://github.com/malczuuu/problem4j-spring/actions/workflows/gradle-build.yml)
-[![Sonatype](https://img.shields.io/maven-central/v/io.github.malczuuu.problem4j/problem4j-spring-bom)](https://central.sonatype.com/artifact/io.github.malczuuu.problem4j/problem4j-spring-bom)
+[![Sonatype](https://img.shields.io/maven-central/v/io.github.malczuuu.problem4j/problem4j-spring-bom)][maven-central]
 [![License](https://img.shields.io/github/license/malczuuu/problem4j-spring)](https://github.com/malczuuu/problem4j-spring/blob/main/LICENSE)
 
 Designing clear and consistent error responses in a REST API is often harder than it looks. Without a shared standard,
@@ -61,9 +61,9 @@ For more details and usage examples, see the submodule `README.md` files:
 Add library as dependency to Maven or Gradle. See the actual versions on [Maven Central][maven-central]. Add it along
 with repository in your dependency manager. **Java 17** or higher is required to use this library.
 
-Tested with Spring Boot `3+`, but mostly on `3.5.x`. However, the idea for `v1.x` of this library was to be backwards
+Tested mostly with Spring Boot from `3.3.x` to `3.5.x`. However, the idea for `problem4j-spring-v1.x` is to be backwards
 compatible down to Spring Boot `3.0.0`. Integration with **Spring Boot 4** (once its released) will most likely be
-released as `v2.x` if `v1.x` won't be compatible.
+released as `problem4j-spring-v2.x`, and maintained on separate branches if `v1.x` won't be compatible.
 
 1. Maven:
    ```xml
@@ -119,7 +119,7 @@ see [`problem4j.tracing-header-name`](#problem4jtracing-header-name)). Defaults 
 - [`problem4j-spring`][problem4j-spring] - Spring modules extending `ResponseEntityExceptionHandler` for handling
   exceptions and returning `Problem` responses.
 
-[maven-central]: https://central.sonatype.com/artifact/io.github.malczuuu.problem4j/problem4j-spring-bom
+[maven-central]: https://central.sonatype.com/namespace/io.github.malczuuu.problem4j
 
 [problem4j-core]: https://github.com/malczuuu/problem4j-core
 
