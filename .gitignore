@@ -11,5 +11,7 @@
 
 ### IDEs ###
 /.idea/
-/.vscode/
+/.run/
 *.iml
+
+/.vscode/
