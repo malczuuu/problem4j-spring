@@ -39,7 +39,7 @@ public class ProblemErrorWebFluxConfiguration {
    *
    * @return a default {@link DefaultErrorAttributes} instance
    */
-  @ConditionalOnMissingBean(value = ErrorAttributes.class)
+  @ConditionalOnMissingBean(ErrorAttributes.class)
   @Bean
   public ErrorAttributes errorAttributes() {
     return new DefaultErrorAttributes();
@@ -53,7 +53,7 @@ public class ProblemErrorWebFluxConfiguration {
    * @see org.springframework.boot.autoconfigure.web.reactive.error.ErrorWebFluxAutoConfiguration
    */
   @Bean
-  @ConditionalOnMissingBean(value = ErrorWebExceptionHandler.class, search = SearchStrategy.CURRENT)
+  @ConditionalOnMissingBean(ErrorWebExceptionHandler.class)
   @Order(-2)
   public ErrorWebExceptionHandler errorWebExceptionHandler(
       ErrorAttributes errorAttributes,
