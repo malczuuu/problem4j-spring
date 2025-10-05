@@ -22,7 +22,7 @@ public class ServerErrorMapping implements ExceptionMapping {
   }
 
   @Override
-  public Class<? extends Exception> getExceptionClass() {
+  public Class<ServerErrorException> getExceptionClass() {
     return ServerErrorException.class;
   }
 
@@ -47,12 +47,15 @@ public class ServerErrorMapping implements ExceptionMapping {
    * {@code MissingRequestValueException} when certain {@code @RestController} argument is missing,
    * {@code PathVariableMethodArgumentResolver} throws {@code ServerErrorException}.
    *
+   * <ul>
+   *   <li>{@code MissingRequestValueException} (from {@code spring-web})
+   *   <li>{@code ServerErrorException} (from {@code spring-web})
+   *   <li>{@code AbstractNamedValueSyncArgumentResolver} (from {@code spring-webflux})
+   *   <li>{@code PathVariableMethodArgumentResolver} (from {@code spring-webflux})
+   * </ul>
+   *
    * @see org.springframework.web.server.MissingRequestValueException
    * @see org.springframework.web.server.ServerErrorException
-   * @see
-   *     org.springframework.web.reactive.result.method.annotation.AbstractNamedValueSyncArgumentResolver
-   * @see
-   *     org.springframework.web.reactive.result.method.annotation.PathVariableMethodArgumentResolver
    * @return {@code true} if the exception actually refers to missing path variable, {@code false}
    *     otherwise
    */

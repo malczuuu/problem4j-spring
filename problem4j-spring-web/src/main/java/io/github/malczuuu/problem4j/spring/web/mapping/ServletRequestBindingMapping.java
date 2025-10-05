@@ -28,9 +28,8 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.ServletRequestBindingException;
 
 /**
- * {@code ServletRequestBindingMapping} is an {@link
- * io.github.malczuuu.problem4j.spring.web.mapping.ExceptionMapping} implementation that maps {@link
- * ServletRequestBindingException} and its common subtypes to {@link Problem} representations.
+ * An {@link ExceptionMapping} implementation that maps {@link ServletRequestBindingException} and
+ * its common subtypes to {@link Problem} representations.
  *
  * <p>Each supported exception type is mapped to a {@code Problem} with {@code 400 Bad Request}
  * status and a human-readable detail message determined by the configured {@link DetailFormat}.
@@ -52,23 +51,12 @@ public class ServletRequestBindingMapping implements ExceptionMapping {
 
   private final DetailFormat detailFormat;
 
-  /**
-   * Creates a new {@code ServletRequestBindingMapping} with the given {@link DetailFormat}
-   * strategy.
-   *
-   * @param detailFormat the format strategy for problem detail messages; must not be {@code null}
-   */
   public ServletRequestBindingMapping(DetailFormat detailFormat) {
     this.detailFormat = detailFormat;
   }
 
-  /**
-   * Returns the exception class handled by this mapping.
-   *
-   * @return the exception type ({@link ServletRequestBindingException}) that this mapping supports
-   */
   @Override
-  public Class<? extends Exception> getExceptionClass() {
+  public Class<ServletRequestBindingException> getExceptionClass() {
     return ServletRequestBindingException.class;
   }
 

@@ -26,6 +26,7 @@ dependencies {
 
     compileOnly("jakarta.servlet:jakarta.servlet-api:${property("jakarta.servlet-api.version")}")
     compileOnly("jakarta.validation:jakarta.validation-api:${property("jakarta.validation-api.version")}")
+    compileOnly("org.jetbrains:annotations:${property("jetbrains.annotations.version")}")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:${property("spring-boot.version")}")
 

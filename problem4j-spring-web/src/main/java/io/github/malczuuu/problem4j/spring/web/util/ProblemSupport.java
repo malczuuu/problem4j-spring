@@ -2,7 +2,21 @@ package io.github.malczuuu.problem4j.spring.web.util;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
+import org.jetbrains.annotations.ApiStatus;
 
+/**
+ * <b>For internal use only.</b>
+ *
+ * <p>This class is intended for internal use within the {@code problem4j-spring-*} libraries and
+ * should not be used directly by external applications. The API may change or be removed without
+ * notice.
+ *
+ * <p><b>Use at your own risk</b>
+ *
+ * @implNote This is an internal API and may change at any time.
+ * @see ApiStatus.Internal
+ */
+@ApiStatus.Internal
 public final class ProblemSupport {
 
   public static final String MISSING_REQUEST_PARAM_DETAIL = "Missing request param";

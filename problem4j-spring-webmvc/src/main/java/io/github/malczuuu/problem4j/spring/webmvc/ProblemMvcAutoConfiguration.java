@@ -29,20 +29,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  * <p>This class wires all necessary beans for producing standardized {@link
  * io.github.malczuuu.problem4j.core.Problem} responses from Spring MVC controllers. It includes:
  *
- * <ul>
- *   <li>Jackson module registration via {@link io.github.malczuuu.problem4j.jackson.ProblemModule}.
- *   <li>Exception handling beans such as {@link ProblemEnhancedMvcHandler}, {@link
- *       ProblemExceptionMvcAdvice}, and {@link ExceptionMvcAdvice}.
- * </ul>
- *
  * <p>Beans are conditional:
  *
  * <ul>
  *   <li>{@link ConditionalOnMissingBean} ensures user-defined beans override defaults.
  *   <li>{@link ConditionalOnClass} ensures compatibility with optional framework classes.
  * </ul>
- *
- * <p>The configuration also imports ({@link ProblemConfiguration}) from {@code commons} library.
  */
 @ConditionalOnClass(ResponseEntityExceptionHandler.class)
 @AutoConfiguration

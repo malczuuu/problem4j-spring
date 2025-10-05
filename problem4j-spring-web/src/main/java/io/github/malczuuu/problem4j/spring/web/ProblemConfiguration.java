@@ -68,9 +68,16 @@ public class ProblemConfiguration {
     return new JacksonPropertyNameFormat(jacksonProperties.getPropertyNamingStrategy());
   }
 
+  /**
+   * Provides a {@link ExceptionMappingStore} that aggregates all {@link ExceptionMapping}
+   * implementations.
+   *
+   * @param exceptionMappings all available {@link ExceptionMapping} declared as components
+   * @return a new {@link CachingExceptionMappingStore}
+   */
   @ConditionalOnMissingBean(ExceptionMappingStore.class)
   @Bean
-  public ExceptionMappingStore exceptionMappingRegistry(List<ExceptionMapping> exceptionMappings) {
+  public ExceptionMappingStore exceptionMappingStore(List<ExceptionMapping> exceptionMappings) {
     return new CachingExceptionMappingStore(exceptionMappings);
   }
 }

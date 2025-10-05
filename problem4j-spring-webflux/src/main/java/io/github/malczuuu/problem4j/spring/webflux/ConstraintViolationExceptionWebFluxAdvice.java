@@ -1,10 +1,9 @@
 package io.github.malczuuu.problem4j.spring.webflux;
 
 import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.core.ProblemBuilder;
-import io.github.malczuuu.problem4j.core.ProblemStatus;
+import io.github.malczuuu.problem4j.spring.web.mapping.ConstraintViolationMapping;
 import io.github.malczuuu.problem4j.spring.web.util.TracingSupport;
-import org.springframework.core.codec.DecodingException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,23 +14,31 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 @RestControllerAdvice
-public class DecodingExceptionFluxAdvice {
+public class ConstraintViolationExceptionWebFluxAdvice {
 
-  @ExceptionHandler(DecodingException.class)
-  public Mono<ResponseEntity<Problem>> handleDecodingException(
-      DecodingException ex, ServerWebExchange exchange) {
+  private final ConstraintViolationMapping constraintViolationMapping;
+
+  public ConstraintViolationExceptionWebFluxAdvice(
+      ConstraintViolationMapping constraintViolationMapping) {
+    this.constraintViolationMapping = constraintViolationMapping;
+  }
+
+  @ExceptionHandler(ConstraintViolationException.class)
+  public Mono<ResponseEntity<Problem>> handleConstraintViolationException(
+      ConstraintViolationException ex, ServerWebExchange exchange) {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
     Object instanceOverride = exchange.getAttribute(TracingSupport.INSTANCE_OVERRIDE_ATTR);
 
-    ProblemBuilder builder = Problem.builder().status(ProblemStatus.BAD_REQUEST);
-    if (instanceOverride != null) {
-      builder = builder.instance(instanceOverride.toString());
-    }
-    Problem problem = builder.build();
+    HttpStatus status = HttpStatus.BAD_REQUEST;
 
-    HttpStatus status = HttpStatus.valueOf(problem.getStatus());
+    Problem problem = constraintViolationMapping.map(ex, headers, status);
+    if (instanceOverride != null) {
+      problem = problem.toBuilder().instance(instanceOverride.toString()).build();
+    }
+
+    status = HttpStatus.valueOf(problem.getStatus());
 
     return Mono.just(new ResponseEntity<>(problem, headers, status));
   }

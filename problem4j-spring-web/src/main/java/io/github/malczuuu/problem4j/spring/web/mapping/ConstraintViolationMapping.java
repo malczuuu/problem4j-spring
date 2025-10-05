@@ -39,7 +39,7 @@ public class ConstraintViolationMapping implements ExceptionMapping {
   }
 
   @Override
-  public Class<? extends Exception> getExceptionClass() {
+  public Class<ConstraintViolationException> getExceptionClass() {
     return ConstraintViolationException.class;
   }
 

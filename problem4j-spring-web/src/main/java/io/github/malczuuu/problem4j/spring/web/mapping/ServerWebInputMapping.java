@@ -17,7 +17,7 @@ public class ServerWebInputMapping implements ExceptionMapping {
   }
 
   @Override
-  public Class<? extends Exception> getExceptionClass() {
+  public Class<ServerWebInputException> getExceptionClass() {
     return ServerWebInputException.class;
   }
 

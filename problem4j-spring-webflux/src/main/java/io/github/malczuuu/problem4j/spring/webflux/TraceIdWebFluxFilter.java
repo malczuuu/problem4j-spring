@@ -9,12 +9,12 @@ import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
-public class TraceIdFluxFilter implements WebFilter {
+public class TraceIdWebFluxFilter implements WebFilter {
 
   private final String tracingHeaderName;
   private final String instanceOverride;
 
-  public TraceIdFluxFilter(String tracingHeaderName, String instanceOverride) {
+  public TraceIdWebFluxFilter(String tracingHeaderName, String instanceOverride) {
     this.tracingHeaderName = tracingHeaderName;
     this.instanceOverride = instanceOverride;
   }

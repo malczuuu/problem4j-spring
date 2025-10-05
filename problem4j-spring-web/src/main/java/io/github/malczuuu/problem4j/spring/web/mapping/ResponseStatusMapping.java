@@ -9,7 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class ResponseStatusMapping implements ExceptionMapping {
 
   @Override
-  public Class<? extends Exception> getExceptionClass() {
+  public Class<ResponseStatusException> getExceptionClass() {
     return ResponseStatusException.class;
   }
 

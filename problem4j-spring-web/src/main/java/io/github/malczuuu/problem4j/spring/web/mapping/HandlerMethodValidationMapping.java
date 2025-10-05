@@ -9,7 +9,7 @@ import org.springframework.web.method.annotation.HandlerMethodValidationExceptio
 public class HandlerMethodValidationMapping implements ExceptionMapping {
 
   @Override
-  public Class<? extends Exception> getExceptionClass() {
+  public Class<HandlerMethodValidationException> getExceptionClass() {
     return HandlerMethodValidationException.class;
   }
 

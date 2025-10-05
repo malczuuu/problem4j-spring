@@ -29,22 +29,10 @@ public class MissingServletRequestPartMapping implements ExceptionMapping {
 
   private final DetailFormat detailFormat;
 
-  /**
-   * Creates a new {@code MissingServletRequestPartMapping} with the given {@link DetailFormat}
-   * strategy.
-   *
-   * @param detailFormat the format strategy for problem detail messages; must not be {@code null}
-   */
   public MissingServletRequestPartMapping(DetailFormat detailFormat) {
     this.detailFormat = detailFormat;
   }
 
-  /**
-   * Returns the exception class handled by this mapping.
-   *
-   * @return the exception type ({@link MissingServletRequestPartException}) that this mapping
-   *     supports
-   */
   @Override
   public Class<MissingServletRequestPartException> getExceptionClass() {
     return MissingServletRequestPartException.class;

@@ -9,11 +9,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest(
     classes = {
       JacksonAutoConfiguration.class,
-      ProblemFluxAutoConfiguration.class,
+      ProblemWebFluxAutoConfiguration.class,
       WebFluxAutoConfiguration.class,
       ErrorWebFluxAutoConfiguration.class
     })
-class ProblemFluxAutoConfigurationTest {
+class ProblemWebFluxAutoConfigurationTest {
 
   @Test
   void contextLoads() {}

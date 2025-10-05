@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootTest(classes = {_TestApp.class})
 @Import({
-  ProblemFluxAdviceTest.ProblemExceptionController.class,
-  ProblemFluxAdviceTest.ProblemAnnotationController.class
+  ProblemWebFluxAdviceTest.ProblemExceptionController.class,
+  ProblemWebFluxAdviceTest.ProblemAnnotationController.class
 })
 @AutoConfigureWebTestClient
-class ProblemFluxAdviceTest {
+class ProblemWebFluxAdviceTest {
 
   static class ExtendedException extends ProblemException {
     ExtendedException(String value1, Long value2, boolean value3) {

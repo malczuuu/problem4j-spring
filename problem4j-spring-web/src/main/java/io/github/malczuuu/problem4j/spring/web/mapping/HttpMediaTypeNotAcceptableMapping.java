@@ -9,7 +9,7 @@ import org.springframework.web.HttpMediaTypeNotAcceptableException;
 public class HttpMediaTypeNotAcceptableMapping implements ExceptionMapping {
 
   @Override
-  public Class<? extends Exception> getExceptionClass() {
+  public Class<HttpMediaTypeNotAcceptableException> getExceptionClass() {
     return HttpMediaTypeNotAcceptableException.class;
   }
 

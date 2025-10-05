@@ -23,7 +23,7 @@ public class WebExchangeBindMapping implements ExceptionMapping {
   }
 
   @Override
-  public Class<? extends Exception> getExceptionClass() {
+  public Class<WebExchangeBindException> getExceptionClass() {
     return WebExchangeBindException.class;
   }
 

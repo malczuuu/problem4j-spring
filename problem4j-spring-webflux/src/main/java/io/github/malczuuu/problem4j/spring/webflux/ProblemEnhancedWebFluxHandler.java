@@ -30,11 +30,11 @@ import reactor.core.publisher.Mono;
  * </ul>
  */
 @RestControllerAdvice
-public class ProblemEnhancedFluxHandler extends ResponseEntityExceptionHandler {
+public class ProblemEnhancedWebFluxHandler extends ResponseEntityExceptionHandler {
 
   private final ExceptionMappingStore exceptionMappingStore;
 
-  public ProblemEnhancedFluxHandler(ExceptionMappingStore exceptionMappingStore) {
+  public ProblemEnhancedWebFluxHandler(ExceptionMappingStore exceptionMappingStore) {
     this.exceptionMappingStore = exceptionMappingStore;
   }
 

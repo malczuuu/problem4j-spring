@@ -30,14 +30,14 @@ import reactor.core.publisher.Mono;
  *
  * <p>Intended as a **generic fallback**, it ensures that unexpected exceptions still produce a
  * consistent Problem+JSON response. For more specific exception handling, use {@link
- * ProblemEnhancedFluxHandler}, {@link ProblemExceptionFluxAdvice}.
+ * ProblemEnhancedWebFluxHandler}, {@link ProblemExceptionWebFluxAdvice}.
  */
 @RestControllerAdvice
-public class ExceptionFluxAdvice {
+public class ExceptionWebFluxAdvice {
 
   private final ProblemMappingProcessor problemMappingProcessor;
 
-  public ExceptionFluxAdvice(ProblemMappingProcessor problemMappingProcessor) {
+  public ExceptionWebFluxAdvice(ProblemMappingProcessor problemMappingProcessor) {
     this.problemMappingProcessor = problemMappingProcessor;
   }
 

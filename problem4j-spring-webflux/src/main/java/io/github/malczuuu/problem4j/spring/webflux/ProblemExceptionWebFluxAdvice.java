@@ -21,7 +21,7 @@ import reactor.core.publisher.Mono;
  * <p>This is intended for application-level exceptions already represented as {@link Problem}.
  */
 @RestControllerAdvice
-public class ProblemExceptionFluxAdvice {
+public class ProblemExceptionWebFluxAdvice {
 
   @ExceptionHandler(ProblemException.class)
   public Mono<ResponseEntity<Problem>> handleProblemException(

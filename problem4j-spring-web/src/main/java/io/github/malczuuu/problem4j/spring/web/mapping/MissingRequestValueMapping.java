@@ -39,7 +39,7 @@ public class MissingRequestValueMapping implements ExceptionMapping {
   }
 
   @Override
-  public Class<? extends Exception> getExceptionClass() {
+  public Class<MissingRequestValueException> getExceptionClass() {
     return MissingRequestValueException.class;
   }
 

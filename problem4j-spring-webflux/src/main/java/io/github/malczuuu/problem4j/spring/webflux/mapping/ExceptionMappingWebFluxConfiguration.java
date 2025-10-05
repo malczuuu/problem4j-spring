@@ -11,4 +11,4 @@ import org.springframework.context.annotation.Configuration;
  * @see io.github.malczuuu.problem4j.spring.web.mapping.ExceptionMappingConfiguration
  */
 @Configuration(proxyBeanMethods = false)
-public class ExceptionMappingFluxConfiguration {}
+public class ExceptionMappingWebFluxConfiguration {}
