@@ -19,7 +19,9 @@ dependencies {
     // Main
     api(project(":problem4j-spring-web"))
 
-    api("org.springframework:spring-webmvc:${property("spring.version")}")
+    compileOnly("org.springframework.boot:spring-boot-autoconfigure:${property("spring-boot.version")}")
+    compileOnly("org.springframework:spring-web:${property("spring.version")}")
+    compileOnly("org.springframework:spring-webmvc:${property("spring.version")}")
 
     compileOnly("jakarta.validation:jakarta.validation-api:${property("jakarta.validation-api.version")}")
     compileOnly("jakarta.servlet:jakarta.servlet-api:${property("jakarta.servlet-api.version")}")
@@ -28,9 +30,8 @@ dependencies {
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test:${property("spring-boot.version")}")
+    testImplementation("org.springframework.boot:spring-boot-starter-web:${property("spring-boot.version")}")
     testImplementation("org.springframework.boot:spring-boot-starter-validation:${property("spring-boot.version")}")
-
-    testImplementation("jakarta.servlet:jakarta.servlet-api:${property("jakarta.servlet-api.version")}")
 
     testImplementation(platform("org.junit:junit-bom:${property("junit-bom.version")}"))
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
