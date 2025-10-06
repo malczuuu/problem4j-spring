@@ -16,7 +16,10 @@ on:
       - "gradle.properties"
       - "gradle/**"
       - "buildSrc/**"
+      - "gradlew"
+      - "gradlew.bat"
       - ".github/workflows/gradle-build.yml"
+
   pull_request:
     branches: [ "main" ]
     paths:
@@ -32,6 +35,8 @@ on:
       - "gradle.properties"
       - "gradle/**"
       - "buildSrc/**"
+      - "gradlew"
+      - "gradlew.bat"
       - ".github/workflows/gradle-build.yml"
 
 jobs:
