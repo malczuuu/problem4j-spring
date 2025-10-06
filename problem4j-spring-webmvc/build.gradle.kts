@@ -11,10 +11,6 @@ java {
     withJavadocJar()
 }
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     // Main
     api(project(":problem4j-spring-web"))

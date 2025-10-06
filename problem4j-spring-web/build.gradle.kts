@@ -11,10 +11,6 @@ java {
     withJavadocJar()
 }
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     // Main
     api("io.github.malczuuu.problem4j:problem4j-core:${property("problem4j-core.version")}")

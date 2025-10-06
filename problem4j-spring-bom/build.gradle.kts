@@ -5,10 +5,6 @@ plugins {
     id("com.gradleup.nmcp")
 }
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     constraints {
         api("io.github.malczuuu.problem4j:problem4j-core:${property("problem4j-core.version")}")
