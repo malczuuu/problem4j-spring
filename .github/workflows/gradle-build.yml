@@ -3,8 +3,36 @@ name: Gradle Build
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - "problem4j-spring-bom/build.gradle.kts"
+      - "problem4j-spring-web/build.gradle.kts"
+      - "problem4j-spring-web/src/**"
+      - "problem4j-spring-webflux/build.gradle.kts"
+      - "problem4j-spring-webflux/src/**"
+      - "problem4j-spring-webmvc/build.gradle.kts"
+      - "problem4j-spring-webmvc/**"
+      - "build.gradle.kts"
+      - "settings.gradle.kts"
+      - "gradle.properties"
+      - "gradle/**"
+      - "buildSrc/**"
+      - ".github/workflows/gradle-build.yml"
   pull_request:
     branches: [ "main" ]
+    paths:
+      - "problem4j-spring-bom/build.gradle.kts"
+      - "problem4j-spring-web/build.gradle.kts"
+      - "problem4j-spring-web/src/**"
+      - "problem4j-spring-webflux/build.gradle.kts"
+      - "problem4j-spring-webflux/src/**"
+      - "problem4j-spring-webmvc/build.gradle.kts"
+      - "problem4j-spring-webmvc/**"
+      - "build.gradle.kts"
+      - "settings.gradle.kts"
+      - "gradle.properties"
+      - "gradle/**"
+      - "buildSrc/**"
+      - ".github/workflows/gradle-build.yml"
 
 jobs:
   build:
