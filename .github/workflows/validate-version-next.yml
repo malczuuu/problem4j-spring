@@ -1,0 +1,26 @@
+name: Validate [next_version.txt]
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - ".github/utils/next_version.txt"
+      - ".github/utils/validate_version_file.sh"
+      - ".github/workflows/validate-next_version.txt.yml"
+  pull_request:
+    paths:
+      - ".github/utils/next_version.txt"
+      - ".github/utils/validate_version_file.sh"
+      - ".github/workflows/validate-next_version.txt.yml"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Validate 'next_version.txt'
+        env:
+          FILE: ".github/next_version.txt"
+        run: bash .github/utils/validate_version_file.sh

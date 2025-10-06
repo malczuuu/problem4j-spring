@@ -2,7 +2,10 @@
 
 Keep Git tags with `vX.Y.Z-suffix` format. GitHub Actions job will only trigger on such tags and will remove `v` prefix.
 
-See [`gradle-release.yml`](.github/workflows/gradle-release.yml) for whole publishing procedure.
+- See [`gradle-publish-release.yml`](.github/workflows/gradle-publish-release.yml) for publishing release versions
+  instructions.
+- See [`gradle-publish-snapshot.yml`](.github/workflows/gradle-publish-snapshot.yml) for publishing snapshot version
+  instructions.
 
 Set the following environment variables in your CI/CD (GitHub Actions, etc.):
 
