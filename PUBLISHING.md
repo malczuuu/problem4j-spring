@@ -1,11 +1,101 @@
 # Publishing
 
+## Snapshots
+
+See [`gradle-publish-snapshot.yml`](.github/workflows/gradle-publish-snapshot.yml) for publishing snapshot version
+instructions. Workflow requires manual trigger for snapshot build so it's not published regularly.
+
+Artifacts are published to Snapshot Repository, using following Gradle task.
+
+```bash
+./gradlew -Pversion=<version> publishAggregationToCentralPortalSnapshots
+```
+
+### Accessing SNAPSHOT versions
+
+1. Maven:
+   ```xml
+   <repositories>
+       <repository>
+           <id>maven-central</id>
+           <url>https://repo.maven.apache.org/maven2/</url>
+       </repository>
+   
+       <!-- add snapshot repository (for unpublished or nightly builds) -->
+       <repository>
+           <id>sonatype-snapshots</id>
+           <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+           <releases>
+               <enabled>false</enabled>
+           </releases>
+           <snapshots>
+               <enabled>true</enabled>
+               <!-- always check for new snapshots -->
+               <updatePolicy>always</updatePolicy>
+           </snapshots>
+       </repository>
+   </repositories>
+   
+   <dependencies>
+   <!-- choose the one appropriate for your project setup -->
+   
+   <dependency>
+       <groupId>io.github.malczuuu.problem4j</groupId>
+       <artifactId>problem4j-spring-webflux</artifactId>
+       <version>1.0.0-SNAPSHOT</version>
+   </dependency>
+   
+   <dependency>
+       <groupId>io.github.malczuuu.problem4j</groupId>
+       <artifactId>problem4j-spring-webmvc</artifactId>
+       <version>1.0.0-SNAPSHOT</version>
+   </dependency>
+   </dependencies>
+   ```
+2. Gradle (Kotlin DSL):
+   ```kotlin
+   repositories {
+       mavenCentral()
+   
+       // add snapshot repository (for unpublished or nightly builds)
+       maven {
+           url = uri("https://central.sonatype.com/repository/maven-snapshots/")
+           content {
+               // only include snapshots from this group to avoid conflicts
+               includeGroup("io.github.malczuuu.problem4j")
+           }
+           mavenContent {
+               snapshotsOnly()
+           }
+       }
+   }
+   
+   // always refresh "changing" dependencies (e.g., SNAPSHOT versions)
+   configurations.all {
+       resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS)
+   }
+   
+   dependencies {
+       // choose the one appropriate for your project setup
+       
+       implementation("io.github.malczuuu.problem4j:problem4j-spring-webflux:1.0.0-SNAPSHOT") {
+           // ensures Gradle re-checks for new snapshot versions
+           isChanging = true   
+       }
+   
+       implementation("io.github.malczuuu.problem4j:problem4j-spring-webmvc:1.0.0-SNAPSHOT") {
+           // ensures Gradle re-checks for new snapshot versions
+           isChanging = true
+       }
+   }
+   ```
+
+## Releases
+
 Keep Git tags with `vX.Y.Z-suffix` format. GitHub Actions job will only trigger on such tags and will remove `v` prefix.
 
-- See [`gradle-publish-release.yml`](.github/workflows/gradle-publish-release.yml) for publishing release versions
-  instructions.
-- See [`gradle-publish-snapshot.yml`](.github/workflows/gradle-publish-snapshot.yml) for publishing snapshot version
-  instructions.
+See [`gradle-publish-release.yml`](.github/workflows/gradle-publish-release.yml) for publishing release versions
+instructions.
 
 Set the following environment variables in your CI/CD (GitHub Actions, etc.):
 

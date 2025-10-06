@@ -65,6 +65,8 @@ Tested mostly with Spring Boot from `3.3.x` to `3.5.x`. However, the idea for `p
 compatible down to Spring Boot `3.0.0`. Integration with **Spring Boot 4** (once its released) will most likely be
 released as `problem4j-spring-v2.x`, and maintained on separate branches if `v1.x` won't be compatible.
 
+**Note:** To limit the number of transitive dependencies, you need to include Spring Boot explicitly in your project.
+
 1. Maven:
    ```xml
    <dependencies>
@@ -81,7 +83,7 @@ released as `problem4j-spring-v2.x`, and maintained on separate branches if `v1.
        </dependency>
    </dependencies>
    ```
-2. Gradle (Groovy or Kotlin DSL):
+2. Gradle (Kotlin DSL):
    ```groovy
    dependencies {
        // pick the one for your project
@@ -89,6 +91,8 @@ released as `problem4j-spring-v2.x`, and maintained on separate branches if `v1.
        implementation("io.github.malczuuu.problem4j:problem4j-spring-webmvc:1.0.0-alpha2")
    }
    ```
+
+For using snapshot versions [**Snapshots** chapter of`PUBLISHING.md`](PUBLISHING.md#snapshots).
 
 ## Configuration
 
