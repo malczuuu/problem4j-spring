@@ -1,5 +1,6 @@
 name: Dependency Submission
 
+# workflow limited to only files related to gradle dependencies
 on:
   push:
     branches: [ "main" ]

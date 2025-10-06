@@ -1,5 +1,6 @@
 name: Gradle Build
 
+# workflow limited to only files related to gradle build itself
 on:
   push:
     branches: [ "main" ]
