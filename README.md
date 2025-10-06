@@ -24,7 +24,7 @@ flexible enough for custom exceptions and business-specific details.
 ## Why bother with Problem4J
 
 Even though Spring provides `ProblemDetail` and `ErrorResponseException` for **RFC 7807**-compliant error responses,
-they are mutable, minimal, and often require manual population of fields. In contrast, **Problem4J** was created to:
+they are quite rough, minimal, and often require manual population of fields. In contrast, **Problem4J** was created to:
 
 - Provide a **fully immutable, fluent `Problem` model** with support for extensions.
 - Support **declarative exception mapping** via `@ProblemMapping` or **programmatic one** via `ProblemException`.
@@ -54,9 +54,9 @@ option for.
 
 For more details and usage examples, see the submodule `README.md` files:
 
-- [`problem4j-spring-web/README.md`][problem4j-spring-web-readme],
-- [`problem4j-spring-webflux/README.md`][problem4j-spring-webflux-readme],
-- [`problem4j-spring-webmvc/README.md`][problem4j-spring-webmvc-readme].
+- [`problem4j-spring-web/README.md`][problem4j-spring-web-readme] - base features of Spring integration of Problem4J,
+- [`problem4j-spring-webflux/README.md`][problem4j-spring-webflux-readme] - Spring WebFlux tweaks and specifics,
+- [`problem4j-spring-webmvc/README.md`][problem4j-spring-webmvc-readme] - Spring WebMVC tweaks and specifics.
 
 Add library as dependency to Maven or Gradle. See the actual versions on [Maven Central][maven-central]. Add it along
 with repository in your dependency manager. **Java 17** or higher is required to use this library.

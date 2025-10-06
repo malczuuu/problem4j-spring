@@ -64,7 +64,7 @@ public class Example {
 }
 ```
 
-For convenience, consider subclassing `ProblemException` and encapsulating building `Problem` object in constructor.
+For convenience, consider subclassing `ProblemException` and encapsulating building `Problem` object within.
 
 ### Annotating `@ProblemMapping`
 
@@ -114,8 +114,8 @@ public class ExampleException extends RuntimeException {
 }
 ```
 
-**Note** that the main reason behind this project is to make `ProblemException` a base class for all custom exception in
-your application code.
+**Note** that `@ProblemMapping` is inherited in subclasses so it's possible to rely on it for building exception classes
+hierarchy.
 
 ### Custom `RestControllerAdvice`
 
@@ -164,6 +164,13 @@ public class ExampleExceptionAdvice {
   }
 }
 ```
+
+While implementing custom `@ControllerAdvice`, enforcing `instance-override` must be performed manually. Please check
+direct implementation of `ProblemExceptionWebFluxAdvice` or `ProblemExceptionMvcAdvice` to see how it's propagated via
+request attributes.
+
+**Note** that the main reason behind this project is to make use of `ProblemException` and `@ProblemMapping` for all
+custom exception in your application code.
 
 ## Validation
 
