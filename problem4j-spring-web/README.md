@@ -158,10 +158,6 @@ convenience. The `resolveProblem` method should not be overwritten.
 
 ### Custom `@RestControllerAdvice`
 
-**Note** that the main reason behind this project is to make use of `ProblemException`, `@ProblemMapping` or
-`ProblemResolver` for all custom exception in your application code. Use `@RestControllerAdvice` as a last resort if
-Problem4J doesn't give you what you need.
-
 While creating your own `@RestControllerAdvice`, make sure to position it with right `@Order`. In order for your custom
 implementation to work seamlessly, make sure to position it on at least **`Ordered.LOWEST_PRECEDENCE - 11`** (the lower
 the value, the higher the priority). All `@RestControllerAdvice` provided by `problem4j-spring` library use ordering
@@ -179,7 +175,7 @@ But let's be honest, you'll probably use `Ordered.HIGHEST_PRECEDENCE` :D.
 | `Exception`                         | `Ordered.LOWEST_PRECEDENCE`      |
 
 While implementing custom `@ControllerAdvice`, enforcing `instance-override` feature must be performed manually. Value
-of `instance` field will come from request attributes and must be overwritten if not `null`.
+of `"instance"` field will come from request attributes and must be overwritten if not `null`.
 
 ```java
 @Order(Ordered.LOWEST_PRECEDENCE - 20)
@@ -197,9 +193,7 @@ public class ExampleExceptionAdvice {
             .detail(ex.getMessage())
             .instance("https://example.org/instances/example-instance");
 
-    Object instanceOverride =
-        request.getAttribute(TracingSupport.INSTANCE_OVERRIDE_ATTR, SCOPE_REQUEST);
-
+    Object instanceOverride = request.getAttribute(TracingSupport.INSTANCE_OVERRIDE, SCOPE_REQUEST);
     if (instanceOverride != null) {
       builder = builder.instance(instanceOverride.toString());
     }

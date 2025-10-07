@@ -7,7 +7,6 @@ import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemBuilder;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
-import java.util.Optional;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.boot.autoconfigure.web.reactive.error.DefaultErrorWebExceptionHandler;
@@ -82,12 +81,9 @@ public class ProblemErrorWebExceptionHandler extends DefaultErrorWebExceptionHan
                 ProblemStatus.findValue(response.statusCode().value())
                     .orElse(ProblemStatus.INTERNAL_SERVER_ERROR));
 
-    Optional<Object> optionalInstanceOverride =
-        request.attribute(TracingSupport.INSTANCE_OVERRIDE_ATTR);
-
-    if (optionalInstanceOverride.isPresent()) {
-      builder = builder.instance(optionalInstanceOverride.get().toString());
-    }
+    request
+        .attribute(TracingSupport.INSTANCE_OVERRIDE)
+        .ifPresent(instanceOverride -> builder.instance(instanceOverride.toString()));
 
     Problem problem = builder.build();
     return ServerResponse.status(problem.getStatus())

@@ -33,8 +33,8 @@ public class TraceIdMvcFilter extends OncePerRequestFilter {
         InstanceSupport.overrideInstance(
             instanceOverride, ProblemContext.builder().traceId(traceId).build());
 
-    request.setAttribute(TracingSupport.TRACE_ID_ATTR, traceId);
-    request.setAttribute(TracingSupport.INSTANCE_OVERRIDE_ATTR, instanceOverrideValue);
+    request.setAttribute(TracingSupport.TRACE_ID, traceId);
+    request.setAttribute(TracingSupport.INSTANCE_OVERRIDE, instanceOverrideValue);
     response.setHeader(tracingHeaderName, traceId);
 
     filterChain.doFilter(request, response);

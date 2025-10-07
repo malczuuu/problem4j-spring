@@ -58,19 +58,18 @@ public class ProblemEnhancedWebFluxHandler extends ResponseEntityExceptionHandle
       HttpStatusCode status,
       ServerWebExchange exchange) {
     ProblemContext context =
-        ProblemContext.builder()
-            .traceId(exchange.getAttribute(TracingSupport.TRACE_ID_ATTR))
-            .build();
+        ProblemContext.builder().traceId(exchange.getAttribute(TracingSupport.TRACE_ID)).build();
 
     headers = headers != null ? HttpHeaders.writableHttpHeaders(headers) : new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
-    Object instanceOverride = exchange.getAttribute(TracingSupport.INSTANCE_OVERRIDE_ATTR);
-
     ProblemBuilder builder = getBuilderForOverridingBody(context, ex, headers, status);
+
+    Object instanceOverride = exchange.getAttribute(TracingSupport.INSTANCE_OVERRIDE);
     if (instanceOverride != null) {
       builder = builder.instance(instanceOverride.toString());
     }
+
     Problem problem = builder.build();
 
     status = resolveStatus(problem);

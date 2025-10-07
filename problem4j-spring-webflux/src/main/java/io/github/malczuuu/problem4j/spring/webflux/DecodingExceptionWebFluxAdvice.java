@@ -24,12 +24,13 @@ public class DecodingExceptionWebFluxAdvice {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
-    Object instanceOverride = exchange.getAttribute(TracingSupport.INSTANCE_OVERRIDE_ATTR);
-
     ProblemBuilder builder = Problem.builder().status(ProblemStatus.BAD_REQUEST);
+
+    Object instanceOverride = exchange.getAttribute(TracingSupport.INSTANCE_OVERRIDE);
     if (instanceOverride != null) {
       builder = builder.instance(instanceOverride.toString());
     }
+
     Problem problem = builder.build();
 
     HttpStatus status = ProblemSupport.resolveStatus(problem);

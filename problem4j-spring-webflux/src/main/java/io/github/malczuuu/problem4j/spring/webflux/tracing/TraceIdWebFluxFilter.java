@@ -53,14 +53,12 @@ public class TraceIdWebFluxFilter implements WebFilter {
     ProblemContext context = ProblemContext.builder().traceId(traceId).build();
     String instanceOverrideValue = InstanceSupport.overrideInstance(instanceOverride, context);
 
-    exchange.getAttributes().put(TracingSupport.TRACE_ID_ATTR, traceId);
-    exchange.getAttributes().put(TracingSupport.INSTANCE_OVERRIDE_ATTR, instanceOverrideValue);
+    exchange.getAttributes().put(TracingSupport.TRACE_ID, traceId);
+    exchange.getAttributes().put(TracingSupport.INSTANCE_OVERRIDE, instanceOverrideValue);
 
     exchange.getResponse().getHeaders().set(tracingHeaderName, traceId);
 
-    return chain
-        .filter(exchange)
-        .contextWrite(ctx -> ctx.put(TracingSupport.TRACE_ID_ATTR, traceId));
+    return chain.filter(exchange).contextWrite(ctx -> ctx.put(TracingSupport.TRACE_ID, traceId));
   }
 
   /**

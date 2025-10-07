@@ -52,19 +52,19 @@ public class ExceptionMvcAdvice {
   public ResponseEntity<Object> handleException(Exception ex, WebRequest request) {
     ProblemContext context =
         ProblemContext.builder()
-            .traceId(request.getAttribute(TracingSupport.TRACE_ID_ATTR, SCOPE_REQUEST))
+            .traceId(request.getAttribute(TracingSupport.TRACE_ID, SCOPE_REQUEST))
             .build();
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
-    Object instanceOverride =
-        request.getAttribute(TracingSupport.INSTANCE_OVERRIDE_ATTR, SCOPE_REQUEST);
-
     ProblemBuilder builder = getProblemBuilder(ex, context, headers);
+
+    Object instanceOverride = request.getAttribute(TracingSupport.INSTANCE_OVERRIDE, SCOPE_REQUEST);
     if (instanceOverride != null) {
       builder = builder.instance(instanceOverride.toString());
     }
+
     Problem problem = builder.build();
 
     HttpStatus status = ProblemSupport.resolveStatus(problem);

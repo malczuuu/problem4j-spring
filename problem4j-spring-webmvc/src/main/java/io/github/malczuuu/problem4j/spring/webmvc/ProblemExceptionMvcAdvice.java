@@ -30,10 +30,10 @@ public class ProblemExceptionMvcAdvice {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
-    Object instanceOverride =
-        request.getAttribute(TracingSupport.INSTANCE_OVERRIDE_ATTR, SCOPE_REQUEST);
-
     Problem problem = ex.getProblem();
+
+    Object instanceOverride = request.getAttribute(TracingSupport.INSTANCE_OVERRIDE, SCOPE_REQUEST);
+
     if (instanceOverride != null) {
       problem = problem.toBuilder().instance(instanceOverride.toString()).build();
     }

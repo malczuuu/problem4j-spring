@@ -45,19 +45,19 @@ public class ProblemEnhancedMvcHandler extends ResponseEntityExceptionHandler {
       Exception ex, Object body, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
     ProblemContext context =
         ProblemContext.builder()
-            .traceId(request.getAttribute(TracingSupport.TRACE_ID_ATTR, SCOPE_REQUEST))
+            .traceId(request.getAttribute(TracingSupport.TRACE_ID, SCOPE_REQUEST))
             .build();
 
     headers = headers != null ? HttpHeaders.writableHttpHeaders(headers) : new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
-    Object instanceOverride =
-        request.getAttribute(TracingSupport.INSTANCE_OVERRIDE_ATTR, SCOPE_REQUEST);
-
     ProblemBuilder builder = getBuilderForOverridingBody(context, ex, headers, status);
+
+    Object instanceOverride = request.getAttribute(TracingSupport.INSTANCE_OVERRIDE, SCOPE_REQUEST);
     if (instanceOverride != null) {
       builder = builder.instance(instanceOverride.toString());
     }
+
     Problem problem = builder.build();
 
     status = resolveStatus(problem);

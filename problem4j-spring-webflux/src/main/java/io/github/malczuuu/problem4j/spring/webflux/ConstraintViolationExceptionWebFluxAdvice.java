@@ -30,22 +30,21 @@ public class ConstraintViolationExceptionWebFluxAdvice {
   public Mono<ResponseEntity<Problem>> handleConstraintViolationException(
       ConstraintViolationException ex, ServerWebExchange exchange) {
     ProblemContext context =
-        ProblemContext.builder()
-            .traceId(exchange.getAttribute(TracingSupport.TRACE_ID_ATTR))
-            .build();
+        ProblemContext.builder().traceId(exchange.getAttribute(TracingSupport.TRACE_ID)).build();
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
-
-    Object instanceOverride = exchange.getAttribute(TracingSupport.INSTANCE_OVERRIDE_ATTR);
 
     HttpStatus status = HttpStatus.BAD_REQUEST;
 
     ProblemBuilder builder =
         constraintViolationResolver.resolveBuilder(context, ex, headers, status);
+
+    Object instanceOverride = exchange.getAttribute(TracingSupport.INSTANCE_OVERRIDE);
     if (instanceOverride != null) {
       builder = builder.instance(instanceOverride.toString());
     }
+
     Problem problem = builder.build();
 
     status = ProblemSupport.resolveStatus(problem);

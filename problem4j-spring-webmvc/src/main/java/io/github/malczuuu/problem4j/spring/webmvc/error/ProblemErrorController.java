@@ -48,9 +48,9 @@ public class ProblemErrorController extends AbstractErrorController {
 
     ProblemBuilder builder = Problem.builder().status(status.value());
 
-    Object optionalInstanceOverride = request.getAttribute(TracingSupport.INSTANCE_OVERRIDE_ATTR);
-    if (optionalInstanceOverride != null) {
-      builder = builder.instance(optionalInstanceOverride.toString());
+    Object instanceOverride = request.getAttribute(TracingSupport.INSTANCE_OVERRIDE);
+    if (instanceOverride != null) {
+      builder = builder.instance(instanceOverride.toString());
     }
 
     Problem problem = builder.build();

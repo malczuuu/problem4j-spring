@@ -98,12 +98,12 @@ library and your application.
 ### `problem4j.tracing-header-name`
 
 Property that specifies the name of the HTTP header used for tracing requests. If set, the trace identifier from this
-header can be injected into the `Problem` response, for example into the`instance` field when combined with
+header can be injected into the `Problem` response, for example into the`"instance"` field when combined with
 [`problem4j.instance-override`](#problem4jinstance-override). Defaults to `null` (disabled).
 
 ### `problem4j.instance-override`
 
-Property that defines a template for overriding the `instance` field in `Problem` responses.The value may contain the
+Property that defines a template for overriding the `"instance"` field in `Problem` responses.The value may contain the
 special placeholder `{traceId}`, which will be replaced at runtime with the trace identifier from the current request (
 see [`problem4j.tracing-header-name`](#problem4jtracing-header-name)). Defaults to `null` (no override applied).
 

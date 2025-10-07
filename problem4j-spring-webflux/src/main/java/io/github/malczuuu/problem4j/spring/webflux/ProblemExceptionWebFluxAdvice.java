@@ -31,9 +31,9 @@ public class ProblemExceptionWebFluxAdvice {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
-    Object instanceOverride = exchange.getAttribute(TracingSupport.INSTANCE_OVERRIDE_ATTR);
-
     Problem problem = ex.getProblem();
+
+    Object instanceOverride = exchange.getAttribute(TracingSupport.INSTANCE_OVERRIDE);
     if (instanceOverride != null) {
       problem = problem.toBuilder().instance(instanceOverride.toString()).build();
     }
