@@ -22,7 +22,7 @@ public class MethodArgumentNotValidResolver extends AbstractProblemResolver {
   }
 
   @Override
-  public ProblemBuilder resolve(
+  public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
     MethodArgumentNotValidException e = (MethodArgumentNotValidException) ex;
     return from(e.getBindingResult()).status(ProblemStatus.BAD_REQUEST);

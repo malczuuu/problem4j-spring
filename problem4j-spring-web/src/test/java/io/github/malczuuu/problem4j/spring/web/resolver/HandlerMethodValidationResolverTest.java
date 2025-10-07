@@ -29,9 +29,8 @@ class HandlerMethodValidationResolverTest {
         new HandlerMethodValidationException(mockMethodValidationResult);
 
     Problem problem =
-        handlerMethodValidationResolver
-            .resolve(ProblemContext.ofTraceId("traceId"), ex, null, HttpStatus.BAD_REQUEST)
-            .build();
+        handlerMethodValidationResolver.resolveProblem(
+            ProblemContext.ofTraceId("traceId"), ex, null, HttpStatus.BAD_REQUEST);
 
     assertEquals(Problem.BLANK_TYPE, problem.getType());
     assertEquals(HttpStatus.BAD_REQUEST.getReasonPhrase(), problem.getTitle());

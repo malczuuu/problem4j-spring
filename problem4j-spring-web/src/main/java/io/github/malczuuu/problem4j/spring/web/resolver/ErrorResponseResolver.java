@@ -15,7 +15,7 @@ public class ErrorResponseResolver extends AbstractProblemResolver {
   }
 
   @Override
-  public ProblemBuilder resolve(
+  public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
     ErrorResponseException e = (ErrorResponseException) ex;
     ProblemBuilder builder =

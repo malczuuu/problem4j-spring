@@ -16,7 +16,7 @@ public class HttpRequestMethodNotSupportedResolver extends AbstractProblemResolv
   }
 
   @Override
-  public ProblemBuilder resolve(
+  public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
     return Problem.builder().status(ProblemStatus.METHOD_NOT_ALLOWED);
   }

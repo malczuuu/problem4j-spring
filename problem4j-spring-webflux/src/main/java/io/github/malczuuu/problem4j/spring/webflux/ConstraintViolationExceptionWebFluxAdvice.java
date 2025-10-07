@@ -41,7 +41,8 @@ public class ConstraintViolationExceptionWebFluxAdvice {
 
     HttpStatus status = HttpStatus.BAD_REQUEST;
 
-    ProblemBuilder builder = constraintViolationResolver.resolve(context, ex, headers, status);
+    ProblemBuilder builder =
+        constraintViolationResolver.resolveBuilder(context, ex, headers, status);
     if (instanceOverride != null) {
       builder = builder.instance(instanceOverride.toString());
     }

@@ -70,7 +70,7 @@ public class ProblemEnhancedMvcHandler extends ResponseEntityExceptionHandler {
     try {
       return problemResolverStore
           .resolver(ex.getClass())
-          .map(resolver -> resolver.resolve(context, ex, headers, status))
+          .map(resolver -> resolver.resolveBuilder(context, ex, headers, status))
           .orElseGet(() -> fallbackProblem(status));
     } catch (Exception e) {
       return fallbackProblem(status);

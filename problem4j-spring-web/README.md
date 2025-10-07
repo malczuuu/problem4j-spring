@@ -137,7 +137,7 @@ public class MaxUploadSizeExceededResolver implements ProblemResolver {
   }
 
   @Override
-  public ProblemBuilder toProblemBuilder(
+  public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
     MaxUploadSizeExceededException e = (MaxUploadSizeExceededException) ex;
     return Problem.builder()
@@ -151,6 +151,10 @@ public class MaxUploadSizeExceededResolver implements ProblemResolver {
   }
 }
 ```
+
+`ProblemResolver` implementations return a `ProblemBuilder` for flexibility in constructing the final `Problem` object.
+The interface contains `default Problem resolveProblem(...)` method that calls `problemBuilder(...).build()` for
+convenience. The `resolveProblem` method should not be overwritten.
 
 ### Custom `@RestControllerAdvice`
 

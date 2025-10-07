@@ -24,7 +24,7 @@ public class MissingServletRequestPartResolver extends AbstractProblemResolver {
   }
 
   @Override
-  public ProblemBuilder resolve(
+  public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
     MissingServletRequestPartException e = (MissingServletRequestPartException) ex;
     return Problem.builder()

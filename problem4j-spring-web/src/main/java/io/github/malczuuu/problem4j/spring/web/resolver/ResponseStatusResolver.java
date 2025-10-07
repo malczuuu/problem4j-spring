@@ -16,7 +16,7 @@ public class ResponseStatusResolver extends AbstractProblemResolver {
   }
 
   @Override
-  public ProblemBuilder resolve(
+  public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
     ResponseStatusException e = (ResponseStatusException) ex;
     return Problem.builder()

@@ -22,7 +22,7 @@ public class WebExchangeBindResolver extends AbstractProblemResolver {
   }
 
   @Override
-  public ProblemBuilder resolve(
+  public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
     WebExchangeBindException e = (WebExchangeBindException) ex;
     return from(e.getBindingResult()).status(ProblemStatus.BAD_REQUEST);

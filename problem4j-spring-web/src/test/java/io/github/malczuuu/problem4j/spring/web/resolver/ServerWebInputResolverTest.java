@@ -38,13 +38,11 @@ class ServerWebInputResolverTest {
     ServerWebInputException ex = new ServerWebInputException("irrelevant reason", parameter, cause);
 
     Problem problem =
-        serverWebInputMapping
-            .resolve(
-                ProblemContext.ofTraceId("traceId"),
-                ex,
-                new HttpHeaders(),
-                HttpStatusCode.valueOf(400))
-            .build();
+        serverWebInputMapping.resolveProblem(
+            ProblemContext.ofTraceId("traceId"),
+            ex,
+            new HttpHeaders(),
+            HttpStatusCode.valueOf(400));
 
     assertThat(problem)
         .isEqualTo(
@@ -64,13 +62,11 @@ class ServerWebInputResolverTest {
     ServerWebInputException ex = new ServerWebInputException("irrelevant reason", null, cause);
 
     Problem problem =
-        serverWebInputMapping
-            .resolve(
-                ProblemContext.ofTraceId("traceId"),
-                ex,
-                new HttpHeaders(),
-                HttpStatusCode.valueOf(400))
-            .build();
+        serverWebInputMapping.resolveProblem(
+            ProblemContext.ofTraceId("traceId"),
+            ex,
+            new HttpHeaders(),
+            HttpStatusCode.valueOf(400));
 
     assertThat(problem)
         .isEqualTo(
@@ -87,7 +83,7 @@ class ServerWebInputResolverTest {
     ServerWebInputException ex = new ServerWebInputException("irrelevant reason");
 
     Problem problem =
-        serverWebInputMapping.resolve(ProblemContext.ofTraceId("traceId"), ex, null, null).build();
+        serverWebInputMapping.resolveProblem(ProblemContext.ofTraceId("traceId"), ex, null, null);
 
     assertThat(problem)
         .isEqualTo(

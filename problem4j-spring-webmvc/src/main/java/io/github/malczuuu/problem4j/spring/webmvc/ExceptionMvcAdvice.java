@@ -82,7 +82,9 @@ public class ExceptionMvcAdvice {
 
       if (optionalResolver.isPresent()) {
         builder =
-            optionalResolver.get().resolve(context, ex, headers, HttpStatus.INTERNAL_SERVER_ERROR);
+            optionalResolver
+                .get()
+                .resolveBuilder(context, ex, headers, HttpStatus.INTERNAL_SERVER_ERROR);
       } else {
         builder = Problem.builder().status(ProblemStatus.INTERNAL_SERVER_ERROR);
       }

@@ -31,7 +31,7 @@ public abstract class AbstractProblemResolver implements ProblemResolver {
   }
 
   @Override
-  public ProblemBuilder resolve(
+  public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
     return Problem.builder().status(ProblemStatus.INTERNAL_SERVER_ERROR);
   }

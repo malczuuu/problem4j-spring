@@ -25,12 +25,12 @@ public class ServerWebInputResolver extends AbstractProblemResolver {
   }
 
   @Override
-  public ProblemBuilder resolve(
+  public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
     ServerWebInputException swie = (ServerWebInputException) ex;
 
     if (ex.getCause() instanceof TypeMismatchException tme) {
-      ProblemBuilder builder = typeMismatchResolver.resolve(context, tme, headers, status);
+      ProblemBuilder builder = typeMismatchResolver.resolveBuilder(context, tme, headers, status);
       if (!builder.build().hasExtension(PROPERTY_EXTENSION)) {
         return tryAppendingPropertyFromMethodParameter(swie.getMethodParameter(), builder);
       }

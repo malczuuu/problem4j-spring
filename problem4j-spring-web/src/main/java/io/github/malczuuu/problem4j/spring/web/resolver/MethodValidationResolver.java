@@ -24,7 +24,7 @@ public class MethodValidationResolver extends AbstractProblemResolver {
   }
 
   @Override
-  public ProblemBuilder resolve(
+  public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
     MethodValidationException e = (MethodValidationException) ex;
     return from(e).status(ProblemStatus.BAD_REQUEST);

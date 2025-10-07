@@ -19,7 +19,7 @@ public class MaxUploadSizeExceededResolver extends AbstractProblemResolver {
   }
 
   @Override
-  public ProblemBuilder resolve(
+  public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
     MaxUploadSizeExceededException e = (MaxUploadSizeExceededException) ex;
     return Problem.builder()

@@ -23,7 +23,7 @@ public class ConstraintViolationResolver extends AbstractProblemResolver {
   }
 
   @Override
-  public ProblemBuilder resolve(
+  public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
     ConstraintViolationException e = (ConstraintViolationException) ex;
     List<Violation> errors = extractViolations(e);

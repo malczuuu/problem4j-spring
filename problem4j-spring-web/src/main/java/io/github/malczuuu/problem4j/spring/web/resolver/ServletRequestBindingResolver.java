@@ -55,7 +55,7 @@ public class ServletRequestBindingResolver extends AbstractProblemResolver {
   }
 
   @Override
-  public ProblemBuilder resolve(
+  public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
     ProblemBuilder builder = Problem.builder().status(ProblemStatus.BAD_REQUEST);
 

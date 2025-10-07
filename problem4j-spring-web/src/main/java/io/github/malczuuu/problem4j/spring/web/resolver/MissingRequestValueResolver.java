@@ -38,7 +38,7 @@ public class MissingRequestValueResolver extends AbstractProblemResolver {
   }
 
   @Override
-  public ProblemBuilder resolve(
+  public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
     MissingRequestValueException e = (MissingRequestValueException) ex;
 

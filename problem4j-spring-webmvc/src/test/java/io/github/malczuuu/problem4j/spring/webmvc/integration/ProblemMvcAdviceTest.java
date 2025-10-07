@@ -98,7 +98,7 @@ class ProblemMvcAdviceTest {
     }
 
     @Override
-    public ProblemBuilder resolve(
+    public ProblemBuilder resolveBuilder(
         ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
       return Problem.builder()
           .type("http://exception.example.org/resolvable")
