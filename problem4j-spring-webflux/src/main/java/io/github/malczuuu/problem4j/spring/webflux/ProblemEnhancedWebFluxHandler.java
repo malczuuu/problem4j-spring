@@ -82,7 +82,7 @@ public class ProblemEnhancedWebFluxHandler extends ResponseEntityExceptionHandle
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
     try {
       return problemResolverStore
-          .resolver(ex.getClass())
+          .findResolver(ex.getClass())
           .map(resolver -> resolver.resolveBuilder(context, ex, headers, status))
           .orElseGet(() -> fallbackProblem(status));
     } catch (Exception e) {

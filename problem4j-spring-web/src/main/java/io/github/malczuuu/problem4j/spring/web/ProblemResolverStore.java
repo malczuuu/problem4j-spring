@@ -24,5 +24,5 @@ public interface ProblemResolverStore {
    * @return an {@link Optional} containing the most specific {@link ProblemResolver} if found,
    *     otherwise an empty {@link Optional}
    */
-  Optional<ProblemResolver> resolver(Class<? extends Exception> clazz);
+  Optional<ProblemResolver> findResolver(Class<? extends Exception> clazz);
 }

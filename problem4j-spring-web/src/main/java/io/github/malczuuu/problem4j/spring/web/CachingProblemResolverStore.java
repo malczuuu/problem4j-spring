@@ -44,7 +44,7 @@ public class CachingProblemResolverStore implements ProblemResolverStore {
    * @return an {@link Optional} containing the matching resolver, or empty if none found
    */
   @Override
-  public Optional<ProblemResolver> resolver(Class<? extends Exception> clazz) {
+  public Optional<ProblemResolver> findResolver(Class<? extends Exception> clazz) {
     return cache.computeIfAbsent(clazz, this::computeResolver);
   }
 

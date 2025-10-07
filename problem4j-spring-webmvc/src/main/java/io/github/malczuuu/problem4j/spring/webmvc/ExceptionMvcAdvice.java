@@ -78,7 +78,7 @@ public class ExceptionMvcAdvice {
     if (problemMappingProcessor.isMappingCandidate(ex)) {
       builder = problemMappingProcessor.toProblemBuilder(ex, context);
     } else {
-      Optional<ProblemResolver> optionalResolver = problemResolverStore.resolver(ex.getClass());
+      Optional<ProblemResolver> optionalResolver = problemResolverStore.findResolver(ex.getClass());
 
       if (optionalResolver.isPresent()) {
         builder =
