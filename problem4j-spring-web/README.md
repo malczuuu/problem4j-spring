@@ -4,7 +4,8 @@
 2. [Returning response bodies from custom exceptions](#returning-response-bodies-from-custom-exceptions)
     1. [Extending `ProblemException`](#extending-problemexception)
     2. [Annotating `@ProblemMapping`](#annotating-problemmapping)
-    3. [Custom `@RestControllerAdvice`](#custom-restcontrolleradvice) 
+    3. [Implementing `ProblemResolver`](#implementing-problemresolver) 
+    4. [Custom `@RestControllerAdvice` implementation](#custom-restcontrolleradvice) 
 3. [Validation](#validation)
 4. [Occurrences of `TypeMismatchException`](#occurrences-of-typemismatchexception)
 5. [Occurrences of `ErrorResponseException`](#occurrences-of-errorresponseexception)
@@ -117,13 +118,14 @@ public class ExampleException extends RuntimeException {
 **Note** that `@ProblemMapping` is inherited in subclasses so it's possible to rely on it for building exception classes
 hierarchy.
 
-### Custom `ProblemResolver` implementation
+### Implementing `ProblemResolver`
 
 For exceptions, you can't modify, the primary way to integrate with Problem4J to create custom `ProblemResolver`
 and declare it as `@Component`.
 
 `ProblemResolver` is an interface used by Problem4J's build-in `@RestControllerAdvice`-s that return `Problem` objects
-in response entity.
+in response entity. After declaring it as a component for dependency injection, it will be loaded into
+`ProblemResolverStore`.
 
 ```java
 @Component
