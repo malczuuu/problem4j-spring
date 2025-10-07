@@ -16,15 +16,15 @@ flexible enough for custom exceptions and business-specific details.
 ## Table of Contents
 
 - [Why bother with Problem4J](#why-bother-with-problem4j)
-- [Features](#features)
 - [Usage](#usage)
 - [Configuration](#configuration)
 - [Problem4J Links](#problem4j-links)
 
 ## Why bother with Problem4J
 
-Even though Spring provides `ProblemDetail` and `ErrorResponseException` for **RFC 7807**-compliant error responses,
-they are quite rough, minimal, and often require manual population of fields. In contrast, **Problem4J** was created to:
+Even though Spring provides `ProblemDetail` and `ErrorResponseException` for [**RFC 7807**][rfc7807]-compliant error
+responses, they are quite rough, minimal, and often require manual population of fields. In contrast, **Problem4J** was
+created to:
 
 - Provide a **fully immutable, fluent `Problem` model** with support for extensions.
 - Support **declarative exception mapping** via `@ProblemMapping` or **programmatic one** via `ProblemException` and
@@ -32,26 +32,16 @@ they are quite rough, minimal, and often require manual population of fields. In
 - Automatically **interpolate exception fields and context metadata** (e.g., `traceId`) into responses.
 - Offer **consistent error responses** across WebMVC and WebFlux, including validation and framework exceptions.
 - Allow **custom extensions** without boilerplate, making structured errors easier to trace and consume.
+- Configure painlessly thanks to Spring Boot autoconfiguration.
 
 In short, Problem4J is designed for developers who want **robust, traceable, and fully configurable REST API errors**,
-while keeping everything RFC 7807-compliant.
-
-## Features
-
-This module provides Spring integration for [`problem4j-core`][problem4j-core]. library that integrates the RFC Problem
-Details model with exception handling in Spring Boot.
-
-- ✅ Automatic mapping of exceptions to responses with `Problem` objects compliant with [RFC 7807][rfc7807].
-- ✅ Mapping of exceptions extending `ProblemException` to responses with `Problem` objects.
-- ✅ Mapping of exceptions annotated with `@ProblemMapping` to responses with `Problem` objects.
-- ✅ Fallback mapping of `Exception` to `Problem` objects representing `500 Internal Server Error`.
-- ✅ Simple configuration thanks to Spring Boot autoconfiguration.
+while keeping everything [RFC 7807][rfc7807]-compliant.
 
 ## Usage
 
 The library provides two ways to convert exceptions into RFC 7807-compliant `Problem` responses. You can either extend
-`ProblemException` or use `@ProblemMapping` annotation on your own exception if modifying inheritance tree is not an
-option for.
+`ProblemException`, mark your exception with `@ProblemMapping` or implement `ProblemResolver` to build `Problem` object
+by yourself.
 
 For more details and usage examples, see the submodule `README.md` files:
 
@@ -62,9 +52,9 @@ For more details and usage examples, see the submodule `README.md` files:
 Add library as dependency to Maven or Gradle. See the actual versions on [Maven Central][maven-central]. Add it along
 with repository in your dependency manager. **Java 17** or higher is required to use this library.
 
-Tested mostly with Spring Boot from `3.3.x` to `3.5.x`. However, the idea for `problem4j-spring-v1.x` is to be backwards
-compatible down to Spring Boot `3.0.0`. Integration with **Spring Boot 4** (once its released) will most likely be
-released as `problem4j-spring-v2.x`, and maintained on separate branches if `v1.x` won't be compatible.
+The idea for `problem4j-spring-v1.x` is to be backwards compatible down to Spring Boot `3.0.x`, although it was tested
+mostly on versions between `3.2.x` and `3.5.x`. Integration with **Spring Boot 4** (once its released) will most likely
+be released as `problem4j-spring-v2.x`, and maintained on separate branches if `v1.x` won't be compatible.
 
 **Note:** To limit the number of transitive dependencies, you need to include Spring Boot explicitly in your project.
 
@@ -75,12 +65,12 @@ released as `problem4j-spring-v2.x`, and maintained on separate branches if `v1.
        <dependency>
            <groupId>io.github.malczuuu.problem4j</groupId>
            <artifactId>problem4j-spring-webflux</artifactId>
-           <version>1.0.0-alpha3</version>
+           <version>1.0.0-alpha4</version>
        </dependency>
        <dependency>
            <groupId>io.github.malczuuu.problem4j</groupId>
            <artifactId>problem4j-spring-webmvc</artifactId>
-           <version>1.0.0-alpha3</version>
+           <version>1.0.0-alpha4</version>
        </dependency>
    </dependencies>
    ```
@@ -88,8 +78,8 @@ released as `problem4j-spring-v2.x`, and maintained on separate branches if `v1.
    ```groovy
    dependencies {
        // pick the one for your project
-       implementation("io.github.malczuuu.problem4j:problem4j-spring-webflux:1.0.0-alpha3")
-       implementation("io.github.malczuuu.problem4j:problem4j-spring-webmvc:1.0.0-alpha3")
+       implementation("io.github.malczuuu.problem4j:problem4j-spring-webflux:1.0.0-alpha4")
+       implementation("io.github.malczuuu.problem4j:problem4j-spring-webmvc:1.0.0-alpha4")
    }
    ```
 
