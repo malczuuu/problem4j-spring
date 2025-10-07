@@ -1,8 +1,10 @@
 package io.github.malczuuu.problem4j.spring.webflux;
 
 import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.spring.web.internal.TracingSupport;
-import io.github.malczuuu.problem4j.spring.web.mapping.ConstraintViolationMapping;
+import io.github.malczuuu.problem4j.core.ProblemBuilder;
+import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
+import io.github.malczuuu.problem4j.spring.web.resolver.ConstraintViolationResolver;
+import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
 import io.github.malczuuu.problem4j.spring.web.util.ProblemSupport;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
@@ -17,16 +19,21 @@ import reactor.core.publisher.Mono;
 @RestControllerAdvice
 public class ConstraintViolationExceptionWebFluxAdvice {
 
-  private final ConstraintViolationMapping constraintViolationMapping;
+  private final ConstraintViolationResolver constraintViolationResolver;
 
   public ConstraintViolationExceptionWebFluxAdvice(
-      ConstraintViolationMapping constraintViolationMapping) {
-    this.constraintViolationMapping = constraintViolationMapping;
+      ConstraintViolationResolver constraintViolationResolver) {
+    this.constraintViolationResolver = constraintViolationResolver;
   }
 
   @ExceptionHandler(ConstraintViolationException.class)
   public Mono<ResponseEntity<Problem>> handleConstraintViolationException(
       ConstraintViolationException ex, ServerWebExchange exchange) {
+    ProblemContext context =
+        ProblemContext.builder()
+            .traceId(exchange.getAttribute(TracingSupport.TRACE_ID_ATTR))
+            .build();
+
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
@@ -34,10 +41,11 @@ public class ConstraintViolationExceptionWebFluxAdvice {
 
     HttpStatus status = HttpStatus.BAD_REQUEST;
 
-    Problem problem = constraintViolationMapping.map(ex, headers, status);
+    ProblemBuilder builder = constraintViolationResolver.resolve(context, ex, headers, status);
     if (instanceOverride != null) {
-      problem = problem.toBuilder().instance(instanceOverride.toString()).build();
+      builder = builder.instance(instanceOverride.toString());
     }
+    Problem problem = builder.build();
 
     status = ProblemSupport.resolveStatus(problem);
 

@@ -1,12 +1,12 @@
 package io.github.malczuuu.problem4j.spring.web;
 
 import io.github.malczuuu.problem4j.jackson.ProblemModule;
+import io.github.malczuuu.problem4j.spring.web.annotation.DefaultProblemMappingProcessor;
 import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
-import io.github.malczuuu.problem4j.spring.web.annotation.SimpleProblemMappingProcessor;
 import io.github.malczuuu.problem4j.spring.web.format.DefaultProblemFormat;
 import io.github.malczuuu.problem4j.spring.web.format.ProblemFormat;
-import io.github.malczuuu.problem4j.spring.web.mapping.ExceptionMapping;
-import io.github.malczuuu.problem4j.spring.web.mapping.ExceptionMappingConfiguration;
+import io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver;
+import io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolverConfiguration;
 import java.util.List;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration(proxyBeanMethods = false)
-@Import({ExceptionMappingConfiguration.class})
+@Import({ProblemResolverConfiguration.class})
 @EnableConfigurationProperties({ProblemProperties.class})
 public class ProblemConfiguration {
 
@@ -33,12 +33,13 @@ public class ProblemConfiguration {
   /**
    * Provides a {@link ProblemMappingProcessor} if none is defined.
    *
-   * @return a new {@link SimpleProblemMappingProcessor}
+   * @return a new {@link
+   *     io.github.malczuuu.problem4j.spring.web.annotation.DefaultProblemMappingProcessor}
    */
   @ConditionalOnMissingBean(ProblemMappingProcessor.class)
   @Bean
   public ProblemMappingProcessor problemMappingProcessor() {
-    return new SimpleProblemMappingProcessor();
+    return new DefaultProblemMappingProcessor();
   }
 
   /**
@@ -54,15 +55,16 @@ public class ProblemConfiguration {
   }
 
   /**
-   * Provides a {@link ExceptionMappingStore} that aggregates all {@link ExceptionMapping}
-   * implementations.
+   * Provides a {@link ProblemResolverStore} that aggregates all {@link
+   * io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver} implementations.
    *
-   * @param exceptionMappings all available {@link ExceptionMapping} declared as components
-   * @return a new {@link CachingExceptionMappingStore}
+   * @param problemResolvers all available {@link
+   *     io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver} declared as components
+   * @return a new {@link CachingProblemResolverStore}
    */
-  @ConditionalOnMissingBean(ExceptionMappingStore.class)
+  @ConditionalOnMissingBean(ProblemResolverStore.class)
   @Bean
-  public ExceptionMappingStore exceptionMappingStore(List<ExceptionMapping> exceptionMappings) {
-    return new CachingExceptionMappingStore(exceptionMappings);
+  public ProblemResolverStore exceptionResolverStore(List<ProblemResolver> problemResolvers) {
+    return new CachingProblemResolverStore(problemResolvers);
   }
 }

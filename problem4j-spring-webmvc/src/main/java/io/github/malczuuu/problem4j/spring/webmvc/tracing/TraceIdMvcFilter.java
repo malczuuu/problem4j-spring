@@ -1,8 +1,8 @@
 package io.github.malczuuu.problem4j.spring.webmvc.tracing;
 
+import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
 import io.github.malczuuu.problem4j.spring.web.internal.InstanceSupport;
-import io.github.malczuuu.problem4j.spring.web.internal.StaticProblemContext;
-import io.github.malczuuu.problem4j.spring.web.internal.TracingSupport;
+import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,9 +29,9 @@ public class TraceIdMvcFilter extends OncePerRequestFilter {
     if (!StringUtils.hasLength(traceId)) {
       traceId = TracingSupport.getRandomTraceId();
     }
-
     String instanceOverrideValue =
-        InstanceSupport.overrideInstance(instanceOverride, new StaticProblemContext(traceId));
+        InstanceSupport.overrideInstance(
+            instanceOverride, ProblemContext.builder().traceId(traceId).build());
 
     request.setAttribute(TracingSupport.TRACE_ID_ATTR, traceId);
     request.setAttribute(TracingSupport.INSTANCE_OVERRIDE_ATTR, instanceOverrideValue);

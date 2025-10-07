@@ -27,7 +27,8 @@ Even though Spring provides `ProblemDetail` and `ErrorResponseException` for **R
 they are quite rough, minimal, and often require manual population of fields. In contrast, **Problem4J** was created to:
 
 - Provide a **fully immutable, fluent `Problem` model** with support for extensions.
-- Support **declarative exception mapping** via `@ProblemMapping` or **programmatic one** via `ProblemException`.
+- Support **declarative exception mapping** via `@ProblemMapping` or **programmatic one** via `ProblemException` and
+  `ProblemResolver`.
 - Automatically **interpolate exception fields and context metadata** (e.g., `traceId`) into responses.
 - Offer **consistent error responses** across WebMVC and WebFlux, including validation and framework exceptions.
 - Allow **custom extensions** without boilerplate, making structured errors easier to trace and consume.
@@ -115,6 +116,9 @@ header can be injected into the `Problem` response, for example into the`instanc
 Property that defines a template for overriding the `instance` field in `Problem` responses.The value may contain the
 special placeholder `{traceId}`, which will be replaced at runtime with the trace identifier from the current request (
 see [`problem4j.tracing-header-name`](#problem4jtracing-header-name)). Defaults to `null` (no override applied).
+
+For example, by assigning `problem4j.instance-override=/error-instances/{traceId}`, with tracing enabled, each `Problem`
+response will have `"instance"` field matching to that format (e.g. `"/error-instances/WQ1tbs12rtSD"`).
 
 ## Problem4J Links
 

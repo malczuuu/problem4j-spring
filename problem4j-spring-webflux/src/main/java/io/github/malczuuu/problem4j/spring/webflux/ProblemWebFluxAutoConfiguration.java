@@ -1,12 +1,12 @@
 package io.github.malczuuu.problem4j.spring.webflux;
 
-import io.github.malczuuu.problem4j.spring.web.ExceptionMappingStore;
 import io.github.malczuuu.problem4j.spring.web.ProblemConfiguration;
 import io.github.malczuuu.problem4j.spring.web.ProblemProperties;
+import io.github.malczuuu.problem4j.spring.web.ProblemResolverStore;
 import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
-import io.github.malczuuu.problem4j.spring.web.mapping.ConstraintViolationMapping;
+import io.github.malczuuu.problem4j.spring.web.resolver.ConstraintViolationResolver;
 import io.github.malczuuu.problem4j.spring.webflux.error.ProblemErrorWebFluxConfiguration;
-import io.github.malczuuu.problem4j.spring.webflux.mapping.ExceptionMappingWebFluxConfiguration;
+import io.github.malczuuu.problem4j.spring.webflux.resolver.ProblemResolverWebFluxConfiguration;
 import io.github.malczuuu.problem4j.spring.webflux.tracing.TraceIdWebFluxFilter;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -44,7 +44,7 @@ import org.springframework.web.reactive.result.method.annotation.ResponseEntityE
 @AutoConfigureBefore({ErrorWebFluxAutoConfiguration.class, WebFluxAutoConfiguration.class})
 @Import({
   ProblemErrorWebFluxConfiguration.class,
-  ExceptionMappingWebFluxConfiguration.class,
+  ProblemResolverWebFluxConfiguration.class,
   ProblemConfiguration.class
 })
 public class ProblemWebFluxAutoConfiguration {
@@ -53,16 +53,16 @@ public class ProblemWebFluxAutoConfiguration {
   @ConditionalOnMissingBean(ResponseEntityExceptionHandler.class)
   @Bean
   public ResponseEntityExceptionHandler responseEntityExceptionHandler(
-      ExceptionMappingStore exceptionMappingStore) {
-    return new ProblemEnhancedWebFluxHandler(exceptionMappingStore);
+      ProblemResolverStore problemResolverStore) {
+    return new ProblemEnhancedWebFluxHandler(problemResolverStore);
   }
 
   @Order(Ordered.LOWEST_PRECEDENCE)
   @ConditionalOnMissingBean(ExceptionWebFluxAdvice.class)
   @Bean
   public ExceptionWebFluxAdvice exceptionWebFluxAdvice(
-      ProblemMappingProcessor problemMappingProcessor) {
-    return new ExceptionWebFluxAdvice(problemMappingProcessor);
+      ProblemMappingProcessor problemMappingProcessor, ProblemResolverStore problemResolverStore) {
+    return new ExceptionWebFluxAdvice(problemMappingProcessor, problemResolverStore);
   }
 
   @Order(Ordered.LOWEST_PRECEDENCE - 10)
@@ -80,8 +80,8 @@ public class ProblemWebFluxAutoConfiguration {
     @ConditionalOnMissingBean(ConstraintViolationExceptionWebFluxAdvice.class)
     @Bean
     public ConstraintViolationExceptionWebFluxAdvice constraintViolationExceptionWebFluxAdvice(
-        ConstraintViolationMapping constraintViolationMapping) {
-      return new ConstraintViolationExceptionWebFluxAdvice(constraintViolationMapping);
+        ConstraintViolationResolver constraintViolationResolver) {
+      return new ConstraintViolationExceptionWebFluxAdvice(constraintViolationResolver);
     }
   }
 

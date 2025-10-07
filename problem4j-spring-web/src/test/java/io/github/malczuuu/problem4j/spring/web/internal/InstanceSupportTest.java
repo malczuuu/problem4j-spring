@@ -2,7 +2,7 @@ package io.github.malczuuu.problem4j.spring.web.internal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.github.malczuuu.problem4j.spring.web.ProblemContext;
+import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
 import org.junit.jupiter.api.Test;
 
 class InstanceSupportTest {
@@ -26,14 +26,14 @@ class InstanceSupportTest {
     ProblemContext context = () -> null;
 
     String result =
-        InstanceSupport.overrideInstance("https://example.com/instances/{traceId}", context);
+        InstanceSupport.overrideInstance("https://example.org/instances/{traceId}", context);
 
     assertThat(result).isNull();
   }
 
   @Test
   void givenNullContext_shouldReturnNull() {
-    String input = "https://example.com/instances/{traceId}";
+    String input = "https://example.org/instances/{traceId}";
 
     String result = InstanceSupport.overrideInstance(input, null);
 
@@ -45,9 +45,9 @@ class InstanceSupportTest {
     ProblemContext context = () -> "12345";
 
     String result =
-        InstanceSupport.overrideInstance("https://example.com/instances/{traceId}", context);
+        InstanceSupport.overrideInstance("https://example.org/instances/{traceId}", context);
 
-    assertThat(result).isEqualTo("https://example.com/instances/12345");
+    assertThat(result).isEqualTo("https://example.org/instances/12345");
   }
 
   @Test
@@ -63,8 +63,8 @@ class InstanceSupportTest {
   void givenNoPlaceholder_shouldReturnOriginal() {
     ProblemContext context = () -> "12345";
 
-    String result = InstanceSupport.overrideInstance("https://example.com/instances/abc", context);
+    String result = InstanceSupport.overrideInstance("https://example.org/instances/abc", context);
 
-    assertThat(result).isEqualTo("https://example.com/instances/abc");
+    assertThat(result).isEqualTo("https://example.org/instances/abc");
   }
 }

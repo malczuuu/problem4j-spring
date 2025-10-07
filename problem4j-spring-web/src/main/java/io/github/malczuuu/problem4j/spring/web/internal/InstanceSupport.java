@@ -1,6 +1,6 @@
 package io.github.malczuuu.problem4j.spring.web.internal;
 
-import io.github.malczuuu.problem4j.spring.web.ProblemContext;
+import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
 import org.jetbrains.annotations.ApiStatus;
 import org.springframework.util.StringUtils;
 

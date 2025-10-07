@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootTest(
     classes = {_TestApp.class},
     properties = {
-      "problem4j.instance-override=https://example.com/trace/{traceId}",
+      "problem4j.instance-override=https://example.org/trace/{traceId}",
       "problem4j.tracing-header-name=X-Trace-Id"
     })
 @Import({InstanceOverrideTest.InstanceOverrideController.class})
@@ -79,7 +79,7 @@ class InstanceOverrideTest {
                       Problem.builder()
                           .status(ProblemStatus.BAD_REQUEST)
                           .detail(VALIDATION_FAILED_DETAIL)
-                          .instance("https://example.com/trace/" + traceId)
+                          .instance("https://example.org/trace/" + traceId)
                           .extension(
                               ERRORS_EXTENSION,
                               List.of(Map.of("field", "name", "error", "must not be blank")))

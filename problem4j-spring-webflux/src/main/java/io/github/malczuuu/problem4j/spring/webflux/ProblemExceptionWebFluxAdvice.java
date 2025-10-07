@@ -2,7 +2,7 @@ package io.github.malczuuu.problem4j.spring.webflux;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemException;
-import io.github.malczuuu.problem4j.spring.web.internal.TracingSupport;
+import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
 import io.github.malczuuu.problem4j.spring.web.util.ProblemSupport;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

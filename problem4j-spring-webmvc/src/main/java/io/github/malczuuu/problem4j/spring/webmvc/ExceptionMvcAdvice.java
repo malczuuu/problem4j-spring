@@ -5,11 +5,13 @@ import static org.springframework.web.context.request.RequestAttributes.SCOPE_RE
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemBuilder;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
-import io.github.malczuuu.problem4j.spring.web.ProblemContext;
+import io.github.malczuuu.problem4j.spring.web.ProblemResolverStore;
 import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
-import io.github.malczuuu.problem4j.spring.web.internal.StaticProblemContext;
-import io.github.malczuuu.problem4j.spring.web.internal.TracingSupport;
+import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
+import io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver;
+import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
 import io.github.malczuuu.problem4j.spring.web.util.ProblemSupport;
+import java.util.Optional;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -38,15 +40,20 @@ import org.springframework.web.context.request.WebRequest;
 public class ExceptionMvcAdvice {
 
   private final ProblemMappingProcessor problemMappingProcessor;
+  private final ProblemResolverStore problemResolverStore;
 
-  public ExceptionMvcAdvice(ProblemMappingProcessor problemMappingProcessor) {
+  public ExceptionMvcAdvice(
+      ProblemMappingProcessor problemMappingProcessor, ProblemResolverStore problemResolverStore) {
     this.problemMappingProcessor = problemMappingProcessor;
+    this.problemResolverStore = problemResolverStore;
   }
 
   @ExceptionHandler(Exception.class)
   public ResponseEntity<Object> handleException(Exception ex, WebRequest request) {
     ProblemContext context =
-        new StaticProblemContext(request.getAttribute(TracingSupport.TRACE_ID_ATTR, SCOPE_REQUEST));
+        ProblemContext.builder()
+            .traceId(request.getAttribute(TracingSupport.TRACE_ID_ATTR, SCOPE_REQUEST))
+            .build();
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
@@ -54,23 +61,32 @@ public class ExceptionMvcAdvice {
     Object instanceOverride =
         request.getAttribute(TracingSupport.INSTANCE_OVERRIDE_ATTR, SCOPE_REQUEST);
 
-    Problem problem;
-
-    if (problemMappingProcessor.isAnnotated(ex)) {
-      problem = problemMappingProcessor.toProblem(ex, context);
-      if (instanceOverride != null) {
-        problem = problem.toBuilder().instance(instanceOverride.toString()).build();
-      }
-    } else {
-      ProblemBuilder builder = Problem.builder().status(ProblemStatus.INTERNAL_SERVER_ERROR);
-      if (instanceOverride != null) {
-        builder = builder.instance(instanceOverride.toString());
-      }
-      problem = builder.build();
+    ProblemBuilder builder = getProblemBuilder(ex, context, headers);
+    if (instanceOverride != null) {
+      builder = builder.instance(instanceOverride.toString());
     }
+    Problem problem = builder.build();
 
     HttpStatus status = ProblemSupport.resolveStatus(problem);
 
     return new ResponseEntity<>(problem, headers, status);
+  }
+
+  private ProblemBuilder getProblemBuilder(
+      Exception ex, ProblemContext context, HttpHeaders headers) {
+    ProblemBuilder builder;
+    if (problemMappingProcessor.isMappingCandidate(ex)) {
+      builder = problemMappingProcessor.toProblemBuilder(ex, context);
+    } else {
+      Optional<ProblemResolver> optionalResolver = problemResolverStore.resolver(ex.getClass());
+
+      if (optionalResolver.isPresent()) {
+        builder =
+            optionalResolver.get().resolve(context, ex, headers, HttpStatus.INTERNAL_SERVER_ERROR);
+      } else {
+        builder = Problem.builder().status(ProblemStatus.INTERNAL_SERVER_ERROR);
+      }
+    }
+    return builder;
   }
 }

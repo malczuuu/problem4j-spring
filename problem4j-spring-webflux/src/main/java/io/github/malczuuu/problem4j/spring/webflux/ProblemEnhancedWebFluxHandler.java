@@ -1,10 +1,13 @@
 package io.github.malczuuu.problem4j.spring.webflux;
 
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.resolveStatus;
+
 import io.github.malczuuu.problem4j.core.Problem;
+import io.github.malczuuu.problem4j.core.ProblemBuilder;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
-import io.github.malczuuu.problem4j.spring.web.ExceptionMappingStore;
-import io.github.malczuuu.problem4j.spring.web.internal.TracingSupport;
-import io.github.malczuuu.problem4j.spring.web.util.ProblemSupport;
+import io.github.malczuuu.problem4j.spring.web.ProblemResolverStore;
+import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
+import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -16,7 +19,7 @@ import reactor.core.publisher.Mono;
 
 /**
  * Handles Spring framework exceptions using registered {@link
- * io.github.malczuuu.problem4j.spring.web.mapping.ExceptionMapping}s.
+ * io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver}s.
  *
  * <p>This class extends {@link ResponseEntityExceptionHandler} and overrides {@link
  * #handleExceptionInternal} to replace the response body with a {@link Problem} object.
@@ -24,7 +27,8 @@ import reactor.core.publisher.Mono;
  * <p>Behavior:
  *
  * <ul>
- *   <li>Delegates exception-to-problem mapping to {@link ExceptionMappingStore}.
+ *   <li>Delegates exception-to-problem mapping to {@link
+ *       io.github.malczuuu.problem4j.spring.web.ProblemResolverStore}.
  *   <li>Sets content type to {@code application/problem+json}.
  *   <li>Falls back to {@link ProblemStatus#INTERNAL_SERVER_ERROR} if mapping fails.
  * </ul>
@@ -32,10 +36,10 @@ import reactor.core.publisher.Mono;
 @RestControllerAdvice
 public class ProblemEnhancedWebFluxHandler extends ResponseEntityExceptionHandler {
 
-  private final ExceptionMappingStore exceptionMappingStore;
+  private final ProblemResolverStore problemResolverStore;
 
-  public ProblemEnhancedWebFluxHandler(ExceptionMappingStore exceptionMappingStore) {
-    this.exceptionMappingStore = exceptionMappingStore;
+  public ProblemEnhancedWebFluxHandler(ProblemResolverStore problemResolverStore) {
+    this.problemResolverStore = problemResolverStore;
   }
 
   /**
@@ -53,35 +57,40 @@ public class ProblemEnhancedWebFluxHandler extends ResponseEntityExceptionHandle
       HttpHeaders headers,
       HttpStatusCode status,
       ServerWebExchange exchange) {
+    ProblemContext context =
+        ProblemContext.builder()
+            .traceId(exchange.getAttribute(TracingSupport.TRACE_ID_ATTR))
+            .build();
+
     headers = headers != null ? HttpHeaders.writableHttpHeaders(headers) : new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
     Object instanceOverride = exchange.getAttribute(TracingSupport.INSTANCE_OVERRIDE_ATTR);
 
-    Problem problem = overrideBody(ex, headers, status);
+    ProblemBuilder builder = getBuilderForOverridingBody(context, ex, headers, status);
     if (instanceOverride != null) {
-      problem = problem.toBuilder().instance(instanceOverride.toString()).build();
+      builder = builder.instance(instanceOverride.toString());
     }
+    Problem problem = builder.build();
 
-    status = ProblemSupport.resolveStatus(problem);
+    status = resolveStatus(problem);
 
     return super.handleExceptionInternal(ex, problem, headers, status, exchange);
   }
 
-  private Problem overrideBody(Exception ex, HttpHeaders headers, HttpStatusCode status) {
+  private ProblemBuilder getBuilderForOverridingBody(
+      ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
     try {
-      return exceptionMappingStore
-          .findMapping(ex.getClass())
-          .map(mapping -> mapping.map(ex, headers, status))
+      return problemResolverStore
+          .resolver(ex.getClass())
+          .map(resolver -> resolver.resolve(context, ex, headers, status))
           .orElseGet(() -> fallbackProblem(status));
     } catch (Exception e) {
       return fallbackProblem(status);
     }
   }
 
-  private Problem fallbackProblem(HttpStatusCode status) {
-    return Problem.builder()
-        .status(ProblemStatus.findValue(status.value()).orElse(ProblemStatus.INTERNAL_SERVER_ERROR))
-        .build();
+  private ProblemBuilder fallbackProblem(HttpStatusCode status) {
+    return Problem.builder().status(resolveStatus(status));
   }
 }

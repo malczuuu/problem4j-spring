@@ -14,14 +14,14 @@
 ## Overview
 
 This module overrides Spring Web's default (often minimal or plain-text) responses for many framework exceptions and
-produces structured RFC 7807 `Problem` objects. [`ExceptionMappingConfiguration`][ExceptionMappingConfiguration]
-registers these mappings.
+produces structured RFC 7807 `Problem` objects. [`ProblemResolverConfiguration`][ProblemResolverConfiguration]
+registers these resolvers.
 
-These error mappings to disallow leaking too much information to the client application. It more information is
-necessary, feel free to override specific [`ExceptionMapping`][ExceptionMapping], register it as `@Serivce`,
-`@Component` or `@Bean` and exclude specific nested[`ExceptionMappingConfiguration`][ExceptionMappingConfiguration]
+These error resolvers to disallow leaking too much information to the client application. It more information is
+necessary, feel free to override specific [`ProblemResolver`][ProblemResolver], register it as `@Serivce`,
+`@Component` or `@Bean` and exclude specific nested[`ProblemResolverConfiguration`][ProblemResolverConfiguration]
 configuration class with `@ConditionalOnClass`, per appropriate exception. Therefore, if using this library with
-previous versions, mappings for exception classes that are not present in classpath are silently ignored.
+previous versions, resolvers for exception classes that are not present in classpath are silently ignored.
 
 Overriding whole `ProblemEnhancedExceptionHandler` is not recommended, although such necessities are sometimes
 understandable.
@@ -41,11 +41,11 @@ control over the `Problem` object.
 /**
  * <pre>{@code
  * {
- *   "type": "https://example.com/errors/invalid-request",
+ *   "type": "https://example.org/errors/invalid-request",
  *   "title": "Invalid Request",
  *   "status": 400,
  *   "detail": "not a valid json",
- *   "instance": "https://example.com/instances/1234"
+ *   "instance": "https://example.org/instances/1234"
  * }
  * }</pre>
  */
@@ -53,11 +53,11 @@ public class Example {
   public void method() {
     Problem problem =
         Problem.builder()
-            .type("https://example.com/errors/invalid-request")
+            .type("https://example.org/errors/invalid-request")
             .title("Invalid Request")
             .status(400)
             .detail("not a valid json")
-            .instance("https://example.com/instances/1234")
+            .instance("https://example.org/instances/1234")
             .build();
     throw new ProblemException(problem);
   }
@@ -84,22 +84,22 @@ To extract values from target exception, it's possible to use placeholders for i
 /**
  * <pre>{@code
  * {
- *   "type": "https://example.com/errors/invalid-request",
+ *   "type": "https://example.org/errors/invalid-request",
  *   "title": "Invalid Request",
  *   "status": 400,
  *   "detail": "bad input for user 123: email",
- *   "instance": "https://example.com/instances/trace-789",
+ *   "instance": "https://example.org/instances/trace-789",
  *   "userId": "123",
  *   "fieldName": "email"
  * }
  * }</pre>
  */
 @ProblemMapping(
-    type = "https://example.com/errors/invalid-request",
+    type = "https://example.org/errors/invalid-request",
     title = "Invalid Request",
     status = 400,
     detail = "{message}: {fieldName}",
-    instance = "https://example.com/instances/{traceId}",
+    instance = "https://example.org/instances/{traceId}",
     extensions = {"userId", "fieldName"})
 public class ExampleException extends RuntimeException {
 
@@ -117,10 +117,44 @@ public class ExampleException extends RuntimeException {
 **Note** that `@ProblemMapping` is inherited in subclasses so it's possible to rely on it for building exception classes
 hierarchy.
 
-### Custom `RestControllerAdvice`
+### Custom `ProblemResolver` implementation
 
-For exceptions, you can't modify, add a custom `@RestControllerAdvice` that returns a `Problem` object, but take note at
-`@Order`.
+For exceptions, you can't modify, the primary way to integrate with Problem4J to create custom `ProblemResolver`
+and declare it as `@Component`.
+
+`ProblemResolver` is an interface used by Problem4J's build-in `@RestControllerAdvice`-s that return `Problem` objects
+in response entity.
+
+```java
+@Component
+public class MaxUploadSizeExceededResolver implements ProblemResolver {
+
+  @Override
+  public Class<? extends Exception> getExceptionClass() {
+    return ExampleException.class;
+  }
+
+  @Override
+  public ProblemBuilder toProblemBuilder(
+      ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
+    MaxUploadSizeExceededException e = (MaxUploadSizeExceededException) ex;
+    return Problem.builder()
+        .type("https://example.org/errors/invalid-request")
+        .title("Invalid Request")
+        .status(400)
+        .detail("bad input for user " + e.getUserId())
+        .instance("https://example.org/instances/" + context.getTraceId())
+        .extension("userId", e.getUserId())
+        .extension("fieldName", e.getFieldName());
+  }
+}
+```
+
+### Custom `@RestControllerAdvice`
+
+**Note** that the main reason behind this project is to make use of `ProblemException`, `@ProblemMapping` or
+`ProblemResolver` for all custom exception in your application code. Use `@RestControllerAdvice` as a last resort if
+Problem4J doesn't give you what you need.
 
 While creating your own `@RestControllerAdvice`, make sure to position it with right `@Order`. In order for your custom
 implementation to work seamlessly, make sure to position it on at least **`Ordered.LOWEST_PRECEDENCE - 11`** (the lower
@@ -138,6 +172,9 @@ But let's be honest, you'll probably use `Ordered.HIGHEST_PRECEDENCE` :D.
 | `ProblemException`                  | `Ordered.LOWEST_PRECEDENCE - 10` |
 | `Exception`                         | `Ordered.LOWEST_PRECEDENCE`      |
 
+While implementing custom `@ControllerAdvice`, enforcing `instance-override` feature must be performed manually. Value
+of `instance` field will come from request attributes and must be overwritten if not `null`.
+
 ```java
 @Order(Ordered.LOWEST_PRECEDENCE - 20)
 @Component
@@ -145,15 +182,23 @@ But let's be honest, you'll probably use `Ordered.HIGHEST_PRECEDENCE` :D.
 public class ExampleExceptionAdvice {
 
   @ExceptionHandler(ExampleException.class)
-  public ResponseEntity<Problem> method(ExampleException ex, WebRequest request) {
-    Problem problem =
+  public ResponseEntity<Problem> handleExampleException(ExampleException ex, WebRequest request) {
+    ProblemBuilder builder =
         Problem.builder()
-            .type("http://example.com/errors/example-error")
+            .type("http://example.org/errors/example-error")
             .title("Example Title")
             .status(400)
             .detail(ex.getMessage())
-            .instance("https://example.com/instances/example-instance")
-            .build();
+            .instance("https://example.org/instances/example-instance");
+
+    Object instanceOverride =
+        request.getAttribute(TracingSupport.INSTANCE_OVERRIDE_ATTR, SCOPE_REQUEST);
+
+    if (instanceOverride != null) {
+      builder = builder.instance(instanceOverride.toString());
+    }
+
+    Problem problem = builder.build();
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
@@ -164,13 +209,6 @@ public class ExampleExceptionAdvice {
   }
 }
 ```
-
-While implementing custom `@ControllerAdvice`, enforcing `instance-override` must be performed manually. Please check
-direct implementation of `ProblemExceptionWebFluxAdvice` or `ProblemExceptionMvcAdvice` to see how it's propagated via
-request attributes.
-
-**Note** that the main reason behind this project is to make use of `ProblemException` and `@ProblemMapping` for all
-custom exception in your application code.
 
 ## Validation
 
@@ -247,7 +285,7 @@ same goes for `@PathVariable`, `@RequestHeader`, `@CookieValue` etc.).
 </tr>
 </table>
 
-Creating response body with adapting turned on was implemented in [`MethodValidationMapping`][MethodValidationMapping].
+Creating response body with adapting turned on was implemented in [`MethodValidationResolver`][MethodValidationResolver].
 
 For Spring Boot versions lower than `3.5`, the above-mentioned property is not available and one must configure it
 programmatically. Consider checking up `org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration`
@@ -373,10 +411,10 @@ See `org.springframework.boot.autoconfigure.web.SpringWebProperties` class to de
 
 [rfc9110-15.5.4]: https://datatracker.ietf.org/doc/html/rfc9110#section-15.5.14
 
-[ExceptionMapping]: src/main/java/io/github/malczuuu/problem4j/spring/web/mapping/ExceptionMapping.java
+[ProblemResolver]: src/main/java/io/github/malczuuu/problem4j/spring/web/resolver/ProblemResolver.java
 
-[ExceptionMappingConfiguration]: src/main/java/io/github/malczuuu/problem4j/spring/web/mapping/ExceptionMappingConfiguration.java
+[ProblemResolverConfiguration]: src/main/java/io/github/malczuuu/problem4j/spring/web/resolver/ProblemResolverConfiguration.java
 
-[MethodValidationMapping]: src/main/java/io/github/malczuuu/problem4j/spring/web/mapping/MethodValidationMapping.java
+[MethodValidationResolver]: src/main/java/io/github/malczuuu/problem4j/spring/web/resolver/MethodValidationResolver.java
 
 [method-validation-exceptions]: https://docs.spring.io/spring-framework/reference/core/validation/beanvalidation.html#validation-beanvalidation-spring-method-exceptions

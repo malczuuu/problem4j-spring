@@ -1,7 +1,9 @@
 package io.github.malczuuu.problem4j.spring.web.util;
 
 import io.github.malczuuu.problem4j.core.Problem;
+import io.github.malczuuu.problem4j.core.ProblemStatus;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 
 public final class ProblemSupport {
 
@@ -50,6 +52,22 @@ public final class ProblemSupport {
     } catch (IllegalArgumentException e) {
       return HttpStatus.INTERNAL_SERVER_ERROR;
     }
+  }
+
+  /**
+   * Resolves an {@link HttpStatusCode} to a corresponding {@link ProblemStatus}.
+   *
+   * <p>If the status code is {@code null} or not recognized, {@code INTERNAL_SERVER_ERROR} is
+   * returned as a fallback.
+   *
+   * @param status the {@link HttpStatusCode} to resolve
+   * @return the corresponding {@link ProblemStatus}, or {@link ProblemStatus#INTERNAL_SERVER_ERROR}
+   *     if the status is {@code null} or invalid
+   */
+  public static ProblemStatus resolveStatus(HttpStatusCode status) {
+    return status == null
+        ? ProblemStatus.INTERNAL_SERVER_ERROR
+        : ProblemStatus.findValue(status.value()).orElse(ProblemStatus.INTERNAL_SERVER_ERROR);
   }
 
   private ProblemSupport() {}

@@ -57,8 +57,9 @@ public class ProblemProperties {
    * Returns the configured instance override.
    *
    * <p>This value may contain the special placeholder {@code {traceId}}, which will be replaced at
-   * runtime with the current trace identifier from the {@link ProblemContext}. If no override is
-   * configured, this method may return {@code null}.
+   * runtime with the current trace identifier from the {@link
+   * io.github.malczuuu.problem4j.spring.web.context.ProblemContext}. If no override is configured,
+   * this method may return {@code null}.
    *
    * <p>This is useful if {@code instance} field will not be known while throwing {@code
    * ProblemException} (or {@code @ProblemMapping}-annotated exception). Setting this configuration,

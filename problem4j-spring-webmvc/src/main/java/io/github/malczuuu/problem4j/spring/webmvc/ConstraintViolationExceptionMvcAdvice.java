@@ -3,8 +3,10 @@ package io.github.malczuuu.problem4j.spring.webmvc;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
 import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.spring.web.internal.TracingSupport;
-import io.github.malczuuu.problem4j.spring.web.mapping.ConstraintViolationMapping;
+import io.github.malczuuu.problem4j.core.ProblemBuilder;
+import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
+import io.github.malczuuu.problem4j.spring.web.resolver.ConstraintViolationResolver;
+import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
 import io.github.malczuuu.problem4j.spring.web.util.ProblemSupport;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
@@ -18,16 +20,21 @@ import org.springframework.web.context.request.WebRequest;
 @RestControllerAdvice
 public class ConstraintViolationExceptionMvcAdvice {
 
-  private final ConstraintViolationMapping constraintViolationMapping;
+  private final ConstraintViolationResolver constraintViolationResolver;
 
   public ConstraintViolationExceptionMvcAdvice(
-      ConstraintViolationMapping constraintViolationMapping) {
-    this.constraintViolationMapping = constraintViolationMapping;
+      ConstraintViolationResolver constraintViolationResolver) {
+    this.constraintViolationResolver = constraintViolationResolver;
   }
 
   @ExceptionHandler(ConstraintViolationException.class)
   public ResponseEntity<Problem> handleConstraintViolationException(
       ConstraintViolationException ex, WebRequest request) {
+    ProblemContext context =
+        ProblemContext.builder()
+            .traceId(request.getAttribute(TracingSupport.TRACE_ID_ATTR, SCOPE_REQUEST))
+            .build();
+
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
@@ -36,10 +43,11 @@ public class ConstraintViolationExceptionMvcAdvice {
 
     HttpStatus status = HttpStatus.BAD_REQUEST;
 
-    Problem problem = constraintViolationMapping.map(ex, headers, status);
+    ProblemBuilder builder = constraintViolationResolver.resolve(context, ex, headers, status);
     if (instanceOverride != null) {
-      problem = problem.toBuilder().instance(instanceOverride.toString()).build();
+      builder = builder.instance(instanceOverride.toString());
     }
+    Problem problem = builder.build();
 
     status = ProblemSupport.resolveStatus(problem);
 

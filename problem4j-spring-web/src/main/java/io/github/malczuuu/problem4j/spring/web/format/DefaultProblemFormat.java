@@ -8,9 +8,8 @@ import org.springframework.util.StringUtils;
  * Default implementation of {@link ProblemFormat} that applies text transformations to problem
  * details according to a configured format.
  *
- * <p>The formatting behavior is determined by the value of {@link
- * ProblemProperties#getDetailFormat()}, which can specify predefined modes such as lowercase,
- * capitalized, or uppercase.
+ * <p>Property {@link ProblemProperties#getDetailFormat()} determines formatting behaviour -
+ * lowercase, capitalized, or uppercase.
  *
  * <p>This class is typically registered automatically as a Spring bean, but can also be
  * instantiated directly.

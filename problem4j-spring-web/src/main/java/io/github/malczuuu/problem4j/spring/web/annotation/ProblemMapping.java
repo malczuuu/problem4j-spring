@@ -7,8 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation to map a {@link Throwable} to an RFC 7807 {@link
- * io.github.malczuuu.problem4j.core.Problem}.
+ * Annotation to map a {@link Throwable} to an RFC 7807 {@code Problem}.
  *
  * <p>This annotation allows you to declaratively specify how a specific exception should be
  * converted into a Problem response. All string values support dynamic interpolation of
@@ -18,8 +17,8 @@ import java.lang.annotation.Target;
  *
  * <ul>
  *   <li>{@code {message}} -> the exception's {@link Throwable#getMessage()}
- *   <li>{@code {traceId}} -> the traceId from {@link
- *       io.github.malczuuu.problem4j.spring.web.ProblemContext#getTraceId()} (special shorthand)
+ *   <li>{@code {traceId}} -> the traceId from {@code ProblemContext#getTraceId()} (special
+ *       shorthand)
  *   <li>{@code {fieldName}} -> value of any field (private or public) in the exception class
  *       hierarchy
  *   <li>Any placeholder that resolves to null or an empty string is ignored in the final output
@@ -50,7 +49,7 @@ import java.lang.annotation.Target;
  *
  * <pre>{@code
  * @ProblemMapping(
- *     type = "https://example.com/errors/validation",
+ *     type = "https://example.org/errors/validation",
  *     title = "Validation Failed",
  *     status = 400,
  *     detail = "Invalid input for user {userId}, trace {traceId}",
@@ -70,6 +69,9 @@ import java.lang.annotation.Target;
  *
  * <p>This annotation provides a simple and consistent way to map exceptions to RFC 7807 Problems,
  * with support for dynamic data inclusion, null/empty-safe interpolation, and subclass inheritance.
+ *
+ * @see io.github.malczuuu.problem4j.core.Problem
+ * @see io.github.malczuuu.problem4j.spring.web.context.ProblemContext#getTraceId()
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
@@ -83,8 +85,7 @@ public @interface ProblemMapping {
    *
    * <ul>
    *   <li>{@code {message}} -> exception message
-   *   <li>{@code {traceId}} -> trace ID from {@link
-   *       io.github.malczuuu.problem4j.spring.web.ProblemContext}
+   *   <li>{@code {traceId}} -> trace ID from {@code ProblemContext}
    *   <li>{@code {fieldName}} -> value of any field in the exception class hierarchy
    * </ul>
    *
@@ -106,8 +107,8 @@ public @interface ProblemMapping {
   /**
    * HTTP status code for the problem.
    *
-   * <p>0 means "unspecified"; in that case, the processor may apply a default. Used to determine
-   * the response status and may influence default title assignment.
+   * <p>{@code 0} means "unspecified"; in that case, the processor may apply a default. Used to
+   * determine the response status and may influence default title assignment.
    */
   int status() default 0;
 
