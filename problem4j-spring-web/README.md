@@ -4,8 +4,9 @@
 2. [Returning response bodies from custom exceptions](#returning-response-bodies-from-custom-exceptions)
     1. [Extending `ProblemException`](#extending-problemexception)
     2. [Annotating `@ProblemMapping`](#annotating-problemmapping)
-    3. [Implementing `ProblemResolver`](#implementing-problemresolver) 
-    4. [Custom `@RestControllerAdvice` implementation](#custom-restcontrolleradvice) 
+    3. [Implementing `ProblemResolver`](#implementing-problemresolver)
+    4. [Custom `@RestControllerAdvice` implementation](#custom-restcontrolleradvice)
+    5. [Using `problem4j-core`](#using-problem4j-core)
 3. [Validation](#validation)
 4. [Occurrences of `TypeMismatchException`](#occurrences-of-typemismatchexception)
 5. [Occurrences of `ErrorResponseException`](#occurrences-of-errorresponseexception)
@@ -14,23 +15,21 @@
 
 ## Overview
 
-This module overrides Spring Web's default (often minimal or plain-text) responses for many framework exceptions and
-produces structured RFC 7807 `Problem` objects. [`ProblemResolverConfiguration`][ProblemResolverConfiguration]
-registers these resolvers.
+This module replaces Spring Web’s default (often verbose or plain-text) error responses with [RFC 7807][rfc7807]-alike
+`Problem` objects for a wide range of framework exceptions. It also provides mechanisms to map your own application
+exceptions to `Problem` responses, as described in the following chapters.
 
-These error resolvers to disallow leaking too much information to the client application. It more information is
-necessary, feel free to override specific [`ProblemResolver`][ProblemResolver], register it as `@Serivce`,
-`@Component` or `@Bean` and exclude specific nested[`ProblemResolverConfiguration`][ProblemResolverConfiguration]
-configuration class with `@ConditionalOnClass`, per appropriate exception. Therefore, if using this library with
-previous versions, resolvers for exception classes that are not present in classpath are silently ignored.
-
-Overriding whole `ProblemEnhancedExceptionHandler` is not recommended, although such necessities are sometimes
-understandable.
+To maintain compatibility with multiple Spring Boot versions, the library uses `@ConditionalOnClass` guards around all
+components that translate exceptions into HTTP responses. This ensures that if your application runs on an older Spring
+Boot version lacking certain exception classes, the configuration is safely skipped instead of causing a
+`ClassNotFoundException`.
 
 ## Returning response bodies from custom exceptions
 
-As mentioned in main [`README.md`](../README.md), you can either extend `ProblemException` or add `@ProblemMapping` to
-your exception class.
+As mentioned in main [`README.md`](../README.md), you can either extend `ProblemException`, annotate your exception with
+`@ProblemMapping` or implement `ProblemResolver` and declare it as a component.
+
+Following subchapters dive deeper into these solutions.
 
 ### Extending `ProblemException`
 
@@ -139,7 +138,7 @@ public class MaxUploadSizeExceededResolver implements ProblemResolver {
   @Override
   public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
-    MaxUploadSizeExceededException e = (MaxUploadSizeExceededException) ex;
+    ExampleException e = (ExampleException) ex;
     return Problem.builder()
         .type("https://example.org/errors/invalid-request")
         .title("Invalid Request")
@@ -153,18 +152,17 @@ public class MaxUploadSizeExceededResolver implements ProblemResolver {
 ```
 
 `ProblemResolver` implementations return a `ProblemBuilder` for flexibility in constructing the final `Problem` object.
-The interface contains `default Problem resolveProblem(...)` method that calls `problemBuilder(...).build()` for
-convenience. The `resolveProblem` method should not be overwritten.
+It's a convenience for additional `Problem` processing (such as `instance-override` feature).
 
 ### Custom `@RestControllerAdvice`
 
 While creating your own `@RestControllerAdvice`, make sure to position it with right `@Order`. In order for your custom
 implementation to work seamlessly, make sure to position it on at least **`Ordered.LOWEST_PRECEDENCE - 11`** (the lower
 the value, the higher the priority). All `@RestControllerAdvice` provided by `problem4j-spring` library use ordering
-from `Ordered.LOWEST_PRECEDENCE` to `Ordered.LOWEST_PRECEDENCE - 10`. By setting at lest `-11`, you make sure that your
-exception will not fall into predefined advices.
+from `Ordered.LOWEST_PRECEDENCE` to `Ordered.LOWEST_PRECEDENCE - 10`.
 
-But let's be honest, you'll probably use `Ordered.HIGHEST_PRECEDENCE` :D.
+If you want your advice to override the ones provided by this library, use a smaller order value (e.g.
+`Ordered.LOWEST_PRECEDENCE - 11` or `Ordered.HIGHEST_PRECEDENCE` if you really mean it).
 
 | <center>covered exceptions</center> | <center>`@Order(...)`</center>   |
 |-------------------------------------|----------------------------------|
@@ -185,13 +183,15 @@ public class ExampleExceptionAdvice {
 
   @ExceptionHandler(ExampleException.class)
   public ResponseEntity<Problem> handleExampleException(ExampleException ex, WebRequest request) {
-    ProblemBuilder builder =
+    ProblemBuilder =
         Problem.builder()
-            .type("http://example.org/errors/example-error")
-            .title("Example Title")
+            .type("https://example.org/errors/invalid-request")
+            .title("Invalid Request")
             .status(400)
             .detail(ex.getMessage())
-            .instance("https://example.org/instances/example-instance");
+            .instance("https://example.org/instances/" + context.getTraceId())
+            .extension("userId", e.getUserId())
+            .extension("fieldName", e.getFieldName());
 
     Object instanceOverride = request.getAttribute(TracingSupport.INSTANCE_OVERRIDE, SCOPE_REQUEST);
     if (instanceOverride != null) {
@@ -209,6 +209,14 @@ public class ExampleExceptionAdvice {
   }
 }
 ```
+
+### Using `problem4j-core`
+
+If you can't use `problem4j-spring` (or don't want to), but the idea of `Problem` objects is appealing to you, you may
+want to consider relying purely on [`problem4j-core`][problem4j-core] and [`problem4j-jackson`][problem4j-jackson]
+libraries. You can build any mechanism for resolving exceptions into `Problem` objects yourself, depending on your own
+frameworks, requirements or any other policies. See the `README.md` file in each module for more details — each module
+is self-explanatory.
 
 ## Validation
 
@@ -285,7 +293,8 @@ same goes for `@PathVariable`, `@RequestHeader`, `@CookieValue` etc.).
 </tr>
 </table>
 
-Creating response body with adapting turned on was implemented in [`MethodValidationResolver`][MethodValidationResolver].
+[`MethodValidationResolver`][MethodValidationResolver] contains implementation of retrieving configured values from
+parameter annotations.
 
 For Spring Boot versions lower than `3.5`, the above-mentioned property is not available and one must configure it
 programmatically. Consider checking up `org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration`
@@ -313,11 +322,11 @@ Triggered for example when trying to pass `String` value into `@RequestParam("pa
 
 ```json
 {
-  "status": 400,
-  "title": "Bad Request",
-  "detail": "Type mismatch",
-  "property": "age",
-  "kind": "integer"
+    "status": 400,
+    "title": "Bad Request",
+    "detail": "Type mismatch",
+    "property": "age",
+    "kind": "integer"
 }
 ```
 
@@ -332,11 +341,11 @@ Example:
 
 ```json
 {
-  "type": "https://example.org/problem-type",
-  "title": "Some Error",
-  "status": 400,
-  "detail": "Explanation of the error",
-  "instance": "https://example.org/instances/123"
+    "type": "https://example.org/problem-type",
+    "title": "Some Error",
+    "status": 400,
+    "detail": "Explanation of the error",
+    "instance": "https://example.org/instances/123"
 }
 ```
 
@@ -346,37 +355,37 @@ Example:
    following response.
    ```json
    {
-     "status": 405,
-     "title": "Method Not Allowed"
+       "status": 405,
+       "title": "Method Not Allowed"
    }
    ```
 2. If calling REST API with invalid `Accept` header, service will write following response.
    ```json
    {
-     "status": 406,
-     "title": "Not Acceptable"
+       "status": 406,
+       "title": "Not Acceptable"
    }
    ```
 3. If calling REST API with invalid `Content-Type` header, service will write following response.
    ```json
    {
-     "status": 415,
-     "title": "Unsupported Media Type"
+       "status": 415,
+       "title": "Unsupported Media Type"
    }
    ```
 4. If passing request body that has invalid JSON syntax, service will write following response.
    ```json
    {
-     "status": 400,
-     "title": "Bad Request"
+       "status": 400,
+       "title": "Bad Request"
    }
    ```
 5. If passing request that's too large by configuration, service will write following response. Note that reason phrase
    for `413` was changed into `Content Too Large` in [RFC 9110 §15.5.14][rfc9110-15.5.4].
    ```json
    {
-     "status": 413,
-     "title": "Content Too Large"
+       "status": 413,
+       "title": "Content Too Large"
    }
    ```
 
@@ -409,7 +418,13 @@ spring.web.locale-resolver=fixed
 
 See `org.springframework.boot.autoconfigure.web.SpringWebProperties` class to debug it yourself.
 
+[rfc7807]: https://datatracker.ietf.org/doc/html/rfc7807
+
 [rfc9110-15.5.4]: https://datatracker.ietf.org/doc/html/rfc9110#section-15.5.14
+
+[problem4j-core]: https://github.com/malczuuu/problem4j-core
+
+[problem4j-jackson]: https://github.com/malczuuu/problem4j-core
 
 [ProblemResolver]: src/main/java/io/github/malczuuu/problem4j/spring/web/resolver/ProblemResolver.java
 
