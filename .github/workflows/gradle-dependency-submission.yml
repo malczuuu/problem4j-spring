@@ -5,10 +5,7 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - "problem4j-spring-bom/build.gradle.kts"
-      - "problem4j-spring-web/build.gradle.kts"
-      - "problem4j-spring-webflux/build.gradle.kts"
-      - "problem4j-spring-webmvc/build.gradle.kts"
+      - "problem4j-spring-*/build.gradle.kts"
       - "build.gradle.kts"
       - "settings.gradle.kts"
       - "gradle.properties"
