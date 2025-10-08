@@ -15,20 +15,8 @@ on:
       - "gradlew"
       - "gradlew.bat"
       - ".github/workflows/gradle-build.yml"
-
   pull_request:
     branches: [ "main" ]
-    paths:
-      - "problem4j-spring-*/build.gradle.kts"
-      - "problem4j-spring-*/src/**"
-      - "build.gradle.kts"
-      - "settings.gradle.kts"
-      - "gradle.properties"
-      - "gradle/**"
-      - "buildSrc/**"
-      - "gradlew"
-      - "gradlew.bat"
-      - ".github/workflows/gradle-build.yml"
 
 jobs:
   build:
