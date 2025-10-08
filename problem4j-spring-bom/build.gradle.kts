@@ -46,7 +46,7 @@ publishing {
                     url = "https://github.com/malczuuu/${rootProject.name}/issues"
                 }
                 scm {
-                    connection = "scm:git:git://github.com/malczuuu/${rootProject.name}.git"
+                    connection = "scm:git:https://github.com/malczuuu/${rootProject.name}.git"
                     developerConnection = "scm:git:git@github.com:malczuuu/${rootProject.name}.git"
                     url = "https://github.com/malczuuu/${rootProject.name}"
                 }
