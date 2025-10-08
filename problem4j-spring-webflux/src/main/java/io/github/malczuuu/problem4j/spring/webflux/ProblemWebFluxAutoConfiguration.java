@@ -9,6 +9,7 @@ import io.github.malczuuu.problem4j.spring.webflux.error.ProblemErrorWebFluxConf
 import io.github.malczuuu.problem4j.spring.webflux.resolver.ProblemResolverWebFluxConfiguration;
 import io.github.malczuuu.problem4j.spring.webflux.tracing.TraceIdWebFluxFilter;
 import jakarta.validation.ConstraintViolationException;
+import java.util.List;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -53,23 +54,28 @@ public class ProblemWebFluxAutoConfiguration {
   @ConditionalOnMissingBean(ResponseEntityExceptionHandler.class)
   @Bean
   public ResponseEntityExceptionHandler responseEntityExceptionHandler(
-      ProblemResolverStore problemResolverStore) {
-    return new ProblemEnhancedWebFluxHandler(problemResolverStore);
+      ProblemResolverStore problemResolverStore,
+      List<AdviceWebFluxInspector> adviceWebFluxInspectors) {
+    return new ProblemEnhancedWebFluxHandler(problemResolverStore, adviceWebFluxInspectors);
   }
 
   @Order(Ordered.LOWEST_PRECEDENCE)
   @ConditionalOnMissingBean(ExceptionWebFluxAdvice.class)
   @Bean
   public ExceptionWebFluxAdvice exceptionWebFluxAdvice(
-      ProblemMappingProcessor problemMappingProcessor, ProblemResolverStore problemResolverStore) {
-    return new ExceptionWebFluxAdvice(problemMappingProcessor, problemResolverStore);
+      ProblemMappingProcessor problemMappingProcessor,
+      ProblemResolverStore problemResolverStore,
+      List<AdviceWebFluxInspector> adviceWebFluxInspectors) {
+    return new ExceptionWebFluxAdvice(
+        problemMappingProcessor, problemResolverStore, adviceWebFluxInspectors);
   }
 
   @Order(Ordered.LOWEST_PRECEDENCE - 10)
   @ConditionalOnMissingBean(ProblemExceptionWebFluxAdvice.class)
   @Bean
-  public ProblemExceptionWebFluxAdvice problemExceptionWebFluxAdvice() {
-    return new ProblemExceptionWebFluxAdvice();
+  public ProblemExceptionWebFluxAdvice problemExceptionWebFluxAdvice(
+      List<AdviceWebFluxInspector> adviceWebFluxInspectors) {
+    return new ProblemExceptionWebFluxAdvice(adviceWebFluxInspectors);
   }
 
   @ConditionalOnClass(ConstraintViolationException.class)
@@ -80,8 +86,10 @@ public class ProblemWebFluxAutoConfiguration {
     @ConditionalOnMissingBean(ConstraintViolationExceptionWebFluxAdvice.class)
     @Bean
     public ConstraintViolationExceptionWebFluxAdvice constraintViolationExceptionWebFluxAdvice(
-        ConstraintViolationResolver constraintViolationResolver) {
-      return new ConstraintViolationExceptionWebFluxAdvice(constraintViolationResolver);
+        ConstraintViolationResolver constraintViolationResolver,
+        List<AdviceWebFluxInspector> adviceWebFluxInspectors) {
+      return new ConstraintViolationExceptionWebFluxAdvice(
+          constraintViolationResolver, adviceWebFluxInspectors);
     }
   }
 
@@ -100,8 +108,9 @@ public class ProblemWebFluxAutoConfiguration {
     @Order(Ordered.LOWEST_PRECEDENCE - 10)
     @ConditionalOnMissingBean(DecodingExceptionWebFluxAdvice.class)
     @Bean
-    public DecodingExceptionWebFluxAdvice decodingExceptionWebFluxAdvice() {
-      return new DecodingExceptionWebFluxAdvice();
+    public DecodingExceptionWebFluxAdvice decodingExceptionWebFluxAdvice(
+        List<AdviceWebFluxInspector> adviceWebFluxInspectors) {
+      return new DecodingExceptionWebFluxAdvice(adviceWebFluxInspectors);
     }
   }
 }

@@ -7,11 +7,12 @@
     3. [Implementing `ProblemResolver`](#implementing-problemresolver)
     4. [Custom `@RestControllerAdvice` implementation](#custom-restcontrolleradvice)
     5. [Using `problem4j-core`](#using-problem4j-core)
-3. [Validation](#validation)
-4. [Occurrences of `TypeMismatchException`](#occurrences-of-typemismatchexception)
-5. [Occurrences of `ErrorResponseException`](#occurrences-of-errorresponseexception)
-6. [General HTTP Stuff](#general-http-stuff)
-7. [FAQ](#faq)
+3. [Inspectors for built-in advices](#inspectors-for-built-in-advices)
+4. [Validation](#validation)
+5. [Occurrences of `TypeMismatchException`](#occurrences-of-typemismatchexception)
+6. [Occurrences of `ErrorResponseException`](#occurrences-of-errorresponseexception)
+7. [General HTTP Stuff](#general-http-stuff)
+8. [FAQ](#faq)
 
 ## Overview
 
@@ -217,6 +218,39 @@ want to consider relying purely on [`problem4j-core`][problem4j-core] and [`prob
 libraries. You can build any mechanism for resolving exceptions into `Problem` objects yourself, depending on your own
 frameworks, requirements or any other policies. See the `README.md` file in each module for more details — each module
 is self-explanatory.
+
+## Inspectors for built-in advices
+
+You can observe how exceptions are translated into `Problem` responses by implementing and registering (depending on
+your framework) either `AdviceWebFluxInspector` or `AdviceMvcInspector`.
+
+The primary goal of these inspectors is to let developers customize logging in their preferred style, but you can also
+use them for other purposes such as metrics collection, auditing, or debugging.
+
+```java
+@Component
+public class LoggingInspector implements AdviceMvcInspector {
+
+  private static final Logger log = LoggerFactory.getLogger(AdviceMvcLogger.class);
+
+  @Override
+  public void inspect(
+      ProblemContext context,
+      Problem problem,
+      Exception ex,
+      HttpHeaders headers,
+      HttpStatusCode status,
+      WebRequest request) { // AdviceWebFluxInspector declares ServerWebExchange argument
+    log.info(
+        "Handled [status={} title={}]: exception={}",
+        status.value(),
+        problem.getTitle(),
+        ex.getClass().getSimpleName());
+  }
+}
+```
+
+You can define any number of inspectors, all of them are executed sequentially during exception handling.
 
 ## Validation
 

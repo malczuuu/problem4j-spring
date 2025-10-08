@@ -9,6 +9,7 @@ import io.github.malczuuu.problem4j.spring.web.resolver.ConstraintViolationResol
 import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
 import io.github.malczuuu.problem4j.spring.web.util.ProblemSupport;
 import jakarta.validation.ConstraintViolationException;
+import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,9 +23,13 @@ public class ConstraintViolationExceptionMvcAdvice {
 
   private final ConstraintViolationResolver constraintViolationResolver;
 
+  private final List<AdviceMvcInspector> adviceMvcInspectors;
+
   public ConstraintViolationExceptionMvcAdvice(
-      ConstraintViolationResolver constraintViolationResolver) {
+      ConstraintViolationResolver constraintViolationResolver,
+      List<AdviceMvcInspector> adviceMvcInspectors) {
     this.constraintViolationResolver = constraintViolationResolver;
+    this.adviceMvcInspectors = adviceMvcInspectors;
   }
 
   @ExceptionHandler(ConstraintViolationException.class)
@@ -51,6 +56,10 @@ public class ConstraintViolationExceptionMvcAdvice {
     Problem problem = builder.build();
 
     status = ProblemSupport.resolveStatus(problem);
+
+    for (AdviceMvcInspector inspector : adviceMvcInspectors) {
+      inspector.inspect(context, problem, ex, headers, status, request);
+    }
 
     return new ResponseEntity<>(problem, headers, status);
   }

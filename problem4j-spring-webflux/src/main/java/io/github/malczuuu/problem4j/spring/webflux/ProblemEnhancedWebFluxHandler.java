@@ -8,6 +8,7 @@ import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.web.ProblemResolverStore;
 import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
 import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
+import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -38,8 +39,13 @@ public class ProblemEnhancedWebFluxHandler extends ResponseEntityExceptionHandle
 
   private final ProblemResolverStore problemResolverStore;
 
-  public ProblemEnhancedWebFluxHandler(ProblemResolverStore problemResolverStore) {
+  private final List<AdviceWebFluxInspector> adviceWebFluxInspectors;
+
+  public ProblemEnhancedWebFluxHandler(
+      ProblemResolverStore problemResolverStore,
+      List<AdviceWebFluxInspector> adviceWebFluxInspectors) {
     this.problemResolverStore = problemResolverStore;
+    this.adviceWebFluxInspectors = adviceWebFluxInspectors;
   }
 
   /**
@@ -73,6 +79,10 @@ public class ProblemEnhancedWebFluxHandler extends ResponseEntityExceptionHandle
     Problem problem = builder.build();
 
     status = resolveStatus(problem);
+
+    for (AdviceWebFluxInspector inspector : adviceWebFluxInspectors) {
+      inspector.inspect(context, problem, ex, headers, status, exchange);
+    }
 
     return super.handleExceptionInternal(ex, problem, headers, status, exchange);
   }

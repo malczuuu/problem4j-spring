@@ -11,6 +11,7 @@ import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
 import io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver;
 import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
 import io.github.malczuuu.problem4j.spring.web.util.ProblemSupport;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -42,10 +43,15 @@ public class ExceptionMvcAdvice {
   private final ProblemMappingProcessor problemMappingProcessor;
   private final ProblemResolverStore problemResolverStore;
 
+  private final List<AdviceMvcInspector> adviceMvcInspectors;
+
   public ExceptionMvcAdvice(
-      ProblemMappingProcessor problemMappingProcessor, ProblemResolverStore problemResolverStore) {
+      ProblemMappingProcessor problemMappingProcessor,
+      ProblemResolverStore problemResolverStore,
+      List<AdviceMvcInspector> adviceMvcInspectors) {
     this.problemMappingProcessor = problemMappingProcessor;
     this.problemResolverStore = problemResolverStore;
+    this.adviceMvcInspectors = adviceMvcInspectors;
   }
 
   @ExceptionHandler(Exception.class)
@@ -68,6 +74,10 @@ public class ExceptionMvcAdvice {
     Problem problem = builder.build();
 
     HttpStatus status = ProblemSupport.resolveStatus(problem);
+
+    for (AdviceMvcInspector inspector : adviceMvcInspectors) {
+      inspector.inspect(context, problem, ex, headers, status, request);
+    }
 
     return new ResponseEntity<>(problem, headers, status);
   }

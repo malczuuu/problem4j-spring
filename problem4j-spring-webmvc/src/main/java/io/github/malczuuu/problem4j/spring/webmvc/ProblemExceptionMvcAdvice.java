@@ -4,8 +4,10 @@ import static org.springframework.web.context.request.RequestAttributes.SCOPE_RE
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemException;
+import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
 import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
 import io.github.malczuuu.problem4j.spring.web.util.ProblemSupport;
+import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,8 +27,19 @@ import org.springframework.web.context.request.WebRequest;
 @RestControllerAdvice
 public class ProblemExceptionMvcAdvice {
 
+  private final List<AdviceMvcInspector> adviceMvcInspectors;
+
+  public ProblemExceptionMvcAdvice(List<AdviceMvcInspector> adviceMvcInspectors) {
+    this.adviceMvcInspectors = adviceMvcInspectors;
+  }
+
   @ExceptionHandler(ProblemException.class)
   public ResponseEntity<Problem> handleProblemException(ProblemException ex, WebRequest request) {
+    ProblemContext context =
+        ProblemContext.builder()
+            .traceId(request.getAttribute(TracingSupport.TRACE_ID, SCOPE_REQUEST))
+            .build();
+
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
@@ -39,6 +52,10 @@ public class ProblemExceptionMvcAdvice {
     }
 
     HttpStatus status = ProblemSupport.resolveStatus(problem);
+
+    for (AdviceMvcInspector inspector : adviceMvcInspectors) {
+      inspector.inspect(context, problem, ex, headers, status, request);
+    }
 
     return new ResponseEntity<>(problem, headers, status);
   }

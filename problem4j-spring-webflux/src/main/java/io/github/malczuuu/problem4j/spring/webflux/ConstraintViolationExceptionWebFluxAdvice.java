@@ -7,6 +7,7 @@ import io.github.malczuuu.problem4j.spring.web.resolver.ConstraintViolationResol
 import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
 import io.github.malczuuu.problem4j.spring.web.util.ProblemSupport;
 import jakarta.validation.ConstraintViolationException;
+import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,10 +21,13 @@ import reactor.core.publisher.Mono;
 public class ConstraintViolationExceptionWebFluxAdvice {
 
   private final ConstraintViolationResolver constraintViolationResolver;
+  private final List<AdviceWebFluxInspector> adviceWebFluxInspectors;
 
   public ConstraintViolationExceptionWebFluxAdvice(
-      ConstraintViolationResolver constraintViolationResolver) {
+      ConstraintViolationResolver constraintViolationResolver,
+      List<AdviceWebFluxInspector> adviceWebFluxInspectors) {
     this.constraintViolationResolver = constraintViolationResolver;
+    this.adviceWebFluxInspectors = adviceWebFluxInspectors;
   }
 
   @ExceptionHandler(ConstraintViolationException.class)
@@ -48,6 +52,10 @@ public class ConstraintViolationExceptionWebFluxAdvice {
     Problem problem = builder.build();
 
     status = ProblemSupport.resolveStatus(problem);
+
+    for (AdviceWebFluxInspector inspector : adviceWebFluxInspectors) {
+      inspector.inspect(context, problem, ex, headers, status, exchange);
+    }
 
     return Mono.just(new ResponseEntity<>(problem, headers, status));
   }

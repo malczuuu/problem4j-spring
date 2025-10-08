@@ -3,8 +3,10 @@ package io.github.malczuuu.problem4j.spring.webflux;
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemBuilder;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
+import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
 import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
 import io.github.malczuuu.problem4j.spring.web.util.ProblemSupport;
+import java.util.List;
 import org.springframework.core.codec.DecodingException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,9 +20,18 @@ import reactor.core.publisher.Mono;
 @RestControllerAdvice
 public class DecodingExceptionWebFluxAdvice {
 
+  private final List<AdviceWebFluxInspector> adviceWebFluxInspectors;
+
+  public DecodingExceptionWebFluxAdvice(List<AdviceWebFluxInspector> adviceWebFluxInspectors) {
+    this.adviceWebFluxInspectors = adviceWebFluxInspectors;
+  }
+
   @ExceptionHandler(DecodingException.class)
   public Mono<ResponseEntity<Problem>> handleDecodingException(
       DecodingException ex, ServerWebExchange exchange) {
+    ProblemContext context =
+        ProblemContext.builder().traceId(exchange.getAttribute(TracingSupport.TRACE_ID)).build();
+
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
@@ -34,6 +45,10 @@ public class DecodingExceptionWebFluxAdvice {
     Problem problem = builder.build();
 
     HttpStatus status = ProblemSupport.resolveStatus(problem);
+
+    for (AdviceWebFluxInspector inspector : adviceWebFluxInspectors) {
+      inspector.inspect(context, problem, ex, headers, status, exchange);
+    }
 
     return Mono.just(new ResponseEntity<>(problem, headers, status));
   }

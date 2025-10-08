@@ -182,7 +182,7 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
    * (shorthand for {context.traceId}) - other names: first look for instance field (including
    * private/superclass), then static fields, then getter methods.
    *
-   * <p>If a placeholder resolves to null — it's replaced by empty string.
+   * <p>If a placeholder resolves to null - it's replaced by empty string.
    */
   private String interpolate(String template, Throwable t, ProblemContext context) {
     if (template == null) {

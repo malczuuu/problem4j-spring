@@ -9,6 +9,7 @@ import io.github.malczuuu.problem4j.spring.webmvc.error.ProblemErrorMvcConfigura
 import io.github.malczuuu.problem4j.spring.webmvc.resolver.ProblemResolverMvcConfiguration;
 import io.github.malczuuu.problem4j.spring.webmvc.tracing.TraceIdMvcFilter;
 import jakarta.validation.ConstraintViolationException;
+import java.util.List;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -51,23 +52,27 @@ public class ProblemMvcAutoConfiguration {
   @ConditionalOnMissingBean(ResponseEntityExceptionHandler.class)
   @Bean
   public ResponseEntityExceptionHandler responseEntityExceptionHandler(
-      ProblemResolverStore problemResolverStore) {
-    return new ProblemEnhancedMvcHandler(problemResolverStore);
+      ProblemResolverStore problemResolverStore, List<AdviceMvcInspector> adviceMvcInspectors) {
+    return new ProblemEnhancedMvcHandler(problemResolverStore, adviceMvcInspectors);
   }
 
   @Order(Ordered.LOWEST_PRECEDENCE)
   @ConditionalOnMissingBean(ExceptionMvcAdvice.class)
   @Bean
   public ExceptionMvcAdvice exceptionAdvice(
-      ProblemMappingProcessor problemMappingProcessor, ProblemResolverStore problemResolverStore) {
-    return new ExceptionMvcAdvice(problemMappingProcessor, problemResolverStore);
+      ProblemMappingProcessor problemMappingProcessor,
+      ProblemResolverStore problemResolverStore,
+      List<AdviceMvcInspector> adviceMvcInspectors) {
+    return new ExceptionMvcAdvice(
+        problemMappingProcessor, problemResolverStore, adviceMvcInspectors);
   }
 
   @Order(Ordered.LOWEST_PRECEDENCE - 10)
   @ConditionalOnMissingBean(ProblemExceptionMvcAdvice.class)
   @Bean
-  public ProblemExceptionMvcAdvice problemExceptionAdvice() {
-    return new ProblemExceptionMvcAdvice();
+  public ProblemExceptionMvcAdvice problemExceptionAdvice(
+      List<AdviceMvcInspector> adviceMvcInspectors) {
+    return new ProblemExceptionMvcAdvice(adviceMvcInspectors);
   }
 
   @ConditionalOnProperty(name = "problem4j.tracing-header-name")
@@ -86,8 +91,10 @@ public class ProblemMvcAutoConfiguration {
     @ConditionalOnMissingBean(ConstraintViolationExceptionMvcAdvice.class)
     @Bean
     public ConstraintViolationExceptionMvcAdvice constraintViolationExceptionWebMvcAdvice(
-        ConstraintViolationResolver constraintViolationResolver) {
-      return new ConstraintViolationExceptionMvcAdvice(constraintViolationResolver);
+        ConstraintViolationResolver constraintViolationResolver,
+        List<AdviceMvcInspector> adviceMvcInspectors) {
+      return new ConstraintViolationExceptionMvcAdvice(
+          constraintViolationResolver, adviceMvcInspectors);
     }
   }
 }

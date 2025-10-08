@@ -9,6 +9,7 @@ import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
 import io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver;
 import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
 import io.github.malczuuu.problem4j.spring.web.util.ProblemSupport;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -41,10 +42,15 @@ public class ExceptionWebFluxAdvice {
   private final ProblemMappingProcessor problemMappingProcessor;
   private final ProblemResolverStore problemResolverStore;
 
+  private final List<AdviceWebFluxInspector> adviceWebFluxInspectors;
+
   public ExceptionWebFluxAdvice(
-      ProblemMappingProcessor problemMappingProcessor, ProblemResolverStore problemResolverStore) {
+      ProblemMappingProcessor problemMappingProcessor,
+      ProblemResolverStore problemResolverStore,
+      List<AdviceWebFluxInspector> adviceWebFluxInspectors) {
     this.problemMappingProcessor = problemMappingProcessor;
     this.problemResolverStore = problemResolverStore;
+    this.adviceWebFluxInspectors = adviceWebFluxInspectors;
   }
 
   @ExceptionHandler(Exception.class)
@@ -65,6 +71,10 @@ public class ExceptionWebFluxAdvice {
     Problem problem = builder.build();
 
     HttpStatus status = ProblemSupport.resolveStatus(problem);
+
+    for (AdviceWebFluxInspector inspector : adviceWebFluxInspectors) {
+      inspector.inspect(context, problem, ex, headers, status, exchange);
+    }
 
     return Mono.just(new ResponseEntity<>(problem, headers, status));
   }

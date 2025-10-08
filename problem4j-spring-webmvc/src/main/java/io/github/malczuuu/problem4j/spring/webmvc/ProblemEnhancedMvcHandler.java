@@ -8,6 +8,7 @@ import io.github.malczuuu.problem4j.core.ProblemBuilder;
 import io.github.malczuuu.problem4j.spring.web.ProblemResolverStore;
 import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
 import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
+import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -28,8 +29,12 @@ public class ProblemEnhancedMvcHandler extends ResponseEntityExceptionHandler {
 
   private final ProblemResolverStore problemResolverStore;
 
-  public ProblemEnhancedMvcHandler(ProblemResolverStore problemResolverStore) {
+  private final List<AdviceMvcInspector> adviceMvcInspectors;
+
+  public ProblemEnhancedMvcHandler(
+      ProblemResolverStore problemResolverStore, List<AdviceMvcInspector> adviceMvcInspectors) {
     this.problemResolverStore = problemResolverStore;
+    this.adviceMvcInspectors = adviceMvcInspectors;
   }
 
   /**
@@ -61,6 +66,10 @@ public class ProblemEnhancedMvcHandler extends ResponseEntityExceptionHandler {
     Problem problem = builder.build();
 
     status = resolveStatus(problem);
+
+    for (AdviceMvcInspector inspector : adviceMvcInspectors) {
+      inspector.inspect(context, problem, ex, headers, status, request);
+    }
 
     return super.handleExceptionInternal(ex, problem, headers, status, request);
   }
