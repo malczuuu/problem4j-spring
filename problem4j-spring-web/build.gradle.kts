@@ -16,7 +16,7 @@ dependencies {
     api("io.github.malczuuu.problem4j:problem4j-core:${property("problem4j-core.version")}")
     api("io.github.malczuuu.problem4j:problem4j-jackson:${property("problem4j-jackson.version")}")
 
-    compileOnly("com.fasterxml.jackson.core:jackson-databind:${property("jackson-databind.version")}")
+    compileOnly("com.fasterxml.jackson.core:jackson-annotations:${property("jackson.version")}")
     compileOnly("org.springframework.boot:spring-boot-autoconfigure:${property("spring-boot.version")}")
     compileOnly("org.springframework:spring-web:${property("spring.version")}")
 
