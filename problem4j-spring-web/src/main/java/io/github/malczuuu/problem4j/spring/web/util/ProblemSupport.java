@@ -36,6 +36,8 @@ public final class ProblemSupport {
   public static final String ERRORS_EXTENSION = "errors";
   public static final String MAX_EXTENSION = "max";
 
+  public static final String IS_NOT_VALID_ERROR = "is not valid";
+
   /**
    * Resolves a {@link Problem} to a corresponding {@link HttpStatus}.
    *
