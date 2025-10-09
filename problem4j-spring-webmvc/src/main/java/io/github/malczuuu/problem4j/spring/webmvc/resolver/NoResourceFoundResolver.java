@@ -10,6 +10,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+/**
+ * Handles {@link NoResourceFoundException} thrown when a requested static resource cannot be found
+ * in application.
+ *
+ * <p>This typically occurs when the client requests a URL that is mapped to static resources (e.g.,
+ * files under {@code /static} or {@code /public}) but no matching resource exists.
+ *
+ * <p>The handler is responsible for returning an appropriate HTTP 404 (Not Found) response to
+ * indicate that the requested resource is not available.
+ */
 public class NoResourceFoundResolver extends AbstractProblemResolver {
 
   public NoResourceFoundResolver(ProblemFormat problemFormat) {

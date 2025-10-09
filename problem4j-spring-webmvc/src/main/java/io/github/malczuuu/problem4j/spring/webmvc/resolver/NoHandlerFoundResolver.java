@@ -10,6 +10,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+/**
+ * Handles {@link NoHandlerFoundException} thrown when no matching handler (controller method) is
+ * found for a given request.
+ *
+ * <p>This typically occurs when the client requests a URL or HTTP method that does not correspond
+ * to any mapped controller endpoint.
+ *
+ * <p>The handler is responsible for returning an appropriate HTTP 404 (Not Found) response to
+ * indicate that the requested resource or endpoint does not exist.
+ */
 public class NoHandlerFoundResolver extends AbstractProblemResolver {
 
   public NoHandlerFoundResolver(ProblemFormat problemFormat) {
