@@ -12,43 +12,27 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ProblemDetail;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.ErrorResponseException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-@SpringBootTest(classes = {_TestApp.class})
-@Import({ErrorResponseTest.ErrorResponseController.class})
+@SpringBootTest(
+    classes = {_TestApp.class},
+    properties = {"spring.web.resources.add-mappings=true"})
 @AutoConfigureMockMvc
-class ErrorResponseTest {
-
-  @RestController
-  static class ErrorResponseController {
-    @GetMapping("/error-response")
-    String endpoint() {
-      throw new ErrorResponseException(
-          HttpStatus.CONFLICT,
-          ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, "this is detail"),
-          null);
-    }
-  }
+class NotFoundNoResourceFoundMvcTest {
 
   @Autowired private MockMvc mockMvc;
-
   @Autowired private ObjectMapper objectMapper;
 
   @Test
-  void givenException_shouldOverrideIt() throws Exception {
+  void givenMissingStaticResource_shouldReturnProblem() throws Exception {
     mockMvc
-        .perform(get("/error-response"))
-        .andExpect(status().isConflict())
+        .perform(get("/not-found.html"))
+        .andExpect(status().isNotFound())
         .andExpect(
             result ->
                 assertThat(result.getResolvedException())
-                    .isInstanceOf(ErrorResponseException.class))
+                    .isInstanceOf(NoResourceFoundException.class))
         .andExpect(content().contentType(Problem.CONTENT_TYPE))
         .andExpect(
             result -> {
@@ -56,11 +40,7 @@ class ErrorResponseTest {
                   objectMapper.readValue(result.getResponse().getContentAsString(), Problem.class);
 
               assertThat(problem)
-                  .isEqualTo(
-                      Problem.builder()
-                          .status(ProblemStatus.CONFLICT)
-                          .detail("this is detail")
-                          .build());
+                  .isEqualTo(Problem.builder().status(ProblemStatus.NOT_FOUND).build());
             });
   }
 }

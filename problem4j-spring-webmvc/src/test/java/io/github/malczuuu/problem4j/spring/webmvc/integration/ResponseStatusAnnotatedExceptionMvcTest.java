@@ -1,5 +1,6 @@
 package io.github.malczuuu.problem4j.spring.webmvc.integration;
 
+import static io.github.malczuuu.problem4j.spring.webmvc.integration.ResponseStatusAnnotatedExceptionMvcTest.AnnotatedStatusController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -13,47 +14,48 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootTest(classes = {_TestApp.class})
-@Import({NotAcceptableTest.NotAcceptableController.class})
+@Import({AnnotatedStatusController.class})
 @AutoConfigureMockMvc
-class NotAcceptableTest {
+class ResponseStatusAnnotatedExceptionMvcTest {
+
+  @ResponseStatus(HttpStatus.FORBIDDEN)
+  static class ForbiddenAnnotatedException extends RuntimeException {}
 
   @RestController
-  static class NotAcceptableController {
-
-    @GetMapping(path = "/not-acceptable", produces = MediaType.TEXT_PLAIN_VALUE)
+  static class AnnotatedStatusController {
+    @GetMapping("/response-status-annotated")
     String endpoint() {
-      return "OK";
+      throw new ForbiddenAnnotatedException();
     }
   }
 
   @Autowired private MockMvc mockMvc;
-
   @Autowired private ObjectMapper objectMapper;
 
+  // FIXME: support for @ResponseStatus is not implemented yet
   @Test
-  void givenException_shouldOverrideIt() throws Exception {
+  void givenAnnotatedException_shouldReturnProblemWithStatus() throws Exception {
     mockMvc
-        .perform(get("/not-acceptable").accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isNotAcceptable())
+        .perform(get("/response-status-annotated"))
+        .andExpect(status().isInternalServerError())
         .andExpect(
             result ->
                 assertThat(result.getResolvedException())
-                    .isInstanceOf(HttpMediaTypeNotAcceptableException.class))
+                    .isInstanceOf(ForbiddenAnnotatedException.class))
         .andExpect(content().contentType(Problem.CONTENT_TYPE))
         .andExpect(
             result -> {
               Problem problem =
                   objectMapper.readValue(result.getResponse().getContentAsString(), Problem.class);
-
               assertThat(problem)
-                  .isEqualTo(Problem.builder().status(ProblemStatus.NOT_ACCEPTABLE).build());
+                  .isEqualTo(Problem.builder().status(ProblemStatus.INTERNAL_SERVER_ERROR).build());
             });
   }
 }

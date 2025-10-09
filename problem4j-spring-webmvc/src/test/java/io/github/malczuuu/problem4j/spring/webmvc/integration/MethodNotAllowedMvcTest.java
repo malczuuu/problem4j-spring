@@ -1,7 +1,6 @@
 package io.github.malczuuu.problem4j.spring.webmvc.integration;
 
-import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.MISSING_REQUEST_PART_DETAIL;
-import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.PARAM_EXTENSION;
+import static io.github.malczuuu.problem4j.spring.webmvc.integration.MethodNotAllowedMvcTest.MethodNotAllowedController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -15,39 +14,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 @SpringBootTest(classes = {_TestApp.class})
-@Import({MalformedMultipartTest.RequestPartController.class})
+@Import({MethodNotAllowedController.class})
 @AutoConfigureMockMvc
-class MalformedMultipartTest {
-
-  @Autowired private MockMvc mockMvc;
-  @Autowired private ObjectMapper objectMapper;
+class MethodNotAllowedMvcTest {
 
   @RestController
-  static class RequestPartController {
-    @PostMapping(path = "/malformed-multipart")
-    String endpoint(@RequestPart("file") MultipartFile file) {
+  static class MethodNotAllowedController {
+    @GetMapping(path = "/method-not-allowed")
+    String methodNotAllowed() {
       return "OK";
     }
   }
 
+  @Autowired private MockMvc mockMvc;
+  @Autowired private ObjectMapper objectMapper;
+
   @Test
-  void givenRequestWithMalformedRequestPart_shouldReturnProblemWithExtensions() throws Exception {
+  void givenCallToNotAllowedMethod_shouldReturnProblem() throws Exception {
     mockMvc
-        .perform(post("/malformed-multipart").contentType(MediaType.MULTIPART_FORM_DATA))
-        .andExpect(status().isBadRequest())
+        .perform(post("/method-not-allowed"))
+        .andExpect(status().isMethodNotAllowed())
         .andExpect(
             result ->
                 assertThat(result.getResolvedException())
-                    .isInstanceOf(MissingServletRequestPartException.class))
+                    .isInstanceOf(HttpRequestMethodNotSupportedException.class))
         .andExpect(content().contentType(Problem.CONTENT_TYPE))
         .andExpect(
             result -> {
@@ -55,12 +51,7 @@ class MalformedMultipartTest {
                   objectMapper.readValue(result.getResponse().getContentAsString(), Problem.class);
 
               assertThat(problem)
-                  .isEqualTo(
-                      Problem.builder()
-                          .status(ProblemStatus.BAD_REQUEST)
-                          .detail(MISSING_REQUEST_PART_DETAIL)
-                          .extension(PARAM_EXTENSION, "file")
-                          .build());
+                  .isEqualTo(Problem.builder().status(ProblemStatus.METHOD_NOT_ALLOWED).build());
             });
   }
 }

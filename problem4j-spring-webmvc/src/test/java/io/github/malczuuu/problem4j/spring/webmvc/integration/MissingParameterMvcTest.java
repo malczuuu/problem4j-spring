@@ -13,6 +13,7 @@ import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.MISSIN
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.MISSING_SESSION_ATTRIBUTE_DETAIL;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.NAME_EXTENSION;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.PARAM_EXTENSION;
+import static io.github.malczuuu.problem4j.spring.webmvc.integration.MissingParameterMvcTest.MissingParameterController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
@@ -48,32 +49,55 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 @SpringBootTest(classes = {_TestApp.class})
-@Import({
-  MissingParameterTest.PathVariableController.class,
-  MissingParameterTest.RequestParamController.class,
-  MissingParameterTest.RequestPartController.class,
-  MissingParameterTest.RequestHeaderController.class,
-  MissingParameterTest.CookieValueController.class,
-  MissingParameterTest.RequestAttributeController.class,
-  MissingParameterTest.SessionAttributeController.class
-})
+@Import({MissingParameterController.class})
 @AutoConfigureMockMvc
-class MissingParameterTest {
+class MissingParameterMvcTest {
 
   @Autowired private MockMvc mockMvc;
   @Autowired private ObjectMapper objectMapper;
 
   @RestController
-  static class PathVariableController {
+  static class MissingParameterController {
+
     @GetMapping(
         path = {"/missing-parameter/path-variable", "/missing-parameter/path-variable/{var}"})
-    String endpoint(@PathVariable("var") String var) {
+    String missingPathVariable(@PathVariable("var") String var) {
+      return "OK";
+    }
+
+    @GetMapping(path = "/missing-parameter/request-param")
+    String missingRequestParam(@RequestParam("param") String param) {
+      return "OK";
+    }
+
+    @PostMapping(path = "/missing-parameter/request-part")
+    String missingRequestPart(@RequestPart("file") MultipartFile file) {
+      return "OK";
+    }
+
+    @GetMapping(path = "/missing-parameter/request-header")
+    String missingRequestHeader(@RequestHeader("X-Custom-Header") String xCustomHeader) {
+      return "OK";
+    }
+
+    @GetMapping(path = "/missing-parameter/cookie-value")
+    String missingCookieValue(@CookieValue("x_session") String xSession) {
+      return "OK";
+    }
+
+    @GetMapping(path = "/missing-parameter/request-attribute")
+    String missingRequestAttribute(@RequestAttribute("attr") String attr) {
+      return "OK";
+    }
+
+    @GetMapping(path = "/missing-parameter/session-attribute")
+    String missingSessionAttribute(@SessionAttribute("attr") String attr) {
       return "OK";
     }
   }
 
   @Test
-  void givenRequestWithoutPathVariable_shouldReturnProblemWithExtensions() throws Exception {
+  void givenRequestWithoutPathVariable_shouldReturnProblem() throws Exception {
     mockMvc
         .perform(get("/missing-parameter/path-variable"))
         .andExpect(status().isBadRequest())
@@ -105,16 +129,8 @@ class MissingParameterTest {
         .andExpect(content().string("OK"));
   }
 
-  @RestController
-  static class RequestParamController {
-    @GetMapping(path = "/missing-parameter/request-param")
-    String endpoint(@RequestParam("param") String param) {
-      return "OK";
-    }
-  }
-
   @Test
-  void givenRequestWithoutRequestParam_shouldReturnProblemWithExtensions() throws Exception {
+  void givenRequestWithoutRequestParam_shouldReturnProblem() throws Exception {
     mockMvc
         .perform(get("/missing-parameter/request-param"))
         .andExpect(status().isBadRequest())
@@ -146,16 +162,8 @@ class MissingParameterTest {
         .andExpect(content().string("OK"));
   }
 
-  @RestController
-  static class RequestPartController {
-    @PostMapping(path = "/missing-parameter/request-part")
-    String endpoint(@RequestPart("file") MultipartFile file) {
-      return "OK";
-    }
-  }
-
   @Test
-  void givenRequestWithoutRequestPart_shouldReturnProblemWithExtensions() throws Exception {
+  void givenRequestWithoutRequestPart_shouldReturnProblem() throws Exception {
     mockMvc
         .perform(multipart("/missing-parameter/request-part"))
         .andExpect(status().isBadRequest())
@@ -188,16 +196,8 @@ class MissingParameterTest {
         .andExpect(content().string("OK"));
   }
 
-  @RestController
-  static class RequestHeaderController {
-    @GetMapping(path = "/missing-parameter/request-header")
-    String endpoint(@RequestHeader("X-Custom-Header") String xCustomHeader) {
-      return "OK";
-    }
-  }
-
   @Test
-  void givenRequestWithoutRequestHeader_shouldReturnProblemWithExtensions() throws Exception {
+  void givenRequestWithoutRequestHeader_shouldReturnProblem() throws Exception {
     mockMvc
         .perform(get("/missing-parameter/request-header"))
         .andExpect(status().isBadRequest())
@@ -229,16 +229,8 @@ class MissingParameterTest {
         .andExpect(content().string("OK"));
   }
 
-  @RestController
-  static class CookieValueController {
-    @GetMapping(path = "/missing-parameter/cookie-value")
-    String endpoint(@CookieValue("x_session") String xSession) {
-      return "OK";
-    }
-  }
-
   @Test
-  void givenRequestWithoutCookieValue_shouldReturnProblemWithExtensions() throws Exception {
+  void givenRequestWithoutCookieValue_shouldReturnProblem() throws Exception {
     mockMvc
         .perform(get("/missing-parameter/cookie-value"))
         .andExpect(status().isBadRequest())
@@ -270,16 +262,8 @@ class MissingParameterTest {
         .andExpect(content().string("OK"));
   }
 
-  @RestController
-  static class RequestAttributeController {
-    @GetMapping(path = "/missing-parameter/request-attribute")
-    String endpoint(@RequestAttribute("attr") String attr) {
-      return "OK";
-    }
-  }
-
   @Test
-  void givenRequestWithoutRequestAttribute_shouldReturnProblemWithExtensions() throws Exception {
+  void givenRequestWithoutRequestAttribute_shouldReturnProblem() throws Exception {
     mockMvc
         .perform(get("/missing-parameter/request-attribute"))
         .andExpect(status().isBadRequest())
@@ -311,16 +295,8 @@ class MissingParameterTest {
         .andExpect(content().string("OK"));
   }
 
-  @RestController
-  static class SessionAttributeController {
-    @GetMapping(path = "/missing-parameter/session-attribute")
-    String endpoint(@SessionAttribute("attr") String attr) {
-      return "OK";
-    }
-  }
-
   @Test
-  void givenRequestWithoutSessionAttribute_shouldReturnProblemWithExtensions() throws Exception {
+  void givenRequestWithoutSessionAttribute_shouldReturnProblem() throws Exception {
     mockMvc
         .perform(get("/missing-parameter/session-attribute"))
         .andExpect(status().isBadRequest())

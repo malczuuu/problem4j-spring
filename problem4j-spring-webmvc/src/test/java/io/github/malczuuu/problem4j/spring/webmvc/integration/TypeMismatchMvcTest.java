@@ -3,6 +3,7 @@ package io.github.malczuuu.problem4j.spring.webmvc.integration;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.KIND_EXTENSION;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.PROPERTY_EXTENSION;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.TYPE_MISMATCH_DETAIL;
+import static io.github.malczuuu.problem4j.spring.webmvc.integration.TypeMismatchMvcTest.TypeMismatchController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -27,29 +28,39 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootTest(classes = {_TestApp.class})
-@Import({
-  TypeMismatchTest.PathVariableController.class,
-  TypeMismatchTest.RequestParamController.class,
-  TypeMismatchTest.RequestHeaderController.class,
-  TypeMismatchTest.CookieValueController.class
-})
+@Import({TypeMismatchController.class})
 @AutoConfigureMockMvc
-class TypeMismatchTest {
+class TypeMismatchMvcTest {
 
   @Autowired private MockMvc mockMvc;
-
   @Autowired private ObjectMapper objectMapper;
 
   @RestController
-  static class PathVariableController {
+  static class TypeMismatchController {
+
     @GetMapping(path = "/type-mismatch/path-variable/{id}")
-    String endpoint(@PathVariable("id") Integer id) {
+    String pathVariable(@PathVariable("id") Integer id) {
+      return "OK";
+    }
+
+    @GetMapping(path = "/type-mismatch/request-param")
+    String requestParam(@RequestParam("id") Integer id) {
+      return "OK";
+    }
+
+    @GetMapping(path = "/type-mismatch/request-header")
+    String requestHeader(@RequestHeader("X-Id") Integer id) {
+      return "OK";
+    }
+
+    @GetMapping(path = "/type-mismatch/cookie-value")
+    String cookieValue(@CookieValue("id") Integer id) {
       return "OK";
     }
   }
 
   @Test
-  void givenRequestWithInvalidPathVariable_shouldReturnProblemWithExtensions() throws Exception {
+  void givenRequestWithInvalidPathVariable_shouldReturnProblem() throws Exception {
     mockMvc
         .perform(get("/type-mismatch/path-variable/abc"))
         .andExpect(status().isBadRequest())
@@ -80,17 +91,8 @@ class TypeMismatchTest {
         .andExpect(content().string("OK"));
   }
 
-  @RestController
-  static class RequestParamController {
-    @GetMapping(path = "/type-mismatch/request-param")
-    String endpoint(@RequestParam("id") Integer id) {
-      return "OK";
-    }
-  }
-
   @Test
-  void givenRequestWithoutInvalidParameterType_shouldReturnProblemWithExtensions()
-      throws Exception {
+  void givenRequestWithInvalidParameterType_shouldReturnProblem() throws Exception {
     mockMvc
         .perform(get("/type-mismatch/request-param").param("id", "abc"))
         .andExpect(status().isBadRequest())
@@ -122,16 +124,8 @@ class TypeMismatchTest {
         .andExpect(content().string("OK"));
   }
 
-  @RestController
-  static class RequestHeaderController {
-    @GetMapping(path = "/type-mismatch/request-header")
-    String endpoint(@RequestHeader("X-Id") Integer id) {
-      return "OK";
-    }
-  }
-
   @Test
-  void givenRequestWithInvalidRequestHeader_shouldReturnProblemWithExtensions() throws Exception {
+  void givenRequestWithInvalidRequestHeader_shouldReturnProblem() throws Exception {
     mockMvc
         .perform(get("/type-mismatch/request-header").header("X-Id", "abc"))
         .andExpect(status().isBadRequest())
@@ -162,16 +156,8 @@ class TypeMismatchTest {
         .andExpect(content().string("OK"));
   }
 
-  @RestController
-  static class CookieValueController {
-    @GetMapping(path = "/type-mismatch/cookie-value")
-    String endpoint(@CookieValue("id") Integer id) {
-      return "OK";
-    }
-  }
-
   @Test
-  void givenRequestWithInvalidCookieValue_shouldReturnProblemWithExtensions() throws Exception {
+  void givenRequestWithInvalidCookieValue_shouldReturnProblem() throws Exception {
     mockMvc
         .perform(get("/type-mismatch/cookie-value").cookie(new Cookie("id", "abc")))
         .andExpect(status().isBadRequest())

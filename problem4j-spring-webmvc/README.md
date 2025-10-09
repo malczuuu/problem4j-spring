@@ -39,46 +39,43 @@ distinguishes between `Accept` header to display a formatted page or JSON with b
 
 ## Main Test Scenarios
 
-1. What happens if `@PathVariable`, `@RequestParam`, etc. is missing - [`MissingParameterTest`][MissingParameterTest].
-2. What happens if `@PathVariable`, etc. is invalid - [`ValidateParameterTest`][ValidateParameterTest] (covers both
-   situations for `spring.validation.method.adapt-constraint-violations`).
-3. What happens if `@PathVariable`, etc. has incorrect type - [`TypeMismatchTest`][TypeMismatchTest].
-4. What happens if `@RequestPart` is malformed - [`MalformedMultipartTest`][MalformedMultipartTest].
-5. What happens if `@RequestBody` is invalid - [`ValidateRequestBodyTest`][ValidateRequestBodyTest].
-6. What happens if `Accept` is invalid - [`NotAcceptableTest`][NotAcceptableTest].
-7. What happens if `Content-Type` is invalid - [`UnsupportedMediaTypeTest`][UnsupportedMediaTypeTest].
-8. What happens if HTTP method (`GET`,`POST`, etc.) is invalid - [`MethodNotAllowedTest`][MethodNotAllowedTest].
-9. What happens if unknown endpoint (or resource) is accessed - [`NotFoundTest`][NotFoundTest].
-10. What happens if `ErrorResponseException` is thrown - [`ErrorResponseTest`][ErrorResponseTest].
-11. What happens if `ProblemException` is thrown [`ProblemMvcAdviceTest`][ProblemMvcAdviceTest] (or exception
-    annotated with`@ProblemMapping`).
-12. What happens if we enable tracing and `instance-override` [`InstanceOverrideTest`][InstanceOverrideTest] (it should
-    include `"instance"` field and add tracing header.
+1. What happens if `@PathVariable`, `@RequestParam`, etc. is missing - [`MissingParameterMvcTest`][MissingParameterMvcTest].
+2. What happens if `@PathVariable`, etc. is invalid - [`ValidateParameterMvcTest`][ValidateParameterMvcTest] (covers both situations for `spring.validation.method.adapt-constraint-violations`).
+3. What happens if `@PathVariable`, etc. has incorrect type - [`TypeMismatchMvcTest`][TypeMismatchMvcTest].
+4. What happens if `@RequestPart` is malformed - [`MalformedMultipartMvcTest`][MalformedMultipartMvcTest].
+5. What happens if `@RequestBody` is invalid - [`ValidateRequestBodyMvcTest`][ValidateRequestBodyMvcTest].
+6. What happens if `Accept` is invalid - [`NotAcceptableMvcTest`][NotAcceptableMvcTest].
+7. What happens if `Content-Type` is invalid - [`UnsupportedMediaTypeMvcTest`][UnsupportedMediaTypeMvcTest].
+8. What happens if HTTP method (`GET`,`POST`, etc.) is invalid - [`MethodNotAllowedMvcTest`][MethodNotAllowedMvcTest].
+9. What happens if unknown endpoint (or resource) is accessed - [`NotFoundMvcTest`][NotFoundMvcTest].
+10. What happens if `ErrorResponseException` is thrown - [`ErrorResponseMvcTest`][ErrorResponseMvcTest].
+11. What happens if `ProblemException` is thrown [`ProblemMvcAdviceTest`][ProblemMvcAdviceTest] (or exception annotated with`@ProblemMapping`).
+12. What happens if we enable tracing and `instance-override` [`InstanceOverrideMvcTest`][InstanceOverrideMvcTest] (it should include `"instance"` field and add tracing header).
 
 [ProblemErrorController]: src/main/java/io/github/malczuuu/problem4j/spring/webmvc/error/ProblemErrorController.java
 
 [ProblemErrorMvcConfiguration]: src/main/java/io/github/malczuuu/problem4j/spring/webmvc/error/ProblemErrorMvcConfiguration.java
 
-[MissingParameterTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/MissingParameterTest.java
+[MissingParameterMvcTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/MissingParameterMvcTest.java
 
-[ValidateParameterTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/ValidateParameterTest.java
+[ValidateParameterMvcTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/ValidateParameterMvcTest.java
 
-[TypeMismatchTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/TypeMismatchTest.java
+[TypeMismatchMvcTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/TypeMismatchMvcTest.java
 
-[MalformedMultipartTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/MalformedMultipartTest.java
+[MalformedMultipartMvcTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/MalformedMultipartMvcTest.java
 
-[ValidateRequestBodyTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/ValidateRequestBodyTest.java
+[ValidateRequestBodyMvcTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/ValidateRequestBodyMvcTest.java
 
-[NotAcceptableTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/NotAcceptableTest.java
+[NotAcceptableMvcTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/NotAcceptableMvcTest.java
 
-[UnsupportedMediaTypeTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/UnsupportedMediaTypeTest.java
+[UnsupportedMediaTypeMvcTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/UnsupportedMediaTypeMvcTest.java
 
-[MethodNotAllowedTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/MethodNotAllowedTest.java
+[MethodNotAllowedMvcTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/MethodNotAllowedMvcTest.java
 
-[NotFoundTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/NotFoundTest.java
+[NotFoundMvcTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/NotFoundMvcTest.java
 
-[ErrorResponseTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/ErrorResponseTest.java
+[ErrorResponseMvcTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/ErrorResponseMvcTest.java
 
 [ProblemMvcAdviceTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/ProblemMvcAdviceTest.java
 
-[InstanceOverrideTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/InstanceOverrideTest.java
+[InstanceOverrideMvcTest]: src/test/java/io/github/malczuuu/problem4j/spring/webmvc/integration/InstanceOverrideMvcTest.java
