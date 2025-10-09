@@ -1,8 +1,6 @@
 package io.github.malczuuu.problem4j.spring.webflux.integration;
 
-import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.KIND_EXTENSION;
-import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.PROPERTY_EXTENSION;
-import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.TYPE_MISMATCH_DETAIL;
+import static io.github.malczuuu.problem4j.spring.webflux.integration.MethodNotAllowedWebFluxTest.MethodNotAllowedController;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
@@ -14,18 +12,17 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootTest(classes = {_TestApp.class})
-@Import({TypeMismatchTest.TypeMismatchController.class})
+@Import({MethodNotAllowedController.class})
 @AutoConfigureWebTestClient
-class TypeMismatchTest {
+class MethodNotAllowedWebFluxTest {
 
   @RestController
-  static class TypeMismatchController {
-    @GetMapping("/type-mismatch")
-    String endpoint(@RequestParam("id") Integer id) {
+  static class MethodNotAllowedController {
+    @GetMapping(path = "/method-not-allowed")
+    String methodNotAllowed() {
       return "OK";
     }
   }
@@ -33,22 +30,16 @@ class TypeMismatchTest {
   @Autowired private WebTestClient webTestClient;
 
   @Test
-  void givenException_shouldOverrideIt() {
+  void givenCallToNotAllowedMethod_shouldReturnProblem() {
     webTestClient
-        .get()
-        .uri(uriBuilder -> uriBuilder.path("/type-mismatch").queryParam("id", "abc").build())
+        .post()
+        .uri("/method-not-allowed")
         .exchange()
         .expectStatus()
-        .isEqualTo(HttpStatus.BAD_REQUEST)
+        .isEqualTo(HttpStatus.METHOD_NOT_ALLOWED)
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .isEqualTo(
-            Problem.builder()
-                .status(ProblemStatus.BAD_REQUEST)
-                .detail(TYPE_MISMATCH_DETAIL)
-                .extension(PROPERTY_EXTENSION, "id")
-                .extension(KIND_EXTENSION, "integer")
-                .build());
+        .isEqualTo(Problem.builder().status(ProblemStatus.METHOD_NOT_ALLOWED).build());
   }
 }

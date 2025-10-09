@@ -1,5 +1,7 @@
 package io.github.malczuuu.problem4j.spring.webflux.integration;
 
+import static io.github.malczuuu.problem4j.spring.webflux.integration.ErrorResponseWebFluxTest.ErrorResponseController;
+
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
 import org.junit.jupiter.api.Test;
@@ -15,14 +17,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootTest(classes = {_TestApp.class})
-@Import({ErrorResponseTest.ErrorResponseController.class})
+@Import({ErrorResponseController.class})
 @AutoConfigureWebTestClient
-class ErrorResponseTest {
+class ErrorResponseWebFluxTest {
 
   @RestController
   static class ErrorResponseController {
     @GetMapping("/error-response")
-    String endpoint() {
+    String errorResponse() {
       throw new ErrorResponseException(
           HttpStatus.CONFLICT,
           ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, "this is detail"),
@@ -33,7 +35,7 @@ class ErrorResponseTest {
   @Autowired private WebTestClient webTestClient;
 
   @Test
-  void givenException_shouldOverrideIt() {
+  void givenErrorResponseException_shouldReturnProblem() {
     webTestClient
         .get()
         .uri("/error-response")

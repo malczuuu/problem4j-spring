@@ -1,5 +1,7 @@
 package io.github.malczuuu.problem4j.spring.webflux.integration;
 
+import static io.github.malczuuu.problem4j.spring.webflux.integration.ResponseStatusAnnotatedExceptionWebFluxTest.AnnotatedStatusController;
+
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
 import org.junit.jupiter.api.Test;
@@ -8,39 +10,41 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootTest(classes = {_TestApp.class})
-@Import({NotAcceptableTest.NotAcceptableController.class})
+@Import({AnnotatedStatusController.class})
 @AutoConfigureWebTestClient
-class NotAcceptableTest {
+class ResponseStatusAnnotatedExceptionWebFluxTest {
+
+  @ResponseStatus(HttpStatus.FORBIDDEN)
+  static class ForbiddenAnnotatedException extends RuntimeException {}
 
   @RestController
-  static class NotAcceptableController {
-
-    @GetMapping(path = "/not-acceptable", produces = MediaType.TEXT_PLAIN_VALUE)
+  static class AnnotatedStatusController {
+    @GetMapping("/response-status-annotated")
     String endpoint() {
-      return "OK";
+      throw new ForbiddenAnnotatedException();
     }
   }
 
   @Autowired private WebTestClient webTestClient;
 
+  // FIXME: support for @ResponseStatus is not implemented yet
   @Test
-  void givenException_shouldOverrideIt() {
+  void givenSpringNativeResponseStatusAnnotation_shouldReturnProblemWithStatus() {
     webTestClient
         .get()
-        .uri("/not-acceptable")
-        .accept(MediaType.APPLICATION_JSON)
+        .uri("/response-status-annotated")
         .exchange()
         .expectStatus()
-        .isEqualTo(HttpStatus.NOT_ACCEPTABLE)
+        .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .isEqualTo(Problem.builder().status(ProblemStatus.NOT_ACCEPTABLE).build());
+        .isEqualTo(Problem.builder().status(ProblemStatus.INTERNAL_SERVER_ERROR).build());
   }
 }

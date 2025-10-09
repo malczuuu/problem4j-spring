@@ -13,6 +13,7 @@ import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.MISSIN
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.MISSING_SESSION_ATTRIBUTE_DETAIL;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.NAME_EXTENSION;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.PARAM_EXTENSION;
+import static io.github.malczuuu.problem4j.spring.webflux.integration.MissingParameterWebFluxTest.MissingParameterController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.github.malczuuu.problem4j.core.Problem;
@@ -40,31 +41,54 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.reactive.function.BodyInserters;
 
 @SpringBootTest(classes = {_TestApp.class})
-@Import({
-  MissingParameterTest.PathVariableController.class,
-  MissingParameterTest.RequestParamController.class,
-  MissingParameterTest.RequestPartController.class,
-  MissingParameterTest.RequestHeaderController.class,
-  MissingParameterTest.CookieValueController.class,
-  MissingParameterTest.RequestAttributeController.class,
-  MissingParameterTest.SessionAttributeController.class
-})
+@Import({MissingParameterController.class})
 @AutoConfigureWebTestClient
-class MissingParameterTest {
+class MissingParameterWebFluxTest {
 
   @Autowired private WebTestClient webTestClient;
 
   @RestController
-  static class PathVariableController {
+  static class MissingParameterController {
+
     @GetMapping(
         path = {"/missing-parameter/path-variable", "/missing-parameter/path-variable/{var}"})
-    String endpoint(@PathVariable("var") String var) {
+    String pathVariable(@PathVariable("var") String var) {
+      return "OK";
+    }
+
+    @GetMapping(path = "/missing-parameter/request-param")
+    String requestParam(@RequestParam("param") String param) {
+      return "OK";
+    }
+
+    @PostMapping(path = "/missing-parameter/request-part")
+    String requestPart(@RequestPart("file") FilePart file) {
+      return "OK";
+    }
+
+    @GetMapping(path = "/missing-parameter/request-header")
+    String requestHeader(@RequestHeader("X-Custom-Header") String xCustomHeader) {
+      return "OK";
+    }
+
+    @GetMapping(path = "/missing-parameter/cookie-value")
+    String cookieValue(@CookieValue("x_session") String xSession) {
+      return "OK";
+    }
+
+    @GetMapping(path = "/missing-parameter/request-attribute")
+    String requestAttribute(@RequestAttribute("attr") String attr) {
+      return "OK";
+    }
+
+    @GetMapping(path = "/missing-parameter/session-attribute")
+    String sessionAttribute(@SessionAttribute("attr") String attr) {
       return "OK";
     }
   }
 
   @Test
-  void givenRequestWithoutPathVariable_shouldReturnProblemWithExtensions() {
+  void givenRequestWithoutPathVariable_shouldReturnProblem() {
     webTestClient
         .get()
         .uri("/missing-parameter/path-variable")
@@ -99,16 +123,8 @@ class MissingParameterTest {
         .isEqualTo("OK");
   }
 
-  @RestController
-  static class RequestParamController {
-    @GetMapping(path = "/missing-parameter/request-param")
-    String endpoint(@RequestParam("param") String param) {
-      return "OK";
-    }
-  }
-
   @Test
-  void givenRequestWithoutRequestParam_shouldReturnProblemWithExtensions() {
+  void givenRequestWithoutRequestParam_shouldReturnProblem() {
     webTestClient
         .get()
         .uri("/missing-parameter/request-param")
@@ -149,16 +165,8 @@ class MissingParameterTest {
         .isEqualTo("OK");
   }
 
-  @RestController
-  static class RequestPartController {
-    @PostMapping(path = "/missing-parameter/request-part")
-    String endpoint(@RequestPart("file") FilePart file) {
-      return "OK";
-    }
-  }
-
   @Test
-  void givenRequestWithoutRequestPart_shouldReturnProblemWithExtensions() {
+  void givenRequestWithoutRequestPart_shouldReturnProblem() {
     webTestClient
         .post()
         .uri("/missing-parameter/request-part")
@@ -205,16 +213,8 @@ class MissingParameterTest {
         .isEqualTo("OK");
   }
 
-  @RestController
-  static class RequestHeaderController {
-    @GetMapping(path = "/missing-parameter/request-header")
-    String endpoint(@RequestHeader("X-Custom-Header") String xCustomHeader) {
-      return "OK";
-    }
-  }
-
   @Test
-  void givenRequestWithoutRequestHeader_shouldReturnProblemWithExtensions() {
+  void givenRequestWithoutRequestHeader_shouldReturnProblem() {
     webTestClient
         .get()
         .uri("/missing-parameter/request-header")
@@ -250,16 +250,8 @@ class MissingParameterTest {
         .isEqualTo("OK");
   }
 
-  @RestController
-  static class CookieValueController {
-    @GetMapping(path = "/missing-parameter/cookie-value")
-    String endpoint(@CookieValue("x_session") String xSession) {
-      return "OK";
-    }
-  }
-
   @Test
-  void givenRequestWithoutCookieValue_shouldReturnProblemWithExtensions() {
+  void givenRequestWithoutCookieValue_shouldReturnProblem() {
     webTestClient
         .get()
         .uri("/missing-parameter/cookie-value")
@@ -295,16 +287,8 @@ class MissingParameterTest {
         .isEqualTo("OK");
   }
 
-  @RestController
-  static class RequestAttributeController {
-    @GetMapping(path = "/missing-parameter/request-attribute")
-    String endpoint(@RequestAttribute("attr") String attr) {
-      return "OK";
-    }
-  }
-
   @Test
-  void givenRequestWithoutRequestAttribute_shouldReturnProblemWithExtensions() {
+  void givenRequestWithoutRequestAttribute_shouldReturnProblem() {
     webTestClient
         .get()
         .uri("/missing-parameter/request-attribute")
@@ -327,16 +311,8 @@ class MissingParameterTest {
             });
   }
 
-  @RestController
-  static class SessionAttributeController {
-    @GetMapping(path = "/missing-parameter/session-attribute")
-    String endpoint(@SessionAttribute("attr") String attr) {
-      return "OK";
-    }
-  }
-
   @Test
-  void givenRequestWithoutSessionAttribute_shouldReturnProblemWithExtensions() {
+  void givenRequestWithoutSessionAttribute_shouldReturnProblem() {
     webTestClient
         .get()
         .uri("/missing-parameter/session-attribute")

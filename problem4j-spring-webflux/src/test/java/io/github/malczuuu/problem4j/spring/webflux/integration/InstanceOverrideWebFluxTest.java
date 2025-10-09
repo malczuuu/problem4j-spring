@@ -1,15 +1,12 @@
 package io.github.malczuuu.problem4j.spring.webflux.integration;
 
-import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.ERRORS_EXTENSION;
-import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.VALIDATION_FAILED_DETAIL;
+import static io.github.malczuuu.problem4j.spring.webflux.integration.InstanceOverrideWebFluxTest.InstanceOverrideController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.core.ProblemStatus;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import java.util.List;
-import java.util.Map;
+import java.net.URI;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -28,16 +25,16 @@ import org.springframework.web.bind.annotation.RestController;
       "problem4j.instance-override=https://example.org/trace/{traceId}",
       "problem4j.tracing-header-name=X-Trace-Id"
     })
-@Import({InstanceOverrideTest.InstanceOverrideController.class})
+@Import({InstanceOverrideController.class})
 @AutoConfigureWebTestClient
-class InstanceOverrideTest {
+class InstanceOverrideWebFluxTest {
 
   record TestRequest(@NotBlank String name) {}
 
   @RestController
   static class InstanceOverrideController {
     @PostMapping("/instance-override")
-    String endpoint(@Valid @RequestBody TestRequest request) {
+    String instanceOverride(@Valid @RequestBody TestRequest request) {
       return "OK";
     }
   }
@@ -45,7 +42,7 @@ class InstanceOverrideTest {
   @Autowired private WebTestClient webTestClient;
 
   @Test
-  void givenInvalidRequestBody_shouldReturnProblemWithViolations() {
+  void givenInstanceOverrideEnabled_shouldIncludeInstanceFieldWithTraceId() {
     String traceId = "12345-trace";
 
     TestRequest invalidRequest = new TestRequest("");
@@ -66,15 +63,7 @@ class InstanceOverrideTest {
         .expectBody(Problem.class)
         .value(
             problem ->
-                assertThat(problem)
-                    .isEqualTo(
-                        Problem.builder()
-                            .status(ProblemStatus.BAD_REQUEST)
-                            .detail(VALIDATION_FAILED_DETAIL)
-                            .instance("https://example.org/trace/" + traceId)
-                            .extension(
-                                ERRORS_EXTENSION,
-                                List.of(Map.of("field", "name", "error", "must not be blank")))
-                            .build()));
+                assertThat(problem.getInstance())
+                    .isEqualTo(URI.create("https://example.org/trace/" + traceId)));
   }
 }

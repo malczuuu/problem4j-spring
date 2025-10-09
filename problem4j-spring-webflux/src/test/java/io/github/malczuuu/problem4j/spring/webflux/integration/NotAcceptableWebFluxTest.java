@@ -1,8 +1,9 @@
 package io.github.malczuuu.problem4j.spring.webflux.integration;
 
+import static io.github.malczuuu.problem4j.spring.webflux.integration.NotAcceptableWebFluxTest.NotAcceptableController;
+
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
-import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -11,20 +12,18 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootTest(classes = {_TestApp.class})
-@Import({UnsupportedMediaTypeTest.UnsupportedMediaTypeController.class})
+@Import({NotAcceptableController.class})
 @AutoConfigureWebTestClient
-class UnsupportedMediaTypeTest {
+class NotAcceptableWebFluxTest {
 
   @RestController
-  static class UnsupportedMediaTypeController {
-
-    @PostMapping(path = "/unsupported-media-type", consumes = MediaType.APPLICATION_JSON_VALUE)
-    String endpoint(@RequestBody Map<String, Object> body) {
+  static class NotAcceptableController {
+    @GetMapping(path = "/not-acceptable", produces = MediaType.TEXT_PLAIN_VALUE)
+    String notAcceptable() {
       return "OK";
     }
   }
@@ -32,18 +31,17 @@ class UnsupportedMediaTypeTest {
   @Autowired private WebTestClient webTestClient;
 
   @Test
-  void givenException_shouldOverrideIt() {
+  void givenUnsupportedAcceptHeader_shouldReturnProblem() {
     webTestClient
-        .post()
-        .uri("/unsupported-media-type")
-        .contentType(MediaType.TEXT_PLAIN)
-        .bodyValue("some text")
+        .get()
+        .uri("/not-acceptable")
+        .accept(MediaType.APPLICATION_JSON)
         .exchange()
         .expectStatus()
-        .isEqualTo(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+        .isEqualTo(HttpStatus.NOT_ACCEPTABLE)
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .isEqualTo(Problem.builder().status(ProblemStatus.UNSUPPORTED_MEDIA_TYPE).build());
+        .isEqualTo(Problem.builder().status(ProblemStatus.NOT_ACCEPTABLE).build());
   }
 }

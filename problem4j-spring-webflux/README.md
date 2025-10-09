@@ -25,46 +25,43 @@ RFC 7807 `Problem` objects, with exceptions that are specific to `spring-webflux
 
 ## Main Test Scenarios
 
-1. What happens if `@PathVariable`, `@RequestParam`, etc. is missing - [`MissingParameterTest`][MissingParameterTest].
-2. What happens if `@PathVariable`, etc. is invalid - [`ValidateParameterTest`][ValidateParameterTest] (covers both
-   situations for `spring.validation.method.adapt-constraint-violations`).
-3. What happens if `@PathVariable`, etc. has incorrect type - [`TypeMismatchTest`][TypeMismatchTest].
-4. What happens if `@RequestPart` is malformed - [`MalformedMultipartTest`][MalformedMultipartTest].
-5. What happens if `@RequestBody` is invalid - [`ValidateRequestBodyTest`][ValidateRequestBodyTest].
-6. What happens if `Accept` is invalid - [`NotAcceptableTest`][NotAcceptableTest].
-7. What happens if `Content-Type` is invalid - [`UnsupportedMediaTypeTest`][UnsupportedMediaTypeTest].
-8. What happens if HTTP method (`GET`,`POST`, etc.) is invalid - [`MethodNotAllowedTest`][MethodNotAllowedTest].
-9. What happens if unknown endpoint (or resource) is accessed - [`NotFoundTest`][NotFoundTest].
-10. What happens if `ErrorResponseException` is thrown - [`ErrorResponseTest`][ErrorResponseTest].
-11. What happens if `ProblemException` is thrown [`ProblemWebFluxAdviceTest`][ProblemWebFluxAdviceTest] (or exception
-    annotated with`@ProblemMapping`).
-12. What happens if we enable tracing and `instance-override` [`InstanceOverrideTest`][InstanceOverrideTest] (it should
-    include `"instance"` field and add tracing header.
+1. What happens if `@PathVariable`, `@RequestParam`, etc. is missing - [`MissingParameterWebFluxTest`][MissingParameterWebFluxTest].
+2. What happens if `@PathVariable`, etc. is invalid - [`ValidateParameterWebFluxTest`][ValidateParameterWebFluxTest] (covers both situations for `spring.validation.method.adapt-constraint-violations`).
+3. What happens if `@PathVariable`, etc. has incorrect type - [`TypeMismatchWebFluxTest`][TypeMismatchWebFluxTest].
+4. What happens if `@RequestPart` is malformed - [`MalformedMultipartWebFluxTest`][MalformedMultipartWebFluxTest].
+5. What happens if `@RequestBody` is invalid - [`ValidateRequestBodyWebFluxTest`][ValidateRequestBodyWebFluxTest].
+6. What happens if `Accept` is invalid - [`NotAcceptableWebFluxTest`][NotAcceptableWebFluxTest].
+7. What happens if `Content-Type` is invalid - [`UnsupportedMediaTypeWebFluxTest`][UnsupportedMediaTypeWebFluxTest].
+8. What happens if HTTP method (`GET`,`POST`, etc.) is invalid - [`MethodNotAllowedWebFluxTest`][MethodNotAllowedWebFluxTest].
+9. What happens if unknown endpoint (or resource) is accessed - [`NotFoundWebFluxTest`][NotFoundWebFluxTest].
+10. What happens if `ErrorResponseException` is thrown - [`ErrorResponseWebFluxTest`][ErrorResponseWebFluxTest].
+11. What happens if `ProblemException` is thrown [`ProblemWebFluxAdviceTest`][ProblemWebFluxAdviceTest] (or exception annotated with`@ProblemMapping`).
+12. What happens if we enable tracing and `instance-override` [`InstanceOverrideWebFluxTest`][InstanceOverrideWebFluxTest] (it should include `"instance"` field and add tracing header).
 
 [ProblemErrorWebExceptionHandler]: src/main/java/io/github/malczuuu/problem4j/spring/webflux/error/ProblemErrorWebExceptionHandler.java
 
 [ProblemErrorWebFluxConfiguration]: src/main/java/io/github/malczuuu/problem4j/spring/webflux/error/ProblemErrorWebFluxConfiguration.java
 
-[MissingParameterTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/MissingParameterTest.java
+[MissingParameterWebFluxTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/MissingParameterWebFluxTest.java
 
-[ValidateParameterTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/ValidateParameterTest.java
+[ValidateParameterWebFluxTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/ValidateParameterWebFluxTest.java
 
-[TypeMismatchTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/TypeMismatchTest.java
+[TypeMismatchWebFluxTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/TypeMismatchWebFluxTest.java
 
-[MalformedMultipartTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/MalformedMultipartTest.java
+[MalformedMultipartWebFluxTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/MalformedMultipartWebFluxTest.java
 
-[ValidateRequestBodyTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/ValidateRequestBodyTest.java
+[ValidateRequestBodyWebFluxTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/ValidateRequestBodyWebFluxTest.java
 
-[NotAcceptableTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/NotAcceptableTest.java
+[NotAcceptableWebFluxTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/NotAcceptableWebFluxTest.java
 
-[UnsupportedMediaTypeTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/UnsupportedMediaTypeTest.java
+[UnsupportedMediaTypeWebFluxTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/UnsupportedMediaTypeWebFluxTest.java
 
-[MethodNotAllowedTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/MethodNotAllowedTest.java
+[MethodNotAllowedWebFluxTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/MethodNotAllowedWebFluxTest.java
 
-[NotFoundTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/NotFoundTest.java
+[NotFoundWebFluxTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/NotFoundWebFluxTest.java
 
-[ErrorResponseTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/ErrorResponseTest.java
+[ErrorResponseWebFluxTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/ErrorResponseWebFluxTest.java
 
 [ProblemWebFluxAdviceTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/ProblemWebFluxAdviceTest.java
 
-[InstanceOverrideTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/InstanceOverrideTest.java
+[InstanceOverrideWebFluxTest]: src/test/java/io/github/malczuuu/problem4j/spring/webflux/integration/InstanceOverrideWebFluxTest.java
