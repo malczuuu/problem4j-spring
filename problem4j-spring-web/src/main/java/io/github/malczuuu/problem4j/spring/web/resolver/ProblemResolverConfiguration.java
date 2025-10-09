@@ -7,12 +7,12 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
 import org.springframework.validation.method.MethodValidationException;
 import org.springframework.web.ErrorResponseException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
@@ -35,6 +35,15 @@ import org.springframework.web.server.ServerWebInputException;
  */
 @Configuration(proxyBeanMethods = false)
 public class ProblemResolverConfiguration {
+
+  @ConditionalOnClass(BindException.class)
+  @Configuration(proxyBeanMethods = false)
+  public static class BindConfiguration {
+    @Bean
+    public BindResolver bindResolver(ProblemFormat problemFormat) {
+      return new BindResolver(problemFormat);
+    }
+  }
 
   @ConditionalOnClass(ConstraintViolationException.class)
   @Configuration(proxyBeanMethods = false)
@@ -111,16 +120,6 @@ public class ProblemResolverConfiguration {
     public MaxUploadSizeExceededResolver maxUploadSizeExceededResolver(
         ProblemFormat problemFormat) {
       return new MaxUploadSizeExceededResolver(problemFormat);
-    }
-  }
-
-  @ConditionalOnClass(MethodArgumentNotValidException.class)
-  @Configuration(proxyBeanMethods = false)
-  public static class MethodArgumentNotValidConfiguration {
-    @Bean
-    public MethodArgumentNotValidResolver methodArgumentNotValidResolver(
-        ProblemFormat problemFormat) {
-      return new MethodArgumentNotValidResolver(problemFormat);
     }
   }
 
