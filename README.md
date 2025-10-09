@@ -65,12 +65,12 @@ be released as `problem4j-spring-v2.x`, and maintained on separate branches if `
        <dependency>
            <groupId>io.github.malczuuu.problem4j</groupId>
            <artifactId>problem4j-spring-webflux</artifactId>
-           <version>1.0.0-rc1</version>
+           <version>1.0.0-rc2</version>
        </dependency>
        <dependency>
            <groupId>io.github.malczuuu.problem4j</groupId>
            <artifactId>problem4j-spring-webmvc</artifactId>
-           <version>1.0.0-rc1</version>
+           <version>1.0.0-rc2</version>
        </dependency>
    </dependencies>
    ```
@@ -78,8 +78,8 @@ be released as `problem4j-spring-v2.x`, and maintained on separate branches if `
    ```groovy
    dependencies {
        // pick the one for your project
-       implementation("io.github.malczuuu.problem4j:problem4j-spring-webflux:1.0.0-rc1")
-       implementation("io.github.malczuuu.problem4j:problem4j-spring-webmvc:1.0.0-rc1")
+       implementation("io.github.malczuuu.problem4j:problem4j-spring-webflux:1.0.0-rc2")
+       implementation("io.github.malczuuu.problem4j:problem4j-spring-webmvc:1.0.0-rc2")
    }
    ```
 
