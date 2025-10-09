@@ -9,6 +9,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 
+/**
+ * Handles {@link HttpMessageNotReadableException} thrown when an HTTP request body cannot be read
+ * or parsed.
+ *
+ * <p>This typically occurs for requests with malformed JSON, XML, or other payloads that cannot be
+ * converted by the configured {@code HttpMessageConverter}s.
+ *
+ * <p>The handler is responsible for returning an appropriate HTTP 400 (Bad Request) response to
+ * indicate that the request body is invalid or unreadable.
+ *
+ * @see org.springframework.http.converter.HttpMessageConverter
+ */
 public class HttpMessageNotReadableResolver extends AbstractProblemResolver {
 
   public HttpMessageNotReadableResolver(ProblemFormat problemFormat) {

@@ -12,6 +12,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
+/**
+ * Handles {@link MaxUploadSizeExceededException} thrown when a file upload exceeds the configured
+ * maximum size limit.
+ *
+ * <p>This occurs during multipart/form-data requests if the uploaded file is larger than the limit
+ * set in the server or Spring configuration (e.g., {@code spring.servlet.multipart.max-file-size}).
+ *
+ * <p>The handler is responsible for returning an appropriate HTTP 413 (Payload Too Large) response
+ * to inform the client that the uploaded file exceeds the allowed size.
+ */
 public class MaxUploadSizeExceededResolver extends AbstractProblemResolver {
 
   public MaxUploadSizeExceededResolver(ProblemFormat problemFormat) {

@@ -15,6 +15,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+/**
+ * Handles {@link TypeMismatchException} thrown when a request parameter, path variable, or property
+ * cannot be converted to the required type.
+ *
+ * <p>This typically occurs when the client sends a value that cannot be converted to the expected
+ * Java type, for example passing a string where an integer is required.
+ *
+ * <p>The handler is responsible for returning an appropriate HTTP 400 (Bad Request) response to
+ * indicate that the provided input has an invalid type.
+ */
 public class TypeMismatchResolver extends AbstractProblemResolver {
 
   public TypeMismatchResolver(ProblemFormat problemFormat) {

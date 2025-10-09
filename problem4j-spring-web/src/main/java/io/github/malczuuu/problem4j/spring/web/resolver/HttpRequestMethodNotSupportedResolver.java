@@ -9,6 +9,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 
+/**
+ * Handles {@link HttpRequestMethodNotSupportedException} thrown when a client sends an HTTP request
+ * using a method not supported by the target handler.
+ *
+ * <p>This typically occurs when the request uses a method (e.g., POST, GET, PUT, DELETE) that the
+ * controller or endpoint does not allow.
+ *
+ * <p>The handler is responsible for returning an appropriate HTTP 405 (Method Not Allowed)
+ * response, often including the list of supported methods in the {@code Allow} header.
+ */
 public class HttpRequestMethodNotSupportedResolver extends AbstractProblemResolver {
 
   public HttpRequestMethodNotSupportedResolver(ProblemFormat problemFormat) {

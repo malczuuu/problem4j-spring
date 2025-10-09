@@ -16,6 +16,15 @@ import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 
+/**
+ * Handles {@link ConstraintViolationException} thrown when one or more Bean Validation constraints
+ * are violated.
+ *
+ * <p>Relates with {@code MethodValidationException} (see {@link MethodValidationResolver}).
+ *
+ * <p>This exception indicates that method parameters, return values, or other validated elements
+ * failed to satisfy declared {@code @Valid} or {@code @Constraint} annotations.
+ */
 public class ConstraintViolationResolver extends AbstractProblemResolver {
 
   public ConstraintViolationResolver(ProblemFormat problemFormat) {

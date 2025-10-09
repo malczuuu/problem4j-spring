@@ -9,6 +9,17 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.server.ResponseStatusException;
 
+/**
+ * Handles {@link ResponseStatusException} thrown to signal a specific HTTP status and optional
+ * reason from application code or framework components.
+ *
+ * <p>This exception can be thrown directly in controllers, services, or other layers to indicate
+ * errors such as 404 (Not Found), 403 (Forbidden), or 500 (Internal Server Error) without relying
+ * on checked exceptions or custom error types.
+ *
+ * <p>The handler is responsible for translating the exception into the corresponding HTTP response
+ * with the specified status code, reason, and any additional details.
+ */
 public class ResponseStatusResolver extends AbstractProblemResolver {
 
   public ResponseStatusResolver(ProblemFormat problemFormat) {

@@ -31,6 +31,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.server.MissingRequestValueException;
 
+/**
+ * Handles {@link MissingRequestValueException} thrown when a required request value is missing.
+ *
+ * <p>This typically occurs when a controller method expects a path variable, request parameter, or
+ * header annotated with {@code @RequestParam}, {@code @PathVariable}, or {@code @RequestHeader},
+ * but the client did not provide it.
+ *
+ * <p>The handler is responsible for returning an appropriate HTTP 400 (Bad Request) response to
+ * indicate that a required input value is missing.
+ */
 public class MissingRequestValueResolver extends AbstractProblemResolver {
 
   public MissingRequestValueResolver(ProblemFormat problemFormat) {

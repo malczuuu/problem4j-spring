@@ -17,6 +17,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ServerErrorException;
 
+/**
+ * Handles {@link ServerErrorException} thrown when a server-side error occurs while processing a
+ * request.
+ *
+ * <p>This exception indicates that an unexpected condition or internal failure prevented the server
+ * from fulfilling the request.
+ *
+ * <p>The handler is responsible for returning an appropriate HTTP 5xx response (e.g., 500 Internal
+ * Server Error) to inform the client that the request could not be processed due to a server-side
+ * problem.
+ */
 public class ServerErrorResolver extends AbstractProblemResolver {
 
   public ServerErrorResolver(ProblemFormat problemFormat) {

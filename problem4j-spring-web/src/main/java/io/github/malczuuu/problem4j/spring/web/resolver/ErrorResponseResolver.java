@@ -8,9 +8,21 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.ErrorResponseException;
 
+/**
+ * Handles {@link ErrorResponseException} thrown when a controller or framework component raises an
+ * error represented by an {@code ErrorResponse}.
+ *
+ * <p>This exception is typically used by Spring MVC or WebFlux to signal HTTP errors such as 400,
+ * 404, or 500, carrying both an {@link HttpStatusCode} and structured error details.
+ *
+ * <p>It may be thrown programmatically from application code or internally by Spring when request
+ * processing fails and an {@code ErrorResponse} needs to be returned to the client.
+ *
+ * @see org.springframework.web.ErrorResponse
+ */
 public class ErrorResponseResolver extends AbstractProblemResolver {
 
-  protected ErrorResponseResolver(ProblemFormat problemFormat) {
+  public ErrorResponseResolver(ProblemFormat problemFormat) {
     super(ErrorResponseException.class, problemFormat);
   }
 

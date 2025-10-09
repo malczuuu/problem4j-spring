@@ -15,7 +15,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
-import org.springframework.validation.method.MethodValidationException;
+import org.springframework.validation.method.MethodValidationResult;
 import org.springframework.validation.method.ParameterValidationResult;
 
 /**
@@ -40,14 +40,14 @@ public class ViolationResolver {
   }
 
   /**
-   * <b>Note:</b> Although {@link MethodValidationException#getAllValidationResults()} is
-   * deprecated, it is used here for backward compatibility with older Spring Framework versions.
+   * <b>Note:</b> Although {@link MethodValidationResult#getAllValidationResults()} is deprecated,
+   * it is used here for backward compatibility with older Spring Framework versions.
    *
    * <p>The deprecation alternative provided by Spring is not available in versions {@code 6.0.*}
    * and {@code 6.1.*} (Spring Framework versions, not Spring Boot). Therefore, this method is
    * retained to ensure compatibility across those versions.
    */
-  public ProblemBuilder from(MethodValidationException e) {
+  public ProblemBuilder from(MethodValidationResult e) {
     List<Violation> violations = new ArrayList<>();
 
     for (ParameterValidationResult result : e.getAllValidationResults()) {

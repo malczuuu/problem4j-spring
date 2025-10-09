@@ -17,6 +17,17 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+/**
+ * Handles {@link DecodingException} thrown when a message or request body cannot be decoded.
+ *
+ * <p>This typically occurs in WebFlux applications when the incoming data cannot be converted by
+ * the configured {@code Decoder}, for example due to malformed JSON, XML, or other payloads.
+ *
+ * <p>The handler is responsible for returning an appropriate HTTP 400 (Bad Request) response to
+ * indicate that the request body could not be decoded.
+ *
+ * @see org.springframework.core.codec.Decoder
+ */
 @RestControllerAdvice
 public class DecodingExceptionWebFluxAdvice {
 

@@ -15,6 +15,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.server.ServerWebInputException;
 
+/**
+ * Handles {@link ServerWebInputException} thrown when request data cannot be properly read or
+ * converted in a WebFlux application.
+ *
+ * <p>This typically occurs for invalid query parameters, path variables, or request body content
+ * that cannot be converted to the target method parameter type.
+ *
+ * <p>The handler is responsible for returning an appropriate HTTP 400 (Bad Request) response to
+ * indicate that the client sent invalid or unreadable input.
+ */
 public class ServerWebInputResolver extends AbstractProblemResolver {
 
   private final TypeMismatchResolver typeMismatchResolver;

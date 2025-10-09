@@ -9,6 +9,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 
+/**
+ * Handles {@link HttpMediaTypeNotSupportedException} thrown when a client sends a request with a
+ * media type that the server cannot consume.
+ *
+ * <p>This typically occurs when the {@code Content-Type} header in the HTTP request does not match
+ * any of the media types supported by the controller method or configured message converters.
+ *
+ * <p>The handler is responsible for returning an appropriate HTTP 415 (Unsupported Media Type)
+ * response to inform the client that the submitted content type is not supported.
+ */
 public class HttpMediaTypeNotSupportedResolver extends AbstractProblemResolver {
 
   public HttpMediaTypeNotSupportedResolver(ProblemFormat problemFormat) {

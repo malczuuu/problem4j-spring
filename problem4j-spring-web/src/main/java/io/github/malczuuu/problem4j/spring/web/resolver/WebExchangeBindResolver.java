@@ -9,6 +9,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.bind.support.WebExchangeBindException;
 
+/**
+ * Handles {@link WebExchangeBindException} thrown when binding and validation of request data in a
+ * WebFlux application fails.
+ *
+ * <p>This typically occurs when request parameters, path variables, or body content cannot be bound
+ * to a target object or violate validation constraints.
+ *
+ * <p>The handler is responsible for returning an appropriate HTTP 400 (Bad Request) response, often
+ * including details about which fields failed binding or validation.
+ */
 public class WebExchangeBindResolver extends AbstractProblemResolver {
 
   private final ViolationResolver violationResolver;

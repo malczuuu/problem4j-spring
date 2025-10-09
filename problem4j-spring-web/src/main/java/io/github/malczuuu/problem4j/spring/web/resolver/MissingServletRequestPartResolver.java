@@ -13,9 +13,22 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 /**
- * Unlike {@link ServletRequestBindingResolver}, this resolver is separate because its exception
- * ({@link MissingServletRequestPartException}} extends {@link jakarta.servlet.ServletException}
- * rather than {@link org.springframework.web.bind.ServletRequestBindingException}.
+ * Handles {@link MissingServletRequestPartResolver} related exceptions, thrown when a required part
+ * of a multipart request is missing.
+ *
+ * <p>This typically occurs when a controller method parameter is annotated with
+ * {@code @RequestPart} and the client fails to include the expected file or form part in a
+ * multipart/form-data request.
+ *
+ * <p>The handler is responsible for returning an appropriate HTTP 400 (Bad Request) response to
+ * indicate that the required request part was not provided.
+ *
+ * <p>Unlike {@link ServletRequestBindingResolver}, this resolver is separate because its exception
+ * ({@link MissingServletRequestPartException}} extends {@code ServletException} rather than {@code
+ * ServletRequestBindingException}.
+ *
+ * @see jakarta.servlet.ServletException
+ * @see org.springframework.web.bind.ServletRequestBindingException
  */
 public class MissingServletRequestPartResolver extends AbstractProblemResolver {
 

@@ -10,12 +10,22 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.validation.BindException;
 
 /**
- * Due to {@code BindException} being subclassed by {@code MethodArgumentNotValidException}, this
+ * Due to {@link BindException} being subclassed by {@code MethodArgumentNotValidException}, this
  * implementation also covers that exceptions.
  *
  * <p>Quite obvious message, but worth to note that the only reason {@code BindResolver} is kept is
  * due to backwards compatibility as {@code problem4j} doesn't use any fields from that subclass at
  * the moment.
+ *
+ * <p>These exceptions indicate that incoming request parameters or bodies could not be bound to
+ * target objects or did not pass validation constraints.
+ *
+ * <ul>
+ *   <li>{@code BindException} — thrown for binding or validation errors on form or query
+ *       parameters.
+ *   <li>{@code MethodArgumentNotValidException} — thrown for validation failures on
+ *       {@code @RequestBody} or {@code @ModelAttribute} method arguments.
+ * </ul>
  *
  * @see org.springframework.web.bind.MethodArgumentNotValidException
  */

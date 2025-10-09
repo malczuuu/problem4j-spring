@@ -9,6 +9,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 
+/**
+ * Handles {@link HttpMediaTypeNotAcceptableException} thrown when a client requests a response
+ * media type that the server cannot produce.
+ *
+ * <p>This typically occurs when the {@code Accept} header in the HTTP request does not match any of
+ * the media types supported by the controller method or configured message converters.
+ *
+ * <p>The handler is responsible for returning an appropriate HTTP 406 (Not Acceptable) response to
+ * inform the client that the requested content type is not available.
+ */
 public class HttpMediaTypeNotAcceptableResolver extends AbstractProblemResolver {
 
   public HttpMediaTypeNotAcceptableResolver(ProblemFormat problemFormat) {
