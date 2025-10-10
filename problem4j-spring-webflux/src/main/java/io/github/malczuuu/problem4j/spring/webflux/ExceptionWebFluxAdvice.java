@@ -1,5 +1,7 @@
 package io.github.malczuuu.problem4j.spring.webflux;
 
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.resolveStatus;
+
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemBuilder;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
@@ -8,14 +10,16 @@ import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcesso
 import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
 import io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver;
 import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
-import io.github.malczuuu.problem4j.spring.web.util.ProblemSupport;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -70,7 +74,7 @@ public class ExceptionWebFluxAdvice {
 
     Problem problem = builder.build();
 
-    HttpStatus status = ProblemSupport.resolveStatus(problem);
+    HttpStatus status = resolveStatus(problem);
 
     for (AdviceWebFluxInspector inspector : adviceWebFluxInspectors) {
       inspector.inspect(context, problem, ex, headers, status, exchange);
@@ -92,7 +96,16 @@ public class ExceptionWebFluxAdvice {
                 .get()
                 .resolveBuilder(context, ex, headers, HttpStatus.INTERNAL_SERVER_ERROR);
       } else {
-        builder = Problem.builder().status(ProblemStatus.INTERNAL_SERVER_ERROR);
+        ResponseStatus responseStatus =
+            AnnotatedElementUtils.findMergedAnnotation(ex.getClass(), ResponseStatus.class);
+        if (responseStatus != null) {
+          builder = Problem.builder().status(resolveStatus(responseStatus.code()));
+          if (StringUtils.hasLength(responseStatus.reason())) {
+            builder = builder.detail(responseStatus.reason());
+          }
+        } else {
+          builder = Problem.builder().status(ProblemStatus.INTERNAL_SERVER_ERROR);
+        }
       }
     }
     return builder;

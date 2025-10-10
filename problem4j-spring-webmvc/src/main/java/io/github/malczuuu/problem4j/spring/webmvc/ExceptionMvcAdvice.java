@@ -1,5 +1,6 @@
 package io.github.malczuuu.problem4j.spring.webmvc;
 
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.resolveStatus;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
 import io.github.malczuuu.problem4j.core.Problem;
@@ -13,11 +14,14 @@ import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
 import io.github.malczuuu.problem4j.spring.web.util.ProblemSupport;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
@@ -96,7 +100,16 @@ public class ExceptionMvcAdvice {
                 .get()
                 .resolveBuilder(context, ex, headers, HttpStatus.INTERNAL_SERVER_ERROR);
       } else {
-        builder = Problem.builder().status(ProblemStatus.INTERNAL_SERVER_ERROR);
+        ResponseStatus responseStatus =
+            AnnotatedElementUtils.findMergedAnnotation(ex.getClass(), ResponseStatus.class);
+        if (responseStatus != null) {
+          builder = Problem.builder().status(resolveStatus(responseStatus.code()));
+          if (StringUtils.hasLength(responseStatus.reason())) {
+            builder = builder.detail(responseStatus.reason());
+          }
+        } else {
+          builder = Problem.builder().status(ProblemStatus.INTERNAL_SERVER_ERROR);
+        }
       }
     }
     return builder;

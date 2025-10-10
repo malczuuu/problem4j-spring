@@ -6,7 +6,8 @@
     2. [Annotating `@ProblemMapping`](#annotating-problemmapping)
     3. [Implementing `ProblemResolver`](#implementing-problemresolver)
     4. [Custom `@RestControllerAdvice` implementation](#custom-restcontrolleradvice)
-    5. [Using `problem4j-core`](#using-problem4j-core)
+    5. [Spring's build-in `@ResponseStatus` annotation](#springs-build-in-responsestatus-annotation)
+    6. [Using `problem4j-core`](#using-problem4j-core)
 3. [Inspectors for built-in advices](#inspectors-for-built-in-advices)
 4. [Validation](#validation)
 5. [Occurrences of `TypeMismatchException`](#occurrences-of-typemismatchexception)
@@ -207,6 +208,30 @@ public class ExampleExceptionAdvice {
     HttpStatus status = ProblemSupport.resolveStatus(problem.getStatus());
 
     return new ResponseEntity<>(problem, headers, status);
+  }
+}
+```
+### Spring's build-in `@ResponseStatus` annotation
+
+If your exception is annotated with Spring's built-in `@ResponseStatus`, the library will use the specified HTTP status
+and reason (if provided) when building the `Problem` response. The `title` field will be set to the standard reason
+phrase for the status code, and the `detail` field will be set to the `reason` specified in the annotation. No
+interpolation of fields is supported for this annotation (if you need that, consider using `@ProblemMapping` instead).
+
+```java
+/**
+ * <pre>{@code
+ * {
+ *   "status": 404,
+ *   "title": "Not Found",
+ *   "detail": "reason: resource not found"
+ * }
+ * }</pre>
+ */
+@ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "reason: resource not found")
+public class ResourceNotFoundException extends RuntimeException {
+  public ResourceNotFoundException(String resourceId) {
+    super("Resource with ID " + resourceId + " not found");
   }
 }
 ```

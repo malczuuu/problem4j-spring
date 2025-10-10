@@ -23,17 +23,25 @@ class ResponseStatusAnnotatedExceptionWebFluxTest {
   @ResponseStatus(HttpStatus.FORBIDDEN)
   static class ForbiddenAnnotatedException extends RuntimeException {}
 
+  @ResponseStatus(code = HttpStatus.FORBIDDEN, reason = "this is reason")
+  static class ReasonAnnotatedException extends RuntimeException {}
+
   @RestController
   static class AnnotatedStatusController {
+
     @GetMapping("/response-status-annotated")
-    String endpoint() {
+    String responseStatusAnnotated() {
       throw new ForbiddenAnnotatedException();
+    }
+
+    @GetMapping("/reason-annotated")
+    String reasonAnnotated() {
+      throw new ReasonAnnotatedException();
     }
   }
 
   @Autowired private WebTestClient webTestClient;
 
-  // FIXME: support for @ResponseStatus is not implemented yet
   @Test
   void givenSpringNativeResponseStatusAnnotation_shouldReturnProblemWithStatus() {
     webTestClient
@@ -41,10 +49,25 @@ class ResponseStatusAnnotatedExceptionWebFluxTest {
         .uri("/response-status-annotated")
         .exchange()
         .expectStatus()
-        .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
+        .isEqualTo(HttpStatus.FORBIDDEN)
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .isEqualTo(Problem.builder().status(ProblemStatus.INTERNAL_SERVER_ERROR).build());
+        .isEqualTo(Problem.builder().status(ProblemStatus.FORBIDDEN).build());
+  }
+
+  @Test
+  void givenSpringNativeResponseStatusAnnotationWithReason_shouldReturnProblem() {
+    webTestClient
+        .get()
+        .uri("/reason-annotated")
+        .exchange()
+        .expectStatus()
+        .isEqualTo(HttpStatus.FORBIDDEN)
+        .expectHeader()
+        .contentType(Problem.CONTENT_TYPE)
+        .expectBody(Problem.class)
+        .isEqualTo(
+            Problem.builder().status(ProblemStatus.FORBIDDEN).detail("this is reason").build());
   }
 }

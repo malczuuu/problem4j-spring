@@ -28,23 +28,31 @@ class ResponseStatusAnnotatedExceptionMvcTest {
   @ResponseStatus(HttpStatus.FORBIDDEN)
   static class ForbiddenAnnotatedException extends RuntimeException {}
 
+  @ResponseStatus(code = HttpStatus.FORBIDDEN, reason = "this is reason")
+  static class ReasonAnnotatedException extends RuntimeException {}
+
   @RestController
   static class AnnotatedStatusController {
+
     @GetMapping("/response-status-annotated")
-    String endpoint() {
+    String responseStatusAnnotated() {
       throw new ForbiddenAnnotatedException();
+    }
+
+    @GetMapping("/reason-annotated")
+    String reasonAnnotated() {
+      throw new ReasonAnnotatedException();
     }
   }
 
   @Autowired private MockMvc mockMvc;
   @Autowired private ObjectMapper objectMapper;
 
-  // FIXME: support for @ResponseStatus is not implemented yet
   @Test
-  void givenAnnotatedException_shouldReturnProblemWithStatus() throws Exception {
+  void givenSpringNativeResponseStatusAnnotation_shouldReturnProblemWithStatus() throws Exception {
     mockMvc
         .perform(get("/response-status-annotated"))
-        .andExpect(status().isInternalServerError())
+        .andExpect(status().isForbidden())
         .andExpect(
             result ->
                 assertThat(result.getResolvedException())
@@ -55,7 +63,30 @@ class ResponseStatusAnnotatedExceptionMvcTest {
               Problem problem =
                   objectMapper.readValue(result.getResponse().getContentAsString(), Problem.class);
               assertThat(problem)
-                  .isEqualTo(Problem.builder().status(ProblemStatus.INTERNAL_SERVER_ERROR).build());
+                  .isEqualTo(Problem.builder().status(ProblemStatus.FORBIDDEN).build());
+            });
+  }
+
+  @Test
+  void givenSpringNativeResponseStatusAnnotationWithReason_shouldReturnProblem() throws Exception {
+    mockMvc
+        .perform(get("/reason-annotated"))
+        .andExpect(status().isForbidden())
+        .andExpect(
+            result ->
+                assertThat(result.getResolvedException())
+                    .isInstanceOf(ReasonAnnotatedException.class))
+        .andExpect(content().contentType(Problem.CONTENT_TYPE))
+        .andExpect(
+            result -> {
+              Problem problem =
+                  objectMapper.readValue(result.getResponse().getContentAsString(), Problem.class);
+              assertThat(problem)
+                  .isEqualTo(
+                      Problem.builder()
+                          .status(ProblemStatus.FORBIDDEN)
+                          .detail("this is reason")
+                          .build());
             });
   }
 }
