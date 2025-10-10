@@ -110,6 +110,30 @@ see [`problem4j.tracing-header-name`](#problem4jtracing-header-name)). Defaults 
 For example, by assigning `problem4j.instance-override=/error-instances/{traceId}`, with tracing enabled, each `Problem`
 response will have `"instance"` field matching to that format (e.g. `"/error-instances/WQ1tbs12rtSD"`).
 
+### `problem4j.resolver-caching.enabled`
+
+Enables caching of resolved `ProblemResolver` instances to avoid repeated reflection and lookup. Defaults to `false`
+(disabled). When disabled, every resolution performs a fresh lookup. Enable if you have many repeated resolutions of a
+stable set of exception / resolver types.
+
+### `problem4j.resolver-caching.max-cache-size`
+
+Maximum number of resolver entries stored when caching is enabled. Defaults to `128`. Uses LRU (least recently used)
+eviction once the limit is exceeded. Values `<= 0` mean the cache is unbounded (no eviction) – use cautiously if many
+distinct resolver types may appear.
+
+Example:
+
+```properties
+problem4j.resolver-caching.enabled=true
+problem4j.resolver-caching.max-cache-size=256
+```
+
+Notes:
+
+- If you rarely introduce new resolver types, a small cache (64–256) is usually enough.
+- Leave disabled if startup / reflection cost is negligible or resolver set is highly dynamic.
+
 ## Problem4J Links
 
 - [`problem4j-core`][problem4j-core] - Core library defining `Problem` model and `ProblemException`.
