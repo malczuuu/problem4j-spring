@@ -8,6 +8,7 @@ import io.github.malczuuu.problem4j.spring.web.format.ProblemFormat;
 import io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver;
 import io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolverConfiguration;
 import java.util.List;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -20,21 +21,9 @@ import org.springframework.context.annotation.Import;
 public class ProblemConfiguration {
 
   /**
-   * Provides a {@link ProblemModule} if none is defined.
-   *
-   * @return a new {@link ProblemModule}
-   */
-  @ConditionalOnMissingBean(ProblemModule.class)
-  @Bean
-  public ProblemModule problemModule() {
-    return new ProblemModule();
-  }
-
-  /**
    * Provides a {@link ProblemMappingProcessor} if none is defined.
    *
-   * @return a new {@link
-   *     io.github.malczuuu.problem4j.spring.web.annotation.DefaultProblemMappingProcessor}
+   * @return a new {@link DefaultProblemMappingProcessor}
    */
   @ConditionalOnMissingBean(ProblemMappingProcessor.class)
   @Bean
@@ -59,8 +48,8 @@ public class ProblemConfiguration {
    * implementations.
    *
    * @param problemResolvers all available {@link ProblemResolver} declared as components
-   * @return {@link HashMapProblemResolverStore}, possibly wrapped in {@link
-   *     CachingProblemResolverStore} if caching is enabled
+   * @return {@link HashMapProblemResolverStore}, wrapped in {@link CachingProblemResolverStore} if
+   *     caching is enabled
    */
   @ConditionalOnMissingBean(ProblemResolverStore.class)
   @Bean
@@ -75,5 +64,21 @@ public class ProblemConfiguration {
     }
 
     return problemResolverStore;
+  }
+
+  @ConditionalOnClass(ProblemModule.class)
+  @Configuration(proxyBeanMethods = false)
+  public static class ProblemModuleConfiguration {
+
+    /**
+     * Provides a {@link ProblemModule} if none is defined.
+     *
+     * @return a new {@link ProblemModule}
+     */
+    @ConditionalOnMissingBean(ProblemModule.class)
+    @Bean
+    public ProblemModule problemModule() {
+      return new ProblemModule();
+    }
   }
 }
