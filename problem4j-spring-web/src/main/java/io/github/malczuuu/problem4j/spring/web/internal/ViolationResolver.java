@@ -39,18 +39,10 @@ public class ViolationResolver {
     this.problemFormat = problemFormat;
   }
 
-  /**
-   * <b>Note:</b> Although {@link MethodValidationResult#getAllValidationResults()} is deprecated,
-   * it is used here for backward compatibility with older Spring Framework versions.
-   *
-   * <p>The deprecation alternative provided by Spring is not available in versions {@code 6.0.*}
-   * and {@code 6.1.*} (Spring Framework versions, not Spring Boot). Therefore, this method is
-   * retained to ensure compatibility across those versions.
-   */
   public ProblemBuilder from(MethodValidationResult e) {
     List<Violation> violations = new ArrayList<>();
 
-    for (ParameterValidationResult result : e.getAllValidationResults()) {
+    for (ParameterValidationResult result : e.getValueResults()) {
       String fieldName = findParameterName(result.getMethodParameter()).orElse(null);
       result
           .getResolvableErrors()
