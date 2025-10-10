@@ -179,8 +179,7 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
 
   /**
    * Interpolate placeholders of form {name}. Special forms: - {message} - {context.key} - {traceId}
-   * (shorthand for {context.traceId}) - other names: first look for instance field (including
-   * private/superclass), then static fields, then getter methods.
+   * (shorthand for {context.traceId}) - other names: looks for instance field.
    *
    * <p>If a placeholder resolves to null - it's replaced by empty string.
    */
@@ -211,9 +210,8 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
   }
 
   /**
-   * Resolve a value for a placeholder name from the throwable or context. Priority: 1) instance
-   * field (including private) search up class hierarchy 2) static field (including private) 3)
-   * public getter method: getX() or isX() 4) context.get(name)
+   * Resolve a value for a placeholder name from the throwable or context. Checks only instance
+   * field (including private) and searches up class hierarchy.
    */
   private Object resolvePlaceholderSource(Throwable t, String name) {
     if (t == null || !StringUtils.hasLength(name)) {
