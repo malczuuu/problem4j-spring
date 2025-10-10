@@ -1,8 +1,9 @@
 package io.github.malczuuu.problem4j.spring.web;
 
 import io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * {@link ProblemResolverStore} implementation that caches resolver lookups for better performance.
@@ -12,18 +13,41 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CachingProblemResolverStore implements ProblemResolverStore {
 
   private final ProblemResolverStore delegate;
+  private final int maxCacheSize;
 
-  private final ConcurrentHashMap<Class<? extends Exception>, Optional<ProblemResolver>> cache =
-      new ConcurrentHashMap<>();
+  private final Map<Class<? extends Exception>, Optional<ProblemResolver>> cache;
 
   /**
-   * Creates a new store initialized with the given resolvers.
+   * Creates a new store initialized with the given delegate and an unbounded cache.
    *
    * @param delegate the delegate store to use for resolver lookups
-   * @throws NullPointerException if any resolver or its exception class is {@code null}
    */
   public CachingProblemResolverStore(ProblemResolverStore delegate) {
+    this(delegate, -1);
+  }
+
+  /**
+   * Creates a new store with an LRU cache limited to maxEntries.
+   *
+   * @param maxCacheSize maximum number of cached entries (fallbacks to {@link Integer#MAX_VALUE} on
+   *     invalid values)
+   * @param delegate the delegate store to use for resolver lookups
+   */
+  public CachingProblemResolverStore(ProblemResolverStore delegate, int maxCacheSize) {
     this.delegate = delegate;
+    this.maxCacheSize = maxCacheSize > 0 ? maxCacheSize : Integer.MAX_VALUE;
+
+    // 16 is the default initial capacity of HashMap;
+    // 0.75f is the default load factor;
+    // accessOrder=true - the last accessed entry is moved to the end of the underlying list
+    this.cache =
+        new LinkedHashMap<>(16, 0.75f, true) {
+          @Override
+          protected boolean removeEldestEntry(
+              Map.Entry<Class<? extends Exception>, Optional<ProblemResolver>> eldest) {
+            return size() > CachingProblemResolverStore.this.maxCacheSize;
+          }
+        };
   }
 
   /**
@@ -36,6 +60,8 @@ public class CachingProblemResolverStore implements ProblemResolverStore {
    */
   @Override
   public Optional<ProblemResolver> findResolver(Class<? extends Exception> clazz) {
-    return cache.computeIfAbsent(clazz, delegate::findResolver);
+    synchronized (cache) {
+      return cache.computeIfAbsent(clazz, delegate::findResolver);
+    }
   }
 }

@@ -9,7 +9,9 @@ import io.github.malczuuu.problem4j.spring.web.resolver.AbstractProblemResolver;
 import io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -117,5 +119,53 @@ class CachingProblemResolverStoreTest {
     }
 
     assertEquals(1, computeCounter.get(), "computeResolver() should run exactly once");
+  }
+
+  private static class Ex1 extends Exception {}
+
+  private static class Ex2 extends Exception {}
+
+  private static class Ex3 extends Exception {}
+
+  @Test
+  void givenLimitedCache_whenExceeded_thenEvictsLeastRecentlyUsed() {
+    int maxCacheSize = 2;
+
+    DummyResolver r1 = new DummyResolver(Ex1.class);
+    DummyResolver r2 = new DummyResolver(Ex2.class);
+    DummyResolver r3 = new DummyResolver(Ex3.class);
+
+    Map<Class<? extends Exception>, ProblemResolver> resolvers =
+        Map.of(
+            Ex1.class, r1,
+            Ex2.class, r2,
+            Ex3.class, r3);
+
+    Map<Class<? extends Exception>, AtomicInteger> counters = new HashMap<>();
+
+    ProblemResolverStore delegate =
+        clazz -> {
+          counters.computeIfAbsent(clazz, k -> new AtomicInteger()).incrementAndGet();
+          return Optional.ofNullable(resolvers.get(clazz));
+        };
+
+    CachingProblemResolverStore store = new CachingProblemResolverStore(delegate, maxCacheSize);
+
+    // Fill cache with Ex1, Ex2
+    assertTrue(store.findResolver(Ex1.class).isPresent());
+    assertTrue(store.findResolver(Ex2.class).isPresent());
+
+    // Touch Ex1 to make it most recently used (LRU order now: Ex2 oldest, Ex1 newest)
+    assertTrue(store.findResolver(Ex1.class).isPresent());
+
+    // Add Ex3 -> should evict Ex2
+    assertTrue(store.findResolver(Ex3.class).isPresent());
+
+    // Access Ex2 again -> should be cache miss and re-computed
+    assertTrue(store.findResolver(Ex2.class).isPresent());
+
+    assertEquals(1, counters.get(Ex1.class).get(), "Ex1 should be computed once");
+    assertEquals(2, counters.get(Ex2.class).get(), "Ex2 should be recomputed after eviction");
+    assertEquals(1, counters.get(Ex3.class).get(), "Ex3 should be computed once");
   }
 }

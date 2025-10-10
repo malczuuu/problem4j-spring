@@ -15,18 +15,29 @@ public class ProblemProperties {
   private final String tracingHeaderName;
   private final String instanceOverride;
 
+  private final ResolverCaching resolverCaching;
+
   /**
    * Creates a new instance.
    *
-   * @param detailFormat the format for the {@code "detail"} field
+   * @param detailFormat format for the "detail" field (one of {@link DetailFormat#LOWERCASE},
+   *     {@link DetailFormat#CAPITALIZED}, {@link DetailFormat#UPPERCASE})
+   * @param tracingHeaderName name of the HTTP header carrying a trace ID (nullable)
+   * @param instanceOverride template for overriding the "instance" field; may contain "{traceId}"
+   *     placeholder (nullable)
+   * @param resolverCaching caching for resolver lookups ({@link CachingProblemResolverStore});
+   *     defaults to {@link ResolverCaching#createDefault()}
    */
   public ProblemProperties(
       @DefaultValue(DetailFormat.CAPITALIZED) String detailFormat,
       String tracingHeaderName,
-      String instanceOverride) {
+      String instanceOverride,
+      ResolverCaching resolverCaching) {
     this.detailFormat = detailFormat;
     this.tracingHeaderName = tracingHeaderName;
     this.instanceOverride = instanceOverride;
+    this.resolverCaching =
+        resolverCaching != null ? resolverCaching : ResolverCaching.createDefault();
   }
 
   /**
@@ -69,6 +80,67 @@ public class ProblemProperties {
    */
   public String getInstanceOverride() {
     return instanceOverride;
+  }
+
+  /**
+   * Returns the caching configuration.
+   *
+   * @return caching settings
+   */
+  public ResolverCaching getCaching() {
+    return resolverCaching;
+  }
+
+  /**
+   * Caching configuration for ({@link CachingProblemResolverStore}).
+   *
+   * <p>Controls whether resolver lookup caching is enabled and its maximum size.
+   */
+  public static class ResolverCaching {
+
+    public static final boolean DEFAULT_ENABLED = false;
+    public static final String DEFAULT_ENABLED_VALUE = "false";
+
+    public static final int DEFAULT_MAX_CACHE_SIZE = 128;
+    public static final String DEFAULT_MAX_CACHE_SIZE_VALUE = "128";
+
+    private static ResolverCaching createDefault() {
+      return new ResolverCaching(DEFAULT_ENABLED, DEFAULT_MAX_CACHE_SIZE);
+    }
+
+    private final boolean enabled;
+    private final int maxCacheSize;
+
+    /**
+     * Creates a new caching configuration.
+     *
+     * @param enabled whether caching is enabled
+     * @param maxCacheSize maximum number of cached entries (-1 or 0 means unbounded)
+     */
+    public ResolverCaching(
+        @DefaultValue(DEFAULT_ENABLED_VALUE) boolean enabled,
+        @DefaultValue(DEFAULT_MAX_CACHE_SIZE_VALUE) int maxCacheSize) {
+      this.enabled = enabled;
+      this.maxCacheSize = maxCacheSize;
+    }
+
+    /**
+     * Returns whether caching is enabled.
+     *
+     * @return true if enabled
+     */
+    public boolean isEnabled() {
+      return enabled;
+    }
+
+    /**
+     * Returns the maximum cache size.
+     *
+     * @return maximum entries; -1 (or non-positive) means unbounded
+     */
+    public int getMaxCacheSize() {
+      return maxCacheSize;
+    }
   }
 
   /** Supported values for {@code detailFormat}. */

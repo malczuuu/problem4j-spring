@@ -59,11 +59,21 @@ public class ProblemConfiguration {
    * implementations.
    *
    * @param problemResolvers all available {@link ProblemResolver} declared as components
-   * @return a new {@link CachingProblemResolverStore}
+   * @return {@link HashMapProblemResolverStore}, possibly wrapped in {@link
+   *     CachingProblemResolverStore} if caching is enabled
    */
   @ConditionalOnMissingBean(ProblemResolverStore.class)
   @Bean
-  public ProblemResolverStore problemResolverStore(List<ProblemResolver> problemResolvers) {
-    return new CachingProblemResolverStore(new HashMapProblemResolverStore(problemResolvers));
+  public ProblemResolverStore problemResolverStore(
+      List<ProblemResolver> problemResolvers, ProblemProperties properties) {
+    ProblemResolverStore problemResolverStore = new HashMapProblemResolverStore(problemResolvers);
+
+    if (properties.getCaching().isEnabled()) {
+      problemResolverStore =
+          new CachingProblemResolverStore(
+              problemResolverStore, properties.getCaching().getMaxCacheSize());
+    }
+
+    return problemResolverStore;
   }
 }
