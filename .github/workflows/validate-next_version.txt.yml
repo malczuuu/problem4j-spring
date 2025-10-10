@@ -2,7 +2,9 @@ name: Validate [next_version.txt]
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - "main"
+      - "release/*"
     paths:
       - ".github/utils/next_version.txt"
       - ".github/utils/validate_version_file.sh"

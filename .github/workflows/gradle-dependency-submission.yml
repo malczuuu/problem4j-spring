@@ -3,7 +3,9 @@ name: Dependency Submission
 # workflow limited to only files related to gradle dependencies
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - "main"
+      - "release/*"
     paths:
       - "problem4j-spring-*/build.gradle.kts"
       - "build.gradle.kts"
