@@ -55,16 +55,15 @@ public class ProblemConfiguration {
   }
 
   /**
-   * Provides a {@link ProblemResolverStore} that aggregates all {@link
-   * io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver} implementations.
+   * Provides a {@link ProblemResolverStore} that aggregates all {@link ProblemResolver}
+   * implementations.
    *
-   * @param problemResolvers all available {@link
-   *     io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver} declared as components
+   * @param problemResolvers all available {@link ProblemResolver} declared as components
    * @return a new {@link CachingProblemResolverStore}
    */
   @ConditionalOnMissingBean(ProblemResolverStore.class)
   @Bean
-  public ProblemResolverStore exceptionResolverStore(List<ProblemResolver> problemResolvers) {
-    return new CachingProblemResolverStore(problemResolvers);
+  public ProblemResolverStore problemResolverStore(List<ProblemResolver> problemResolvers) {
+    return new CachingProblemResolverStore(new HashMapProblemResolverStore(problemResolvers));
   }
 }

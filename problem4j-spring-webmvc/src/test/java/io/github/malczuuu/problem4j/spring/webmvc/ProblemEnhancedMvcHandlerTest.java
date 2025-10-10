@@ -2,7 +2,7 @@ package io.github.malczuuu.problem4j.spring.webmvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.github.malczuuu.problem4j.spring.web.CachingProblemResolverStore;
+import io.github.malczuuu.problem4j.spring.web.HashMapProblemResolverStore;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +24,7 @@ class ProblemEnhancedMvcHandlerTest {
     hits = new AtomicInteger(0);
     advice =
         new ProblemEnhancedMvcHandler(
-            new CachingProblemResolverStore(List.of()),
+            new HashMapProblemResolverStore(List.of()),
             List.of((context, problem, ex, headers, status, exchange) -> hits.incrementAndGet()));
   }
 
