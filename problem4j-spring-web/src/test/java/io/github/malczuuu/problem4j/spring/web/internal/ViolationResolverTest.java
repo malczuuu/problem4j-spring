@@ -90,7 +90,7 @@ class ViolationResolverTest {
         .thenReturn(List.of(new ObjectError("second", "size must be between 3 and 10")));
 
     MethodValidationException ex = mock(MethodValidationException.class);
-    when(ex.getAllValidationResults()).thenReturn(List.of(firstResult, secondResult));
+    when(ex.getValueResults()).thenReturn(List.of(firstResult, secondResult));
 
     Problem problem = resolver.from(ex).build();
 

@@ -1,8 +1,9 @@
 package io.github.malczuuu.problem4j.spring.web.resolver;
 
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.resolveStatus;
+
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemBuilder;
-import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
 import io.github.malczuuu.problem4j.spring.web.format.ProblemFormat;
 import org.springframework.http.HttpHeaders;
@@ -30,9 +31,6 @@ public class ResponseStatusResolver extends AbstractProblemResolver {
   public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
     ResponseStatusException e = (ResponseStatusException) ex;
-    return Problem.builder()
-        .status(
-            ProblemStatus.findValue(e.getStatusCode().value())
-                .orElse(ProblemStatus.INTERNAL_SERVER_ERROR));
+    return Problem.builder().status(resolveStatus(e.getStatusCode()));
   }
 }

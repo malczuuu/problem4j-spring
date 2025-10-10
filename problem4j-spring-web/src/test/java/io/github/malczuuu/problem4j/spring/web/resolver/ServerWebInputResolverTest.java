@@ -1,5 +1,6 @@
 package io.github.malczuuu.problem4j.spring.web.resolver;
 
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.resolveStatus;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.malczuuu.problem4j.core.Problem;
@@ -86,16 +87,10 @@ class ServerWebInputResolverTest {
         serverWebInputMapping.resolveProblem(ProblemContext.ofTraceId("traceId"), ex, null, null);
 
     assertThat(problem)
-        .isEqualTo(
-            Problem.builder()
-                .status(
-                    ProblemStatus.findValue(ex.getStatusCode().value())
-                        .orElse(ProblemStatus.INTERNAL_SERVER_ERROR))
-                .build());
+        .isEqualTo(Problem.builder().status(resolveStatus(ex.getStatusCode())).build());
   }
 
   static class DummyController {
-
     public void paramMethod(Boolean value) {}
   }
 }

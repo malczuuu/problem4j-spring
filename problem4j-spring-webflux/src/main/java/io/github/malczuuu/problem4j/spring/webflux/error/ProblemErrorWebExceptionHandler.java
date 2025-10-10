@@ -1,11 +1,11 @@
 package io.github.malczuuu.problem4j.spring.webflux.error;
 
+import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.resolveStatus;
 import static org.springframework.web.reactive.function.server.RequestPredicates.all;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemBuilder;
-import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.WebProperties;
@@ -75,11 +75,7 @@ public class ProblemErrorWebExceptionHandler extends DefaultErrorWebExceptionHan
    * @return a {@link Mono} emitting the updated response
    */
   private Mono<ServerResponse> override(ServerRequest request, ServerResponse response) {
-    ProblemBuilder builder =
-        Problem.builder()
-            .status(
-                ProblemStatus.findValue(response.statusCode().value())
-                    .orElse(ProblemStatus.INTERNAL_SERVER_ERROR));
+    ProblemBuilder builder = Problem.builder().status(resolveStatus(response.statusCode()));
 
     request
         .attribute(TracingSupport.INSTANCE_OVERRIDE)
