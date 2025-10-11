@@ -1,10 +1,11 @@
 package io.github.malczuuu.problem4j.spring.webflux;
 
+import static io.github.malczuuu.problem4j.spring.web.context.ContextSupport.PROBLEM_CONTEXT;
+
 import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.core.ProblemBuilder;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
-import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
+import io.github.malczuuu.problem4j.spring.web.processor.ProblemPostProcessor;
 import io.github.malczuuu.problem4j.spring.web.util.ProblemSupport;
 import java.util.List;
 import org.springframework.core.codec.DecodingException;
@@ -31,9 +32,14 @@ import reactor.core.publisher.Mono;
 @RestControllerAdvice
 public class DecodingExceptionWebFluxAdvice {
 
+  private final ProblemPostProcessor problemPostProcessor;
+
   private final List<AdviceWebFluxInspector> adviceWebFluxInspectors;
 
-  public DecodingExceptionWebFluxAdvice(List<AdviceWebFluxInspector> adviceWebFluxInspectors) {
+  public DecodingExceptionWebFluxAdvice(
+      ProblemPostProcessor problemPostProcessor,
+      List<AdviceWebFluxInspector> adviceWebFluxInspectors) {
+    this.problemPostProcessor = problemPostProcessor;
     this.adviceWebFluxInspectors = adviceWebFluxInspectors;
   }
 
@@ -41,19 +47,13 @@ public class DecodingExceptionWebFluxAdvice {
   public Mono<ResponseEntity<Problem>> handleDecodingException(
       DecodingException ex, ServerWebExchange exchange) {
     ProblemContext context =
-        ProblemContext.builder().traceId(exchange.getAttribute(TracingSupport.TRACE_ID)).build();
+        exchange.getAttributeOrDefault(PROBLEM_CONTEXT, ProblemContext.empty());
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
-    ProblemBuilder builder = Problem.builder().status(ProblemStatus.BAD_REQUEST);
-
-    Object instanceOverride = exchange.getAttribute(TracingSupport.INSTANCE_OVERRIDE);
-    if (instanceOverride != null) {
-      builder = builder.instance(instanceOverride.toString());
-    }
-
-    Problem problem = builder.build();
+    Problem problem = Problem.builder().status(ProblemStatus.BAD_REQUEST).build();
+    problem = problemPostProcessor.process(context, problem);
 
     HttpStatus status = ProblemSupport.resolveStatus(problem);
 

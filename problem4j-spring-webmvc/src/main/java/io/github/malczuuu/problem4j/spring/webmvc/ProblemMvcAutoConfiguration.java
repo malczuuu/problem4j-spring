@@ -4,17 +4,17 @@ import io.github.malczuuu.problem4j.spring.web.ProblemConfiguration;
 import io.github.malczuuu.problem4j.spring.web.ProblemProperties;
 import io.github.malczuuu.problem4j.spring.web.ProblemResolverStore;
 import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
+import io.github.malczuuu.problem4j.spring.web.processor.ProblemPostProcessor;
 import io.github.malczuuu.problem4j.spring.web.resolver.ConstraintViolationResolver;
+import io.github.malczuuu.problem4j.spring.webmvc.context.ProblemContextMvcFilter;
 import io.github.malczuuu.problem4j.spring.webmvc.error.ProblemErrorMvcConfiguration;
 import io.github.malczuuu.problem4j.spring.webmvc.resolver.ProblemResolverMvcConfiguration;
-import io.github.malczuuu.problem4j.spring.webmvc.tracing.TraceIdMvcFilter;
 import jakarta.validation.ConstraintViolationException;
 import java.util.List;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -52,8 +52,11 @@ public class ProblemMvcAutoConfiguration {
   @ConditionalOnMissingBean(ResponseEntityExceptionHandler.class)
   @Bean
   public ResponseEntityExceptionHandler responseEntityExceptionHandler(
-      ProblemResolverStore problemResolverStore, List<AdviceMvcInspector> adviceMvcInspectors) {
-    return new ProblemEnhancedMvcHandler(problemResolverStore, adviceMvcInspectors);
+      ProblemResolverStore problemResolverStore,
+      ProblemPostProcessor problemPostProcessor,
+      List<AdviceMvcInspector> adviceMvcInspectors) {
+    return new ProblemEnhancedMvcHandler(
+        problemResolverStore, problemPostProcessor, adviceMvcInspectors);
   }
 
   @Order(Ordered.LOWEST_PRECEDENCE)
@@ -62,25 +65,24 @@ public class ProblemMvcAutoConfiguration {
   public ExceptionMvcAdvice exceptionAdvice(
       ProblemMappingProcessor problemMappingProcessor,
       ProblemResolverStore problemResolverStore,
+      ProblemPostProcessor problemPostProcessor,
       List<AdviceMvcInspector> adviceMvcInspectors) {
     return new ExceptionMvcAdvice(
-        problemMappingProcessor, problemResolverStore, adviceMvcInspectors);
+        problemMappingProcessor, problemResolverStore, problemPostProcessor, adviceMvcInspectors);
   }
 
   @Order(Ordered.LOWEST_PRECEDENCE - 10)
   @ConditionalOnMissingBean(ProblemExceptionMvcAdvice.class)
   @Bean
   public ProblemExceptionMvcAdvice problemExceptionAdvice(
-      List<AdviceMvcInspector> adviceMvcInspectors) {
-    return new ProblemExceptionMvcAdvice(adviceMvcInspectors);
+      ProblemPostProcessor problemPostProcessor, List<AdviceMvcInspector> adviceMvcInspectors) {
+    return new ProblemExceptionMvcAdvice(problemPostProcessor, adviceMvcInspectors);
   }
 
-  @ConditionalOnProperty(name = "problem4j.tracing-header-name")
-  @ConditionalOnMissingBean(TraceIdMvcFilter.class)
+  @ConditionalOnMissingBean(ProblemContextMvcFilter.class)
   @Bean
-  public TraceIdMvcFilter traceIdMvcFilter(ProblemProperties properties) {
-    return new TraceIdMvcFilter(
-        properties.getTracingHeaderName(), properties.getInstanceOverride());
+  public ProblemContextMvcFilter problemContextMvcFilter(ProblemProperties properties) {
+    return new ProblemContextMvcFilter(properties);
   }
 
   @ConditionalOnClass(ConstraintViolationException.class)
@@ -92,9 +94,10 @@ public class ProblemMvcAutoConfiguration {
     @Bean
     public ConstraintViolationExceptionMvcAdvice constraintViolationExceptionWebMvcAdvice(
         ConstraintViolationResolver constraintViolationResolver,
+        ProblemPostProcessor problemPostProcessor,
         List<AdviceMvcInspector> adviceMvcInspectors) {
       return new ConstraintViolationExceptionMvcAdvice(
-          constraintViolationResolver, adviceMvcInspectors);
+          constraintViolationResolver, problemPostProcessor, adviceMvcInspectors);
     }
   }
 }

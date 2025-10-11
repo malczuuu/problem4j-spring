@@ -1,5 +1,6 @@
 package io.github.malczuuu.problem4j.spring.webflux.error;
 
+import io.github.malczuuu.problem4j.spring.web.processor.ProblemPostProcessor;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
@@ -55,6 +56,7 @@ public class ProblemErrorWebFluxConfiguration {
   @ConditionalOnMissingBean(ErrorWebExceptionHandler.class)
   @Order(-2)
   public ErrorWebExceptionHandler errorWebExceptionHandler(
+      ProblemPostProcessor problemPostProcessor,
       ErrorAttributes errorAttributes,
       WebProperties webProperties,
       ObjectProvider<ViewResolver> viewResolvers,
@@ -62,6 +64,7 @@ public class ProblemErrorWebFluxConfiguration {
       ApplicationContext applicationContext) {
     ProblemErrorWebExceptionHandler exceptionHandler =
         new ProblemErrorWebExceptionHandler(
+            problemPostProcessor,
             errorAttributes,
             webProperties.getResources(),
             this.serverProperties.getError(),

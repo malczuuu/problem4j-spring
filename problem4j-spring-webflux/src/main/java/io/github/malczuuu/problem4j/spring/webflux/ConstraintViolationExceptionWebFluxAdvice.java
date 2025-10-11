@@ -1,10 +1,11 @@
 package io.github.malczuuu.problem4j.spring.webflux;
 
+import static io.github.malczuuu.problem4j.spring.web.context.ContextSupport.PROBLEM_CONTEXT;
+
 import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.core.ProblemBuilder;
 import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
+import io.github.malczuuu.problem4j.spring.web.processor.ProblemPostProcessor;
 import io.github.malczuuu.problem4j.spring.web.resolver.ConstraintViolationResolver;
-import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
 import io.github.malczuuu.problem4j.spring.web.util.ProblemSupport;
 import jakarta.validation.ConstraintViolationException;
 import java.util.List;
@@ -21,12 +22,16 @@ import reactor.core.publisher.Mono;
 public class ConstraintViolationExceptionWebFluxAdvice {
 
   private final ConstraintViolationResolver constraintViolationResolver;
+  private final ProblemPostProcessor problemPostProcessor;
+
   private final List<AdviceWebFluxInspector> adviceWebFluxInspectors;
 
   public ConstraintViolationExceptionWebFluxAdvice(
       ConstraintViolationResolver constraintViolationResolver,
+      ProblemPostProcessor problemPostProcessor,
       List<AdviceWebFluxInspector> adviceWebFluxInspectors) {
     this.constraintViolationResolver = constraintViolationResolver;
+    this.problemPostProcessor = problemPostProcessor;
     this.adviceWebFluxInspectors = adviceWebFluxInspectors;
   }
 
@@ -34,22 +39,16 @@ public class ConstraintViolationExceptionWebFluxAdvice {
   public Mono<ResponseEntity<Problem>> handleConstraintViolationException(
       ConstraintViolationException ex, ServerWebExchange exchange) {
     ProblemContext context =
-        ProblemContext.builder().traceId(exchange.getAttribute(TracingSupport.TRACE_ID)).build();
+        exchange.getAttributeOrDefault(PROBLEM_CONTEXT, ProblemContext.empty());
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
     HttpStatus status = HttpStatus.BAD_REQUEST;
 
-    ProblemBuilder builder =
-        constraintViolationResolver.resolveBuilder(context, ex, headers, status);
-
-    Object instanceOverride = exchange.getAttribute(TracingSupport.INSTANCE_OVERRIDE);
-    if (instanceOverride != null) {
-      builder = builder.instance(instanceOverride.toString());
-    }
-
-    Problem problem = builder.build();
+    Problem problem =
+        constraintViolationResolver.resolveBuilder(context, ex, headers, status).build();
+    problem = problemPostProcessor.process(context, problem);
 
     status = ProblemSupport.resolveStatus(problem);
 

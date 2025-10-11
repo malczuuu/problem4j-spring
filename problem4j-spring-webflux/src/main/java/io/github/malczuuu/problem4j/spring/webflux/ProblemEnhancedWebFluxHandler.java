@@ -1,5 +1,6 @@
 package io.github.malczuuu.problem4j.spring.webflux;
 
+import static io.github.malczuuu.problem4j.spring.web.context.ContextSupport.PROBLEM_CONTEXT;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.resolveStatus;
 
 import io.github.malczuuu.problem4j.core.Problem;
@@ -7,7 +8,7 @@ import io.github.malczuuu.problem4j.core.ProblemBuilder;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.web.ProblemResolverStore;
 import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
-import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
+import io.github.malczuuu.problem4j.spring.web.processor.ProblemPostProcessor;
 import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -38,13 +39,16 @@ import reactor.core.publisher.Mono;
 public class ProblemEnhancedWebFluxHandler extends ResponseEntityExceptionHandler {
 
   private final ProblemResolverStore problemResolverStore;
+  private final ProblemPostProcessor problemPostProcessor;
 
   private final List<AdviceWebFluxInspector> adviceWebFluxInspectors;
 
   public ProblemEnhancedWebFluxHandler(
       ProblemResolverStore problemResolverStore,
+      ProblemPostProcessor problemPostProcessor,
       List<AdviceWebFluxInspector> adviceWebFluxInspectors) {
     this.problemResolverStore = problemResolverStore;
+    this.problemPostProcessor = problemPostProcessor;
     this.adviceWebFluxInspectors = adviceWebFluxInspectors;
   }
 
@@ -64,19 +68,13 @@ public class ProblemEnhancedWebFluxHandler extends ResponseEntityExceptionHandle
       HttpStatusCode status,
       ServerWebExchange exchange) {
     ProblemContext context =
-        ProblemContext.builder().traceId(exchange.getAttribute(TracingSupport.TRACE_ID)).build();
+        exchange.getAttributeOrDefault(PROBLEM_CONTEXT, ProblemContext.empty());
 
     headers = headers != null ? HttpHeaders.writableHttpHeaders(headers) : new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
-    ProblemBuilder builder = getBuilderForOverridingBody(context, ex, headers, status);
-
-    Object instanceOverride = exchange.getAttribute(TracingSupport.INSTANCE_OVERRIDE);
-    if (instanceOverride != null) {
-      builder = builder.instance(instanceOverride.toString());
-    }
-
-    Problem problem = builder.build();
+    Problem problem = getBuilderForOverridingBody(context, ex, headers, status).build();
+    problem = problemPostProcessor.process(context, problem);
 
     status = resolveStatus(problem);
 

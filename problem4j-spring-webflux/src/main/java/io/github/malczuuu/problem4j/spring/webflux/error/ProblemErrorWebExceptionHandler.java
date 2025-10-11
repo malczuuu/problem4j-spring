@@ -1,12 +1,14 @@
 package io.github.malczuuu.problem4j.spring.webflux.error;
 
+import static io.github.malczuuu.problem4j.spring.web.context.ContextSupport.PROBLEM_CONTEXT;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.resolveStatus;
 import static org.springframework.web.reactive.function.server.RequestPredicates.all;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.core.ProblemBuilder;
-import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
+import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
+import io.github.malczuuu.problem4j.spring.web.processor.ProblemPostProcessor;
+import java.util.Optional;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.boot.autoconfigure.web.reactive.error.DefaultErrorWebExceptionHandler;
@@ -28,6 +30,8 @@ import reactor.core.publisher.Mono;
  */
 public class ProblemErrorWebExceptionHandler extends DefaultErrorWebExceptionHandler {
 
+  private final ProblemPostProcessor problemPostProcessor;
+
   /**
    * Creates a new {@code ProblemErrorWebExceptionHandler}.
    *
@@ -37,11 +41,13 @@ public class ProblemErrorWebExceptionHandler extends DefaultErrorWebExceptionHan
    * @param applicationContext the current application context
    */
   public ProblemErrorWebExceptionHandler(
+      ProblemPostProcessor problemPostProcessor,
       ErrorAttributes errorAttributes,
       WebProperties.Resources resources,
       ErrorProperties errorProperties,
       ApplicationContext applicationContext) {
     super(errorAttributes, resources, errorProperties, applicationContext);
+    this.problemPostProcessor = problemPostProcessor;
   }
 
   /**
@@ -75,13 +81,15 @@ public class ProblemErrorWebExceptionHandler extends DefaultErrorWebExceptionHan
    * @return a {@link Mono} emitting the updated response
    */
   private Mono<ServerResponse> override(ServerRequest request, ServerResponse response) {
-    ProblemBuilder builder = Problem.builder().status(resolveStatus(response.statusCode()));
+    Problem problem = Problem.builder().status(resolveStatus(response.statusCode())).build();
 
-    request
-        .attribute(TracingSupport.INSTANCE_OVERRIDE)
-        .ifPresent(instanceOverride -> builder.instance(instanceOverride.toString()));
+    Optional<ProblemContext> optionalContext =
+        request.attribute(PROBLEM_CONTEXT).map(context -> (ProblemContext) context);
+    if (optionalContext.isPresent()) {
+      ProblemContext context = optionalContext.get();
+      problem = problemPostProcessor.process(context, problem);
+    }
 
-    Problem problem = builder.build();
     return ServerResponse.status(problem.getStatus())
         .contentType(MediaType.APPLICATION_PROBLEM_JSON)
         .body(BodyInserters.fromValue(problem));

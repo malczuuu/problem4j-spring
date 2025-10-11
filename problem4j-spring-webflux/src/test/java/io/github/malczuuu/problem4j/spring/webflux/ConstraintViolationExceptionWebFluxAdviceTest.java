@@ -3,6 +3,7 @@ package io.github.malczuuu.problem4j.spring.webflux;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.malczuuu.problem4j.spring.web.format.IdentityProblemFormat;
+import io.github.malczuuu.problem4j.spring.web.processor.IdentityProblemPostProcessor;
 import io.github.malczuuu.problem4j.spring.web.resolver.ConstraintViolationResolver;
 import jakarta.validation.ConstraintViolationException;
 import java.util.List;
@@ -25,6 +26,7 @@ class ConstraintViolationExceptionWebFluxAdviceTest {
     advice =
         new ConstraintViolationExceptionWebFluxAdvice(
             new ConstraintViolationResolver(new IdentityProblemFormat()),
+            new IdentityProblemPostProcessor(),
             List.of((context, problem, ex, headers, status, exchange) -> hits.incrementAndGet()));
   }
 

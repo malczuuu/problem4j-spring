@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootTest(
     classes = {_TestApp.class},
     properties = {
-      "problem4j.instance-override=https://example.org/trace/{traceId}",
+      "problem4j.instance-override=https://example.org/trace/{context.traceId}",
       "problem4j.tracing-header-name=X-Trace-Id"
     })
 @Import({InstanceOverrideController.class})

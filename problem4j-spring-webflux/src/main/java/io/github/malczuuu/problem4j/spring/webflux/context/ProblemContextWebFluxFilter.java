@@ -1,8 +1,11 @@
-package io.github.malczuuu.problem4j.spring.webflux.tracing;
+package io.github.malczuuu.problem4j.spring.webflux.context;
+
+import static io.github.malczuuu.problem4j.spring.web.context.ContextSupport.PROBLEM_CONTEXT;
+import static io.github.malczuuu.problem4j.spring.web.context.ContextSupport.TRACE_ID;
+import static io.github.malczuuu.problem4j.spring.web.context.ContextSupport.getRandomTraceId;
 
 import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
-import io.github.malczuuu.problem4j.spring.web.internal.InstanceSupport;
-import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
+import io.github.malczuuu.problem4j.spring.web.context.ProblemContextSettings;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
@@ -11,26 +14,18 @@ import reactor.core.publisher.Mono;
 
 /**
  * {@link WebFilter} that ensures each request processed by a WebFlux application has an associated
- * trace identifier.
+ * context and trace identifier.
  *
  * <p>The filter reads the trace ID from a configured HTTP header, generates one if missing, and
  * stores it in the {@link ServerWebExchange} attributes, response headers, and Reactor context for
  * downstream access.
  */
-public class TraceIdWebFluxFilter implements WebFilter {
+public class ProblemContextWebFluxFilter implements WebFilter {
 
-  private final String tracingHeaderName;
-  private final String instanceOverride;
+  private final ProblemContextSettings settings;
 
-  /**
-   * Creates a new filter using the given tracing header name and instance override.
-   *
-   * @param tracingHeaderName name of the HTTP header carrying the trace ID
-   * @param instanceOverride template for overriding {@code Problem.instance} field
-   */
-  public TraceIdWebFluxFilter(String tracingHeaderName, String instanceOverride) {
-    this.tracingHeaderName = tracingHeaderName;
-    this.instanceOverride = instanceOverride;
+  public ProblemContextWebFluxFilter(ProblemContextSettings settings) {
+    this.settings = settings;
   }
 
   /**
@@ -49,16 +44,16 @@ public class TraceIdWebFluxFilter implements WebFilter {
   @Override
   public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
     String traceId = readTraceId(exchange);
-
     ProblemContext context = ProblemContext.builder().traceId(traceId).build();
-    String instanceOverrideValue = InstanceSupport.overrideInstance(instanceOverride, context);
 
-    exchange.getAttributes().put(TracingSupport.TRACE_ID, traceId);
-    exchange.getAttributes().put(TracingSupport.INSTANCE_OVERRIDE, instanceOverrideValue);
+    exchange.getAttributes().put(TRACE_ID, traceId);
+    exchange.getAttributes().put(PROBLEM_CONTEXT, context);
 
-    exchange.getResponse().getHeaders().set(tracingHeaderName, traceId);
+    if (settings.getTracingHeaderName() != null) {
+      exchange.getResponse().getHeaders().set(settings.getTracingHeaderName(), traceId);
+    }
 
-    return chain.filter(exchange).contextWrite(ctx -> ctx.put(TracingSupport.TRACE_ID, traceId));
+    return chain.filter(exchange).contextWrite(ctx -> ctx.put(TRACE_ID, traceId));
   }
 
   /**
@@ -68,9 +63,9 @@ public class TraceIdWebFluxFilter implements WebFilter {
    * @return existing or newly generated trace identifier
    */
   private String readTraceId(ServerWebExchange exchange) {
-    String traceId = exchange.getRequest().getHeaders().getFirst(tracingHeaderName);
+    String traceId = exchange.getRequest().getHeaders().getFirst(settings.getTracingHeaderName());
     if (!StringUtils.hasLength(traceId)) {
-      traceId = TracingSupport.getRandomTraceId();
+      traceId = getRandomTraceId();
     }
     return traceId;
   }

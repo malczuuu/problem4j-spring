@@ -90,11 +90,11 @@ class DefaultProblemMappingProcessorTest {
       String expectedDetail,
       String expectedInstance) {
     @ProblemMapping(
-        type = "https://example.org/probs/ctx/{traceId}",
-        title = "Ctx {traceId}",
+        type = "https://example.org/probs/ctx/{context.traceId}",
+        title = "Ctx {context.traceId}",
         status = 418,
-        detail = "ctx:{traceId} field:{value}",
-        instance = "https://example.org/instance/{traceId}")
+        detail = "ctx:{context.traceId} field:{value}",
+        instance = "https://example.org/instance/{context.traceId}")
     class ContextException extends RuntimeException {
 
       private final String value;

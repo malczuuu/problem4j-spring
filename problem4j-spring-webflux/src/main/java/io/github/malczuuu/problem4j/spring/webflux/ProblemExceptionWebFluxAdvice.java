@@ -1,9 +1,11 @@
 package io.github.malczuuu.problem4j.spring.webflux;
 
+import static io.github.malczuuu.problem4j.spring.web.context.ContextSupport.PROBLEM_CONTEXT;
+
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemException;
 import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
-import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
+import io.github.malczuuu.problem4j.spring.web.processor.ProblemPostProcessor;
 import io.github.malczuuu.problem4j.spring.web.util.ProblemSupport;
 import java.util.List;
 import org.springframework.http.HttpHeaders;
@@ -26,9 +28,14 @@ import reactor.core.publisher.Mono;
 @RestControllerAdvice
 public class ProblemExceptionWebFluxAdvice {
 
+  private final ProblemPostProcessor problemPostProcessor;
+
   private final List<AdviceWebFluxInspector> adviceWebFluxInspectors;
 
-  public ProblemExceptionWebFluxAdvice(List<AdviceWebFluxInspector> adviceWebFluxInspectors) {
+  public ProblemExceptionWebFluxAdvice(
+      ProblemPostProcessor problemPostProcessor,
+      List<AdviceWebFluxInspector> adviceWebFluxInspectors) {
+    this.problemPostProcessor = problemPostProcessor;
     this.adviceWebFluxInspectors = adviceWebFluxInspectors;
   }
 
@@ -36,17 +43,13 @@ public class ProblemExceptionWebFluxAdvice {
   public Mono<ResponseEntity<Problem>> handleProblemException(
       ProblemException ex, ServerWebExchange exchange) {
     ProblemContext context =
-        ProblemContext.builder().traceId(exchange.getAttribute(TracingSupport.TRACE_ID)).build();
+        exchange.getAttributeOrDefault(PROBLEM_CONTEXT, ProblemContext.empty());
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
     Problem problem = ex.getProblem();
-
-    Object instanceOverride = exchange.getAttribute(TracingSupport.INSTANCE_OVERRIDE);
-    if (instanceOverride != null) {
-      problem = problem.toBuilder().instance(instanceOverride.toString()).build();
-    }
+    problem = problemPostProcessor.process(context, problem);
 
     HttpStatus status = ProblemSupport.resolveStatus(problem);
 

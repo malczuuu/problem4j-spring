@@ -1,5 +1,6 @@
 package io.github.malczuuu.problem4j.spring.webflux;
 
+import static io.github.malczuuu.problem4j.spring.web.context.ContextSupport.PROBLEM_CONTEXT;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.resolveStatus;
 
 import io.github.malczuuu.problem4j.core.Problem;
@@ -8,8 +9,8 @@ import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.web.ProblemResolverStore;
 import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
 import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
+import io.github.malczuuu.problem4j.spring.web.processor.ProblemPostProcessor;
 import io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver;
-import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.core.annotation.AnnotatedElementUtils;
@@ -45,34 +46,31 @@ public class ExceptionWebFluxAdvice {
 
   private final ProblemMappingProcessor problemMappingProcessor;
   private final ProblemResolverStore problemResolverStore;
+  private final ProblemPostProcessor problemPostProcessor;
 
   private final List<AdviceWebFluxInspector> adviceWebFluxInspectors;
 
   public ExceptionWebFluxAdvice(
       ProblemMappingProcessor problemMappingProcessor,
       ProblemResolverStore problemResolverStore,
+      ProblemPostProcessor problemPostProcessor,
       List<AdviceWebFluxInspector> adviceWebFluxInspectors) {
     this.problemMappingProcessor = problemMappingProcessor;
     this.problemResolverStore = problemResolverStore;
+    this.problemPostProcessor = problemPostProcessor;
     this.adviceWebFluxInspectors = adviceWebFluxInspectors;
   }
 
   @ExceptionHandler(Exception.class)
   public Mono<ResponseEntity<Problem>> handleException(Exception ex, ServerWebExchange exchange) {
     ProblemContext context =
-        ProblemContext.builder().traceId(exchange.getAttribute(TracingSupport.TRACE_ID)).build();
+        exchange.getAttributeOrDefault(PROBLEM_CONTEXT, ProblemContext.empty());
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
-    ProblemBuilder builder = getProblemBuilder(ex, context, headers);
-
-    Object instanceOverride = exchange.getAttribute(TracingSupport.INSTANCE_OVERRIDE);
-    if (instanceOverride != null) {
-      builder = builder.instance(instanceOverride.toString());
-    }
-
-    Problem problem = builder.build();
+    Problem problem = getProblemBuilder(ex, context, headers).build();
+    problem = problemPostProcessor.process(context, problem);
 
     HttpStatus status = resolveStatus(problem);
 

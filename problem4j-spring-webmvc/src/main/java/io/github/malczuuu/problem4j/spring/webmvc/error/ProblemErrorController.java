@@ -1,8 +1,10 @@
 package io.github.malczuuu.problem4j.spring.webmvc.error;
 
+import static io.github.malczuuu.problem4j.spring.web.context.ContextSupport.PROBLEM_CONTEXT;
+
 import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.core.ProblemBuilder;
-import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
+import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
+import io.github.malczuuu.problem4j.spring.web.processor.ProblemPostProcessor;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
@@ -23,13 +25,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("${server.error.path:${error.path:/error}}")
 public class ProblemErrorController extends AbstractErrorController {
+
+  private final ProblemPostProcessor problemPostProcessor;
+
   /**
    * Creates a new {@code ProblemErrorController}.
    *
    * @param errorAttributes the error attributes used to obtain error information
    */
-  public ProblemErrorController(ErrorAttributes errorAttributes) {
+  public ProblemErrorController(
+      ProblemPostProcessor problemPostProcessor, ErrorAttributes errorAttributes) {
     super(errorAttributes);
+    this.problemPostProcessor = problemPostProcessor;
   }
 
   /**
@@ -46,14 +53,13 @@ public class ProblemErrorController extends AbstractErrorController {
       return ResponseEntity.noContent().build();
     }
 
-    ProblemBuilder builder = Problem.builder().status(status.value());
-
-    Object instanceOverride = request.getAttribute(TracingSupport.INSTANCE_OVERRIDE);
-    if (instanceOverride != null) {
-      builder = builder.instance(instanceOverride.toString());
+    ProblemContext context = (ProblemContext) request.getAttribute(PROBLEM_CONTEXT);
+    if (context == null) {
+      context = ProblemContext.empty();
     }
 
-    Problem problem = builder.build();
+    Problem problem = Problem.builder().status(status.value()).build();
+    problem = problemPostProcessor.process(context, problem);
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);

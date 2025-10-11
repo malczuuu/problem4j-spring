@@ -21,7 +21,8 @@ import org.springframework.util.StringUtils;
  *         <li>Interpolate placeholders of the form {@code {name}}:
  *             <ul>
  *               <li>{@code {message}} -> {@link Throwable#getMessage()}
- *               <li>{@code {traceId}} -> {@link ProblemContext#getTraceId()} (special shorthand)
+ *               <li>{@code {context.traceId}} -> {@link ProblemContext#getTraceId()} (special
+ *                   shorthand)
  *               <li>{@code {fieldName}} -> any field in the exception class hierarchy
  *             </ul>
  *         <li>Ignore placeholders that resolve to null or empty string.
@@ -178,8 +179,8 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
   }
 
   /**
-   * Interpolate placeholders of form {name}. Special forms: - {message} - {context.key} - {traceId}
-   * (shorthand for {context.traceId}) - other names: looks for instance field.
+   * Interpolate placeholders of form {name}. Special forms: - {message} - {context.key} -
+   * {context.traceId} (shorthand for {context.traceId}) - other names: looks for instance field.
    *
    * <p>If a placeholder resolves to null - it's replaced by empty string.
    */

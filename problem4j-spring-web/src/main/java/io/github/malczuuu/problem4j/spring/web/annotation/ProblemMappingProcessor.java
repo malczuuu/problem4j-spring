@@ -32,7 +32,7 @@ public interface ProblemMappingProcessor {
   Pattern PLACEHOLDER = Pattern.compile("\\{([^}]+)}");
 
   String MESSAGE_LABEL = "message";
-  String TRACE_ID_LABEL = "traceId";
+  String TRACE_ID_LABEL = "context.traceId";
 
   /**
    * Convert {@link Throwable} -> {@link ProblemBuilder} according to its {@link ProblemMapping}

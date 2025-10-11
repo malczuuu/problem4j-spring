@@ -5,6 +5,8 @@ import io.github.malczuuu.problem4j.spring.web.annotation.DefaultProblemMappingP
 import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
 import io.github.malczuuu.problem4j.spring.web.format.DefaultProblemFormat;
 import io.github.malczuuu.problem4j.spring.web.format.ProblemFormat;
+import io.github.malczuuu.problem4j.spring.web.processor.OverridingProblemPostProcessor;
+import io.github.malczuuu.problem4j.spring.web.processor.ProblemPostProcessor;
 import io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver;
 import io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolverConfiguration;
 import java.util.List;
@@ -41,6 +43,33 @@ public class ProblemConfiguration {
   @Bean
   public ProblemFormat problemFormat(ProblemProperties properties) {
     return new DefaultProblemFormat(properties.getDetailFormat());
+  }
+
+  /**
+   * Provides a {@link ProblemPostProcessor} that applies post-processing rules to {@code Problem}
+   * instances before they are returned in HTTP responses.
+   *
+   * <p>The default implementation, {@link OverridingProblemPostProcessor}, supports configurable
+   * overrides for problem fields such as {@code type} and {@code instance}, based on the properties
+   * defined in {@link ProblemProperties}. These overrides may include runtime placeholders such as:
+   *
+   * <ul>
+   *   <li>{@code {problem.type}} — replaced with the original problem’s type URI
+   *   <li>{@code {problem.instance}} — replaced with the original problem’s instance URI
+   *   <li>{@code {context.traceId}} — replaced with the current trace identifier, if available
+   * </ul>
+   *
+   * <p>This allows enriching or normalizing problem responses without modifying the original
+   * exception mapping logic.
+   *
+   * @param properties the configuration properties containing override templates and settings
+   * @return a new {@link OverridingProblemPostProcessor} instance
+   * @see io.github.malczuuu.problem4j.core.Problem
+   */
+  @ConditionalOnMissingBean(ProblemPostProcessor.class)
+  @Bean
+  public ProblemPostProcessor problemPostProcessor(ProblemProperties properties) {
+    return new OverridingProblemPostProcessor(properties);
   }
 
   /**

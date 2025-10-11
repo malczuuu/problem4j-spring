@@ -1,5 +1,6 @@
 package io.github.malczuuu.problem4j.spring.webmvc;
 
+import static io.github.malczuuu.problem4j.spring.web.context.ContextSupport.PROBLEM_CONTEXT;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.resolveStatus;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
@@ -9,8 +10,8 @@ import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.web.ProblemResolverStore;
 import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
 import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
+import io.github.malczuuu.problem4j.spring.web.processor.ProblemPostProcessor;
 import io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver;
-import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
 import io.github.malczuuu.problem4j.spring.web.util.ProblemSupport;
 import java.util.List;
 import java.util.Optional;
@@ -46,36 +47,33 @@ public class ExceptionMvcAdvice {
 
   private final ProblemMappingProcessor problemMappingProcessor;
   private final ProblemResolverStore problemResolverStore;
+  private final ProblemPostProcessor problemPostProcessor;
 
   private final List<AdviceMvcInspector> adviceMvcInspectors;
 
   public ExceptionMvcAdvice(
       ProblemMappingProcessor problemMappingProcessor,
       ProblemResolverStore problemResolverStore,
+      ProblemPostProcessor problemPostProcessor,
       List<AdviceMvcInspector> adviceMvcInspectors) {
     this.problemMappingProcessor = problemMappingProcessor;
     this.problemResolverStore = problemResolverStore;
+    this.problemPostProcessor = problemPostProcessor;
     this.adviceMvcInspectors = adviceMvcInspectors;
   }
 
   @ExceptionHandler(Exception.class)
   public ResponseEntity<Object> handleException(Exception ex, WebRequest request) {
-    ProblemContext context =
-        ProblemContext.builder()
-            .traceId(request.getAttribute(TracingSupport.TRACE_ID, SCOPE_REQUEST))
-            .build();
+    ProblemContext context = (ProblemContext) request.getAttribute(PROBLEM_CONTEXT, SCOPE_REQUEST);
+    if (context == null) {
+      context = ProblemContext.empty();
+    }
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
-    ProblemBuilder builder = getProblemBuilder(ex, context, headers);
-
-    Object instanceOverride = request.getAttribute(TracingSupport.INSTANCE_OVERRIDE, SCOPE_REQUEST);
-    if (instanceOverride != null) {
-      builder = builder.instance(instanceOverride.toString());
-    }
-
-    Problem problem = builder.build();
+    Problem problem = getProblemBuilder(ex, context, headers).build();
+    problem = problemPostProcessor.process(context, problem);
 
     HttpStatus status = ProblemSupport.resolveStatus(problem);
 

@@ -1,11 +1,12 @@
 package io.github.malczuuu.problem4j.spring.webmvc;
 
+import static io.github.malczuuu.problem4j.spring.web.context.ContextSupport.PROBLEM_CONTEXT;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemException;
 import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
-import io.github.malczuuu.problem4j.spring.web.tracing.TracingSupport;
+import io.github.malczuuu.problem4j.spring.web.processor.ProblemPostProcessor;
 import io.github.malczuuu.problem4j.spring.web.util.ProblemSupport;
 import java.util.List;
 import org.springframework.http.HttpHeaders;
@@ -27,29 +28,28 @@ import org.springframework.web.context.request.WebRequest;
 @RestControllerAdvice
 public class ProblemExceptionMvcAdvice {
 
+  private final ProblemPostProcessor problemPostProcessor;
+
   private final List<AdviceMvcInspector> adviceMvcInspectors;
 
-  public ProblemExceptionMvcAdvice(List<AdviceMvcInspector> adviceMvcInspectors) {
+  public ProblemExceptionMvcAdvice(
+      ProblemPostProcessor problemPostProcessor, List<AdviceMvcInspector> adviceMvcInspectors) {
+    this.problemPostProcessor = problemPostProcessor;
     this.adviceMvcInspectors = adviceMvcInspectors;
   }
 
   @ExceptionHandler(ProblemException.class)
   public ResponseEntity<Problem> handleProblemException(ProblemException ex, WebRequest request) {
-    ProblemContext context =
-        ProblemContext.builder()
-            .traceId(request.getAttribute(TracingSupport.TRACE_ID, SCOPE_REQUEST))
-            .build();
+    ProblemContext context = (ProblemContext) request.getAttribute(PROBLEM_CONTEXT, SCOPE_REQUEST);
+    if (context == null) {
+      context = ProblemContext.empty();
+    }
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
     Problem problem = ex.getProblem();
-
-    Object instanceOverride = request.getAttribute(TracingSupport.INSTANCE_OVERRIDE, SCOPE_REQUEST);
-
-    if (instanceOverride != null) {
-      problem = problem.toBuilder().instance(instanceOverride.toString()).build();
-    }
+    problem = problemPostProcessor.process(context, problem);
 
     HttpStatus status = ProblemSupport.resolveStatus(problem);
 

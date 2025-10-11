@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
  *
  * <ul>
  *   <li>{@code {message}} -> the exception's {@link Throwable#getMessage()}
- *   <li>{@code {traceId}} -> the traceId from {@code ProblemContext#getTraceId()} (special
+ *   <li>{@code {context.traceId}} -> the traceId from {@code ProblemContext#getTraceId()} (special
  *       shorthand)
  *   <li>{@code {fieldName}} -> value of any field (private or public) in the exception class
  *       hierarchy
@@ -52,7 +52,7 @@ import java.lang.annotation.Target;
  *     type = "https://example.org/errors/validation",
  *     title = "Validation Failed",
  *     status = 400,
- *     detail = "Invalid input for user {userId}, trace {traceId}",
+ *     detail = "Invalid input for user {userId}, trace {context.traceId}",
  *     extensions = {"userId", "fieldName"}
  * )
  * public class ValidationException extends RuntimeException {
@@ -85,7 +85,7 @@ public @interface ProblemMapping {
    *
    * <ul>
    *   <li>{@code {message}} -> exception message
-   *   <li>{@code {traceId}} -> trace ID from {@code ProblemContext}
+   *   <li>{@code {context.traceId}} -> trace ID from {@code ProblemContext}
    *   <li>{@code {fieldName}} -> value of any field in the exception class hierarchy
    * </ul>
    *
