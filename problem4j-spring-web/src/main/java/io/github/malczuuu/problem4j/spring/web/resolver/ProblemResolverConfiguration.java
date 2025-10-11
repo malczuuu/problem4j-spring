@@ -6,6 +6,7 @@ import org.springframework.beans.TypeMismatchException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.codec.DecodingException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.method.MethodValidationException;
@@ -51,6 +52,15 @@ public class ProblemResolverConfiguration {
     @Bean
     public ConstraintViolationResolver constraintViolationResolver(ProblemFormat problemFormat) {
       return new ConstraintViolationResolver(problemFormat);
+    }
+  }
+
+  @ConditionalOnClass(DecodingException.class)
+  @Configuration(proxyBeanMethods = false)
+  public static class DecodingConfiguration {
+    @Bean
+    public DecodingResolver decodingResolver(ProblemFormat problemFormat) {
+      return new DecodingResolver(problemFormat);
     }
   }
 

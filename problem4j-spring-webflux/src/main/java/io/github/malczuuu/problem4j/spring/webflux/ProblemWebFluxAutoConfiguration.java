@@ -5,11 +5,9 @@ import io.github.malczuuu.problem4j.spring.web.ProblemProperties;
 import io.github.malczuuu.problem4j.spring.web.ProblemResolverStore;
 import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
 import io.github.malczuuu.problem4j.spring.web.processor.ProblemPostProcessor;
-import io.github.malczuuu.problem4j.spring.web.resolver.ConstraintViolationResolver;
 import io.github.malczuuu.problem4j.spring.webflux.context.ProblemContextWebFluxFilter;
 import io.github.malczuuu.problem4j.spring.webflux.error.ProblemErrorWebFluxConfiguration;
 import io.github.malczuuu.problem4j.spring.webflux.resolver.ProblemResolverWebFluxConfiguration;
-import jakarta.validation.ConstraintViolationException;
 import java.util.List;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -18,11 +16,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.web.reactive.WebFluxAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.reactive.error.ErrorWebFluxAutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.core.codec.DecodingException;
 import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
 
 /**
@@ -84,40 +80,10 @@ public class ProblemWebFluxAutoConfiguration {
     return new ProblemExceptionWebFluxAdvice(problemPostProcessor, adviceWebFluxInspectors);
   }
 
-  @ConditionalOnClass(ConstraintViolationException.class)
-  @Configuration(proxyBeanMethods = false)
-  public static class ConstraintViolationExceptionAdviceConfiguration {
-
-    @Order(Ordered.LOWEST_PRECEDENCE - 10)
-    @ConditionalOnMissingBean(ConstraintViolationExceptionWebFluxAdvice.class)
-    @Bean
-    public ConstraintViolationExceptionWebFluxAdvice constraintViolationExceptionWebFluxAdvice(
-        ConstraintViolationResolver constraintViolationResolver,
-        ProblemPostProcessor problemPostProcessor,
-        List<AdviceWebFluxInspector> adviceWebFluxInspectors) {
-      return new ConstraintViolationExceptionWebFluxAdvice(
-          constraintViolationResolver, problemPostProcessor, adviceWebFluxInspectors);
-    }
-  }
-
   @ConditionalOnMissingBean(ProblemContextWebFluxFilter.class)
   @Bean
   public ProblemContextWebFluxFilter problemContextWebFluxFilter(
       ProblemProperties problemProperties) {
     return new ProblemContextWebFluxFilter(problemProperties);
-  }
-
-  @ConditionalOnClass(DecodingException.class)
-  @Configuration(proxyBeanMethods = false)
-  public static class DecodingExceptionAdviceConfiguration {
-
-    @Order(Ordered.LOWEST_PRECEDENCE - 10)
-    @ConditionalOnMissingBean(DecodingExceptionWebFluxAdvice.class)
-    @Bean
-    public DecodingExceptionWebFluxAdvice decodingExceptionWebFluxAdvice(
-        ProblemPostProcessor problemPostProcessor,
-        List<AdviceWebFluxInspector> adviceWebFluxInspectors) {
-      return new DecodingExceptionWebFluxAdvice(problemPostProcessor, adviceWebFluxInspectors);
-    }
   }
 }

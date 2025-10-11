@@ -249,13 +249,11 @@ from `Ordered.LOWEST_PRECEDENCE` to `Ordered.LOWEST_PRECEDENCE - 10`.
 If you want your advice to override the ones provided by this library, use a smaller order value (e.g.
 `Ordered.LOWEST_PRECEDENCE - 11` or `Ordered.HIGHEST_PRECEDENCE` if you really mean it).
 
-| <center>covered exceptions</center> | <center>`@Order(...)`</center>   |
-|-------------------------------------|----------------------------------|
-| Spring's internal exceptions        | `Ordered.LOWEST_PRECEDENCE - 10` |
-| `ConstraintViolationException`      | `Ordered.LOWEST_PRECEDENCE - 10` |
-| `DecodingException`                 | `Ordered.LOWEST_PRECEDENCE - 10` |
-| `ProblemException`                  | `Ordered.LOWEST_PRECEDENCE - 10` |
-| `Exception`                         | `Ordered.LOWEST_PRECEDENCE`      |
+| <center>covered exceptions</center>             | <center>`@Order(...)`</center>   |
+|-------------------------------------------------|----------------------------------|
+| Spring's internal exceptions                    | `Ordered.LOWEST_PRECEDENCE - 10` |
+| `ProblemException`                              | `Ordered.LOWEST_PRECEDENCE - 10` |
+| `Exception` (fallback for all other exceptions) | `Ordered.LOWEST_PRECEDENCE`      |
 
 While implementing custom `@ControllerAdvice`, don't forget of calling `ProblemPostProcessor` manually, before returning
 `Problem` object. 
