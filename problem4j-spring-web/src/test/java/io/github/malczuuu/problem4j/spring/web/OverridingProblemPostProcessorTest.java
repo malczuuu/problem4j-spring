@@ -6,6 +6,7 @@ import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
 import io.github.malczuuu.problem4j.spring.web.processor.OverridingProblemPostProcessor;
 import io.github.malczuuu.problem4j.spring.web.processor.PostProcessorSettings;
+import java.net.URI;
 import org.junit.jupiter.api.Test;
 
 class OverridingProblemPostProcessorTest {
@@ -226,6 +227,58 @@ class OverridingProblemPostProcessorTest {
     Problem result = processor.process(context, problem);
 
     assertThat(result.getInstance().toString()).isEqualTo("https://example.org/instances/abc");
+  }
+
+  @Test
+  void givenAboutBlankTypeWithPlaceholderOnly_shouldNotOverrideToEmpty() {
+    PostProcessorSettings settings =
+        new ProblemProperties(null, null, "{problem.type}", null, null);
+    OverridingProblemPostProcessor processor = new OverridingProblemPostProcessor(settings);
+
+    Problem problem = Problem.builder().build();
+
+    Problem result = processor.process(null, problem);
+
+    assertThat(result).isSameAs(problem);
+    assertThat(result.getType()).isEqualTo(Problem.BLANK_TYPE);
+  }
+
+  @Test
+  void givenUnknownPlaceholderVariableInType_shouldEmptyIt() {
+    PostProcessorSettings settings =
+        new ProblemProperties(null, null, "type-is-{unknown}", null, null);
+    OverridingProblemPostProcessor processor = new OverridingProblemPostProcessor(settings);
+
+    Problem problem = problem("type", "instance");
+
+    Problem result = processor.process(null, problem);
+
+    assertThat(result.getType()).isEqualTo(URI.create("type-is-"));
+  }
+
+  @Test
+  void givenOnlyUnknownPlaceholderVariableInType_shouldNotChangeCurrentType() {
+    PostProcessorSettings settings = new ProblemProperties(null, null, "{unknown}", null, null);
+    OverridingProblemPostProcessor processor = new OverridingProblemPostProcessor(settings);
+
+    Problem problem = problem("type", "instance");
+
+    Problem result = processor.process(null, problem);
+
+    assertThat(result.getType()).isEqualTo(URI.create("type"));
+  }
+
+  @Test
+  void givenUnknownPlaceholderVariableInInstance_shouldEmptyIt() {
+    PostProcessorSettings settings =
+        new ProblemProperties(null, null, null, "instance-is-{unknown}", null);
+    OverridingProblemPostProcessor processor = new OverridingProblemPostProcessor(settings);
+
+    Problem problem = problem("type", "instance");
+
+    Problem result = processor.process(null, problem);
+
+    assertThat(result.getInstance()).isEqualTo(URI.create("instance-is-"));
   }
 
   private Problem problem(String type, String instance) {

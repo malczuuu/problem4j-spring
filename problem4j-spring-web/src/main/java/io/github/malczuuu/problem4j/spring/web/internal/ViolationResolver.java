@@ -35,10 +35,33 @@ public class ViolationResolver {
 
   private final ProblemFormat problemFormat;
 
+  /**
+   * Creates a new resolver that converts validation results into {@link ProblemBuilder}s.
+   *
+   * @param problemFormat formatting strategy used for the problem {@code detail} field
+   */
   public ViolationResolver(ProblemFormat problemFormat) {
     this.problemFormat = problemFormat;
   }
 
+  /**
+   * Builds a {@link ProblemBuilder} for a {@link MethodValidationResult} produced by method /
+   * parameter validation (e.g. {@code @Validated} on a controller). Each parameter violation is
+   * mapped to a {@link Violation} whose name is the resolved method parameter name and message is
+   * the constraint message.
+   *
+   * <p>The resulting builder has:
+   *
+   * <ul>
+   *   <li>{@code detail} set to a formatted {@code VALIDATION_FAILED_DETAIL}
+   *   <li>{@code errors} extension (key {@code ProblemSupport#ERRORS_EXTENSION}) containing a list
+   *       of {@link Violation}
+   * </ul>
+   *
+   * @param e aggregated method validation result (must not be {@code null})
+   * @return a builder pre-populated with validation detail and violations extension
+   * @see io.github.malczuuu.problem4j.spring.web.util.ProblemSupport
+   */
   public ProblemBuilder from(MethodValidationResult e) {
     List<Violation> violations = new ArrayList<>();
 
@@ -53,6 +76,24 @@ public class ViolationResolver {
         .extension(ERRORS_EXTENSION, violations);
   }
 
+  /**
+   * Builds a {@link ProblemBuilder} from a Spring {@link BindingResult} (e.g. produced when binding
+   * a {@code @ModelAttribute} fails or when {@code @Valid} detects field / global errors). Field
+   * errors are translated into {@link Violation}s keyed by field name; global errors use {@code
+   * null} as the field name.
+   *
+   * <p>The resulting builder has:
+   *
+   * <ul>
+   *   <li>{@code detail} set to a formatted {@code VALIDATION_FAILED_DETAIL}
+   *   <li>{@code errors} extension (key {@code ProblemSupport#ERRORS_EXTENSION}) containing a list
+   *       of {@link Violation}
+   * </ul>
+   *
+   * @param bindingResult the binding/validation result to convert (must not be {@code null})
+   * @return a builder pre-populated with validation detail and violations extension
+   * @see io.github.malczuuu.problem4j.spring.web.util.ProblemSupport#ERRORS_EXTENSION
+   */
   public ProblemBuilder from(BindingResult bindingResult) {
     ArrayList<Violation> errors = new ArrayList<>();
     bindingResult.getFieldErrors().forEach(f -> errors.add(resolveFieldError(f)));

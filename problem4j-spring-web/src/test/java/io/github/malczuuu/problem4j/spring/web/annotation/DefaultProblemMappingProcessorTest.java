@@ -121,7 +121,7 @@ class DefaultProblemMappingProcessorTest {
   }
 
   @Test
-  void givenNullPrivateFields_shouldOmitInterpolation() {
+  void givenNullPrivateFields_shouldOmitExtensions() {
     @ProblemMapping(
         type = "https://example.org/probs/ext",
         title = "Extensions problem",

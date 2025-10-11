@@ -28,6 +28,18 @@ public class MaxUploadSizeExceededResolver extends AbstractProblemResolver {
     super(MaxUploadSizeExceededException.class, problemFormat);
   }
 
+  /**
+   * Builds a {@link ProblemBuilder} with status {@link ProblemStatus#CONTENT_TOO_LARGE}, a
+   * formatted standard detail message, and an extension entry providing the maximum allowed upload
+   * size. Other parameters ({@code context}, {@code headers}, {@code status}) are ignored because
+   * the semantics of {@link MaxUploadSizeExceededException} dictate the response.
+   *
+   * @param context problem context (unused for this resolver)
+   * @param ex the triggering {@link MaxUploadSizeExceededException}
+   * @param headers HTTP headers (unused)
+   * @param status suggested status from caller (ignored; 413 enforced)
+   * @return builder pre-populated with status, detail, and max size extension
+   */
   @Override
   public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {

@@ -25,6 +25,17 @@ public class HttpMediaTypeNotSupportedResolver extends AbstractProblemResolver {
     super(HttpMediaTypeNotSupportedException.class, problemFormat);
   }
 
+  /**
+   * Returns a {@link ProblemBuilder} with status {@link ProblemStatus#UNSUPPORTED_MEDIA_TYPE} (HTTP
+   * 415). Other parameters are ignored because the status is mandated by the semantics of {@link
+   * HttpMediaTypeNotSupportedException}.
+   *
+   * @param context problem context (unused)
+   * @param ex the triggering {@link HttpMediaTypeNotSupportedException}
+   * @param headers HTTP headers (unused)
+   * @param status suggested status from caller (ignored; 415 enforced)
+   * @return builder pre-populated with 415 status
+   */
   @Override
   public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {

@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
  * }
  * }</pre>
  *
- * <p>Implementations should return {@code null} if the exception class is not annotated with {@link
+ * <p>Implementations should return {@code null} if the exception class is not annotated with {@code
  * ProblemMapping}, and may throw {@link ProblemProcessingException} if an error occurs during
  * problem creation.
  *

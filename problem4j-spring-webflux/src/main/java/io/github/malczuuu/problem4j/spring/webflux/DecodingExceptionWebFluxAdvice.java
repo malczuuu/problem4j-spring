@@ -43,6 +43,10 @@ public class DecodingExceptionWebFluxAdvice {
     this.adviceWebFluxInspectors = adviceWebFluxInspectors;
   }
 
+  /**
+   * Converts a {@link DecodingException} into a BAD_REQUEST {@code Problem} response and invokes
+   * post-processors / inspectors.
+   */
   @ExceptionHandler(DecodingException.class)
   public Mono<ResponseEntity<Problem>> handleDecodingException(
       DecodingException ex, ServerWebExchange exchange) {

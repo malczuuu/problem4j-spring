@@ -34,6 +34,25 @@ public class ServerErrorResolver extends AbstractProblemResolver {
     super(ServerErrorException.class, problemFormat);
   }
 
+  /**
+   * Resolves a {@link ServerErrorException} into a {@link ProblemBuilder}.
+   *
+   * <p>Special case: Spring WebFlux's {@code PathVariableMethodArgumentResolver} raises {@code
+   * ServerErrorException} (instead of a missing-value exception) when a required {@code
+   * PathVariable} is absent. In that scenario this method returns a BAD_REQUEST problem with a
+   * standardized detail ({@code ProblemSupport#MISSING_PATH_VARIABLE_DETAIL}) and an extension
+   * "{@code ProblemSupport#NAME_EXTENSION}" containing the variable name.
+   *
+   * <p>Otherwise, it falls back to a generic INTERNAL_SERVER_ERROR problem.
+   *
+   * @param context problem context (unused)
+   * @param ex the triggering {@link ServerErrorException}
+   * @param headers HTTP headers (unused)
+   * @param status suggested status from caller (ignored; derives from condition)
+   * @return builder with BAD_REQUEST + path variable info or INTERNAL_SERVER_ERROR
+   * @see io.github.malczuuu.problem4j.spring.web.util.ProblemSupport#MISSING_PATH_VARIABLE_DETAIL
+   * @see io.github.malczuuu.problem4j.spring.web.util.ProblemSupport#NAME_EXTENSION
+   */
   @Override
   public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
@@ -74,6 +93,17 @@ public class ServerErrorResolver extends AbstractProblemResolver {
         && e.getMethodParameter().hasParameterAnnotation(PathVariable.class);
   }
 
+  /**
+   * Derives a path variable's logical name from the {@link MethodParameter}. If the parameter is
+   * annotated with {@link PathVariable} and its {@code name} attribute is non-empty, that value is
+   * returned; otherwise the Java parameter name (which may be {@code null} if not compiled with
+   * {@code -parameters}) is returned.
+   *
+   * @param methodParameter the method parameter describing the missing path variable (never null
+   *     when invoked)
+   * @return explicit annotation name, falling back to the reflective parameter name (may be {@code
+   *     null})
+   */
   private String findParameterName(MethodParameter methodParameter) {
     PathVariable annotation = methodParameter.getParameterAnnotation(PathVariable.class);
     return (annotation != null && StringUtils.hasLength(annotation.name()))

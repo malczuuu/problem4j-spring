@@ -27,6 +27,17 @@ public class HttpMessageNotReadableResolver extends AbstractProblemResolver {
     super(HttpMessageNotReadableException.class, problemFormat);
   }
 
+  /**
+   * Returns a {@link ProblemBuilder} with {@link ProblemStatus#BAD_REQUEST} (HTTP 400). Other
+   * parameters ({@code context}, {@code headers}, {@code status}) are ignored because a malformed
+   * or unreadable request body always maps to a client error.
+   *
+   * @param context problem context (unused)
+   * @param ex the triggering {@link HttpMessageNotReadableException}
+   * @param headers HTTP headers (unused)
+   * @param status suggested status from caller (ignored; 400 enforced)
+   * @return builder pre-populated with 400 status
+   */
   @Override
   public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {

@@ -38,6 +38,17 @@ public class BindResolver extends AbstractProblemResolver {
     violationResolver = new ViolationResolver(problemFormat);
   }
 
+  /**
+   * Resolves a {@link BindException} (or subclass) to a {@link ProblemBuilder} with {@code
+   * ProblemStatus#BAD_REQUEST} and an {@code errors} extension listing field/global validation
+   * violations produced by the underlying {@link BindException#getBindingResult()}.
+   *
+   * @param context problem context (ignored for binding violations)
+   * @param ex the binding / validation exception (must be a {@link BindException})
+   * @param headers HTTP response headers (unused here but part of the SPI)
+   * @param status suggested HTTP status from caller (ignored; BAD_REQUEST is enforced)
+   * @return builder pre-populated with validation detail and violations
+   */
   @Override
   public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {

@@ -561,8 +561,7 @@ to resolve to proper HTTP links dynamically.
 Property that defines a template for overriding the `"type"` field in `Problem` responses. The value may contain special
 placeholders that will be replaced at runtime:
 
-- `{problem.type}` — the original problem’s `"type"` value
-- `{context.traceId}` — the current request’s trace identifier (if available)
+- `{problem.type}` — the original problem’s `"type"` value.
 
 Defaults to `null` (no override applied). This can be used to unify or enrich problem type URIs across the application.
 
@@ -574,6 +573,9 @@ Defaults to `null` (no override applied). This can be used to unify or enrich pr
 > 
 > the post processor will change `"type"` value to `"https://errors.example.com/problems/validation`.
 
+This feature will override original type only if resulting `type` will not be empty. Note that the resulting `type` must
+be a valid URI.
+
 ### `problem4j.instance-override`
 
 This property allow overriding the `"instance"` field of `Problem` responses with custom templates at the environment
@@ -583,8 +585,8 @@ enabling them to resolve to proper HTTP links dynamically.
 Property that defines a template for overriding the `"instance"` field in `Problem` responses. The value may contain
 special placeholders that will be replaced at runtime:
 
-- `{problem.instance}` — the original problem’s `"instance"` value
-- `{context.traceId}` — the current request’s trace identifier (if available)
+- `{problem.instance}` — the original problem’s `"instance"` value,
+- `{context.traceId}` — the current request’s trace identifier (if available).
 
 Defaults to `null` (no override applied). This is useful for controlling how problem instances are represented in your
 API responses, even without tracing enabled.
@@ -599,6 +601,9 @@ API responses, even without tracing enabled.
 > 
 > For using `{problem.instance}` placeholder, the `instance` field will behave similarly to `type-override`.
 
+This feature will override original `instance` only if resulting type will not be empty. Note that the resulting
+`instance` must be a valid URI.
+
 ### `problem4j.resolver-caching.enabled`
 
 Enables caching of resolved `ProblemResolver` instances to avoid repeated reflection and lookup. Defaults to `false`
@@ -608,7 +613,7 @@ stable set of exception / resolver types.
 ### `problem4j.resolver-caching.max-cache-size`
 
 Maximum number of resolver entries stored when caching is enabled. Defaults to `128`. Uses LRU (least recently used)
-eviction once the limit is exceeded. Values `<= 0` mean the cache is unbounded (no eviction) – use cautiously if many
+eviction once the limit is exceeded. Values `<= 0` mean the cache is unbounded (no eviction) - use cautiously if many
 distinct resolver types may appear.
 
 Example:
@@ -620,7 +625,7 @@ problem4j.resolver-caching.max-cache-size=256
 
 Notes:
 
-- If you rarely introduce new resolver types, a small cache (64–256) is usually enough.
+- If you rarely introduce new resolver types, a small cache (64-256) is usually enough.
 - Leave disabled if startup / reflection cost is negligible or resolver set is highly dynamic.
 
 ## FAQ

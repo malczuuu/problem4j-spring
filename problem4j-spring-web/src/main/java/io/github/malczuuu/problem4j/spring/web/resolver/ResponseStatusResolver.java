@@ -27,6 +27,20 @@ public class ResponseStatusResolver extends AbstractProblemResolver {
     super(ResponseStatusException.class, problemFormat);
   }
 
+  /**
+   * Builds a {@link ProblemBuilder} reflecting {@link ResponseStatusException} and the HTTP status
+   * carried by it. Ignores provided {@code status}, {@code headers}, and {@code context}; the
+   * resolver always uses {@link ResponseStatusException#getStatusCode()}.
+   *
+   * <p>The exception's reason/message is intentionally not propagated here (can be added by a
+   * custom subclass if desired) to avoid leaking internal details unless explicitly configured.
+   *
+   * @param context problem context (unused)
+   * @param ex the {@link ResponseStatusException} to convert
+   * @param headers HTTP headers (unused)
+   * @param status suggested status from caller (ignored)
+   * @return builder pre-populated with the exception's status code
+   */
   @Override
   public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {

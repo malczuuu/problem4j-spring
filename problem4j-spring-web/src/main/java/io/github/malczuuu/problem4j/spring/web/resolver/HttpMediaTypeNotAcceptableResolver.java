@@ -25,6 +25,17 @@ public class HttpMediaTypeNotAcceptableResolver extends AbstractProblemResolver 
     super(HttpMediaTypeNotAcceptableException.class, problemFormat);
   }
 
+  /**
+   * Returns a {@link ProblemBuilder} with {@link ProblemStatus#NOT_ACCEPTABLE} (HTTP 406). Other
+   * parameters ({@code context}, {@code headers}, {@code status}) are ignored because the status is
+   * dictated by the semantics of {@link HttpMediaTypeNotAcceptableException}.
+   *
+   * @param context problem context (unused)
+   * @param ex the triggering {@link HttpMediaTypeNotAcceptableException}
+   * @param headers HTTP headers (unused)
+   * @param status suggested status from caller (ignored; 406 enforced)
+   * @return builder pre-populated with 406 status
+   */
   @Override
   public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {

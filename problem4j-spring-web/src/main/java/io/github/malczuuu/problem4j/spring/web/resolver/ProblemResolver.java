@@ -8,8 +8,7 @@ import org.springframework.http.HttpStatusCode;
 
 /**
  * Represents a resolver from a specific {@link Exception} to a {@link ProblemBuilder}, can be
- * further extended or executed to create {@link io.github.malczuuu.problem4j.core.Problem}
- * response.
+ * further extended or executed to create {@link Problem} response.
  *
  * <p>Implementations are supposed to be stateless.
  */
@@ -37,7 +36,7 @@ public interface ProblemResolver {
    * Resolves the given exception into an immutable {@link Problem}.
    *
    * <p>This method is a convenient shortcut for callers who do not need to modify the problem.
-   * Internally, it delegates to {@link #resolveBuilder(ProblemContext, Exception, HttpHeaders,
+   * Internally, it delegates to {@code #resolveBuilder(ProblemContext, Exception, HttpHeaders,
    * HttpStatusCode)} and immediately calls {@link ProblemBuilder#build()} to produce a fully
    * immutable {@link Problem}.
    *

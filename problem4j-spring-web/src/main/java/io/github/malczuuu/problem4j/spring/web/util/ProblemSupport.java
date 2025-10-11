@@ -5,8 +5,27 @@ import io.github.malczuuu.problem4j.core.ProblemStatus;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
+/**
+ * Central constants and small utilities used when constructing RFC 7807 {@link Problem} responses.
+ *
+ * <p>Contains:
+ *
+ * <ul>
+ *   <li>Standard detail message templates (e.g. missing / validation / type mismatch)
+ *   <li>Source labels reported by Spring missing-value exceptions
+ *   <li>Well-known extension key names added to problems
+ *   <li>Status resolution helpers bridging {@link Problem} and Spring HTTP status abstractions
+ * </ul>
+ *
+ * Not intended for instantiation or external mutation.
+ */
 public final class ProblemSupport {
 
+  // ---------------------------------------------------------------------------
+  // Detail message templates (surface-level, human-readable strings) used for
+  // Problem.detail across various resolvers. Each corresponds to a specific
+  // failure/validation scenario detected by Spring MVC / WebFlux or internal logic.
+  // ---------------------------------------------------------------------------
   public static final String MISSING_REQUEST_PARAM_DETAIL = "Missing request param";
   public static final String MISSING_REQUEST_PART_DETAIL = "Missing request part";
   public static final String MISSING_HEADER_DETAIL = "Missing header";
@@ -18,6 +37,11 @@ public final class ProblemSupport {
   public static final String VALIDATION_FAILED_DETAIL = "Validation failed";
   public static final String MAX_UPLOAD_SIZE_EXCEEDED_DETAIL = "Max upload size exceeded";
 
+  // ---------------------------------------------------------------------------
+  // Source labels emitted by Spring (e.g. MissingRequestValueException#getLabel()) or used to
+  // classify missing-value scenarios. Resolvers map these labels to the above detail templates
+  // and complementary metadata extensions.
+  // ---------------------------------------------------------------------------
   public static final String QUERY_PARAMETER_LABEL = "query parameter";
   public static final String REQUEST_PART_LABEL = "request part";
   public static final String HEADER_LABEL = "header";
@@ -26,6 +50,10 @@ public final class ProblemSupport {
   public static final String REQUEST_ATTRIBUTE_LABEL = "request attribute";
   public static final String SESSION_ATTRIBUTE_LABEL = "session attribute";
 
+  // ---------------------------------------------------------------------------
+  // Extension keys injected into Problem.extension(...) to expose structured metadata to clients.
+  // Naming is intentionally short & stable for JSON footprint and public contract clarity.
+  // ---------------------------------------------------------------------------
   public static final String PARAM_EXTENSION = "param";
   public static final String KIND_EXTENSION = "kind";
   public static final String HEADER_EXTENSION = "header";
@@ -36,6 +64,9 @@ public final class ProblemSupport {
   public static final String ERRORS_EXTENSION = "errors";
   public static final String MAX_EXTENSION = "max";
 
+  // ---------------------------------------------------------------------------
+  // Generic fragments reused inside violations or fallback messages.
+  // ---------------------------------------------------------------------------
   public static final String IS_NOT_VALID_ERROR = "is not valid";
 
   /**

@@ -26,6 +26,18 @@ public class NoHandlerFoundResolver extends AbstractProblemResolver {
     super(NoHandlerFoundException.class, problemFormat);
   }
 
+  /**
+   * Returns a {@link ProblemBuilder} with {@link ProblemStatus#NOT_FOUND} (HTTP 404) indicating no
+   * controller handler matched the incoming request (URL + HTTP method). Other parameters ({@code
+   * context}, {@code headers}, {@code status}) are ignored because the semantics of {@code
+   * NoHandlerFoundException} unambiguously map to 404.
+   *
+   * @param context problem context (unused)
+   * @param ex the triggering {@link NoHandlerFoundException}
+   * @param headers HTTP headers (unused)
+   * @param status suggested status from caller (ignored; 404 enforced)
+   * @return builder pre-populated with NOT_FOUND status
+   */
   @Override
   public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {

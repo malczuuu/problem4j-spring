@@ -36,6 +36,21 @@ public class MissingServletRequestPartResolver extends AbstractProblemResolver {
     super(MissingServletRequestPartException.class, problemFormat);
   }
 
+  /**
+   * Builds a {@link ProblemBuilder} representing a missing multipart request part.
+   *
+   * <p>Always returns a builder with status {@link ProblemStatus#BAD_REQUEST}, a standardized
+   * detail message ({@code ProblemSupport#MISSING_REQUEST_PART_DETAIL}) and an extension named
+   * {@code ProblemSupport#PARAM_EXTENSION} containing the missing part's name.
+   *
+   * @param context problem context (unused)
+   * @param ex the triggering {@link MissingServletRequestPartException}
+   * @param headers HTTP headers (unused)
+   * @param status suggested status from caller (ignored; 400 enforced)
+   * @return builder pre-populated with status, detail and parameter extension
+   * @see io.github.malczuuu.problem4j.spring.web.util.ProblemSupport#MISSING_REQUEST_PART_DETAIL
+   * @see io.github.malczuuu.problem4j.spring.web.util.ProblemSupport#PARAM_EXTENSION
+   */
   @Override
   public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {

@@ -2,6 +2,7 @@ package io.github.malczuuu.problem4j.spring.web.processor;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemBuilder;
+import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
 import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
 import org.springframework.util.StringUtils;
 
@@ -48,16 +49,12 @@ public class OverridingProblemPostProcessor implements ProblemPostProcessor {
   }
 
   /**
-   * Applies the configured field overrides to the given {@link Problem}, if applicable.
+   * Applies configured overrides to {@code type} and/or {@code instance}.
    *
-   * <p>This method substitutes placeholders in the configured templates with runtime values and
-   * builds a new {@link Problem} only if the resulting field values differ from the originals.
-   *
-   * @param context the {@link ProblemContext} providing request-scoped metadata such as a trace
-   *     identifier
-   * @param problem the original {@link Problem} to process
-   * @return a new {@link Problem} with overridden fields, or the original instance if no
-   *     modifications were applied
+   * <p>About {@code about:blank}: when the original type is {@code null} or {@code
+   * Problem#BLANK_TYPE}, the placeholder {@code {problem.type}} resolves to an empty string
+   * (templates naturally collapse). If the template is exactly {@code {problem.type}}, the original
+   * {@code about:blank} value is preserved instead of becoming empty.
    */
   @Override
   public Problem process(ProblemContext context, Problem problem) {
@@ -69,14 +66,14 @@ public class OverridingProblemPostProcessor implements ProblemPostProcessor {
 
     if (StringUtils.hasLength(settings.getTypeOverride())) {
       String newType = overrideType(problem);
-      if (newType != null && !newType.equals(stringOrEmpty(problem.getType()))) {
+      if (StringUtils.hasLength(newType) && !newType.equals(stringOrEmpty(problem.getType()))) {
         builder = problem.toBuilder().type(newType);
       }
     }
 
     if (StringUtils.hasLength(settings.getInstanceOverride())) {
       String newInstance = overrideInstance(problem, context);
-      if (newInstance != null && !newInstance.equals(stringOrEmpty(problem.getInstance()))) {
+      if (!newInstance.equals(stringOrEmpty(problem.getInstance()))) {
         if (builder == null) {
           builder = problem.toBuilder();
         }
@@ -87,44 +84,70 @@ public class OverridingProblemPostProcessor implements ProblemPostProcessor {
     return builder != null ? builder.build() : problem;
   }
 
+  /**
+   * Because this implementation does not try to resolve dynamic fields, it does not reuse the code
+   * from {@code DefaultProblemMappingProcessor}. Instead, we rely on simple substring replacement
+   * in form of {@link String#replace(CharSequence, CharSequence)}, and then removing all remaining
+   * unknown variables.
+   *
+   * @see io.github.malczuuu.problem4j.spring.web.annotation.DefaultProblemMappingProcessor
+   */
   private String overrideType(Problem problem) {
-    String override = settings.getTypeOverride();
-    if (!StringUtils.hasLength(override)) {
+    String template = settings.getTypeOverride();
+    if (!StringUtils.hasLength(template)) {
       return stringOrEmpty(problem.getType());
     }
+    String original = stringOrEmpty(problem.getType());
+    String valueForPlaceholder = isTypeSet(problem) ? original : "";
+    String resolved = template.replace("{problem.type}", valueForPlaceholder);
+    resolved = removeUnknownPlaceholders(resolved);
 
-    String problemType = isTypeUnset(problem) ? stringOrEmpty(problem.getType()) : "";
-    override = override.replace("{problem.type}", problemType != null ? problemType : "");
-    return override;
+    if (!isTypeSet(problem)
+        && !original.isEmpty()
+        && resolved.isEmpty()
+        && template.trim().equals("{problem.type}")) {
+      return original;
+    }
+
+    return resolved;
   }
 
-  private boolean isTypeUnset(Problem problem) {
-    return !Problem.BLANK_TYPE.equals(problem.getType());
+  private boolean isTypeSet(Problem problem) {
+    return problem.getType() != null && !Problem.BLANK_TYPE.equals(problem.getType());
   }
 
+  /**
+   * Because this implementation does not try to resolve dynamic fields, it does not reuse the code
+   * from {@code DefaultProblemMappingProcessor}. Instead, we rely on simple substring replacement
+   * in form of {@link String#replace(CharSequence, CharSequence)}, and then removing all remaining
+   * unknown variables.
+   *
+   * @see io.github.malczuuu.problem4j.spring.web.annotation.DefaultProblemMappingProcessor
+   */
   private String overrideInstance(Problem problem, ProblemContext context) {
-    String override = settings.getInstanceOverride();
-    if (!StringUtils.hasLength(override)) {
+    String template = settings.getInstanceOverride();
+    if (!StringUtils.hasLength(template)) {
       return stringOrEmpty(problem.getInstance());
     }
-
-    if (StringUtils.hasLength(context.getTraceId())) {
-      override = override.replace("{context.traceId}", context.getTraceId());
-    } else {
-      override = override.replace("{context.traceId}", "");
-    }
-
-    String problemInstance = stringOrEmpty(problem.getInstance());
-    if (StringUtils.hasLength(problemInstance)) {
-      override = override.replace("{problem.instance}", problemInstance);
-    } else {
-      override = override.replace("{problem.instance}", "");
-    }
-
-    return override;
+    template = template.replace("{context.traceId}", stringOrEmpty(context.getTraceId()));
+    template = template.replace("{problem.instance}", stringOrEmpty(problem.getInstance()));
+    template = removeUnknownPlaceholders(template);
+    return template;
   }
 
   private String stringOrEmpty(Object value) {
     return value != null ? value.toString() : "";
+  }
+
+  /**
+   * Because this implementation does not try to resolve dynamic fields, it does not reuse the code
+   * from {@code DefaultProblemMappingProcessor}. Instead, we rely on simple substring replacement
+   * in form of {@link String#replace(CharSequence, CharSequence)}, and then removing all remaining
+   * unknown variables.
+   *
+   * @see io.github.malczuuu.problem4j.spring.web.annotation.DefaultProblemMappingProcessor
+   */
+  private String removeUnknownPlaceholders(String value) {
+    return ProblemMappingProcessor.PLACEHOLDER.matcher(value).replaceAll("");
   }
 }

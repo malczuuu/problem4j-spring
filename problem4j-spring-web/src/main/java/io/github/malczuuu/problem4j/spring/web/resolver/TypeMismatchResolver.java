@@ -31,6 +31,29 @@ public class TypeMismatchResolver extends AbstractProblemResolver {
     super(TypeMismatchException.class, problemFormat);
   }
 
+  /**
+   * Resolves a {@link TypeMismatchException} (also {@link MethodArgumentTypeMismatchException})
+   * into a {@link ProblemBuilder} with status {@link ProblemStatus#BAD_REQUEST}, a standardized
+   * detail ({@code ProblemSupport#TYPE_MISMATCH_DETAIL}), and optional extensions:
+   *
+   * <ul>
+   *   <li>{@code property} ({@code ProblemSupport#PROPERTY_EXTENSION}) - name of the parameter /
+   *       property that failed conversion
+   *   <li>{@code kind} ({@code ProblemSupport#KIND_EXTENSION}) - required target type in lowercase
+   *       simple form
+   * </ul>
+   *
+   * <p>Older Spring versions may not populate {@code propertyName} for {@code
+   * MethodArgumentTypeMismatchException}; in that case this resolver falls back to {@code
+   * MethodArgumentTypeMismatchException#getName()}.
+   *
+   * @param context problem context (unused)
+   * @param ex the triggering type mismatch exception
+   * @param headers HTTP headers (unused)
+   * @param status suggested status (ignored; BAD_REQUEST enforced)
+   * @return builder populated with status, detail and relevant extensions
+   * @see io.github.malczuuu.problem4j.spring.web.util.ProblemSupport
+   */
   @Override
   public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {

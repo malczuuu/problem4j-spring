@@ -39,8 +39,8 @@ import org.springframework.web.context.request.WebRequest;
  * </ul>
  *
  * <p>Intended as a **generic fallback**, it ensures that unexpected exceptions still produce a
- * consistent Problem+JSON response. For more specific exception handling, use {@link
- * ProblemEnhancedMvcHandler}, {@link ProblemExceptionMvcAdvice}.
+ * consistent {@code Problem} response. For more specific exception handling, use {@code
+ * ProblemEnhancedMvcHandler}, {@code ProblemExceptionMvcAdvice}.
  */
 @RestControllerAdvice
 public class ExceptionMvcAdvice {
@@ -62,6 +62,10 @@ public class ExceptionMvcAdvice {
     this.adviceMvcInspectors = adviceMvcInspectors;
   }
 
+  /**
+   * Generic fallback handler that converts any uncaught exception into a {@code Problem} response.
+   * Chooses a resolver, @ProblemMapping, @ResponseStatus, or defaults to INTERNAL_SERVER_ERROR.
+   */
   @ExceptionHandler(Exception.class)
   public ResponseEntity<Object> handleException(Exception ex, WebRequest request) {
     ProblemContext context = (ProblemContext) request.getAttribute(PROBLEM_CONTEXT, SCOPE_REQUEST);

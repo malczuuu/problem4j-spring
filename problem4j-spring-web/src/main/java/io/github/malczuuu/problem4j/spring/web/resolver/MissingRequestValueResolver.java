@@ -47,6 +47,19 @@ public class MissingRequestValueResolver extends AbstractProblemResolver {
     super(MissingRequestValueException.class, problemFormat);
   }
 
+  /**
+   * Builds a {@link ProblemBuilder} for a {@link MissingRequestValueException}. Chooses a specific
+   * detail message and sets identifying extensions based on {@code
+   * MissingRequestValueException#getLabel()}. Falls back to a bare BAD_REQUEST if the label is
+   * {@code null}.
+   *
+   * @param context problem context (unused)
+   * @param ex the thrown {@link MissingRequestValueException}
+   * @param headers HTTP headers (unused)
+   * @param status suggested status (ignored; BAD_REQUEST enforced)
+   * @return builder populated with status, detail, and relevant extensions
+   * @see MissingRequestValueException#getLabel()
+   */
   @Override
   public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {

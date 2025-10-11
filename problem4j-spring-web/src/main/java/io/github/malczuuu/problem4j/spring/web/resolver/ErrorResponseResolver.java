@@ -26,6 +26,20 @@ public class ErrorResponseResolver extends AbstractProblemResolver {
     super(ErrorResponseException.class, problemFormat);
   }
 
+  /**
+   * Converts the given {@link ErrorResponseException} into a {@link ProblemBuilder} by copying its
+   * body fields (type, title, detail, instance) and status code. Any additional properties present
+   * in the underlying {@code ErrorResponse} are added as extensions.
+   *
+   * <p>The provided {@code status} parameter is ignored in favor of the status contained in the
+   * exception. {@code headers} and {@code context} are currently not used but are part of the SPI.
+   *
+   * @param context problem context (unused)
+   * @param ex the {@link ErrorResponseException} to convert
+   * @param headers HTTP response headers (unused)
+   * @param status suggested status from caller (ignored)
+   * @return a builder representing the problem described by the exception
+   */
   @Override
   public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {

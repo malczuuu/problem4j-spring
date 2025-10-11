@@ -18,6 +18,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+/**
+ * Handles {@link ConstraintViolationException} from Bean Validation in WebFlux, returning a
+ * BAD_REQUEST {@code Problem} with validation errors.
+ */
 @RestControllerAdvice
 public class ConstraintViolationExceptionWebFluxAdvice {
 
@@ -35,6 +39,10 @@ public class ConstraintViolationExceptionWebFluxAdvice {
     this.adviceWebFluxInspectors = adviceWebFluxInspectors;
   }
 
+  /**
+   * Converts a {@link ConstraintViolationException} into a BAD_REQUEST Problem with an errors
+   * extension; then post-processes and inspects it.
+   */
   @ExceptionHandler(ConstraintViolationException.class)
   public Mono<ResponseEntity<Problem>> handleConstraintViolationException(
       ConstraintViolationException ex, ServerWebExchange exchange) {

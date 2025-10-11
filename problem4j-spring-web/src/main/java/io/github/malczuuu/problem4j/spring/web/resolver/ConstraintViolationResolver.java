@@ -31,6 +31,17 @@ public class ConstraintViolationResolver extends AbstractProblemResolver {
     super(ConstraintViolationException.class, problemFormat);
   }
 
+  /**
+   * Builds a {@link ProblemBuilder} with {@link ProblemStatus#BAD_REQUEST}, a formatted {@code
+   * detail}, and an {@code errors} extension listing each constraint violation (property and
+   * message) extracted from the exception.
+   *
+   * @param context problem context (ignored)
+   * @param ex the thrown {@link ConstraintViolationException}
+   * @param headers HTTP headers (unused here)
+   * @param status suggested status (ignored; BAD_REQUEST enforced)
+   * @return populated problem builder
+   */
   @Override
   public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
@@ -43,12 +54,20 @@ public class ConstraintViolationResolver extends AbstractProblemResolver {
         .extension(ERRORS_EXTENSION, errors);
   }
 
+  /**
+   * Converts each {@link ConstraintViolation} into a {@link Violation} capturing the leaf property
+   * name and its validation message.
+   */
   private List<Violation> extractViolations(ConstraintViolationException e) {
     return e.getConstraintViolations().stream()
         .map(violation -> new Violation(fetchViolationProperty(violation), violation.getMessage()))
         .toList();
   }
 
+  /**
+   * Returns the simple (leaf) property name from a violation's {@link Path}. If the path or its
+   * terminal node name is absent, returns an empty string.
+   */
   private String fetchViolationProperty(ConstraintViolation<?> violation) {
     if (violation.getPropertyPath() == null) {
       return "";

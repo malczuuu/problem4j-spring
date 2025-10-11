@@ -20,8 +20,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 /**
- * Handles Spring framework exceptions using registered {@link
- * io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver}s.
+ * Handles Spring framework exceptions using registered {@code ProblemResolver}s.
  *
  * <p>This class extends {@link ResponseEntityExceptionHandler} and overrides {@link
  * #handleExceptionInternal} to replace the response body with a {@link Problem} object.
@@ -29,11 +28,12 @@ import reactor.core.publisher.Mono;
  * <p>Behavior:
  *
  * <ul>
- *   <li>Delegates exception-to-problem mapping to {@link
- *       io.github.malczuuu.problem4j.spring.web.ProblemResolverStore}.
+ *   <li>Delegates exception-to-problem mapping to {@link ProblemResolverStore}.
  *   <li>Sets content type to {@code application/problem+json}.
  *   <li>Falls back to {@link ProblemStatus#INTERNAL_SERVER_ERROR} if mapping fails.
  * </ul>
+ *
+ * @see io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver
  */
 @RestControllerAdvice
 public class ProblemEnhancedWebFluxHandler extends ResponseEntityExceptionHandler {

@@ -30,6 +30,15 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 @ApiStatus.Internal
 public final class MethodParameterSupport {
 
+  /**
+   * Resolve a stable logical name for a method parameter, honoring supported Spring binding
+   * annotations. If an annotation supplies an explicit {@code name} or {@code value}, that wins;
+   * otherwise falls back to the parameter's discovered name. Unknown or unsupported annotations are
+   * ignored.
+   *
+   * @param parameter Spring {@link MethodParameter} (may be {@code null})
+   * @return optional parameter name; empty if the input is {@code null}
+   */
   public static Optional<String> findParameterName(MethodParameter parameter) {
     if (parameter == null) {
       return Optional.empty();
@@ -68,6 +77,14 @@ public final class MethodParameterSupport {
     return Optional.ofNullable(fieldName);
   }
 
+  /**
+   * Derive the effective name for a {@link PathVariable}, preferring {@code name} then {@code
+   * value}.
+   *
+   * @param annotation path variable annotation
+   * @param defaultName fallback (parameter name)
+   * @return resolved name or fallback
+   */
   private static String findPathVariableName(PathVariable annotation, String defaultName) {
     String name = annotation.name();
     if (!StringUtils.hasLength(name)) {
@@ -76,6 +93,14 @@ public final class MethodParameterSupport {
     return StringUtils.hasLength(name) ? name : defaultName;
   }
 
+  /**
+   * Derive the effective name for a {@link RequestParam}, preferring {@code name} then {@code
+   * value}.
+   *
+   * @param annotation request param annotation
+   * @param defaultName fallback (parameter name)
+   * @return resolved name or fallback
+   */
   private static String findRequestParamName(RequestParam annotation, String defaultName) {
     String name = annotation.name();
     if (!StringUtils.hasLength(name)) {
@@ -84,6 +109,14 @@ public final class MethodParameterSupport {
     return StringUtils.hasLength(name) ? name : defaultName;
   }
 
+  /**
+   * Derive the effective name for a {@link RequestPart}, preferring {@code name} then {@code
+   * value}.
+   *
+   * @param annotation request part annotation
+   * @param defaultName fallback (parameter name)
+   * @return resolved name or fallback
+   */
   private static String findRequestPartName(RequestPart annotation, String defaultName) {
     String name = annotation.name();
     if (!StringUtils.hasLength(name)) {
@@ -92,6 +125,14 @@ public final class MethodParameterSupport {
     return StringUtils.hasLength(name) ? name : defaultName;
   }
 
+  /**
+   * Derive the effective name for a {@link RequestHeader}, preferring {@code name} then {@code
+   * value}.
+   *
+   * @param annotation request header annotation
+   * @param defaultName fallback (parameter name)
+   * @return resolved name or fallback
+   */
   private static String findRequestHeaderName(RequestHeader annotation, String defaultName) {
     String name = annotation.name();
     if (!StringUtils.hasLength(name)) {
@@ -100,6 +141,14 @@ public final class MethodParameterSupport {
     return StringUtils.hasLength(name) ? name : defaultName;
   }
 
+  /**
+   * Derive the effective name for a {@link CookieValue}, preferring {@code name} then {@code
+   * value}.
+   *
+   * @param annotation cookie value annotation
+   * @param defaultName fallback (parameter name)
+   * @return resolved name or fallback
+   */
   private static String findCookieValueName(CookieValue annotation, String defaultName) {
     String name = annotation.name();
     if (!StringUtils.hasLength(name)) {
@@ -108,6 +157,14 @@ public final class MethodParameterSupport {
     return StringUtils.hasLength(name) ? name : defaultName;
   }
 
+  /**
+   * Derive the effective name for a {@link SessionAttribute}, preferring {@code name} then {@code
+   * value}.
+   *
+   * @param annotation session attribute annotation
+   * @param defaultName fallback (parameter name)
+   * @return resolved name or fallback
+   */
   private static String findSessionAttributeName(SessionAttribute annotation, String defaultName) {
     String name = annotation.name();
     if (!StringUtils.hasLength(name)) {
@@ -116,6 +173,14 @@ public final class MethodParameterSupport {
     return StringUtils.hasLength(name) ? name : defaultName;
   }
 
+  /**
+   * Derive the effective name for a {@link RequestAttribute}, preferring {@code name} then {@code
+   * value}.
+   *
+   * @param annotation request attribute annotation
+   * @param defaultName fallback (parameter name)
+   * @return resolved name or fallback
+   */
   private static String findRequestAttributeName(RequestAttribute annotation, String defaultName) {
     String name = annotation.name();
     if (!StringUtils.hasLength(name)) {
@@ -124,6 +189,14 @@ public final class MethodParameterSupport {
     return StringUtils.hasLength(name) ? name : defaultName;
   }
 
+  /**
+   * Derive the effective name for a {@link MatrixVariable}, preferring {@code name} then {@code
+   * value}.
+   *
+   * @param annotation matrix variable annotation
+   * @param defaultName fallback (parameter name)
+   * @return resolved name or fallback
+   */
   private static String findMatrixVariableName(MatrixVariable annotation, String defaultName) {
     String name = annotation.name();
     if (!StringUtils.hasLength(name)) {
@@ -132,5 +205,6 @@ public final class MethodParameterSupport {
     return StringUtils.hasLength(name) ? name : defaultName;
   }
 
+  /** Utility class; no instances. */
   private MethodParameterSupport() {}
 }

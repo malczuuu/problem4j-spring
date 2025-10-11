@@ -22,8 +22,7 @@ import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
 public interface ProblemPostProcessor {
 
   /**
-   * Processes the given {@link io.github.malczuuu.problem4j.core.Problem} before it is returned to
-   * the client.
+   * Processes the given {@link Problem} before it is returned to the client.
    *
    * @param context the {@link ProblemContext} providing request-scoped data, such as tracing
    *     information

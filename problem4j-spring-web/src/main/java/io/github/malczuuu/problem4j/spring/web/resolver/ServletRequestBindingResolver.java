@@ -54,6 +54,33 @@ public class ServletRequestBindingResolver extends AbstractProblemResolver {
     super(ServletRequestBindingException.class, problemFormat);
   }
 
+  /**
+   * Resolves a {@link ServletRequestBindingException} (or one of its common subclasses) into a
+   * {@link ProblemBuilder} with {@link ProblemStatus#BAD_REQUEST} status and appropriate detail
+   * plus metadata extensions.
+   *
+   * <p>Subtype handling:
+   *
+   * <ul>
+   *   <li>{@link MissingPathVariableException}: detail {@code MISSING_PATH_VARIABLE_DETAIL},
+   *       extension {@code name}
+   *   <li>{@link MissingServletRequestParameterException}: detail {@code
+   *       MISSING_REQUEST_PARAM_DETAIL}, extensions {@code param}, {@code kind}
+   *   <li>{@link MissingRequestHeaderException}: detail {@code MISSING_HEADER_DETAIL}, extension
+   *       {@code header}
+   *   <li>{@link MissingRequestCookieException}: detail {@code MISSING_COOKIE_DETAIL}, extension
+   *       {@code cookie}
+   *   <li>Generic {@link ServletRequestBindingException} whose message matches {@code ^Missing
+   *       (session|request) attribute '...'}: detail set to corresponding missing attribute message
+   *       and extension {@code attribute}
+   * </ul>
+   *
+   * @param context problem context (unused)
+   * @param ex binding-related exception to map
+   * @param headers HTTP headers (unused)
+   * @param status suggested status (ignored; always BAD_REQUEST)
+   * @return builder populated with status, detail, and extensions
+   */
   @Override
   public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
@@ -92,6 +119,15 @@ public class ServletRequestBindingResolver extends AbstractProblemResolver {
     return builder;
   }
 
+  /**
+   * Applies the appropriate missing attribute detail (session vs request) and adds the attribute
+   * name extension.
+   *
+   * @param scope either "session" or "request" (already validated by regex match)
+   * @param builder current problem builder
+   * @param attribute missing attribute name extracted from exception message
+   * @return updated builder with detail and attribute extension
+   */
   private ProblemBuilder extentAttributeDetail(
       String scope, ProblemBuilder builder, String attribute) {
     if (scope.equals("session")) {

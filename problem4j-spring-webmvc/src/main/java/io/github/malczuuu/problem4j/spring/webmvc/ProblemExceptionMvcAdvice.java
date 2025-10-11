@@ -38,6 +38,11 @@ public class ProblemExceptionMvcAdvice {
     this.adviceMvcInspectors = adviceMvcInspectors;
   }
 
+  /**
+   * Converts a {@link ProblemException} into a {@code Problem} response. The contained {@code
+   * Problem} is post-processed, headers set to application/problem+json, and status resolved from
+   * the problem's status code.
+   */
   @ExceptionHandler(ProblemException.class)
   public ResponseEntity<Problem> handleProblemException(ProblemException ex, WebRequest request) {
     ProblemContext context = (ProblemContext) request.getAttribute(PROBLEM_CONTEXT, SCOPE_REQUEST);

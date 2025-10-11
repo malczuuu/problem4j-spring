@@ -8,6 +8,13 @@ import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
  */
 public class IdentityProblemPostProcessor implements ProblemPostProcessor {
 
+  /**
+   * Returns the given {@link Problem} unchanged.
+   *
+   * @param context optional problem context (ignored)
+   * @param problem the problem instance to pass through (may be {@code null})
+   * @return the same instance provided in {@code problem}
+   */
   @Override
   public Problem process(ProblemContext context, Problem problem) {
     return problem;

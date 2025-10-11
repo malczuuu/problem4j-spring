@@ -38,8 +38,8 @@ import reactor.core.publisher.Mono;
  * </ul>
  *
  * <p>Intended as a **generic fallback**, it ensures that unexpected exceptions still produce a
- * consistent Problem+JSON response. For more specific exception handling, use {@link
- * ProblemEnhancedWebFluxHandler}, {@link ProblemExceptionWebFluxAdvice}.
+ * consistent {@code Problem} response. For more specific exception handling, use {@code
+ * ProblemEnhancedWebFluxHandler}, {@code ProblemExceptionWebFluxAdvice}.
  */
 @RestControllerAdvice
 public class ExceptionWebFluxAdvice {
@@ -61,6 +61,10 @@ public class ExceptionWebFluxAdvice {
     this.adviceWebFluxInspectors = adviceWebFluxInspectors;
   }
 
+  /**
+   * Generic fallback handler converting any uncaught exception into a {@code Problem} response.
+   * Chooses a resolver, @ProblemMapping, @ResponseStatus, or defaults to INTERNAL_SERVER_ERROR.
+   */
   @ExceptionHandler(Exception.class)
   public Mono<ResponseEntity<Problem>> handleException(Exception ex, ServerWebExchange exchange) {
     ProblemContext context =

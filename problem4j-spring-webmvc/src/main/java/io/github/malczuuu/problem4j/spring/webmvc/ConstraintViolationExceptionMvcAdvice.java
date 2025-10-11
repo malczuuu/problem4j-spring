@@ -18,6 +18,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
+/**
+ * Handles {@link ConstraintViolationException} produced by method / parameter validation (e.g. Bean
+ * Validation annotations) and returns a {@code Problem} response.
+ */
 @RestControllerAdvice
 public class ConstraintViolationExceptionMvcAdvice {
 
@@ -35,6 +39,10 @@ public class ConstraintViolationExceptionMvcAdvice {
     this.adviceMvcInspectors = adviceMvcInspectors;
   }
 
+  /**
+   * Converts a {@link ConstraintViolationException} into a BAD_REQUEST Problem enriched with
+   * validation errors and processed by the configured {@link ProblemPostProcessor}.
+   */
   @ExceptionHandler(ConstraintViolationException.class)
   public ResponseEntity<Problem> handleConstraintViolationException(
       ConstraintViolationException ex, WebRequest request) {

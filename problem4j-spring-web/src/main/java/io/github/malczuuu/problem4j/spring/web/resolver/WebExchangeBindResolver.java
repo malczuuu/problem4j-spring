@@ -28,6 +28,17 @@ public class WebExchangeBindResolver extends AbstractProblemResolver {
     violationResolver = new ViolationResolver(problemFormat);
   }
 
+  /**
+   * Converts the {@link WebExchangeBindException} into a {@link ProblemBuilder} with status {@code
+   * ProblemStatus#BAD_REQUEST} and an {@code errors} extension listing field/global validation
+   * violations extracted from its {@code BindingResult}.
+   *
+   * @param context problem context (unused)
+   * @param ex the triggering {@link WebExchangeBindException}
+   * @param headers HTTP headers (unused)
+   * @param status suggested status (ignored; BAD_REQUEST enforced)
+   * @return builder populated with validation detail and violations
+   */
   @Override
   public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {

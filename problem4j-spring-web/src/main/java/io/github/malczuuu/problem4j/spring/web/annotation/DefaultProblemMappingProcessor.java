@@ -96,6 +96,7 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
     return t != null && t.getClass().isAnnotationPresent(ProblemMapping.class);
   }
 
+  /** Returns the {@link ProblemMapping} annotation from the class if present, otherwise null. */
   private ProblemMapping findAnnotation(Class<?> clazz) {
     if (clazz == null) {
       return null;
@@ -103,6 +104,10 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
     return clazz.getAnnotation(ProblemMapping.class);
   }
 
+  /**
+   * Applies the "type" value from {@link ProblemMapping#type()} after placeholder interpolation;
+   * ignores invalid URIs.
+   */
   private void applyTypeOnBuilder(
       ProblemBuilder builder, ProblemMapping mapping, Throwable t, ProblemContext context) {
     String rawType = mapping.type() == null ? "" : mapping.type().trim();
@@ -118,6 +123,7 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
     }
   }
 
+  /** Applies the interpolated title if present and non-empty. */
   private void applyTitleOnBuilder(
       ProblemBuilder builder, ProblemMapping mapping, Throwable t, ProblemContext context) {
     String titleRaw = mapping.title() == null ? "" : mapping.title();
@@ -129,12 +135,14 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
     }
   }
 
+  /** Sets the HTTP status when greater than zero. */
   private void applyStatusOnBuilder(ProblemMapping mapping, ProblemBuilder builder) {
     if (mapping.status() > 0) {
       builder.status(mapping.status());
     }
   }
 
+  /** Applies the interpolated detail text if non-empty. */
   private void applyDetailOnBuilder(
       ProblemBuilder builder, ProblemMapping mapping, Throwable t, ProblemContext context) {
     String detailRaw = mapping.detail() == null ? "" : mapping.detail();
@@ -146,6 +154,7 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
     }
   }
 
+  /** Applies the interpolated instance value; ignores invalid URIs. */
   private void applyInstanceOnBuilder(
       ProblemBuilder builder, ProblemMapping mapping, Throwable t, ProblemContext context) {
     String rawInstance = mapping.instance() == null ? "" : mapping.instance().trim();
@@ -161,6 +170,7 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
     }
   }
 
+  /** Adds extension fields resolved from {@link ProblemMapping#extensions()}. */
   private void applyExtensionsOnBuilder(
       ProblemBuilder builder, ProblemMapping mapping, Throwable t) {
     String[] extensions = mapping.extensions();
@@ -179,10 +189,15 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
   }
 
   /**
-   * Interpolate placeholders of form {name}. Special forms: - {message} - {context.key} -
-   * {context.traceId} (shorthand for {context.traceId}) - other names: looks for instance field.
+   * Interpolates placeholders of the form {@code {name}}. Supported keys:
    *
-   * <p>If a placeholder resolves to null - it's replaced by empty string.
+   * <ul>
+   *   <li>{@code message} - throwable message
+   *   <li>{@code context.traceId} - trace ID from context
+   *   <li>Any other token - value of a matching field in the throwable class hierarchy
+   * </ul>
+   *
+   * Missing values resolve to an empty string.
    */
   private String interpolate(String template, Throwable t, ProblemContext context) {
     if (template == null) {
@@ -210,10 +225,7 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
     return sb.toString();
   }
 
-  /**
-   * Resolve a value for a placeholder name from the throwable or context. Checks only instance
-   * field (including private) and searches up class hierarchy.
-   */
+  /** Resolves a placeholder by reflective field lookup up the throwable class hierarchy. */
   private Object resolvePlaceholderSource(Throwable t, String name) {
     if (t == null || !StringUtils.hasLength(name)) {
       return null;

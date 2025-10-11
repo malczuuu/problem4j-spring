@@ -19,11 +19,12 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
- * Handles Spring framework exceptions using registered {@link
- * io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver}s.
+ * Handles Spring framework exceptions using registered {@code ProblemResolver}s.
  *
- * <p>This class extends {@link ResponseEntityExceptionHandler} and overrides {@link
- * #handleExceptionInternal} to replace the response body with a {@link Problem} object.
+ * <p>This class extends {@link ResponseEntityExceptionHandler} and overrides {@code
+ * handleExceptionInternal} to replace the response body with a {@link Problem} object.
+ *
+ * @see io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver
  */
 @RestControllerAdvice
 public class ProblemEnhancedMvcHandler extends ResponseEntityExceptionHandler {

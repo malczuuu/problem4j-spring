@@ -39,6 +39,10 @@ public class ProblemExceptionWebFluxAdvice {
     this.adviceWebFluxInspectors = adviceWebFluxInspectors;
   }
 
+  /**
+   * Converts a {@link ProblemException} into a {@code Problem} response: processes the embedded
+   * {@link Problem}, sets content type, resolves status, and applies inspectors.
+   */
   @ExceptionHandler(ProblemException.class)
   public Mono<ResponseEntity<Problem>> handleProblemException(
       ProblemException ex, ServerWebExchange exchange) {

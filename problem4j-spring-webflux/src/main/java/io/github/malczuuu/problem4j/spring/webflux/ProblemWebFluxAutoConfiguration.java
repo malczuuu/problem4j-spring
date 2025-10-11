@@ -29,9 +29,8 @@ import org.springframework.web.reactive.result.method.annotation.ResponseEntityE
  * Spring Boot autoconfiguration for problem-based exception handling in {@code spring-webflux}
  * applications.
  *
- * <p>This class wires all necessary beans for producing standardized {@link
- * io.github.malczuuu.problem4j.core.Problem} responses from Spring WebFlux controllers. It
- * includes:
+ * <p>This class wires all necessary beans for producing standardized {@code Problem} responses from
+ * Spring WebFlux controllers. It includes:
  *
  * <p>Beans are conditional:
  *

@@ -34,6 +34,20 @@ public class ServerWebInputResolver extends AbstractProblemResolver {
     typeMismatchResolver = new TypeMismatchResolver(problemFormat);
   }
 
+  /**
+   * Resolves a {@link ServerWebInputException} into a {@link ProblemBuilder}. If the root cause is
+   * a {@link TypeMismatchException}, delegates to {@code TypeMismatchResolver} and, when missing,
+   * attempts to append the offending property/parameter name as the {@code
+   * ProblemSupport#PROPERTY_EXTENSION}. Otherwise, returns a builder whose status reflects the
+   * exception's embedded HTTP status code.
+   *
+   * @param context problem context (unused for this resolver)
+   * @param ex the triggering {@link ServerWebInputException}
+   * @param headers HTTP headers (unused)
+   * @param status suggested status from caller (ignored; status derived from exception)
+   * @return builder representing the invalid input condition
+   * @see io.github.malczuuu.problem4j.spring.web.util.ProblemSupport#PROPERTY_EXTENSION
+   */
   @Override
   public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
