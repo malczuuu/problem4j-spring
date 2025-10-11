@@ -2,6 +2,7 @@ package io.github.malczuuu.problem4j.spring.webflux;
 
 import static io.github.malczuuu.problem4j.spring.web.context.ContextSupport.PROBLEM_CONTEXT;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.resolveStatus;
+import static io.github.malczuuu.problem4j.spring.webflux.WebFluxAdviceSupport.logAdviceException;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemBuilder;
@@ -13,6 +14,8 @@ import io.github.malczuuu.problem4j.spring.web.processor.ProblemPostProcessor;
 import io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver;
 import java.util.List;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -44,6 +47,8 @@ import reactor.core.publisher.Mono;
 @RestControllerAdvice
 public class ExceptionWebFluxAdvice {
 
+  private static final Logger log = LoggerFactory.getLogger(ExceptionWebFluxAdvice.class);
+
   private final ProblemMappingProcessor problemMappingProcessor;
   private final ProblemResolverStore problemResolverStore;
   private final ProblemPostProcessor problemPostProcessor;
@@ -73,8 +78,14 @@ public class ExceptionWebFluxAdvice {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
-    Problem problem = getProblemBuilder(ex, context, headers).build();
-    problem = problemPostProcessor.process(context, problem);
+    Problem problem;
+    try {
+      problem = getProblemBuilder(ex, context, headers).build();
+      problem = problemPostProcessor.process(context, problem);
+    } catch (Exception e) {
+      logAdviceException(log, ex, exchange, e);
+      problem = Problem.builder().status(ProblemStatus.INTERNAL_SERVER_ERROR).build();
+    }
 
     HttpStatus status = resolveStatus(problem);
 

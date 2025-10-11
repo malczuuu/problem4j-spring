@@ -1,14 +1,18 @@
 package io.github.malczuuu.problem4j.spring.webmvc;
 
 import static io.github.malczuuu.problem4j.spring.web.context.ContextSupport.PROBLEM_CONTEXT;
+import static io.github.malczuuu.problem4j.spring.webmvc.MvcAdviceSupport.logAdviceException;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemException;
+import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
 import io.github.malczuuu.problem4j.spring.web.processor.ProblemPostProcessor;
 import io.github.malczuuu.problem4j.spring.web.util.ProblemSupport;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,6 +31,8 @@ import org.springframework.web.context.request.WebRequest;
  */
 @RestControllerAdvice
 public class ProblemExceptionMvcAdvice {
+
+  private static final Logger log = LoggerFactory.getLogger(ProblemExceptionMvcAdvice.class);
 
   private final ProblemPostProcessor problemPostProcessor;
 
@@ -53,8 +59,14 @@ public class ProblemExceptionMvcAdvice {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
-    Problem problem = ex.getProblem();
-    problem = problemPostProcessor.process(context, problem);
+    Problem problem;
+    try {
+      problem = ex.getProblem();
+      problem = problemPostProcessor.process(context, problem);
+    } catch (Exception e) {
+      logAdviceException(log, ex, request, e);
+      problem = Problem.builder().status(ProblemStatus.INTERNAL_SERVER_ERROR).build();
+    }
 
     HttpStatus status = ProblemSupport.resolveStatus(problem);
 

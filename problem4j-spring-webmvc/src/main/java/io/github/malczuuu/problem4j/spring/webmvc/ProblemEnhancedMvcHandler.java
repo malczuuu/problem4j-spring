@@ -2,14 +2,18 @@ package io.github.malczuuu.problem4j.spring.webmvc;
 
 import static io.github.malczuuu.problem4j.spring.web.context.ContextSupport.PROBLEM_CONTEXT;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.resolveStatus;
+import static io.github.malczuuu.problem4j.spring.webmvc.MvcAdviceSupport.logAdviceException;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemBuilder;
+import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.web.ProblemResolverStore;
 import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
 import io.github.malczuuu.problem4j.spring.web.processor.ProblemPostProcessor;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -28,6 +32,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  */
 @RestControllerAdvice
 public class ProblemEnhancedMvcHandler extends ResponseEntityExceptionHandler {
+
+  private static final Logger log = LoggerFactory.getLogger(ProblemEnhancedMvcHandler.class);
 
   private final ProblemResolverStore problemResolverStore;
   private final ProblemPostProcessor problemPostProcessor;
@@ -62,8 +68,14 @@ public class ProblemEnhancedMvcHandler extends ResponseEntityExceptionHandler {
     headers = headers != null ? HttpHeaders.writableHttpHeaders(headers) : new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
-    Problem problem = getBuilderForOverridingBody(context, ex, headers, status).build();
-    problem = problemPostProcessor.process(context, problem);
+    Problem problem;
+    try {
+      problem = getBuilderForOverridingBody(context, ex, headers, status).build();
+      problem = problemPostProcessor.process(context, problem);
+    } catch (Exception e) {
+      logAdviceException(log, ex, request, e);
+      problem = Problem.builder().status(ProblemStatus.INTERNAL_SERVER_ERROR).build();
+    }
 
     status = resolveStatus(problem);
 
