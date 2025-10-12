@@ -28,7 +28,7 @@ public class ProblemErrorMvcConfiguration {
    *
    * @return a default {@link DefaultErrorAttributes} instance
    */
-  @ConditionalOnMissingBean(value = ErrorAttributes.class)
+  @ConditionalOnMissingBean(ErrorAttributes.class)
   @Bean
   public ErrorAttributes errorAttributes() {
     return new DefaultErrorAttributes();
@@ -43,7 +43,7 @@ public class ProblemErrorMvcConfiguration {
    * @return a new {@link ProblemErrorController} instance
    * @see org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration
    */
-  @ConditionalOnMissingBean(value = ErrorController.class)
+  @ConditionalOnMissingBean(ErrorController.class)
   @Bean
   public ErrorController errorController(
       ProblemPostProcessor problemPostProcessor, ErrorAttributes errorAttributes) {

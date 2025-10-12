@@ -4,6 +4,7 @@ import io.github.malczuuu.problem4j.spring.web.format.ProblemFormat;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.codec.DecodingException;
@@ -40,6 +41,7 @@ public class ProblemResolverConfiguration {
   @ConditionalOnClass(BindException.class)
   @Configuration(proxyBeanMethods = false)
   public static class BindConfiguration {
+    @ConditionalOnMissingBean(BindResolver.class)
     @Bean
     public BindResolver bindResolver(ProblemFormat problemFormat) {
       return new BindResolver(problemFormat);
@@ -49,6 +51,7 @@ public class ProblemResolverConfiguration {
   @ConditionalOnClass(ConstraintViolationException.class)
   @Configuration(proxyBeanMethods = false)
   public static class ConstraintViolationConfiguration {
+    @ConditionalOnMissingBean(ConstraintViolationResolver.class)
     @Bean
     public ConstraintViolationResolver constraintViolationResolver(ProblemFormat problemFormat) {
       return new ConstraintViolationResolver(problemFormat);
@@ -58,6 +61,7 @@ public class ProblemResolverConfiguration {
   @ConditionalOnClass(DecodingException.class)
   @Configuration(proxyBeanMethods = false)
   public static class DecodingConfiguration {
+    @ConditionalOnMissingBean(DecodingResolver.class)
     @Bean
     public DecodingResolver decodingResolver(ProblemFormat problemFormat) {
       return new DecodingResolver(problemFormat);
@@ -67,6 +71,7 @@ public class ProblemResolverConfiguration {
   @ConditionalOnClass(ErrorResponseException.class)
   @Configuration(proxyBeanMethods = false)
   public static class ErrorResponseConfiguration {
+    @ConditionalOnMissingBean(ErrorResponseResolver.class)
     @Bean
     public ErrorResponseResolver errorResponseResolver(ProblemFormat problemFormat) {
       return new ErrorResponseResolver(problemFormat);
@@ -76,6 +81,7 @@ public class ProblemResolverConfiguration {
   @ConditionalOnClass(HandlerMethodValidationException.class)
   @Configuration(proxyBeanMethods = false)
   public static class HandlerMethodValidationConfiguration {
+    @ConditionalOnMissingBean(HandlerMethodValidationResolver.class)
     @Bean
     public HandlerMethodValidationResolver handlerMethodValidationResolver(
         ProblemFormat problemFormat) {
@@ -86,6 +92,7 @@ public class ProblemResolverConfiguration {
   @ConditionalOnClass(HttpMediaTypeNotAcceptableException.class)
   @Configuration(proxyBeanMethods = false)
   public static class HttpMediaTypeNotAcceptableConfiguration {
+    @ConditionalOnMissingBean(HttpMediaTypeNotAcceptableResolver.class)
     @Bean
     public HttpMediaTypeNotAcceptableResolver httpMediaTypeNotAcceptableResolver(
         ProblemFormat problemFormat) {
@@ -96,6 +103,7 @@ public class ProblemResolverConfiguration {
   @ConditionalOnClass(HttpMediaTypeNotSupportedException.class)
   @Configuration(proxyBeanMethods = false)
   public static class HttpMediaTypeNotSupportedConfiguration {
+    @ConditionalOnMissingBean(HttpMediaTypeNotSupportedResolver.class)
     @Bean
     public HttpMediaTypeNotSupportedResolver httpMediaTypeNotSupportedResolver(
         ProblemFormat problemFormat) {
@@ -106,6 +114,7 @@ public class ProblemResolverConfiguration {
   @ConditionalOnClass(HttpMessageNotReadableException.class)
   @Configuration(proxyBeanMethods = false)
   public static class HttpMessageNotReadableConfiguration {
+    @ConditionalOnMissingBean(HttpMessageNotReadableResolver.class)
     @Bean
     public HttpMessageNotReadableResolver httpMessageNotReadableResolver(
         ProblemFormat problemFormat) {
@@ -116,6 +125,7 @@ public class ProblemResolverConfiguration {
   @ConditionalOnClass(HttpRequestMethodNotSupportedException.class)
   @Configuration(proxyBeanMethods = false)
   public static class HttpRequestMethodNotSupportedConfiguration {
+    @ConditionalOnMissingBean(HttpRequestMethodNotSupportedResolver.class)
     @Bean
     public HttpRequestMethodNotSupportedResolver httpRequestMethodNotSupportedResolver(
         ProblemFormat problemFormat) {
@@ -126,6 +136,7 @@ public class ProblemResolverConfiguration {
   @ConditionalOnClass(MaxUploadSizeExceededException.class)
   @Configuration(proxyBeanMethods = false)
   public static class MaxUploadSizeExceededConfiguration {
+    @ConditionalOnMissingBean(MaxUploadSizeExceededResolver.class)
     @Bean
     public MaxUploadSizeExceededResolver maxUploadSizeExceededResolver(
         ProblemFormat problemFormat) {
@@ -136,6 +147,7 @@ public class ProblemResolverConfiguration {
   @ConditionalOnClass(MethodValidationException.class)
   @Configuration(proxyBeanMethods = false)
   public static class MethodValidationConfiguration {
+    @ConditionalOnMissingBean(MethodValidationResolver.class)
     @Bean
     public MethodValidationResolver methodValidationResolver(ProblemFormat problemFormat) {
       return new MethodValidationResolver(problemFormat);
@@ -145,6 +157,7 @@ public class ProblemResolverConfiguration {
   @ConditionalOnClass(MissingRequestValueException.class)
   @Configuration(proxyBeanMethods = false)
   public static class MissingRequestValueConfiguration {
+    @ConditionalOnMissingBean(MissingRequestValueResolver.class)
     @Bean
     public MissingRequestValueResolver missingRequestValueResolver(ProblemFormat problemFormat) {
       return new MissingRequestValueResolver(problemFormat);
@@ -154,6 +167,7 @@ public class ProblemResolverConfiguration {
   @ConditionalOnClass(MissingServletRequestPartException.class)
   @Configuration(proxyBeanMethods = false)
   public static class MissingServletRequestPartConfiguration {
+    @ConditionalOnMissingBean(MissingServletRequestPartResolver.class)
     @Bean
     public MissingServletRequestPartResolver missingServletRequestPartResolver(
         ProblemFormat problemFormat) {
@@ -164,6 +178,7 @@ public class ProblemResolverConfiguration {
   @ConditionalOnClass(ResponseStatusException.class)
   @Configuration(proxyBeanMethods = false)
   public static class ResponseStatusConfiguration {
+    @ConditionalOnMissingBean(ResponseStatusResolver.class)
     @Bean
     public ResponseStatusResolver responseStatusResolver(ProblemFormat problemFormat) {
       return new ResponseStatusResolver(problemFormat);
@@ -173,6 +188,7 @@ public class ProblemResolverConfiguration {
   @ConditionalOnClass(ServerErrorException.class)
   @Configuration(proxyBeanMethods = false)
   public static class ServerErrorConfiguration {
+    @ConditionalOnMissingBean(ServerErrorResolver.class)
     @Bean
     public ServerErrorResolver serverErrorResolver(ProblemFormat problemFormat) {
       return new ServerErrorResolver(problemFormat);
@@ -182,6 +198,7 @@ public class ProblemResolverConfiguration {
   @ConditionalOnClass(ServerWebInputException.class)
   @Configuration(proxyBeanMethods = false)
   public static class ServerWebInputConfiguration {
+    @ConditionalOnMissingBean(ServerWebInputResolver.class)
     @Bean
     public ServerWebInputResolver serverWebInputResolver(ProblemFormat problemFormat) {
       return new ServerWebInputResolver(problemFormat);
@@ -191,6 +208,7 @@ public class ProblemResolverConfiguration {
   @ConditionalOnClass(ServletRequestBindingException.class)
   @Configuration(proxyBeanMethods = false)
   public static class ServletRequestBindingConfiguration {
+    @ConditionalOnMissingBean(ServletRequestBindingResolver.class)
     @Bean
     public ServletRequestBindingResolver servletRequestBindingResolver(
         ProblemFormat problemFormat) {
@@ -201,6 +219,7 @@ public class ProblemResolverConfiguration {
   @ConditionalOnClass(TypeMismatchException.class)
   @Configuration(proxyBeanMethods = false)
   public static class TypeMismatchConfiguration {
+    @ConditionalOnMissingBean(TypeMismatchResolver.class)
     @Bean
     public TypeMismatchResolver typeMismatchResolver(ProblemFormat problemFormat) {
       return new TypeMismatchResolver(problemFormat);
@@ -210,6 +229,7 @@ public class ProblemResolverConfiguration {
   @ConditionalOnClass(WebExchangeBindException.class)
   @Configuration(proxyBeanMethods = false)
   public static class WebExchangeBindConfiguration {
+    @ConditionalOnMissingBean(WebExchangeBindResolver.class)
     @Bean
     public WebExchangeBindResolver webExchangeBindResolver(ProblemFormat problemFormat) {
       return new WebExchangeBindResolver(problemFormat);

@@ -2,6 +2,7 @@ package io.github.malczuuu.problem4j.spring.webmvc.resolver;
 
 import io.github.malczuuu.problem4j.spring.web.format.ProblemFormat;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -20,6 +21,7 @@ public class ProblemResolverMvcConfiguration {
   @ConditionalOnClass(NoHandlerFoundException.class)
   @Configuration(proxyBeanMethods = false)
   public static class NoHandlerFoundConfiguration {
+    @ConditionalOnMissingBean(NoHandlerFoundResolver.class)
     @Bean
     public NoHandlerFoundResolver noHandlerFoundResolver(ProblemFormat problemFormat) {
       return new NoHandlerFoundResolver(problemFormat);
@@ -29,6 +31,7 @@ public class ProblemResolverMvcConfiguration {
   @ConditionalOnClass(NoResourceFoundException.class)
   @Configuration(proxyBeanMethods = false)
   public static class NoResourceFoundConfiguration {
+    @ConditionalOnMissingBean(NoResourceFoundResolver.class)
     @Bean
     public NoResourceFoundResolver noResourceFoundResolver(ProblemFormat problemFormat) {
       return new NoResourceFoundResolver(problemFormat);

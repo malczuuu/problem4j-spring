@@ -23,7 +23,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
- * Spring Boot autoconfiguration for problem-based exception handling in {@code spring-webflux}
+ * Spring Boot autoconfiguration for problem-based exception handling in {@code spring-webmvc}
  * applications.
  *
  * <p>This class wires all necessary beans for producing standardized {@code Problem} responses from

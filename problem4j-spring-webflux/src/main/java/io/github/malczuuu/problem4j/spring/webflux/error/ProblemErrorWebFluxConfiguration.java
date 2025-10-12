@@ -52,9 +52,9 @@ public class ProblemErrorWebFluxConfiguration {
    *
    * @see org.springframework.boot.autoconfigure.web.reactive.error.ErrorWebFluxAutoConfiguration
    */
-  @Bean
-  @ConditionalOnMissingBean(ErrorWebExceptionHandler.class)
   @Order(-2)
+  @ConditionalOnMissingBean(ErrorWebExceptionHandler.class)
+  @Bean
   public ErrorWebExceptionHandler errorWebExceptionHandler(
       ProblemPostProcessor problemPostProcessor,
       ErrorAttributes errorAttributes,
