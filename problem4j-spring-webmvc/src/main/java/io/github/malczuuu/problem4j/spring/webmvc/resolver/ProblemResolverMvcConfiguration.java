@@ -20,9 +20,8 @@ public class ProblemResolverMvcConfiguration {
   @ConditionalOnClass(NoHandlerFoundException.class)
   @Configuration(proxyBeanMethods = false)
   public static class NoHandlerFoundConfiguration {
-
     @Bean
-    NoHandlerFoundResolver noHandlerFoundResolver(ProblemFormat problemFormat) {
+    public NoHandlerFoundResolver noHandlerFoundResolver(ProblemFormat problemFormat) {
       return new NoHandlerFoundResolver(problemFormat);
     }
   }
@@ -30,9 +29,8 @@ public class ProblemResolverMvcConfiguration {
   @ConditionalOnClass(NoResourceFoundException.class)
   @Configuration(proxyBeanMethods = false)
   public static class NoResourceFoundConfiguration {
-
     @Bean
-    NoResourceFoundResolver noResourceFoundResolver(ProblemFormat problemFormat) {
+    public NoResourceFoundResolver noResourceFoundResolver(ProblemFormat problemFormat) {
       return new NoResourceFoundResolver(problemFormat);
     }
   }

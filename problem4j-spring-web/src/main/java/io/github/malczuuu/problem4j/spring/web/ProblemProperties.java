@@ -78,8 +78,8 @@ public class ProblemProperties implements ProblemContextSettings, PostProcessorS
    * include special placeholders that will be dynamically replaced at runtime:
    *
    * <ul>
-   *   <li>{@code {problem.type}} — replaced with the original problem’s type URI
-   *   <li>{@code {context.traceId}} — replaced with the current trace identifier from the {@code
+   *   <li>{@code {problem.type}} - replaced with the original problem’s type URI
+   *   <li>{@code {context.traceId}} - replaced with the current trace identifier from the {@code
    *       ProblemContext}
    * </ul>
    *
@@ -102,8 +102,8 @@ public class ProblemProperties implements ProblemContextSettings, PostProcessorS
    * or problem-specific data:
    *
    * <ul>
-   *   <li>{@code {problem.instance}} — replaced with the original problem’s instance URI
-   *   <li>{@code {context.traceId}} — replaced with the current trace identifier from the {@code
+   *   <li>{@code {problem.instance}} - replaced with the original problem’s instance URI
+   *   <li>{@code {context.traceId}} - replaced with the current trace identifier from the {@code
    *       ProblemContext}
    * </ul>
    *

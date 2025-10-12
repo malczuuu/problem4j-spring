@@ -16,6 +16,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.web.reactive.WebFluxAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.reactive.error.ErrorWebFluxAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -35,7 +36,6 @@ import org.springframework.web.reactive.result.method.annotation.ResponseEntityE
  *   <li>{@link ConditionalOnClass} ensures compatibility with optional framework classes.
  * </ul>
  */
-@ConditionalOnClass(ResponseEntityExceptionHandler.class)
 @AutoConfiguration
 @AutoConfigureBefore({ErrorWebFluxAutoConfiguration.class, WebFluxAutoConfiguration.class})
 @Import({
@@ -44,17 +44,6 @@ import org.springframework.web.reactive.result.method.annotation.ResponseEntityE
   ProblemConfiguration.class
 })
 public class ProblemWebFluxAutoConfiguration {
-
-  @Order(Ordered.LOWEST_PRECEDENCE - 10)
-  @ConditionalOnMissingBean(ResponseEntityExceptionHandler.class)
-  @Bean
-  public ResponseEntityExceptionHandler responseEntityExceptionHandler(
-      ProblemResolverStore problemResolverStore,
-      ProblemPostProcessor problemPostProcessor,
-      List<AdviceWebFluxInspector> adviceWebFluxInspectors) {
-    return new ProblemEnhancedWebFluxHandler(
-        problemResolverStore, problemPostProcessor, adviceWebFluxInspectors);
-  }
 
   @Order(Ordered.LOWEST_PRECEDENCE)
   @ConditionalOnMissingBean(ExceptionWebFluxAdvice.class)
@@ -85,5 +74,21 @@ public class ProblemWebFluxAutoConfiguration {
   public ProblemContextWebFluxFilter problemContextWebFluxFilter(
       ProblemProperties problemProperties) {
     return new ProblemContextWebFluxFilter(problemProperties);
+  }
+
+  @ConditionalOnClass(ResponseEntityExceptionHandler.class)
+  @Configuration(proxyBeanMethods = false)
+  public static class ResponseEntityExceptionHandlerConfiguration {
+
+    @Order(Ordered.LOWEST_PRECEDENCE - 10)
+    @ConditionalOnMissingBean(ResponseEntityExceptionHandler.class)
+    @Bean
+    public ResponseEntityExceptionHandler responseEntityExceptionHandler(
+        ProblemResolverStore problemResolverStore,
+        ProblemPostProcessor problemPostProcessor,
+        List<AdviceWebFluxInspector> adviceWebFluxInspectors) {
+      return new ProblemEnhancedWebFluxHandler(
+          problemResolverStore, problemPostProcessor, adviceWebFluxInspectors);
+    }
   }
 }

@@ -18,9 +18,10 @@ dependencies {
     compileOnly("org.springframework.boot:spring-boot-autoconfigure:${property("spring-boot.version")}")
     compileOnly("org.springframework:spring-web:${property("spring.version")}")
     compileOnly("org.springframework:spring-webmvc:${property("spring.version")}")
+
     compileOnly("jakarta.validation:jakarta.validation-api:${property("jakarta.validation-api.version")}")
     compileOnly("jakarta.servlet:jakarta.servlet-api:${property("jakarta.servlet-api.version")}")
-    compileOnly("org.slf4j:slf4j-api:2.0.17")
+    compileOnly("org.slf4j:slf4j-api:${property("slf4j-api.version")}")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:${property("spring-boot.version")}")
 

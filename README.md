@@ -30,6 +30,8 @@ flexible enough for custom exceptions and business-specific details.
   - [Occurrences of `TypeMismatchException`](#occurrences-of-typemismatchexception)
   - [Occurrences of `ErrorResponseException`](#occurrences-of-errorresponseexception)
   - [General HTTP Stuff](#general-http-stuff)
+- [Experimental Features](#experimental-features)
+  - [Overriding Problem Fields](#overriding-problem-fields)
 - [Configuration](#configuration)
 - [FAQ](#faq)
 - [Problem4J Links](#problem4j-links)
@@ -37,8 +39,8 @@ flexible enough for custom exceptions and business-specific details.
 ## Why bother with Problem4J
 
 Even though Spring provides `ProblemDetail` and `ErrorResponseException` for [**RFC 7807**][rfc7807]-compliant error
-responses, they are quite rough, minimal, and often require manual population of fields. In contrast, **Problem4J** was
-created to:
+responses, they are quite rough, minimalistic, and often require manual population of fields. In contrast, **Problem4J**
+was created to:
 
 - Provide a **fully immutable, fluent `Problem` model** with support for extensions.
 - Support **declarative exception mapping** via `@ProblemMapping` or **programmatic one** via `ProblemException` and
@@ -327,7 +329,7 @@ public class ResourceNotFoundException extends RuntimeException {
 If you can't use `problem4j-spring` (or don't want to), but the idea of `Problem` objects is appealing to you, you may
 want to consider relying purely on [`problem4j-core`][problem4j-core] and [`problem4j-jackson`][problem4j-jackson]
 libraries. You can build any mechanism for resolving exceptions into `Problem` objects yourself, depending on your own
-frameworks, requirements or any other policies. See the `README.md` file in each module for more details — each module
+frameworks, requirements or any other policies. See the `README.md` file in each module for more details - each module
 is self-explanatory.
 
 ### Inspectors for built-in advices
@@ -534,6 +536,75 @@ Example:
    }
    ```
 
+## Experimental Features
+
+Problem4J includes a set of **experimental features** designed to explore advanced integration scenarios and enable more
+flexible error response customization. These features are stable enough for practical use but may evolve in future
+releases as their design matures and community feedback is incorporated.
+
+All experimental features are **opt-in** - they are disabled by default and must be explicitly configured. Use them when
+your deployment requires fine-grained control over how `Problem` responses are post-processed or formatted.
+
+### Overriding Problem Fields
+
+Problem4J provides an **experimental post-processing mechanism** that allows modifying certain fields of a `Problem` object
+after it has been constructed. This feature makes it possible to generate environment-dependent or runtime-resolved URIs
+for fields such as `"type"` and `"instance"`, without embedding such logic into exception classes or resolvers.
+
+Currently, the following fields can be overridden:
+
+- `type` - the logical category of the problem
+- `instance` - an identifier of a specific occurrence, often a URI or trace reference
+
+These overrides are applied by a **global post-processor** using templates defined in configuration properties.
+
+#### Placeholders
+
+Templates may include placeholders that are dynamically replaced at runtime.
+
+Available placeholders include:
+
+- for overriding `"type"` field:
+    - `{problem.type}` - the original `"type"` value of the problem
+- for overriding "instance" field:
+    - `{problem.instance}` - the original `"instance"` value of the problem
+    - `{context.traceId}` - the trace identifier from the current request (if tracing is enabled)
+
+General post-processing rules:
+
+- Overrides are applied **only if all placeholders in the template can be resolved**:
+    - `{problem.type}` - applied if the original `type` is **non-null**, **non-empty**, not `"about:blank"`.
+    - `{problem.instance}` - applied if the original `instance` is **non-null** and **non-empty**.
+    - `{context.traceId}` - applied if the context provides a **non-null**, **non-empty** trace ID.
+- If any referenced placeholder cannot be resolved, **the override is skipped** (occurrences of unknown placeholders
+  also abort the override for that field).
+- The resulting values are **non-empty strings** and treated as valid URIs.
+- If no override is set, fields remain as in the original `Problem`.
+- **Static templates** (no placeholders) are always applied, regardless of the original value.
+
+These rules ensure that field transformation is safe and predictable while allowing flexible runtime substitution.
+
+#### Example
+
+If your configuration includes:
+
+```properties
+problem4j.type-override=https://errors.example.com/{problem.type}
+problem4j.instance-override=/errors/{context.traceId}
+```
+
+and a request produces a problem with:
+
+- `type=problems/validation`
+- `traceId=WQ1tbs12rtSD`
+
+the resulting response will contain:
+
+- `"type": "https://errors.example.com/problems/validation"`
+- `"instance": "/errors/WQ1tbs12rtSD"`
+
+This allows uniform and resolvable links for problem reports across environments.
+
 ## Configuration
 
 Library can be configured with following properties.
@@ -552,55 +623,17 @@ other configuration properties using the `{context.traceId}` placeholder. Defaul
 
 ### `problem4j.type-override`
 
-This property allow overriding the `"type"` field of `Problem` responses with custom templates at the environment level.
-This is useful when the final URIs are not known at development time or may vary depending on deployment, enabling them
-to resolve to proper HTTP links dynamically.
+Defines a template for overriding the `"type"` field of `Problem` responses. Useful for mapping logical problem
+identifiers to environment-specific URIs (for example, production vs. staging). Defaults to `null` (disabled).
 
-Property that defines a template for overriding the `"type"` field in `Problem` responses. The value may contain special
-placeholders that will be replaced at runtime:
-
-- `{problem.type}` — the original problem’s `"type"` value.
-
-Defaults to `null` (no override applied). This can be used to unify or enrich problem type URIs across the application.
-
-> For example, if setting `type` in your exception to `problems/validation` and:
-> 
-> ```properties
-> problem4j.type-override=https://errors.example.com/{problem.type}
-> ```
-> 
-> the post processor will change `"type"` value to `"https://errors.example.com/problems/validation`.
-
-This feature will override original type only if resulting `type` will not be empty. Note that the resulting `type` must
-be a valid URI.
+See [Overriding Problem Fields](#overriding-problem-fields) chapter for more info.
 
 ### `problem4j.instance-override`
 
-This property allow overriding the `"instance"` field of `Problem` responses with custom templates at the environment
-level. This is useful when the final URIs are not known at development time or may vary depending on deployment,
-enabling them to resolve to proper HTTP links dynamically.
+Defines a template for overriding the `"instance"` field of `Problem` responses. Useful for appending runtime context
+such as request trace identifiers or constructing predictable instance URIs. Defaults to `null` (disabled).
 
-Property that defines a template for overriding the `"instance"` field in `Problem` responses. The value may contain
-special placeholders that will be replaced at runtime:
-
-- `{problem.instance}` — the original problem’s `"instance"` value,
-- `{context.traceId}` — the current request’s trace identifier (if available).
-
-Defaults to `null` (no override applied). This is useful for controlling how problem instances are represented in your
-API responses, even without tracing enabled.
-
-> For example if not assigning `instance` at all in your exceptions and: 
-> 
-> ```properties
-> problem4j.instance-override=/errors/{context.traceId}
-> ```
-> 
-> the post processor will change `"instance"` value to `"/errors/WQ1tbs12rtSD"`.
-> 
-> For using `{problem.instance}` placeholder, the `instance` field will behave similarly to `type-override`.
-
-This feature will override original `instance` only if resulting type will not be empty. Note that the resulting
-`instance` must be a valid URI.
+See [Overriding Problem Fields](#overriding-problem-fields) chapter for more info.
 
 ### `problem4j.resolver-caching.enabled`
 

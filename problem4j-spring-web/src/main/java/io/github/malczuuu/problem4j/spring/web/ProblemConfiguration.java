@@ -1,5 +1,6 @@
 package io.github.malczuuu.problem4j.spring.web;
 
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import io.github.malczuuu.problem4j.jackson.ProblemModule;
 import io.github.malczuuu.problem4j.spring.web.annotation.DefaultProblemMappingProcessor;
 import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
@@ -54,9 +55,9 @@ public class ProblemConfiguration {
    * defined in {@link ProblemProperties}. These overrides may include runtime placeholders such as:
    *
    * <ul>
-   *   <li>{@code {problem.type}} — replaced with the original problem’s type URI
-   *   <li>{@code {problem.instance}} — replaced with the original problem’s instance URI
-   *   <li>{@code {context.traceId}} — replaced with the current trace identifier, if available
+   *   <li>{@code {problem.type}} - replaced with the original problem’s type URI
+   *   <li>{@code {problem.instance}} - replaced with the original problem’s instance URI
+   *   <li>{@code {context.traceId}} - replaced with the current trace identifier, if available
    * </ul>
    *
    * <p>This allows enriching or normalizing problem responses without modifying the original
@@ -95,7 +96,7 @@ public class ProblemConfiguration {
     return problemResolverStore;
   }
 
-  @ConditionalOnClass(ProblemModule.class)
+  @ConditionalOnClass({ProblemModule.class, SimpleModule.class})
   @Configuration(proxyBeanMethods = false)
   public static class ProblemModuleConfiguration {
 

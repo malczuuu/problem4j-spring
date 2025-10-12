@@ -21,9 +21,9 @@ import org.springframework.validation.BindException;
  * target objects or did not pass validation constraints.
  *
  * <ul>
- *   <li>{@code BindException} — thrown for binding or validation errors on form or query
+ *   <li>{@code BindException} - thrown for binding or validation errors on form or query
  *       parameters.
- *   <li>{@code MethodArgumentNotValidException} — thrown for validation failures on
+ *   <li>{@code MethodArgumentNotValidException} - thrown for validation failures on
  *       {@code @RequestBody} or {@code @ModelAttribute} method arguments.
  * </ul>
  *

@@ -16,6 +16,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -35,7 +36,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  *   <li>{@link ConditionalOnClass} ensures compatibility with optional framework classes.
  * </ul>
  */
-@ConditionalOnClass(ResponseEntityExceptionHandler.class)
 @AutoConfiguration
 @AutoConfigureBefore({ErrorMvcAutoConfiguration.class, WebMvcAutoConfiguration.class})
 @Import({
@@ -45,21 +45,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 })
 public class ProblemMvcAutoConfiguration {
 
-  @Order(Ordered.LOWEST_PRECEDENCE - 10)
-  @ConditionalOnMissingBean(ResponseEntityExceptionHandler.class)
-  @Bean
-  public ResponseEntityExceptionHandler responseEntityExceptionHandler(
-      ProblemResolverStore problemResolverStore,
-      ProblemPostProcessor problemPostProcessor,
-      List<AdviceMvcInspector> adviceMvcInspectors) {
-    return new ProblemEnhancedMvcHandler(
-        problemResolverStore, problemPostProcessor, adviceMvcInspectors);
-  }
-
   @Order(Ordered.LOWEST_PRECEDENCE)
   @ConditionalOnMissingBean(ExceptionMvcAdvice.class)
   @Bean
-  public ExceptionMvcAdvice exceptionAdvice(
+  public ExceptionMvcAdvice exceptionMvcAdvice(
       ProblemMappingProcessor problemMappingProcessor,
       ProblemResolverStore problemResolverStore,
       ProblemPostProcessor problemPostProcessor,
@@ -71,7 +60,7 @@ public class ProblemMvcAutoConfiguration {
   @Order(Ordered.LOWEST_PRECEDENCE - 10)
   @ConditionalOnMissingBean(ProblemExceptionMvcAdvice.class)
   @Bean
-  public ProblemExceptionMvcAdvice problemExceptionAdvice(
+  public ProblemExceptionMvcAdvice problemExceptionMvcAdvice(
       ProblemPostProcessor problemPostProcessor, List<AdviceMvcInspector> adviceMvcInspectors) {
     return new ProblemExceptionMvcAdvice(problemPostProcessor, adviceMvcInspectors);
   }
@@ -80,5 +69,21 @@ public class ProblemMvcAutoConfiguration {
   @Bean
   public ProblemContextMvcFilter problemContextMvcFilter(ProblemProperties properties) {
     return new ProblemContextMvcFilter(properties);
+  }
+
+  @ConditionalOnClass(ResponseEntityExceptionHandler.class)
+  @Configuration(proxyBeanMethods = false)
+  public static class ResponseEntityExceptionHandlerConfiguration {
+
+    @Order(Ordered.LOWEST_PRECEDENCE - 10)
+    @ConditionalOnMissingBean(ResponseEntityExceptionHandler.class)
+    @Bean
+    public ResponseEntityExceptionHandler responseEntityExceptionHandler(
+        ProblemResolverStore problemResolverStore,
+        ProblemPostProcessor problemPostProcessor,
+        List<AdviceMvcInspector> adviceMvcInspectors) {
+      return new ProblemEnhancedMvcHandler(
+          problemResolverStore, problemPostProcessor, adviceMvcInspectors);
+    }
   }
 }
