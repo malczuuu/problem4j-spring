@@ -13,8 +13,8 @@ jobs:
         if: startsWith(github.ref, 'refs/heads/')
         run: |
           BRANCH="${GITHUB_REF#refs/heads/}"
-          if [[ "$BRANCH" != "main" && "$BRANCH" != release/* ]]; then
-            echo "::error title=wrong branch selected::this workflow must be run on 'main' or 'release/*' branches"
+          if [[ "$BRANCH" != "main" && "$BRANCH" != "dev" && "$BRANCH" != dev/* && "$BRANCH" != release/* ]]; then
+            echo "::error title=wrong branch selected::this workflow must be run on 'main', 'dev/*' or 'release/*' branches"
             exit 1
           fi
 
