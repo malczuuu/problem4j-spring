@@ -215,7 +215,7 @@ in response entity. After declaring it as a component for dependency injection, 
 
 ```java
 @Component
-public class MaxUploadSizeExceededResolver implements ProblemResolver {
+public class ExampleExceptionResolver implements ProblemResolver {
 
   @Override
   public Class<? extends Exception> getExceptionClass() {
@@ -237,6 +237,9 @@ public class MaxUploadSizeExceededResolver implements ProblemResolver {
   }
 }
 ```
+
+You can also override existing `ProblemResolver` implementations to extend models provided by this module. Build-in
+resolvers come with `@ConditionalOnMissingBean`, so they can be shadowed by custom ones in target applications.
 
 `ProblemResolver` implementations return a `ProblemBuilder` for flexibility in constructing the final `Problem` object.
 It's a convenience method for further extending `Problem` object by processing downstream.

@@ -92,7 +92,12 @@ Artifacts are published to Snapshot Repository, using following Gradle task.
 
 ## Releases
 
-Keep Git tags with `vX.Y.Z-suffix` format. GitHub Actions job will only trigger on such tags and will remove `v` prefix.
+1. Keep Git tags with `vX.Y.Z-suffix` format. GitHub Actions job will only trigger on such tags and will remove `v`
+   prefix.
+2. After publishing a release, update [`next_version.txt`](.github/utils/next_version.txt) for snapshot builds
+   automation.
+3. The releasing procedure only uploads the artifacts to Sonatype repository. You need to manually log in to Sonatype to
+   push the artifacts to Maven Central.
 
 See [`gradle-publish-release.yml`](.github/workflows/gradle-publish-release.yml) for publishing release versions
 instructions.
@@ -116,6 +121,3 @@ Artifacts are published to Maven Central via Sonatype, using following Gradle ta
 ```
 
 This command uses `nmcp` Gradle plugin - [link](https://github.com/GradleUp/nmcp).
-
-**Note** that this only uploads the artifacts to Sonatype repository. You need to manually log in to Sonatype to push
-the artifacts to Maven Central.
