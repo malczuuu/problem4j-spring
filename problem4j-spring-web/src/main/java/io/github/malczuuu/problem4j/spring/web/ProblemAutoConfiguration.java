@@ -11,17 +11,20 @@ import io.github.malczuuu.problem4j.spring.web.processor.ProblemPostProcessor;
 import io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver;
 import io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolverConfiguration;
 import java.util.List;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-@Configuration(proxyBeanMethods = false)
-@Import({ProblemResolverConfiguration.class})
+@AutoConfiguration
 @EnableConfigurationProperties({ProblemProperties.class})
-public class ProblemConfiguration {
+@ConditionalOnProperty(prefix = "problem4j", name = "enabled", matchIfMissing = true)
+@Import({ProblemResolverConfiguration.class})
+public class ProblemAutoConfiguration {
 
   /**
    * Provides a {@link ProblemMappingProcessor} if none is defined.

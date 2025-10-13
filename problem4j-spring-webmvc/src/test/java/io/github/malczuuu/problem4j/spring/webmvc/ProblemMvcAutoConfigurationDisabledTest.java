@@ -9,8 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest(classes = {MvcTestApp.class})
-class ProblemMvcAutoConfigurationTest {
+@SpringBootTest(
+    classes = {MvcTestApp.class},
+    properties = {"problem4j.enabled=false"})
+class ProblemMvcAutoConfigurationDisabledTest {
 
   @Autowired(required = false)
   private ProblemMvcAutoConfiguration problemMvcAutoConfiguration;
@@ -22,9 +24,9 @@ class ProblemMvcAutoConfigurationTest {
   private ProblemResolverMvcConfiguration problemResolverMvcConfiguration;
 
   @Test
-  void contextLoads() {
-    assertThat(problemMvcAutoConfiguration).isNotNull();
-    assertThat(problemErrorMvcConfiguration).isNotNull();
-    assertThat(problemResolverMvcConfiguration).isNotNull();
+  void contextLoadsWithoutProblemConfiguration() {
+    assertThat(problemMvcAutoConfiguration).isNull();
+    assertThat(problemErrorMvcConfiguration).isNull();
+    assertThat(problemResolverMvcConfiguration).isNull();
   }
 }

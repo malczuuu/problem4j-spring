@@ -1,11 +1,11 @@
-package io.github.malczuuu.problem4j.spring.webmvc.app;
+package io.github.malczuuu.problem4j.spring.web.app;
 
 import jakarta.annotation.PostConstruct;
 import java.util.Locale;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MvcTestApp {
+public class TestApp {
 
   @PostConstruct
   public void postConstruct() {

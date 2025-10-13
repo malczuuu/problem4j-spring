@@ -1,6 +1,5 @@
 package io.github.malczuuu.problem4j.spring.webflux;
 
-import io.github.malczuuu.problem4j.spring.web.ProblemConfiguration;
 import io.github.malczuuu.problem4j.spring.web.ProblemProperties;
 import io.github.malczuuu.problem4j.spring.web.ProblemResolverStore;
 import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
@@ -13,17 +12,20 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.web.reactive.WebFluxAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.reactive.error.ErrorWebFluxAutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.server.WebFilter;
 
 /**
- * Spring Boot autoconfiguration for problem-based exception handling in {@code spring-webflux}
+ * Spring autoconfiguration for problem-based exception handling in {@code spring-webflux}
  * applications.
  *
  * <p>This class wires all necessary beans for producing standardized {@code Problem} responses from
@@ -37,12 +39,10 @@ import org.springframework.web.reactive.result.method.annotation.ResponseEntityE
  * </ul>
  */
 @AutoConfiguration
+@EnableConfigurationProperties({ProblemProperties.class})
+@ConditionalOnProperty(prefix = "problem4j", name = "enabled", matchIfMissing = true)
 @AutoConfigureBefore({ErrorWebFluxAutoConfiguration.class, WebFluxAutoConfiguration.class})
-@Import({
-  ProblemErrorWebFluxConfiguration.class,
-  ProblemResolverWebFluxConfiguration.class,
-  ProblemConfiguration.class
-})
+@Import({ProblemErrorWebFluxConfiguration.class, ProblemResolverWebFluxConfiguration.class})
 public class ProblemWebFluxAutoConfiguration {
 
   @Order(Ordered.LOWEST_PRECEDENCE)
@@ -69,17 +69,19 @@ public class ProblemWebFluxAutoConfiguration {
     return new ProblemExceptionWebFluxAdvice(problemPostProcessor, adviceWebFluxInspectors);
   }
 
-  @ConditionalOnMissingBean(ProblemContextWebFluxFilter.class)
-  @Bean
-  public ProblemContextWebFluxFilter problemContextWebFluxFilter(
-      ProblemProperties problemProperties) {
-    return new ProblemContextWebFluxFilter(problemProperties);
+  @ConditionalOnClass(WebFilter.class)
+  @Configuration(proxyBeanMethods = false)
+  public static class ProblemContextWebFluxFilterConfiguration {
+    @ConditionalOnMissingBean(ProblemContextWebFluxFilter.class)
+    @Bean
+    public ProblemContextWebFluxFilter problemContextWebFluxFilter(ProblemProperties properties) {
+      return new ProblemContextWebFluxFilter(properties);
+    }
   }
 
   @ConditionalOnClass(ResponseEntityExceptionHandler.class)
   @Configuration(proxyBeanMethods = false)
   public static class ResponseEntityExceptionHandlerConfiguration {
-
     @Order(Ordered.LOWEST_PRECEDENCE - 10)
     @ConditionalOnMissingBean(ResponseEntityExceptionHandler.class)
     @Bean

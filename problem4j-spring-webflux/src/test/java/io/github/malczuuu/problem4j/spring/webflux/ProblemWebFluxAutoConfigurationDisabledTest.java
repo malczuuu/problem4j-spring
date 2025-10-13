@@ -9,8 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest(classes = {WebFluxTestApp.class})
-class ProblemWebFluxAutoConfigurationTest {
+@SpringBootTest(
+    classes = {WebFluxTestApp.class},
+    properties = {"problem4j.enabled=false"})
+class ProblemWebFluxAutoConfigurationDisabledTest {
 
   @Autowired(required = false)
   private ProblemWebFluxAutoConfiguration problemWebFluxAutoConfiguration;
@@ -22,9 +24,9 @@ class ProblemWebFluxAutoConfigurationTest {
   private ProblemResolverWebFluxConfiguration problemResolverWebFluxConfiguration;
 
   @Test
-  void contextLoads() {
-    assertThat(problemWebFluxAutoConfiguration).isNotNull();
-    assertThat(problemErrorWebFluxConfiguration).isNotNull();
-    assertThat(problemResolverWebFluxConfiguration).isNotNull();
+  void contextLoadsWithoutProblemConfiguration() {
+    assertThat(problemWebFluxAutoConfiguration).isNull();
+    assertThat(problemErrorWebFluxConfiguration).isNull();
+    assertThat(problemResolverWebFluxConfiguration).isNull();
   }
 }

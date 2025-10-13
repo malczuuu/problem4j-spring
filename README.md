@@ -612,6 +612,10 @@ This allows uniform and resolvable links for problem reports across environments
 
 Library can be configured with following properties.
 
+### `problem4j.enabled`
+
+Property that enables or disables all auto-configurations provided by this module. Defaults to `true` (enabled).
+
 ### `problem4j.detail-format`
 
 Property that specifies how exception handling imported with this module should print the `"detail"` field of the

@@ -8,8 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest(classes = {TestApp.class})
-class ProblemConfigurationTest {
+@SpringBootTest(
+    classes = {TestApp.class},
+    properties = {"problem4j.enabled=false"})
+class ProblemConfigurationDisabledTest {
 
   @Autowired(required = false)
   private ProblemAutoConfiguration problemAutoConfiguration;
@@ -18,8 +20,8 @@ class ProblemConfigurationTest {
   private ProblemResolverConfiguration problemResolverConfiguration;
 
   @Test
-  void contextLoads() {
-    assertThat(problemAutoConfiguration).isNotNull();
-    assertThat(problemResolverConfiguration).isNotNull();
+  void contextLoadsWithoutProblemConfiguration() {
+    assertThat(problemAutoConfiguration).isNull();
+    assertThat(problemResolverConfiguration).isNull();
   }
 }

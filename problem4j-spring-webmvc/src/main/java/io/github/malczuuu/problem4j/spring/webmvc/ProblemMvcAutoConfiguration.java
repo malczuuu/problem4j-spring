@@ -1,6 +1,5 @@
 package io.github.malczuuu.problem4j.spring.webmvc;
 
-import io.github.malczuuu.problem4j.spring.web.ProblemConfiguration;
 import io.github.malczuuu.problem4j.spring.web.ProblemProperties;
 import io.github.malczuuu.problem4j.spring.web.ProblemResolverStore;
 import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
@@ -13,13 +12,16 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
@@ -37,12 +39,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  * </ul>
  */
 @AutoConfiguration
+@EnableConfigurationProperties({ProblemProperties.class})
+@ConditionalOnProperty(prefix = "problem4j", name = "enabled", matchIfMissing = true)
 @AutoConfigureBefore({ErrorMvcAutoConfiguration.class, WebMvcAutoConfiguration.class})
-@Import({
-  ProblemErrorMvcConfiguration.class,
-  ProblemResolverMvcConfiguration.class,
-  ProblemConfiguration.class
-})
+@Import({ProblemErrorMvcConfiguration.class, ProblemResolverMvcConfiguration.class})
 public class ProblemMvcAutoConfiguration {
 
   @Order(Ordered.LOWEST_PRECEDENCE)
@@ -65,16 +65,19 @@ public class ProblemMvcAutoConfiguration {
     return new ProblemExceptionMvcAdvice(problemPostProcessor, adviceMvcInspectors);
   }
 
-  @ConditionalOnMissingBean(ProblemContextMvcFilter.class)
-  @Bean
-  public ProblemContextMvcFilter problemContextMvcFilter(ProblemProperties properties) {
-    return new ProblemContextMvcFilter(properties);
+  @ConditionalOnClass(OncePerRequestFilter.class)
+  @Configuration(proxyBeanMethods = false)
+  public static class ProblemContextMvcFilterConfiguration {
+    @ConditionalOnMissingBean(ProblemContextMvcFilter.class)
+    @Bean
+    public ProblemContextMvcFilter problemContextMvcFilter(ProblemProperties properties) {
+      return new ProblemContextMvcFilter(properties);
+    }
   }
 
   @ConditionalOnClass(ResponseEntityExceptionHandler.class)
   @Configuration(proxyBeanMethods = false)
   public static class ResponseEntityExceptionHandlerConfiguration {
-
     @Order(Ordered.LOWEST_PRECEDENCE - 10)
     @ConditionalOnMissingBean(ResponseEntityExceptionHandler.class)
     @Bean
