@@ -7,6 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
+import io.github.malczuuu.problem4j.spring.webflux.app.WebFluxTestApp;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RestController;
 
-@SpringBootTest(classes = {_TestApp.class})
+@SpringBootTest(classes = {WebFluxTestApp.class})
 @Import({BindingController.class})
 @AutoConfigureWebTestClient
 class WebExchangeBindExceptionWebFluxTest {

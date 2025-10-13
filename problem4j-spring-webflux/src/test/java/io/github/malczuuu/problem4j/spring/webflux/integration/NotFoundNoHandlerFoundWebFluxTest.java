@@ -4,13 +4,14 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
+import io.github.malczuuu.problem4j.spring.webflux.app.WebFluxTestApp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-@SpringBootTest(classes = {_TestApp.class})
+@SpringBootTest(classes = {WebFluxTestApp.class})
 @AutoConfigureWebTestClient
 class NotFoundNoHandlerFoundWebFluxTest {
 

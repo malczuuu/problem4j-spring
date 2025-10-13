@@ -1,16 +1,12 @@
-package io.github.malczuuu.problem4j.spring.webflux.integration;
+package io.github.malczuuu.problem4j.spring.webflux.app;
 
 import jakarta.annotation.PostConstruct;
 import java.util.Locale;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * Name starts with {@code _} so it's always sorted on top (or bottom, depending on OS) of
- * directory.
- */
 @SpringBootApplication
-class _TestApp {
+public class WebFluxTestApp {
 
   @Configuration(proxyBeanMethods = false)
   public static class TestLocaleConfig {

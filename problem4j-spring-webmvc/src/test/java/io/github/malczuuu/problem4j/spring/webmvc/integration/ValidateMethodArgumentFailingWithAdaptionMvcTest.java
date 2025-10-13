@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
+import io.github.malczuuu.problem4j.spring.webmvc.app.MvcTestApp;
 import jakarta.servlet.http.Cookie;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -35,7 +36,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootTest(
-    classes = {_TestApp.class},
+    classes = {MvcTestApp.class},
     properties = "spring.validation.method.adapt-constraint-violations=true")
 @Import({ValidateParameterController.class})
 @AutoConfigureMockMvc

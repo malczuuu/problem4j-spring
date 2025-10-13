@@ -8,6 +8,7 @@ import static org.assertj.core.api.InstanceOfAssertFactories.LIST;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
+import io.github.malczuuu.problem4j.spring.webflux.app.WebFluxTestApp;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.util.List;
@@ -29,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootTest(
-    classes = {_TestApp.class},
+    classes = {WebFluxTestApp.class},
     properties = "spring.validation.method.adapt-constraint-violations=true")
 @Import({ValidateParameterController.class})
 @AutoConfigureWebTestClient

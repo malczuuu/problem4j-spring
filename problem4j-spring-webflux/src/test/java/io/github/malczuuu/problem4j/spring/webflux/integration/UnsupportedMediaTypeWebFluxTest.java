@@ -4,6 +4,7 @@ import static io.github.malczuuu.problem4j.spring.webflux.integration.Unsupporte
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
+import io.github.malczuuu.problem4j.spring.webflux.app.WebFluxTestApp;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@SpringBootTest(classes = {_TestApp.class})
+@SpringBootTest(classes = {WebFluxTestApp.class})
 @Import({UnsupportedMediaTypeController.class})
 @AutoConfigureWebTestClient
 class UnsupportedMediaTypeWebFluxTest {

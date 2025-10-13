@@ -15,6 +15,7 @@ import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMapping;
 import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
 import io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver;
+import io.github.malczuuu.problem4j.spring.webmvc.app.MvcTestApp;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -30,7 +31,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@SpringBootTest(classes = {_TestApp.class})
+@SpringBootTest(classes = {MvcTestApp.class})
 @Import({ProblemExceptionController.class, ResolvableExceptionResolver.class})
 @AutoConfigureMockMvc
 class ProblemMvcAdviceTest {
