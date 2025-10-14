@@ -29,7 +29,7 @@ public class HashMapProblemResolverStore implements ProblemResolverStore {
   public HashMapProblemResolverStore(List<ProblemResolver> problemResolvers) {
     Map<Class<? extends Exception>, ProblemResolver> copy = new HashMap<>(problemResolvers.size());
     problemResolvers.forEach(
-        resovler -> copy.put(resovler.getExceptionClass(), Objects.requireNonNull(resovler)));
+        resolver -> copy.put(resolver.getExceptionClass(), Objects.requireNonNull(resolver)));
     this.resolvers = Map.copyOf(copy);
   }
 
