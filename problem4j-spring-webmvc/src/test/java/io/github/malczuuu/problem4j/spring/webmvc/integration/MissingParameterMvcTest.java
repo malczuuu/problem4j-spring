@@ -152,9 +152,8 @@ class MissingParameterMvcTest {
     assertThat(response.getBody()).isEqualTo("OK");
   }
 
-  // also add test for valid multipart header but without the part - it throws MultipartException
   @Test
-  void givenRequestWithoutRequestPart_shouldReturnProblem() throws Exception {
+  void givenRequestWithoutRequestPartParam_shouldReturnProblem() throws Exception {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
@@ -176,6 +175,22 @@ class MissingParameterMvcTest {
                 .detail(MISSING_REQUEST_PART_DETAIL)
                 .extension(PARAM_EXTENSION, "file")
                 .build());
+  }
+
+  @Test
+  void givenRequestWithoutRequestPartHeader_shouldReturnProblem() throws Exception {
+    ResponseEntity<String> response =
+        restTemplate.postForEntity(
+            "/missing-parameter/request-part",
+            new HttpEntity<>(null, new HttpHeaders()),
+            String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+
+    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+
+    assertThat(problem).isEqualTo(Problem.builder().status(ProblemStatus.BAD_REQUEST).build());
   }
 
   @Test

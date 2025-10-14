@@ -19,6 +19,7 @@ import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.server.MissingRequestValueException;
 import org.springframework.web.server.ResponseStatusException;
@@ -172,6 +173,16 @@ public class ProblemResolverConfiguration {
     public MissingServletRequestPartResolver missingServletRequestPartResolver(
         ProblemFormat problemFormat) {
       return new MissingServletRequestPartResolver(problemFormat);
+    }
+  }
+
+  @ConditionalOnClass(MultipartException.class)
+  @Configuration(proxyBeanMethods = false)
+  public static class MultipartConfiguration {
+    @ConditionalOnMissingBean(MultipartProblemResolver.class)
+    @Bean
+    public MultipartProblemResolver multipartExceptionResolver(ProblemFormat problemFormat) {
+      return new MultipartProblemResolver(problemFormat);
     }
   }
 
