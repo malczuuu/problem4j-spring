@@ -3,7 +3,7 @@ package io.github.malczuuu.problem4j.spring.webmvc.integration;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.ERRORS_EXTENSION;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.IS_NOT_VALID_ERROR;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.VALIDATION_FAILED_DETAIL;
-import static io.github.malczuuu.problem4j.spring.webmvc.integration.MethodArgumentNotValidExceptionMvcTest.BindingController;
+import static io.github.malczuuu.problem4j.spring.webmvc.integration.MethodArgumentNotValidMvcTest.BindingController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootTest(classes = {MvcTestApp.class})
 @Import({BindingController.class})
 @AutoConfigureMockMvc
-class MethodArgumentNotValidExceptionMvcTest {
+class MethodArgumentNotValidMvcTest {
 
   static class Form {
 

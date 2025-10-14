@@ -44,9 +44,13 @@ public class MaxUploadSizeExceededResolver extends AbstractProblemResolver {
   public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
     MaxUploadSizeExceededException e = (MaxUploadSizeExceededException) ex;
-    return Problem.builder()
-        .status(ProblemStatus.CONTENT_TOO_LARGE)
-        .detail(formatDetail(MAX_UPLOAD_SIZE_EXCEEDED_DETAIL))
-        .extension(MAX_EXTENSION, e.getMaxUploadSize());
+    ProblemBuilder builder =
+        Problem.builder()
+            .status(ProblemStatus.CONTENT_TOO_LARGE)
+            .detail(formatDetail(MAX_UPLOAD_SIZE_EXCEEDED_DETAIL));
+    if (e.getMaxUploadSize() > 0) {
+      builder.extension(MAX_EXTENSION, e.getMaxUploadSize());
+    }
+    return builder;
   }
 }
