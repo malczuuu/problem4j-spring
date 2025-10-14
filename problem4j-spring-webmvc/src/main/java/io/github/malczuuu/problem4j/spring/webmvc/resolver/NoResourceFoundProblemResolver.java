@@ -20,9 +20,9 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
  * <p>The handler is responsible for returning an appropriate HTTP 404 (Not Found) response to
  * indicate that the requested resource is not available.
  */
-public class NoResourceFoundResolver extends AbstractProblemResolver {
+public class NoResourceFoundProblemResolver extends AbstractProblemResolver {
 
-  public NoResourceFoundResolver(ProblemFormat problemFormat) {
+  public NoResourceFoundProblemResolver(ProblemFormat problemFormat) {
     super(NoResourceFoundException.class, problemFormat);
   }
 

@@ -28,9 +28,9 @@ import org.springframework.web.server.ServerErrorException;
  * Server Error) to inform the client that the request could not be processed due to a server-side
  * problem.
  */
-public class ServerErrorResolver extends AbstractProblemResolver {
+public class ServerErrorProblemResolver extends AbstractProblemResolver {
 
-  public ServerErrorResolver(ProblemFormat problemFormat) {
+  public ServerErrorProblemResolver(ProblemFormat problemFormat) {
     super(ServerErrorException.class, problemFormat);
   }
 

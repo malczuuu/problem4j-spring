@@ -25,13 +25,13 @@ import org.springframework.web.server.ServerWebInputException;
  * <p>The handler is responsible for returning an appropriate HTTP 400 (Bad Request) response to
  * indicate that the client sent invalid or unreadable input.
  */
-public class ServerWebInputResolver extends AbstractProblemResolver {
+public class ServerWebInputProblemResolver extends AbstractProblemResolver {
 
-  private final TypeMismatchResolver typeMismatchResolver;
+  private final TypeMismatchProblemResolver typeMismatchProblemResolver;
 
-  public ServerWebInputResolver(ProblemFormat problemFormat) {
+  public ServerWebInputProblemResolver(ProblemFormat problemFormat) {
     super(ServerWebInputException.class, problemFormat);
-    typeMismatchResolver = new TypeMismatchResolver(problemFormat);
+    typeMismatchProblemResolver = new TypeMismatchProblemResolver(problemFormat);
   }
 
   /**
@@ -54,7 +54,8 @@ public class ServerWebInputResolver extends AbstractProblemResolver {
     ServerWebInputException swie = (ServerWebInputException) ex;
 
     if (ex.getCause() instanceof TypeMismatchException tme) {
-      ProblemBuilder builder = typeMismatchResolver.resolveBuilder(context, tme, headers, status);
+      ProblemBuilder builder =
+          typeMismatchProblemResolver.resolveBuilder(context, tme, headers, status);
       if (!builder.build().hasExtension(PROPERTY_EXTENSION)) {
         return tryAppendingPropertyFromMethodParameter(swie.getMethodParameter(), builder);
       }

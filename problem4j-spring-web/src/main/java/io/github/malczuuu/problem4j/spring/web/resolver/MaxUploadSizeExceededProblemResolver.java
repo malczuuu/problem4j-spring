@@ -22,9 +22,9 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
  * <p>The handler is responsible for returning an appropriate HTTP 413 (Payload Too Large) response
  * to inform the client that the uploaded file exceeds the allowed size.
  */
-public class MaxUploadSizeExceededResolver extends AbstractProblemResolver {
+public class MaxUploadSizeExceededProblemResolver extends AbstractProblemResolver {
 
-  public MaxUploadSizeExceededResolver(ProblemFormat problemFormat) {
+  public MaxUploadSizeExceededProblemResolver(ProblemFormat problemFormat) {
     super(MaxUploadSizeExceededException.class, problemFormat);
   }
 

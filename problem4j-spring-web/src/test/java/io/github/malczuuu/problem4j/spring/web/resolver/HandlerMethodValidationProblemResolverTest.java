@@ -12,14 +12,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.method.MethodValidationResult;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
-class HandlerMethodValidationResolverTest {
+class HandlerMethodValidationProblemResolverTest {
 
-  private HandlerMethodValidationResolver handlerMethodValidationResolver;
+  private HandlerMethodValidationProblemResolver handlerMethodValidationProblemResolver;
 
   @BeforeEach
   void beforeEach() {
-    handlerMethodValidationResolver =
-        new HandlerMethodValidationResolver(new IdentityProblemFormat());
+    handlerMethodValidationProblemResolver =
+        new HandlerMethodValidationProblemResolver(new IdentityProblemFormat());
   }
 
   @Test
@@ -29,7 +29,7 @@ class HandlerMethodValidationResolverTest {
         new HandlerMethodValidationException(mockMethodValidationResult);
 
     Problem problem =
-        handlerMethodValidationResolver.resolveProblem(
+        handlerMethodValidationProblemResolver.resolveProblem(
             ProblemContext.ofTraceId("traceId"), ex, null, HttpStatus.BAD_REQUEST);
 
     assertEquals(Problem.BLANK_TYPE, problem.getType());

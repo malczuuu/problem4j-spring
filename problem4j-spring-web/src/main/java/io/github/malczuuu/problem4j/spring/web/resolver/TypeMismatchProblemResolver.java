@@ -25,9 +25,9 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
  * <p>The handler is responsible for returning an appropriate HTTP 400 (Bad Request) response to
  * indicate that the provided input has an invalid type.
  */
-public class TypeMismatchResolver extends AbstractProblemResolver {
+public class TypeMismatchProblemResolver extends AbstractProblemResolver {
 
-  public TypeMismatchResolver(ProblemFormat problemFormat) {
+  public TypeMismatchProblemResolver(ProblemFormat problemFormat) {
     super(TypeMismatchException.class, problemFormat);
   }
 

@@ -19,9 +19,9 @@ import org.springframework.web.HttpMediaTypeNotSupportedException;
  * <p>The handler is responsible for returning an appropriate HTTP 415 (Unsupported Media Type)
  * response to inform the client that the submitted content type is not supported.
  */
-public class HttpMediaTypeNotSupportedResolver extends AbstractProblemResolver {
+public class HttpMediaTypeNotSupportedProblemResolver extends AbstractProblemResolver {
 
-  public HttpMediaTypeNotSupportedResolver(ProblemFormat problemFormat) {
+  public HttpMediaTypeNotSupportedProblemResolver(ProblemFormat problemFormat) {
     super(HttpMediaTypeNotSupportedException.class, problemFormat);
   }
 

@@ -41,209 +41,216 @@ public class ProblemResolverConfiguration {
 
   @ConditionalOnClass(BindException.class)
   @Configuration(proxyBeanMethods = false)
-  public static class BindConfiguration {
-    @ConditionalOnMissingBean(BindResolver.class)
+  public static class BindProblemConfiguration {
+    @ConditionalOnMissingBean(BindProblemResolver.class)
     @Bean
-    public BindResolver bindResolver(ProblemFormat problemFormat) {
-      return new BindResolver(problemFormat);
+    public BindProblemResolver bindProblemResolver(ProblemFormat problemFormat) {
+      return new BindProblemResolver(problemFormat);
     }
   }
 
   @ConditionalOnClass(ConstraintViolationException.class)
   @Configuration(proxyBeanMethods = false)
-  public static class ConstraintViolationConfiguration {
-    @ConditionalOnMissingBean(ConstraintViolationResolver.class)
+  public static class ConstraintViolationProblemConfiguration {
+    @ConditionalOnMissingBean(ConstraintViolationProblemResolver.class)
     @Bean
-    public ConstraintViolationResolver constraintViolationResolver(ProblemFormat problemFormat) {
-      return new ConstraintViolationResolver(problemFormat);
+    public ConstraintViolationProblemResolver constraintViolationProblemResolver(
+        ProblemFormat problemFormat) {
+      return new ConstraintViolationProblemResolver(problemFormat);
     }
   }
 
   @ConditionalOnClass(DecodingException.class)
   @Configuration(proxyBeanMethods = false)
-  public static class DecodingConfiguration {
-    @ConditionalOnMissingBean(DecodingResolver.class)
+  public static class DecodingProblemConfiguration {
+    @ConditionalOnMissingBean(DecodingProblemResolver.class)
     @Bean
-    public DecodingResolver decodingResolver(ProblemFormat problemFormat) {
-      return new DecodingResolver(problemFormat);
+    public DecodingProblemResolver decodingProblemResolver(ProblemFormat problemFormat) {
+      return new DecodingProblemResolver(problemFormat);
     }
   }
 
   @ConditionalOnClass(ErrorResponseException.class)
   @Configuration(proxyBeanMethods = false)
-  public static class ErrorResponseConfiguration {
-    @ConditionalOnMissingBean(ErrorResponseResolver.class)
+  public static class ErrorResponseProblemConfiguration {
+    @ConditionalOnMissingBean(ErrorResponseProblemResolver.class)
     @Bean
-    public ErrorResponseResolver errorResponseResolver(ProblemFormat problemFormat) {
-      return new ErrorResponseResolver(problemFormat);
+    public ErrorResponseProblemResolver errorResponseProblemResolver(ProblemFormat problemFormat) {
+      return new ErrorResponseProblemResolver(problemFormat);
     }
   }
 
   @ConditionalOnClass(HandlerMethodValidationException.class)
   @Configuration(proxyBeanMethods = false)
-  public static class HandlerMethodValidationConfiguration {
-    @ConditionalOnMissingBean(HandlerMethodValidationResolver.class)
+  public static class HandlerMethodValidationProblemConfiguration {
+    @ConditionalOnMissingBean(HandlerMethodValidationProblemResolver.class)
     @Bean
-    public HandlerMethodValidationResolver handlerMethodValidationResolver(
+    public HandlerMethodValidationProblemResolver handlerMethodValidationProblemResolver(
         ProblemFormat problemFormat) {
-      return new HandlerMethodValidationResolver(problemFormat);
+      return new HandlerMethodValidationProblemResolver(problemFormat);
     }
   }
 
   @ConditionalOnClass(HttpMediaTypeNotAcceptableException.class)
   @Configuration(proxyBeanMethods = false)
-  public static class HttpMediaTypeNotAcceptableConfiguration {
-    @ConditionalOnMissingBean(HttpMediaTypeNotAcceptableResolver.class)
+  public static class HttpMediaTypeNotAcceptableProblemConfiguration {
+    @ConditionalOnMissingBean(HttpMediaTypeNotAcceptableProblemResolver.class)
     @Bean
-    public HttpMediaTypeNotAcceptableResolver httpMediaTypeNotAcceptableResolver(
+    public HttpMediaTypeNotAcceptableProblemResolver httpMediaTypeNotAcceptableProblemResolver(
         ProblemFormat problemFormat) {
-      return new HttpMediaTypeNotAcceptableResolver(problemFormat);
+      return new HttpMediaTypeNotAcceptableProblemResolver(problemFormat);
     }
   }
 
   @ConditionalOnClass(HttpMediaTypeNotSupportedException.class)
   @Configuration(proxyBeanMethods = false)
-  public static class HttpMediaTypeNotSupportedConfiguration {
-    @ConditionalOnMissingBean(HttpMediaTypeNotSupportedResolver.class)
+  public static class HttpMediaTypeNotSupportedProblemConfiguration {
+    @ConditionalOnMissingBean(HttpMediaTypeNotSupportedProblemResolver.class)
     @Bean
-    public HttpMediaTypeNotSupportedResolver httpMediaTypeNotSupportedResolver(
+    public HttpMediaTypeNotSupportedProblemResolver httpMediaTypeNotSupportedProblemResolver(
         ProblemFormat problemFormat) {
-      return new HttpMediaTypeNotSupportedResolver(problemFormat);
+      return new HttpMediaTypeNotSupportedProblemResolver(problemFormat);
     }
   }
 
   @ConditionalOnClass(HttpMessageNotReadableException.class)
   @Configuration(proxyBeanMethods = false)
-  public static class HttpMessageNotReadableConfiguration {
-    @ConditionalOnMissingBean(HttpMessageNotReadableResolver.class)
+  public static class HttpMessageNotReadableProblemConfiguration {
+    @ConditionalOnMissingBean(HttpMessageNotReadableProblemResolver.class)
     @Bean
-    public HttpMessageNotReadableResolver httpMessageNotReadableResolver(
+    public HttpMessageNotReadableProblemResolver httpMessageNotReadableProblemResolver(
         ProblemFormat problemFormat) {
-      return new HttpMessageNotReadableResolver(problemFormat);
+      return new HttpMessageNotReadableProblemResolver(problemFormat);
     }
   }
 
   @ConditionalOnClass(HttpRequestMethodNotSupportedException.class)
   @Configuration(proxyBeanMethods = false)
-  public static class HttpRequestMethodNotSupportedConfiguration {
-    @ConditionalOnMissingBean(HttpRequestMethodNotSupportedResolver.class)
+  public static class HttpRequestMethodNotSupportedProblemConfiguration {
+    @ConditionalOnMissingBean(HttpRequestMethodNotSupportedProblemResolver.class)
     @Bean
-    public HttpRequestMethodNotSupportedResolver httpRequestMethodNotSupportedResolver(
-        ProblemFormat problemFormat) {
-      return new HttpRequestMethodNotSupportedResolver(problemFormat);
+    public HttpRequestMethodNotSupportedProblemResolver
+        httpRequestMethodNotSupportedProblemResolver(ProblemFormat problemFormat) {
+      return new HttpRequestMethodNotSupportedProblemResolver(problemFormat);
     }
   }
 
   @ConditionalOnClass(MaxUploadSizeExceededException.class)
   @Configuration(proxyBeanMethods = false)
-  public static class MaxUploadSizeExceededConfiguration {
-    @ConditionalOnMissingBean(MaxUploadSizeExceededResolver.class)
+  public static class MaxUploadSizeExceededProblemConfiguration {
+    @ConditionalOnMissingBean(MaxUploadSizeExceededProblemResolver.class)
     @Bean
-    public MaxUploadSizeExceededResolver maxUploadSizeExceededResolver(
+    public MaxUploadSizeExceededProblemResolver maxUploadSizeExceededProblemResolver(
         ProblemFormat problemFormat) {
-      return new MaxUploadSizeExceededResolver(problemFormat);
+      return new MaxUploadSizeExceededProblemResolver(problemFormat);
     }
   }
 
   @ConditionalOnClass(MethodValidationException.class)
   @Configuration(proxyBeanMethods = false)
-  public static class MethodValidationConfiguration {
-    @ConditionalOnMissingBean(MethodValidationResolver.class)
+  public static class MethodValidationProblemConfiguration {
+    @ConditionalOnMissingBean(MethodValidationProblemResolver.class)
     @Bean
-    public MethodValidationResolver methodValidationResolver(ProblemFormat problemFormat) {
-      return new MethodValidationResolver(problemFormat);
+    public MethodValidationProblemResolver methodValidationProblemResolver(
+        ProblemFormat problemFormat) {
+      return new MethodValidationProblemResolver(problemFormat);
     }
   }
 
   @ConditionalOnClass(MissingRequestValueException.class)
   @Configuration(proxyBeanMethods = false)
-  public static class MissingRequestValueConfiguration {
-    @ConditionalOnMissingBean(MissingRequestValueResolver.class)
+  public static class MissingRequestValueProblemConfiguration {
+    @ConditionalOnMissingBean(MissingRequestValueProblemResolver.class)
     @Bean
-    public MissingRequestValueResolver missingRequestValueResolver(ProblemFormat problemFormat) {
-      return new MissingRequestValueResolver(problemFormat);
+    public MissingRequestValueProblemResolver missingRequestValueProblemResolver(
+        ProblemFormat problemFormat) {
+      return new MissingRequestValueProblemResolver(problemFormat);
     }
   }
 
   @ConditionalOnClass(MissingServletRequestPartException.class)
   @Configuration(proxyBeanMethods = false)
-  public static class MissingServletRequestPartConfiguration {
-    @ConditionalOnMissingBean(MissingServletRequestPartResolver.class)
+  public static class MissingServletRequestPartProblemConfiguration {
+    @ConditionalOnMissingBean(MissingServletRequestPartProblemResolver.class)
     @Bean
-    public MissingServletRequestPartResolver missingServletRequestPartResolver(
+    public MissingServletRequestPartProblemResolver missingServletRequestPartProblemResolver(
         ProblemFormat problemFormat) {
-      return new MissingServletRequestPartResolver(problemFormat);
+      return new MissingServletRequestPartProblemResolver(problemFormat);
     }
   }
 
   @ConditionalOnClass(MultipartException.class)
   @Configuration(proxyBeanMethods = false)
-  public static class MultipartConfiguration {
-    @ConditionalOnMissingBean(MultipartProblemResolver.class)
+  public static class MultipartProblemConfiguration {
+    @ConditionalOnMissingBean(MultipartProblemProblemResolver.class)
     @Bean
-    public MultipartProblemResolver multipartExceptionResolver(ProblemFormat problemFormat) {
-      return new MultipartProblemResolver(problemFormat);
+    public MultipartProblemProblemResolver multipartExceptionProblemResolver(
+        ProblemFormat problemFormat) {
+      return new MultipartProblemProblemResolver(problemFormat);
     }
   }
 
   @ConditionalOnClass(ResponseStatusException.class)
   @Configuration(proxyBeanMethods = false)
-  public static class ResponseStatusConfiguration {
-    @ConditionalOnMissingBean(ResponseStatusResolver.class)
+  public static class ResponseStatusProblemConfiguration {
+    @ConditionalOnMissingBean(ResponseStatusProblemResolver.class)
     @Bean
-    public ResponseStatusResolver responseStatusResolver(ProblemFormat problemFormat) {
-      return new ResponseStatusResolver(problemFormat);
+    public ResponseStatusProblemResolver responseStatusProblemResolver(
+        ProblemFormat problemFormat) {
+      return new ResponseStatusProblemResolver(problemFormat);
     }
   }
 
   @ConditionalOnClass(ServerErrorException.class)
   @Configuration(proxyBeanMethods = false)
-  public static class ServerErrorConfiguration {
-    @ConditionalOnMissingBean(ServerErrorResolver.class)
+  public static class ServerErrorProblemConfiguration {
+    @ConditionalOnMissingBean(ServerErrorProblemResolver.class)
     @Bean
-    public ServerErrorResolver serverErrorResolver(ProblemFormat problemFormat) {
-      return new ServerErrorResolver(problemFormat);
+    public ServerErrorProblemResolver serverErrorProblemResolver(ProblemFormat problemFormat) {
+      return new ServerErrorProblemResolver(problemFormat);
     }
   }
 
   @ConditionalOnClass(ServerWebInputException.class)
   @Configuration(proxyBeanMethods = false)
-  public static class ServerWebInputConfiguration {
-    @ConditionalOnMissingBean(ServerWebInputResolver.class)
+  public static class ServerWebInputProblemConfiguration {
+    @ConditionalOnMissingBean(ServerWebInputProblemResolver.class)
     @Bean
-    public ServerWebInputResolver serverWebInputResolver(ProblemFormat problemFormat) {
-      return new ServerWebInputResolver(problemFormat);
+    public ServerWebInputProblemResolver serverWebInputProblemResolver(
+        ProblemFormat problemFormat) {
+      return new ServerWebInputProblemResolver(problemFormat);
     }
   }
 
   @ConditionalOnClass(ServletRequestBindingException.class)
   @Configuration(proxyBeanMethods = false)
-  public static class ServletRequestBindingConfiguration {
-    @ConditionalOnMissingBean(ServletRequestBindingResolver.class)
+  public static class ServletRequestBindingProblemConfiguration {
+    @ConditionalOnMissingBean(ServletRequestBindingProblemResolver.class)
     @Bean
-    public ServletRequestBindingResolver servletRequestBindingResolver(
+    public ServletRequestBindingProblemResolver servletRequestBindingProblemResolver(
         ProblemFormat problemFormat) {
-      return new ServletRequestBindingResolver(problemFormat);
+      return new ServletRequestBindingProblemResolver(problemFormat);
     }
   }
 
   @ConditionalOnClass(TypeMismatchException.class)
   @Configuration(proxyBeanMethods = false)
-  public static class TypeMismatchConfiguration {
-    @ConditionalOnMissingBean(TypeMismatchResolver.class)
+  public static class TypeMismatchProblemConfiguration {
+    @ConditionalOnMissingBean(TypeMismatchProblemResolver.class)
     @Bean
-    public TypeMismatchResolver typeMismatchResolver(ProblemFormat problemFormat) {
-      return new TypeMismatchResolver(problemFormat);
+    public TypeMismatchProblemResolver typeMismatchProblemResolver(ProblemFormat problemFormat) {
+      return new TypeMismatchProblemResolver(problemFormat);
     }
   }
 
   @ConditionalOnClass(WebExchangeBindException.class)
   @Configuration(proxyBeanMethods = false)
-  public static class WebExchangeBindConfiguration {
-    @ConditionalOnMissingBean(WebExchangeBindResolver.class)
+  public static class WebExchangeBindProblemConfiguration {
+    @ConditionalOnMissingBean(WebExchangeBindProblemResolver.class)
     @Bean
-    public WebExchangeBindResolver webExchangeBindResolver(ProblemFormat problemFormat) {
-      return new WebExchangeBindResolver(problemFormat);
+    public WebExchangeBindProblemResolver webExchangeBindProblemResolver(
+        ProblemFormat problemFormat) {
+      return new WebExchangeBindProblemResolver(problemFormat);
     }
   }
 }

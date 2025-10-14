@@ -29,11 +29,11 @@ import org.springframework.validation.method.MethodValidationException;
  *
  * @see jakarta.validation.ConstraintViolationException
  */
-public class MethodValidationResolver extends AbstractProblemResolver {
+public class MethodValidationProblemResolver extends AbstractProblemResolver {
 
   private final ViolationResolver violationResolver;
 
-  public MethodValidationResolver(ProblemFormat problemFormat) {
+  public MethodValidationProblemResolver(ProblemFormat problemFormat) {
     super(MethodValidationException.class, problemFormat);
     violationResolver = new ViolationResolver(problemFormat);
   }

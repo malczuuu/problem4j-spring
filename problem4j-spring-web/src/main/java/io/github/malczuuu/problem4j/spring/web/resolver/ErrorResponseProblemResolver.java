@@ -20,9 +20,9 @@ import org.springframework.web.ErrorResponseException;
  *
  * @see org.springframework.web.ErrorResponse
  */
-public class ErrorResponseResolver extends AbstractProblemResolver {
+public class ErrorResponseProblemResolver extends AbstractProblemResolver {
 
-  public ErrorResponseResolver(ProblemFormat problemFormat) {
+  public ErrorResponseProblemResolver(ProblemFormat problemFormat) {
     super(ErrorResponseException.class, problemFormat);
   }
 

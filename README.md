@@ -443,8 +443,8 @@ same goes for `@PathVariable`, `@RequestHeader`, `@CookieValue` etc.).
 </tr>
 </table>
 
-[`MethodValidationResolver`][MethodValidationResolver] contains implementation of retrieving configured values from
-parameter annotations.
+[`MethodValidationProblemResolver`][MethodValidationProblemResolver] contains implementation of retrieving configured
+values from parameter annotations.
 
 For Spring Boot versions lower than `3.5`, the above-mentioned property is not available and one must configure it
 programmatically. Consider checking up `org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration`
@@ -720,6 +720,6 @@ See `org.springframework.boot.autoconfigure.web.SpringWebProperties` class to de
 
 [ProblemResolverConfiguration]: problem4j-spring-web/src/main/java/io/github/malczuuu/problem4j/spring/web/resolver/ProblemResolverConfiguration.java
 
-[MethodValidationResolver]: problem4j-spring-web/src/main/java/io/github/malczuuu/problem4j/spring/web/resolver/MethodValidationResolver.java
+[MethodValidationProblemResolver]: problem4j-spring-web/src/main/java/io/github/malczuuu/problem4j/spring/web/resolver/MethodValidationProblemResolver.java
 
 [method-validation-exceptions]: https://docs.spring.io/spring-framework/reference/core/validation/beanvalidation.html#validation-beanvalidation-spring-method-exceptions

@@ -29,11 +29,11 @@ import org.springframework.validation.BindException;
  *
  * @see org.springframework.web.bind.MethodArgumentNotValidException
  */
-public class BindResolver extends AbstractProblemResolver {
+public class BindProblemResolver extends AbstractProblemResolver {
 
   private final ViolationResolver violationResolver;
 
-  public BindResolver(ProblemFormat problemFormat) {
+  public BindProblemResolver(ProblemFormat problemFormat) {
     super(BindException.class, problemFormat);
     violationResolver = new ViolationResolver(problemFormat);
   }

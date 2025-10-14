@@ -20,11 +20,11 @@ import org.springframework.web.method.annotation.HandlerMethodValidationExceptio
  * problem with the resolved status, avoiding leaking validation details when the server indicates
  * an internal failure.
  */
-public class HandlerMethodValidationResolver extends AbstractProblemResolver {
+public class HandlerMethodValidationProblemResolver extends AbstractProblemResolver {
 
   private final ViolationResolver violationResolver;
 
-  public HandlerMethodValidationResolver(ProblemFormat problemFormat) {
+  public HandlerMethodValidationProblemResolver(ProblemFormat problemFormat) {
     super(HandlerMethodValidationException.class, problemFormat);
     violationResolver = new ViolationResolver(problemFormat);
   }

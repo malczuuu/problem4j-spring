@@ -18,13 +18,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.server.ServerWebInputException;
 
-class ServerWebInputResolverTest {
+class ServerWebInputProblemResolverTest {
 
-  private ServerWebInputResolver serverWebInputMapping;
+  private ServerWebInputProblemResolver serverWebInputMapping;
 
   @BeforeEach
   void beforeEach() {
-    serverWebInputMapping = new ServerWebInputResolver(new IdentityProblemFormat());
+    serverWebInputMapping = new ServerWebInputProblemResolver(new IdentityProblemFormat());
   }
 
   @Test

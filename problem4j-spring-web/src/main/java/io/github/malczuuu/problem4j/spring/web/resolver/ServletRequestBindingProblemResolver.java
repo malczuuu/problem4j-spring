@@ -45,12 +45,12 @@ import org.springframework.web.bind.ServletRequestBindingException;
  * @see Problem
  * @see ProblemStatus#BAD_REQUEST
  */
-public class ServletRequestBindingResolver extends AbstractProblemResolver {
+public class ServletRequestBindingProblemResolver extends AbstractProblemResolver {
 
   private static final Pattern MISSING_ATTRIBUTE_PATTERN =
       Pattern.compile("^Missing (session|request) attribute '([^']+)'");
 
-  public ServletRequestBindingResolver(ProblemFormat problemFormat) {
+  public ServletRequestBindingProblemResolver(ProblemFormat problemFormat) {
     super(ServletRequestBindingException.class, problemFormat);
   }
 

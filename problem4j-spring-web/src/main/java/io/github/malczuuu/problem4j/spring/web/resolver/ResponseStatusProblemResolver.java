@@ -21,9 +21,9 @@ import org.springframework.web.server.ResponseStatusException;
  * <p>The handler is responsible for translating the exception into the corresponding HTTP response
  * with the specified status code, reason, and any additional details.
  */
-public class ResponseStatusResolver extends AbstractProblemResolver {
+public class ResponseStatusProblemResolver extends AbstractProblemResolver {
 
-  public ResponseStatusResolver(ProblemFormat problemFormat) {
+  public ResponseStatusProblemResolver(ProblemFormat problemFormat) {
     super(ResponseStatusException.class, problemFormat);
   }
 

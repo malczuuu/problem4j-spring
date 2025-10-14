@@ -21,9 +21,9 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
  *
  * <p>Always resolves to a {@link Problem} with status {@link ProblemStatus#METHOD_NOT_ALLOWED}.
  */
-public class HttpRequestMethodNotSupportedResolver extends AbstractProblemResolver {
+public class HttpRequestMethodNotSupportedProblemResolver extends AbstractProblemResolver {
 
-  public HttpRequestMethodNotSupportedResolver(ProblemFormat problemFormat) {
+  public HttpRequestMethodNotSupportedProblemResolver(ProblemFormat problemFormat) {
     super(HttpRequestMethodNotSupportedException.class, problemFormat);
   }
 

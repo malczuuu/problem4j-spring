@@ -16,9 +16,9 @@ import org.springframework.http.HttpStatusCode;
  * <p>Maps decoding failures (e.g. malformed JSON or invalid request bodies) to a {@code Problem}
  * response with {@code 400 Bad Request} status.
  */
-public class DecodingResolver extends AbstractProblemResolver {
+public class DecodingProblemResolver extends AbstractProblemResolver {
 
-  public DecodingResolver(ProblemFormat problemFormat) {
+  public DecodingProblemResolver(ProblemFormat problemFormat) {
     super(DecodingException.class, problemFormat);
   }
 

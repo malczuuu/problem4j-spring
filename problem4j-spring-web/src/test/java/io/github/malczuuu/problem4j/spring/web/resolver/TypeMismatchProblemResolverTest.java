@@ -13,13 +13,13 @@ import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 
-class TypeMismatchResolverTest {
+class TypeMismatchProblemResolverTest {
 
-  private TypeMismatchResolver typeMismatchMapping;
+  private TypeMismatchProblemResolver typeMismatchMapping;
 
   @BeforeEach
   void beforeEach() {
-    typeMismatchMapping = new TypeMismatchResolver(new IdentityProblemFormat());
+    typeMismatchMapping = new TypeMismatchProblemResolver(new IdentityProblemFormat());
   }
 
   @Test

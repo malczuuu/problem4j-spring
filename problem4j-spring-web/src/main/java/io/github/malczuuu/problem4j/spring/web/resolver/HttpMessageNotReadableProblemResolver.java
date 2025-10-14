@@ -21,9 +21,9 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
  *
  * @see org.springframework.http.converter.HttpMessageConverter
  */
-public class HttpMessageNotReadableResolver extends AbstractProblemResolver {
+public class HttpMessageNotReadableProblemResolver extends AbstractProblemResolver {
 
-  public HttpMessageNotReadableResolver(ProblemFormat problemFormat) {
+  public HttpMessageNotReadableProblemResolver(ProblemFormat problemFormat) {
     super(HttpMessageNotReadableException.class, problemFormat);
   }
 
