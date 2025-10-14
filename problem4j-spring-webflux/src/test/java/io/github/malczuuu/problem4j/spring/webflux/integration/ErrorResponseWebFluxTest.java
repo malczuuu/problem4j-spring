@@ -17,7 +17,9 @@ import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@SpringBootTest(classes = {WebFluxTestApp.class})
+@SpringBootTest(
+    classes = {WebFluxTestApp.class},
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import({ErrorResponseController.class})
 @AutoConfigureWebTestClient
 class ErrorResponseWebFluxTest {

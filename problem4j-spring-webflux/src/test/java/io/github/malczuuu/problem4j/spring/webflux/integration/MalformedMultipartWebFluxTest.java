@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@SpringBootTest(classes = {WebFluxTestApp.class})
+@SpringBootTest(
+    classes = {WebFluxTestApp.class},
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import({RequestPartController.class})
 @AutoConfigureWebTestClient
 class MalformedMultipartWebFluxTest {

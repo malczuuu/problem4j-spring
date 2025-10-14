@@ -16,7 +16,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
     properties = {
       "spring.webflux.static-path-pattern=/**",
       "spring.web.resources.static-locations=classpath:/static/"
-    })
+    },
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
 class NotFoundNoResourceFoundWebFluxTest {
 

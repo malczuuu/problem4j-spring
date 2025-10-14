@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
-@SpringBootTest(classes = {WebFluxTestApp.class})
+@SpringBootTest(
+    classes = {WebFluxTestApp.class},
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import({MaxUploadController.class})
 @AutoConfigureWebTestClient
 class MaxUploadSizeExceededWebFluxTest {

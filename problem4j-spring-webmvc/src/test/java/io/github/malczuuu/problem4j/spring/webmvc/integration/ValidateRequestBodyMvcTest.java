@@ -2,18 +2,16 @@ package io.github.malczuuu.problem4j.spring.webmvc.integration;
 
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.ERRORS_EXTENSION;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.VALIDATION_FAILED_DETAIL;
-import static io.github.malczuuu.problem4j.spring.webmvc.integration.ValidateRequestBodyMvcTest.ValidateRequestBodyController;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.webmvc.app.MvcTestApp;
+import io.github.malczuuu.problem4j.spring.webmvc.integration.ValidateRequestBodyMvcTest.ValidateRequestBodyController;
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -31,21 +29,22 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@SpringBootTest(classes = {MvcTestApp.class})
+@SpringBootTest(
+    classes = {MvcTestApp.class},
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import({ValidateRequestBodyController.class})
-@AutoConfigureMockMvc
 class ValidateRequestBodyMvcTest {
 
   @RestController
@@ -62,98 +61,8 @@ class ValidateRequestBodyMvcTest {
     }
   }
 
-  @Autowired private MockMvc mockMvc;
+  @Autowired private TestRestTemplate restTemplate;
   @Autowired private ObjectMapper objectMapper;
-
-  @Test
-  void givenInvalidRequestBody_shouldReturnProblem() throws Exception {
-    TestRequest invalidRequest = new TestRequest("", null);
-
-    mockMvc
-        .perform(
-            post("/validate-request-body")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(invalidRequest)))
-        .andExpect(status().isBadRequest())
-        .andExpect(
-            result ->
-                assertThat(result.getResolvedException())
-                    .isInstanceOf(MethodArgumentNotValidException.class))
-        .andExpect(content().contentType(Problem.CONTENT_TYPE))
-        .andExpect(
-            result -> {
-              Problem problem =
-                  objectMapper.readValue(result.getResponse().getContentAsString(), Problem.class);
-
-              assertThat(problem)
-                  .isEqualTo(
-                      Problem.builder()
-                          .status(ProblemStatus.BAD_REQUEST)
-                          .detail(VALIDATION_FAILED_DETAIL)
-                          .extension(
-                              ERRORS_EXTENSION,
-                              List.of(Map.of("field", "name", "error", "must not be blank")))
-                          .build());
-            });
-  }
-
-  @Test
-  void givenGlobalValidationViolation_shouldReturnProblemWithoutFieldName() throws Exception {
-    String json = "{\"field\":\"value\"}";
-
-    mockMvc
-        .perform(
-            post("/validate-global-object").contentType(MediaType.APPLICATION_JSON).content(json))
-        .andExpect(status().isBadRequest())
-        .andExpect(
-            result ->
-                assertThat(result.getResolvedException())
-                    .isInstanceOf(MethodArgumentNotValidException.class))
-        .andExpect(content().contentType(Problem.CONTENT_TYPE))
-        .andExpect(
-            result -> {
-              Problem problem =
-                  objectMapper.readValue(result.getResponse().getContentAsString(), Problem.class);
-              Map<String, String> error = new HashMap<>();
-              error.put("field", null);
-              error.put("error", "always invalid");
-              assertThat(problem)
-                  .isEqualTo(
-                      Problem.builder()
-                          .status(ProblemStatus.BAD_REQUEST)
-                          .detail(VALIDATION_FAILED_DETAIL)
-                          .extension(ERRORS_EXTENSION, List.of(error))
-                          .build());
-            });
-  }
-
-  @ParameterizedTest
-  @ValueSource(
-      strings = {"{ \"name\": \"Alice\"", "{ \"name\": \"Alice\", \"age\": \"too young\"}", ""})
-  @NullSource
-  void givenMalformedRequestBody_shouldReturnProblem(String json) throws Exception {
-    MockHttpServletRequestBuilder builder =
-        post("/validate-request-body").contentType(MediaType.APPLICATION_JSON);
-    if (json != null) {
-      builder.content(json);
-    }
-
-    mockMvc
-        .perform(builder)
-        .andExpect(status().isBadRequest())
-        .andExpect(
-            result ->
-                assertThat(result.getResolvedException())
-                    .isInstanceOf(HttpMessageNotReadableException.class))
-        .andExpect(content().contentType(Problem.CONTENT_TYPE))
-        .andExpect(
-            result -> {
-              Problem problem =
-                  objectMapper.readValue(result.getResponse().getContentAsString(), Problem.class);
-              assertThat(problem)
-                  .isEqualTo(Problem.builder().status(ProblemStatus.BAD_REQUEST).build());
-            });
-  }
 
   record TestRequest(@NotBlank String name, Integer age) {}
 
@@ -178,5 +87,73 @@ class ValidateRequestBodyMvcTest {
     public boolean isValid(Object value, ConstraintValidatorContext context) {
       return false;
     }
+  }
+
+  @Test
+  void givenInvalidRequestBody_shouldReturnProblem() throws Exception {
+    TestRequest invalidRequest = new TestRequest("", null);
+
+    ResponseEntity<String> response =
+        restTemplate.postForEntity("/validate-request-body", invalidRequest, String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+
+    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+
+    assertThat(problem)
+        .isEqualTo(
+            Problem.builder()
+                .status(ProblemStatus.BAD_REQUEST)
+                .detail(VALIDATION_FAILED_DETAIL)
+                .extension(
+                    ERRORS_EXTENSION,
+                    List.of(Map.of("field", "name", "error", "must not be blank")))
+                .build());
+  }
+
+  @Test
+  void givenGlobalValidationViolation_shouldReturnProblemWithoutFieldName() throws Exception {
+    AlwaysInvalidRequest body = new AlwaysInvalidRequest("value");
+
+    ResponseEntity<String> response =
+        restTemplate.postForEntity("/validate-global-object", body, String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+
+    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+
+    Map<String, String> error = new HashMap<>();
+    error.put("field", null);
+    error.put("error", "always invalid");
+    assertThat(problem)
+        .isEqualTo(
+            Problem.builder()
+                .status(ProblemStatus.BAD_REQUEST)
+                .detail(VALIDATION_FAILED_DETAIL)
+                .extension(ERRORS_EXTENSION, List.of(error))
+                .build());
+  }
+
+  @ParameterizedTest
+  @ValueSource(
+      strings = {"{ \"name\": \"Alice\"", "{ \"name\": \"Alice\", \"age\": \"too young\"}", ""})
+  @NullSource
+  void givenMalformedRequestBody_shouldReturnProblem(String json) throws JsonProcessingException {
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    HttpEntity<String> entity = new HttpEntity<>(json, headers);
+
+    ResponseEntity<String> response =
+        restTemplate.postForEntity("/validate-request-body", entity, String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+
+    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+
+    assertThat(problem).isEqualTo(Problem.builder().status(ProblemStatus.BAD_REQUEST).build());
   }
 }

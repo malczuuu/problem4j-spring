@@ -2,10 +2,6 @@ package io.github.malczuuu.problem4j.spring.webmvc.integration;
 
 import static io.github.malczuuu.problem4j.spring.webmvc.integration.ProblemOverrideMvcTest.InstanceOverrideController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.malczuuu.problem4j.core.Problem;
@@ -15,15 +11,19 @@ import io.github.malczuuu.problem4j.spring.webmvc.app.MvcTestApp;
 import java.net.URI;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootTest(
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     classes = {MvcTestApp.class},
     properties = {
       "problem4j.type-override=https://example.org/type/{problem.type}",
@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.RestController;
       "problem4j.tracing-header-name=X-Trace-Id"
     })
 @Import({InstanceOverrideController.class})
-@AutoConfigureMockMvc
 class ProblemOverrideMvcTest {
 
   @RestController
@@ -48,65 +47,62 @@ class ProblemOverrideMvcTest {
     }
   }
 
-  @Autowired private MockMvc mockMvc;
+  @Autowired private TestRestTemplate restTemplate;
   @Autowired private ObjectMapper objectMapper;
 
   @Test
   void givenNonEmptyType_shouldRewriteType() throws Exception {
-    mockMvc
-        .perform(post("/type-not-blank").contentType(MediaType.APPLICATION_JSON).content("{}"))
-        .andExpect(status().isBadRequest())
-        .andExpect(
-            result ->
-                assertThat(result.getResolvedException()).isInstanceOf(ProblemException.class))
-        .andExpect(content().contentType(Problem.CONTENT_TYPE))
-        .andExpect(
-            result -> {
-              Problem problem =
-                  objectMapper.readValue(result.getResponse().getContentAsString(), Problem.class);
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
 
-              assertThat(problem.getType())
-                  .isEqualTo(URI.create("https://example.org/type/not-blank"));
-            });
+    HttpEntity<String> request = new HttpEntity<>("{}", headers);
+
+    ResponseEntity<String> response =
+        restTemplate.postForEntity("/type-not-blank", request, String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+
+    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+
+    assertThat(problem.getType()).isEqualTo(URI.create("https://example.org/type/not-blank"));
   }
 
   @Test
   void givenEmptyType_shouldNotRewriteType() throws Exception {
-    mockMvc
-        .perform(post("/instance-override").contentType(MediaType.APPLICATION_JSON).content("{}"))
-        .andExpect(status().isBadRequest())
-        .andExpect(
-            result -> {
-              Problem problem =
-                  objectMapper.readValue(result.getResponse().getContentAsString(), Problem.class);
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
 
-              assertThat(problem.getType()).isEqualTo(Problem.BLANK_TYPE);
-            });
+    HttpEntity<String> request = new HttpEntity<>("{}", headers);
+
+    ResponseEntity<String> response =
+        restTemplate.postForEntity("/instance-override", request, String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+
+    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    assertThat(problem.getType()).isEqualTo(Problem.BLANK_TYPE);
   }
 
   @Test
   void givenNonEmptyTraceId_shouldRewriteInstanceField() throws Exception {
     String traceId = "12345-trace";
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    headers.set("X-Trace-ID", traceId);
 
-    mockMvc
-        .perform(
-            post("/instance-override")
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("X-Trace-ID", traceId)
-                .content("{}"))
-        .andExpect(status().isBadRequest())
-        .andExpect(
-            result ->
-                assertThat(result.getResolvedException()).isInstanceOf(ProblemException.class))
-        .andExpect(content().contentType(Problem.CONTENT_TYPE))
-        .andExpect(header().string("X-Trace-ID", traceId))
-        .andExpect(
-            result -> {
-              Problem problem =
-                  objectMapper.readValue(result.getResponse().getContentAsString(), Problem.class);
+    HttpEntity<String> request = new HttpEntity<>("{}", headers);
 
-              assertThat(problem.getInstance())
-                  .isEqualTo(URI.create("https://example.org/trace/" + traceId));
-            });
+    ResponseEntity<String> response =
+        restTemplate.postForEntity("/instance-override", request, String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+    assertThat(response.getHeaders().getFirst("X-Trace-ID")).isEqualTo(traceId);
+
+    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+
+    assertThat(problem.getInstance()).isEqualTo(URI.create("https://example.org/trace/" + traceId));
   }
 }

@@ -1,7 +1,7 @@
 package io.github.malczuuu.problem4j.spring.webflux.integration;
 
-import static io.github.malczuuu.problem4j.spring.webflux.integration.ProblemWebFluxAdviceTest.ProblemExceptionController;
-import static io.github.malczuuu.problem4j.spring.webflux.integration.ProblemWebFluxAdviceTest.ResolvableExceptionResolver;
+import static io.github.malczuuu.problem4j.spring.webflux.integration.ProblemAdviceWebFluxTest.ProblemExceptionController;
+import static io.github.malczuuu.problem4j.spring.webflux.integration.ProblemAdviceWebFluxTest.ResolvableExceptionResolver;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemBuilder;
@@ -27,10 +27,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@SpringBootTest(classes = {WebFluxTestApp.class})
+@SpringBootTest(
+    classes = {WebFluxTestApp.class},
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import({ProblemExceptionController.class, ResolvableExceptionResolver.class})
 @AutoConfigureWebTestClient
-class ProblemWebFluxAdviceTest {
+class ProblemAdviceWebFluxTest {
 
   @RestController
   static class ProblemExceptionController {

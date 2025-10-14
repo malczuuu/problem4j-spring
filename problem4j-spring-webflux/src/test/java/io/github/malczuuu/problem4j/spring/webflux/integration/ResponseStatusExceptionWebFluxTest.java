@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-@SpringBootTest(classes = {WebFluxTestApp.class})
+@SpringBootTest(
+    classes = {WebFluxTestApp.class},
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import({ResponseStatusController.class})
 @AutoConfigureWebTestClient
 class ResponseStatusExceptionWebFluxTest {

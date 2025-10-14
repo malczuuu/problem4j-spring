@@ -25,7 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
       "problem4j.type-override=https://example.org/type/{problem.type}",
       "problem4j.instance-override=https://example.org/trace/{context.traceId}",
       "problem4j.tracing-header-name=X-Trace-Id"
-    })
+    },
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import({InstanceOverrideController.class})
 @AutoConfigureWebTestClient
 class ProblemOverrideWebFluxTest {

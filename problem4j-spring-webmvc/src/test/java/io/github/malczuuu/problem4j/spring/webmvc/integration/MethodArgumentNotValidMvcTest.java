@@ -5,9 +5,6 @@ import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.IS_NOT
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.VALIDATION_FAILED_DETAIL;
 import static io.github.malczuuu.problem4j.spring.webmvc.integration.MethodArgumentNotValidMvcTest.BindingController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.malczuuu.problem4j.core.Problem;
@@ -17,22 +14,22 @@ import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RestController;
 
-@SpringBootTest(classes = {MvcTestApp.class})
+@SpringBootTest(
+    classes = {MvcTestApp.class},
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import({BindingController.class})
-@AutoConfigureMockMvc
 class MethodArgumentNotValidMvcTest {
 
   static class Form {
-
     private Integer number;
 
     public Integer getNumber() {
@@ -52,32 +49,27 @@ class MethodArgumentNotValidMvcTest {
     }
   }
 
-  @Autowired private MockMvc mockMvc;
+  @Autowired private TestRestTemplate restTemplate;
   @Autowired private ObjectMapper objectMapper;
 
   @Test
   void givenModelAttributeTypeMismatch_shouldReturnBadRequestProblem() throws Exception {
-    mockMvc
-        .perform(get("/binding").param("number", "abc"))
-        .andExpect(status().isBadRequest())
-        .andExpect(
-            result ->
-                assertThat(result.getResolvedException())
-                    .isInstanceOf(MethodArgumentNotValidException.class))
-        .andExpect(content().contentType(Problem.CONTENT_TYPE))
-        .andExpect(
-            result -> {
-              Problem problem =
-                  objectMapper.readValue(result.getResponse().getContentAsString(), Problem.class);
-              assertThat(problem)
-                  .isEqualTo(
-                      Problem.builder()
-                          .status(ProblemStatus.BAD_REQUEST)
-                          .detail(VALIDATION_FAILED_DETAIL)
-                          .extension(
-                              ERRORS_EXTENSION,
-                              List.of(Map.of("field", "number", "error", IS_NOT_VALID_ERROR)))
-                          .build());
-            });
+    ResponseEntity<String> response =
+        restTemplate.getForEntity("/binding?number=abc", String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+
+    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+
+    assertThat(problem)
+        .isEqualTo(
+            Problem.builder()
+                .status(ProblemStatus.BAD_REQUEST)
+                .detail(VALIDATION_FAILED_DETAIL)
+                .extension(
+                    ERRORS_EXTENSION,
+                    List.of(Map.of("field", "number", "error", IS_NOT_VALID_ERROR)))
+                .build());
   }
 }

@@ -15,27 +15,25 @@ import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.NAME_E
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.PARAM_EXTENSION;
 import static io.github.malczuuu.problem4j.spring.webmvc.integration.MissingParameterMvcTest.MissingParameterController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.webmvc.app.MvcTestApp;
-import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.bind.MissingPathVariableException;
-import org.springframework.web.bind.MissingRequestCookieException;
-import org.springframework.web.bind.MissingRequestHeaderException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.ServletRequestBindingException;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,15 +45,12 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
-@SpringBootTest(classes = {MvcTestApp.class})
+@SpringBootTest(
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+    classes = {MvcTestApp.class})
 @Import({MissingParameterController.class})
-@AutoConfigureMockMvc
 class MissingParameterMvcTest {
-
-  @Autowired private MockMvc mockMvc;
-  @Autowired private ObjectMapper objectMapper;
 
   @RestController
   static class MissingParameterController {
@@ -97,235 +92,200 @@ class MissingParameterMvcTest {
     }
   }
 
+  @Autowired private TestRestTemplate restTemplate;
+  @Autowired private ObjectMapper objectMapper;
+
   @Test
   void givenRequestWithoutPathVariable_shouldReturnProblem() throws Exception {
-    mockMvc
-        .perform(get("/missing-parameter/path-variable"))
-        .andExpect(status().isBadRequest())
-        .andExpect(
-            result ->
-                assertThat(result.getResolvedException())
-                    .isInstanceOf(MissingPathVariableException.class))
-        .andExpect(content().contentType(Problem.CONTENT_TYPE))
-        .andExpect(
-            result -> {
-              Problem problem =
-                  objectMapper.readValue(result.getResponse().getContentAsString(), Problem.class);
+    ResponseEntity<String> response =
+        restTemplate.getForEntity("/missing-parameter/path-variable", String.class);
 
-              assertThat(problem)
-                  .isEqualTo(
-                      Problem.builder()
-                          .status(ProblemStatus.BAD_REQUEST)
-                          .detail(MISSING_PATH_VARIABLE_DETAIL)
-                          .extension(NAME_EXTENSION, "var")
-                          .build());
-            });
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+
+    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+
+    assertThat(problem)
+        .isEqualTo(
+            Problem.builder()
+                .status(ProblemStatus.BAD_REQUEST)
+                .detail(MISSING_PATH_VARIABLE_DETAIL)
+                .extension(NAME_EXTENSION, "var")
+                .build());
   }
 
   @Test
-  void givenRequestWithPathVariable_shouldReturnOk() throws Exception {
-    mockMvc
-        .perform(get("/missing-parameter/path-variable/value"))
-        .andExpect(status().isOk())
-        .andExpect(content().string("OK"));
+  void givenRequestWithPathVariable_shouldReturnOk() {
+    ResponseEntity<String> response =
+        restTemplate.getForEntity("/missing-parameter/path-variable/value", String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(response.getBody()).isEqualTo("OK");
   }
 
   @Test
   void givenRequestWithoutRequestParam_shouldReturnProblem() throws Exception {
-    mockMvc
-        .perform(get("/missing-parameter/request-param"))
-        .andExpect(status().isBadRequest())
-        .andExpect(
-            result ->
-                assertThat(result.getResolvedException())
-                    .isInstanceOf(MissingServletRequestParameterException.class))
-        .andExpect(content().contentType(Problem.CONTENT_TYPE))
-        .andExpect(
-            result -> {
-              Problem problem =
-                  objectMapper.readValue(result.getResponse().getContentAsString(), Problem.class);
-              assertThat(problem)
-                  .isEqualTo(
-                      Problem.builder()
-                          .status(ProblemStatus.BAD_REQUEST)
-                          .detail(MISSING_REQUEST_PARAM_DETAIL)
-                          .extension(PARAM_EXTENSION, "param")
-                          .extension(KIND_EXTENSION, "string")
-                          .build());
-            });
+    ResponseEntity<String> response =
+        restTemplate.getForEntity("/missing-parameter/request-param", String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+
+    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+
+    assertThat(problem)
+        .isEqualTo(
+            Problem.builder()
+                .status(ProblemStatus.BAD_REQUEST)
+                .detail(MISSING_REQUEST_PARAM_DETAIL)
+                .extension(PARAM_EXTENSION, "param")
+                .extension(KIND_EXTENSION, "string")
+                .build());
   }
 
   @Test
-  void givenRequestWithRequestParam_shouldReturnOk() throws Exception {
-    mockMvc
-        .perform(get("/missing-parameter/request-param").param("param", "value"))
-        .andExpect(status().isOk())
-        .andExpect(content().string("OK"));
+  void givenRequestWithRequestParam_shouldReturnOk() {
+    ResponseEntity<String> response =
+        restTemplate.getForEntity("/missing-parameter/request-param?param=value", String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(response.getBody()).isEqualTo("OK");
   }
 
+  // also add test for valid multipart header but without the part - it throws MultipartException
   @Test
   void givenRequestWithoutRequestPart_shouldReturnProblem() throws Exception {
-    mockMvc
-        .perform(multipart("/missing-parameter/request-part"))
-        .andExpect(status().isBadRequest())
-        .andExpect(
-            result ->
-                assertThat(result.getResolvedException())
-                    .isInstanceOf(MissingServletRequestPartException.class))
-        .andExpect(content().contentType(Problem.CONTENT_TYPE))
-        .andExpect(
-            result -> {
-              Problem problem =
-                  objectMapper.readValue(result.getResponse().getContentAsString(), Problem.class);
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-              assertThat(problem)
-                  .isEqualTo(
-                      Problem.builder()
-                          .status(ProblemStatus.BAD_REQUEST)
-                          .detail(MISSING_REQUEST_PART_DETAIL)
-                          .extension(PARAM_EXTENSION, "file")
-                          .build());
-            });
+    HttpEntity<MultiValueMap<String, Object>> request =
+        new HttpEntity<>(new LinkedMultiValueMap<>(), headers);
+
+    ResponseEntity<String> response =
+        restTemplate.postForEntity("/missing-parameter/request-part", request, String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+
+    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+
+    assertThat(problem)
+        .isEqualTo(
+            Problem.builder()
+                .status(ProblemStatus.BAD_REQUEST)
+                .detail(MISSING_REQUEST_PART_DETAIL)
+                .extension(PARAM_EXTENSION, "file")
+                .build());
   }
 
   @Test
-  void givenRequestWithRequestPart_shouldReturnOk() throws Exception {
-    mockMvc
-        .perform(
-            multipart("/missing-parameter/request-part").file("file", "test content".getBytes()))
-        .andExpect(status().isOk())
-        .andExpect(content().string("OK"));
+  void givenRequestWithRequestPart_shouldReturnOk() {
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+    MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+    body.add(
+        "file",
+        new ByteArrayResource("test content".getBytes()) {
+          @Override
+          public String getFilename() {
+            return "test.txt";
+          }
+        });
+    HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(body, headers);
+
+    ResponseEntity<String> response =
+        restTemplate.postForEntity("/missing-parameter/request-part", request, String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(response.getBody()).isEqualTo("OK");
   }
 
   @Test
   void givenRequestWithoutRequestHeader_shouldReturnProblem() throws Exception {
-    mockMvc
-        .perform(get("/missing-parameter/request-header"))
-        .andExpect(status().isBadRequest())
-        .andExpect(
-            result ->
-                assertThat(result.getResolvedException())
-                    .isInstanceOf(MissingRequestHeaderException.class))
-        .andExpect(content().contentType(Problem.CONTENT_TYPE))
-        .andExpect(
-            result -> {
-              Problem problem =
-                  objectMapper.readValue(result.getResponse().getContentAsString(), Problem.class);
-
-              assertThat(problem)
-                  .isEqualTo(
-                      Problem.builder()
-                          .status(ProblemStatus.BAD_REQUEST)
-                          .detail(MISSING_HEADER_DETAIL)
-                          .extension(HEADER_EXTENSION, "X-Custom-Header")
-                          .build());
-            });
+    ResponseEntity<String> response =
+        restTemplate.getForEntity("/missing-parameter/request-header", String.class);
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    assertThat(problem)
+        .isEqualTo(
+            Problem.builder()
+                .status(ProblemStatus.BAD_REQUEST)
+                .detail(MISSING_HEADER_DETAIL)
+                .extension(HEADER_EXTENSION, "X-Custom-Header")
+                .build());
   }
 
   @Test
-  void givenRequestWithRequestHeader_shouldReturnOk() throws Exception {
-    mockMvc
-        .perform(get("/missing-parameter/request-header").header("X-Custom-Header", "value"))
-        .andExpect(status().isOk())
-        .andExpect(content().string("OK"));
+  void givenRequestWithRequestHeader_shouldReturnOk() {
+    HttpHeaders headers = new HttpHeaders();
+    headers.set("X-Custom-Header", "value");
+    HttpEntity<Void> request = new HttpEntity<>(headers);
+    ResponseEntity<String> response =
+        restTemplate.exchange(
+            "/missing-parameter/request-header", HttpMethod.GET, request, String.class);
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(response.getBody()).isEqualTo("OK");
   }
 
   @Test
   void givenRequestWithoutCookieValue_shouldReturnProblem() throws Exception {
-    mockMvc
-        .perform(get("/missing-parameter/cookie-value"))
-        .andExpect(status().isBadRequest())
-        .andExpect(
-            result ->
-                assertThat(result.getResolvedException())
-                    .isInstanceOf(MissingRequestCookieException.class))
-        .andExpect(content().contentType(Problem.CONTENT_TYPE))
-        .andExpect(
-            result -> {
-              Problem problem =
-                  objectMapper.readValue(result.getResponse().getContentAsString(), Problem.class);
-
-              assertThat(problem)
-                  .isEqualTo(
-                      Problem.builder()
-                          .status(ProblemStatus.BAD_REQUEST)
-                          .detail(MISSING_COOKIE_DETAIL)
-                          .extension(COOKIE_EXTENSION, "x_session")
-                          .build());
-            });
+    ResponseEntity<String> response =
+        restTemplate.getForEntity("/missing-parameter/cookie-value", String.class);
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    assertThat(problem)
+        .isEqualTo(
+            Problem.builder()
+                .status(ProblemStatus.BAD_REQUEST)
+                .detail(MISSING_COOKIE_DETAIL)
+                .extension(COOKIE_EXTENSION, "x_session")
+                .build());
   }
 
   @Test
-  void givenRequestWithCookieValue_shouldReturnOk() throws Exception {
-    mockMvc
-        .perform(get("/missing-parameter/cookie-value").cookie(new Cookie("x_session", "value")))
-        .andExpect(status().isOk())
-        .andExpect(content().string("OK"));
+  void givenRequestWithCookieValue_shouldReturnOk() {
+    HttpHeaders headers = new HttpHeaders();
+    headers.add(HttpHeaders.COOKIE, "x_session=value");
+    HttpEntity<Void> request = new HttpEntity<>(headers);
+    ResponseEntity<String> response =
+        restTemplate.exchange(
+            "/missing-parameter/cookie-value", HttpMethod.GET, request, String.class);
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(response.getBody()).isEqualTo("OK");
   }
 
   @Test
   void givenRequestWithoutRequestAttribute_shouldReturnProblem() throws Exception {
-    mockMvc
-        .perform(get("/missing-parameter/request-attribute"))
-        .andExpect(status().isBadRequest())
-        .andExpect(
-            result ->
-                assertThat(result.getResolvedException())
-                    .isInstanceOf(ServletRequestBindingException.class))
-        .andExpect(content().contentType(Problem.CONTENT_TYPE))
-        .andExpect(
-            result -> {
-              Problem problem =
-                  objectMapper.readValue(result.getResponse().getContentAsString(), Problem.class);
-
-              assertThat(problem)
-                  .isEqualTo(
-                      Problem.builder()
-                          .status(ProblemStatus.BAD_REQUEST)
-                          .detail(MISSING_REQUEST_ATTRIBUTE_DETAIL)
-                          .extension(ATTRIBUTE_EXTENSION, "attr")
-                          .build());
-            });
-  }
-
-  @Test
-  void givenRequestWithRequestAttribute_shouldReturnOk() throws Exception {
-    mockMvc
-        .perform(get("/missing-parameter/request-attribute").requestAttr("attr", "value"))
-        .andExpect(status().isOk())
-        .andExpect(content().string("OK"));
+    ResponseEntity<String> response =
+        restTemplate.getForEntity("/missing-parameter/request-attribute", String.class);
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    assertThat(problem)
+        .isEqualTo(
+            Problem.builder()
+                .status(ProblemStatus.BAD_REQUEST)
+                .detail(MISSING_REQUEST_ATTRIBUTE_DETAIL)
+                .extension(ATTRIBUTE_EXTENSION, "attr")
+                .build());
   }
 
   @Test
   void givenRequestWithoutSessionAttribute_shouldReturnProblem() throws Exception {
-    mockMvc
-        .perform(get("/missing-parameter/session-attribute"))
-        .andExpect(status().isBadRequest())
-        .andExpect(
-            result ->
-                assertThat(result.getResolvedException())
-                    .isInstanceOf(ServletRequestBindingException.class))
-        .andExpect(content().contentType(Problem.CONTENT_TYPE))
-        .andExpect(
-            result -> {
-              Problem problem =
-                  objectMapper.readValue(result.getResponse().getContentAsString(), Problem.class);
-
-              assertThat(problem)
-                  .isEqualTo(
-                      Problem.builder()
-                          .status(ProblemStatus.BAD_REQUEST)
-                          .detail(MISSING_SESSION_ATTRIBUTE_DETAIL)
-                          .extension(ATTRIBUTE_EXTENSION, "attr")
-                          .build());
-            });
-  }
-
-  @Test
-  void givenRequestWithSessionAttribute_shouldReturnOk() throws Exception {
-    mockMvc
-        .perform(get("/missing-parameter/session-attribute").sessionAttr("attr", "value"))
-        .andExpect(status().isOk())
-        .andExpect(content().string("OK"));
+    ResponseEntity<String> response =
+        restTemplate.getForEntity("/missing-parameter/session-attribute", String.class);
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    assertThat(problem)
+        .isEqualTo(
+            Problem.builder()
+                .status(ProblemStatus.BAD_REQUEST)
+                .detail(MISSING_SESSION_ATTRIBUTE_DETAIL)
+                .extension(ATTRIBUTE_EXTENSION, "attr")
+                .build());
   }
 }

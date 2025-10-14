@@ -1,7 +1,7 @@
 package io.github.malczuuu.problem4j.spring.webmvc.integration;
 
-import static io.github.malczuuu.problem4j.spring.webmvc.integration.ProblemMvcAdviceIntegrationTest.ProblemExceptionController;
-import static io.github.malczuuu.problem4j.spring.webmvc.integration.ProblemMvcAdviceIntegrationTest.ResolvableExceptionResolver;
+import static io.github.malczuuu.problem4j.spring.webmvc.integration.ProblemAdviceMvcTest.ProblemExceptionController;
+import static io.github.malczuuu.problem4j.spring.webmvc.integration.ProblemAdviceMvcTest.ResolvableExceptionResolver;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     classes = {MvcTestApp.class})
 @Import({ProblemExceptionController.class, ResolvableExceptionResolver.class})
-class ProblemMvcAdviceIntegrationTest {
+class ProblemAdviceMvcTest {
 
   @RestController
   static class ProblemExceptionController {

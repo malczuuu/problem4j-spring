@@ -1,21 +1,20 @@
 package io.github.malczuuu.problem4j.spring.webmvc.integration;
 
-import static io.github.malczuuu.problem4j.spring.webmvc.integration.ValidateMethodArgumentPassingMvcTest.ValidateParameterController;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.malczuuu.problem4j.spring.webmvc.app.MvcTestApp;
-import jakarta.servlet.http.Cookie;
-import jakarta.validation.constraints.Pattern;
+import io.github.malczuuu.problem4j.spring.webmvc.integration.ValidateMethodArgumentPassingMvcTest.ValidateParameterController;
 import jakarta.validation.constraints.Size;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,9 +23,10 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@SpringBootTest(classes = {MvcTestApp.class})
+@SpringBootTest(
+    classes = {MvcTestApp.class},
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import({ValidateParameterController.class})
-@AutoConfigureMockMvc
 class ValidateMethodArgumentPassingMvcTest {
 
   @Validated
@@ -54,12 +54,6 @@ class ValidateMethodArgumentPassingMvcTest {
       return "OK";
     }
 
-    @GetMapping("/validate-parameter/multi-constraint")
-    String validateMultiConstraint(
-        @RequestParam("input") @Size(min = 5) @Pattern(regexp = "i") String inputParam) {
-      return "OK";
-    }
-
     @GetMapping("/validate-parameter/two-arg")
     String validateTwoArguments(
         @RequestParam("first") @Size(min = 5) String firstParam,
@@ -76,79 +70,76 @@ class ValidateMethodArgumentPassingMvcTest {
     }
   }
 
-  @Autowired private MockMvc mockMvc;
-  @Autowired private ObjectMapper objectMapper;
+  @Autowired private TestRestTemplate restTemplate;
 
-  /**
-   * @see ValidateParameterController#validatePathVariable(String)
-   */
   @Test
-  void givenValidPathVariable_shouldReturnOk() throws Exception {
-    mockMvc
-        .perform(get("/validate-parameter/path-variable/value"))
-        .andExpect(status().isOk())
-        .andExpect(content().string("OK"));
+  void givenValidPathVariable_shouldReturnOk() {
+    ResponseEntity<String> response =
+        restTemplate.getForEntity("/validate-parameter/path-variable/value", String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(response.getBody()).isEqualTo("OK");
   }
 
-  /**
-   * @see ValidateParameterController#validateRequestParam(String)
-   */
   @Test
-  void givenValidRequestParam_shouldReturnOk() throws Exception {
-    mockMvc
-        .perform(get("/validate-parameter/request-param").param("query", "value"))
-        .andExpect(status().isOk())
-        .andExpect(content().string("OK"));
+  void givenValidRequestParam_shouldReturnOk() {
+    ResponseEntity<String> response =
+        restTemplate.getForEntity("/validate-parameter/request-param?query=value", String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(response.getBody()).isEqualTo("OK");
   }
 
-  /**
-   * @see ValidateParameterController#validateRequestHeader(String)
-   */
   @Test
-  void givenValidRequestHeader_shouldReturnOk() throws Exception {
-    mockMvc
-        .perform(get("/validate-parameter/request-header").header("X-Custom-Header", "value"))
-        .andExpect(status().isOk())
-        .andExpect(content().string("OK"));
+  void givenValidRequestHeader_shouldReturnOk() {
+    HttpHeaders headers = new HttpHeaders();
+    headers.set("X-Custom-Header", "value");
+
+    ResponseEntity<String> response =
+        restTemplate.exchange(
+            "/validate-parameter/request-header",
+            HttpMethod.GET,
+            new HttpEntity<>(headers),
+            String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(response.getBody()).isEqualTo("OK");
   }
 
-  /**
-   * @see ValidateParameterController#validateCookieValue(String)
-   */
   @Test
-  void givenValidCookieValue_shouldReturnOk() throws Exception {
-    mockMvc
-        .perform(get("/validate-parameter/cookie-value").cookie(new Cookie("x_session", "value")))
-        .andExpect(status().isOk())
-        .andExpect(content().string("OK"));
+  void givenValidCookieValue_shouldReturnOk() {
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Cookie", "x_session=value");
+
+    ResponseEntity<String> response =
+        restTemplate.exchange(
+            "/validate-parameter/cookie-value",
+            HttpMethod.GET,
+            new HttpEntity<>(headers),
+            String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(response.getBody()).isEqualTo("OK");
   }
 
-  /**
-   * @see ValidateParameterController#validateMultiConstraint(String)
-   */
   @Test
-  void givenBothParamsValid_shouldReturnOk() throws Exception {
-    mockMvc
-        .perform(
-            get("/validate-parameter/two-arg")
-                .param("first", "validVal")
-                .param("second", "anything"))
-        .andExpect(status().isOk())
-        .andExpect(content().string("OK"));
+  void givenBothParamsValid_shouldReturnOk() {
+    ResponseEntity<String> response =
+        restTemplate.getForEntity(
+            "/validate-parameter/two-arg?first=validVal&second=anything", String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(response.getBody()).isEqualTo("OK");
   }
 
-  /**
-   * @see ValidateParameterController#validateThreeArguments(String, String, String)
-   */
   @Test
-  void givenThreeParamsValid_shouldReturnOk() throws Exception {
-    mockMvc
-        .perform(
-            get("/validate-parameter/three-arg")
-                .param("first", "anything")
-                .param("second", "validVal")
-                .param("third", "anything"))
-        .andExpect(status().isOk())
-        .andExpect(content().string("OK"));
+  void givenThreeParamsValid_shouldReturnOk() {
+    ResponseEntity<String> response =
+        restTemplate.getForEntity(
+            "/validate-parameter/three-arg?first=anything&second=validVal&third=anything",
+            String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(response.getBody()).isEqualTo("OK");
   }
 }

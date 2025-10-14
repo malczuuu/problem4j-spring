@@ -31,7 +31,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootTest(
     classes = {WebFluxTestApp.class},
-    properties = "spring.validation.method.adapt-constraint-violations=true")
+    properties = {"spring.validation.method.adapt-constraint-violations=true"},
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import({ValidateParameterController.class})
 @AutoConfigureWebTestClient
 class ValidateMethodArgumentFailingWithAdaptingWebFluxTest {

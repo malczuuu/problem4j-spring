@@ -2,28 +2,30 @@ package io.github.malczuuu.problem4j.spring.webmvc.integration;
 
 import static io.github.malczuuu.problem4j.spring.webmvc.integration.NotAcceptableMvcTest.NotAcceptableController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.webmvc.app.MvcTestApp;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@SpringBootTest(classes = {MvcTestApp.class})
+@SpringBootTest(
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+    classes = {MvcTestApp.class})
 @Import({NotAcceptableController.class})
-@AutoConfigureMockMvc
 class NotAcceptableMvcTest {
 
   @RestController
@@ -34,26 +36,24 @@ class NotAcceptableMvcTest {
     }
   }
 
-  @Autowired private MockMvc mockMvc;
+  @Autowired private TestRestTemplate restTemplate;
   @Autowired private ObjectMapper objectMapper;
 
   @Test
   void givenUnsupportedAcceptHeader_shouldReturnProblem() throws Exception {
-    mockMvc
-        .perform(get("/not-acceptable").accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isNotAcceptable())
-        .andExpect(
-            result ->
-                assertThat(result.getResolvedException())
-                    .isInstanceOf(HttpMediaTypeNotAcceptableException.class))
-        .andExpect(content().contentType(Problem.CONTENT_TYPE))
-        .andExpect(
-            result -> {
-              Problem problem =
-                  objectMapper.readValue(result.getResponse().getContentAsString(), Problem.class);
+    HttpHeaders headers = new HttpHeaders();
+    headers.setAccept(List.of(MediaType.APPLICATION_JSON));
 
-              assertThat(problem)
-                  .isEqualTo(Problem.builder().status(ProblemStatus.NOT_ACCEPTABLE).build());
-            });
+    HttpEntity<Void> request = new HttpEntity<>(headers);
+
+    ResponseEntity<String> response =
+        restTemplate.exchange("/not-acceptable", HttpMethod.GET, request, String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_ACCEPTABLE);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+
+    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+
+    assertThat(problem).isEqualTo(Problem.builder().status(ProblemStatus.NOT_ACCEPTABLE).build());
   }
 }
