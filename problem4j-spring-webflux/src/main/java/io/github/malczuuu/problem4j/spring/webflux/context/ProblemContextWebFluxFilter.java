@@ -63,10 +63,10 @@ public class ProblemContextWebFluxFilter implements WebFilter {
    * @return existing or newly generated trace identifier
    */
   private String readTraceId(ServerWebExchange exchange) {
-    String traceId = exchange.getRequest().getHeaders().getFirst(settings.getTracingHeaderName());
-    if (!StringUtils.hasLength(traceId)) {
-      traceId = getRandomTraceId();
+    if (settings.getTracingHeaderName() == null) {
+      return getRandomTraceId();
     }
-    return traceId;
+    String traceId = exchange.getRequest().getHeaders().getFirst(settings.getTracingHeaderName());
+    return StringUtils.hasLength(traceId) ? traceId : getRandomTraceId();
   }
 }

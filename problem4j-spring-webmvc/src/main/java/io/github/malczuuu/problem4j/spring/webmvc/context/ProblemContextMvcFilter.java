@@ -2,8 +2,8 @@ package io.github.malczuuu.problem4j.spring.webmvc.context;
 
 import static io.github.malczuuu.problem4j.spring.web.context.ContextSupport.PROBLEM_CONTEXT;
 import static io.github.malczuuu.problem4j.spring.web.context.ContextSupport.TRACE_ID;
+import static io.github.malczuuu.problem4j.spring.web.context.ContextSupport.getRandomTraceId;
 
-import io.github.malczuuu.problem4j.spring.web.context.ContextSupport;
 import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
 import io.github.malczuuu.problem4j.spring.web.context.ProblemContextSettings;
 import jakarta.servlet.FilterChain;
@@ -66,10 +66,10 @@ public class ProblemContextMvcFilter extends OncePerRequestFilter {
    * @return existing or newly generated trace identifier
    */
   private String readTraceId(HttpServletRequest request) {
-    String traceId = request.getHeader(settings.getTracingHeaderName());
-    if (!StringUtils.hasLength(traceId)) {
-      traceId = ContextSupport.getRandomTraceId();
+    if (settings.getTracingHeaderName() == null) {
+      return getRandomTraceId();
     }
-    return traceId;
+    String traceId = request.getHeader(settings.getTracingHeaderName());
+    return StringUtils.hasLength(traceId) ? traceId : getRandomTraceId();
   }
 }
