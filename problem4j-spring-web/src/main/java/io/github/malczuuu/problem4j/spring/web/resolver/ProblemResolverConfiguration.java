@@ -182,11 +182,10 @@ public class ProblemResolverConfiguration {
   @ConditionalOnClass(MultipartException.class)
   @Configuration(proxyBeanMethods = false)
   public static class MultipartProblemConfiguration {
-    @ConditionalOnMissingBean(MultipartProblemProblemResolver.class)
+    @ConditionalOnMissingBean(MultipartProblemResolver.class)
     @Bean
-    public MultipartProblemProblemResolver multipartExceptionProblemResolver(
-        ProblemFormat problemFormat) {
-      return new MultipartProblemProblemResolver(problemFormat);
+    public MultipartProblemResolver multipartProblemResolver(ProblemFormat problemFormat) {
+      return new MultipartProblemResolver(problemFormat);
     }
   }
 
