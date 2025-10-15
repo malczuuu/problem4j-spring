@@ -42,13 +42,13 @@ Artifacts are published to Snapshot Repository, using following Gradle task.
    <dependency>
        <groupId>io.github.malczuuu.problem4j</groupId>
        <artifactId>problem4j-spring-webflux</artifactId>
-       <version>1.0.0-SNAPSHOT</version>
+       <version>1.1.0-SNAPSHOT</version>
    </dependency>
    
    <dependency>
        <groupId>io.github.malczuuu.problem4j</groupId>
        <artifactId>problem4j-spring-webmvc</artifactId>
-       <version>1.0.0-SNAPSHOT</version>
+       <version>1.1.0-SNAPSHOT</version>
    </dependency>
    </dependencies>
    ```
@@ -78,12 +78,12 @@ Artifacts are published to Snapshot Repository, using following Gradle task.
    dependencies {
        // choose the one appropriate for your project setup
        
-       implementation("io.github.malczuuu.problem4j:problem4j-spring-webflux:1.0.0-SNAPSHOT") {
+       implementation("io.github.malczuuu.problem4j:problem4j-spring-webflux:1.1.0-SNAPSHOT") {
            // ensures Gradle re-checks for new snapshot versions
            isChanging = true   
        }
    
-       implementation("io.github.malczuuu.problem4j:problem4j-spring-webmvc:1.0.0-SNAPSHOT") {
+       implementation("io.github.malczuuu.problem4j:problem4j-spring-webmvc:1.1.0-SNAPSHOT") {
            // ensures Gradle re-checks for new snapshot versions
            isChanging = true
        }
