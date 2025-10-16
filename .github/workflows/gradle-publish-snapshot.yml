@@ -7,6 +7,7 @@ on:
 
 jobs:
   check-branch:
+    name: Check Branch
     runs-on: ubuntu-latest
     steps:
       - name: Check Branch
@@ -19,6 +20,7 @@ jobs:
           fi
 
   check-updates:
+    name: Check Updates
     runs-on: ubuntu-latest
     outputs:
       should_run: ${{ steps.check.outputs.should_run }}
@@ -45,6 +47,7 @@ jobs:
           fi
 
   publish-snapshot:
+    name: Publish problem4j-spring SNAPSHOT
     needs: [ check-branch, check-updates ]
     if: needs.check-updates.outputs.should_run == 'true'
     runs-on: ubuntu-latest
@@ -81,7 +84,7 @@ jobs:
           echo "::notice::evaluated snapshot version: $SNAPSHOT_VERSION"
           echo "version=$SNAPSHOT_VERSION" >> $GITHUB_OUTPUT
 
-      - name: Publish Snapshot with Gradle Wrapper
+      - name: Publish Snapshot
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
           SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}

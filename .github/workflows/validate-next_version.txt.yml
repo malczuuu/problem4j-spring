@@ -17,12 +17,13 @@ on:
 
 jobs:
   validate:
+    name: Validate SNAPSHOT version files
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Validate 'next_version.txt'
+      - name: Validate next_version.txt file
         env:
           FILE: .github/utils/next_version.txt
         run: bash .github/utils/validate_version_file.sh

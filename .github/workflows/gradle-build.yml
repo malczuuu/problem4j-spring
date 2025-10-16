@@ -1,6 +1,5 @@
 name: Gradle Build
 
-# workflow limited to only files related to gradle build itself
 on:
   push:
     branches:
@@ -8,18 +7,8 @@ on:
       - "dev"
       - "dev/*"
       - "feature/*"
+      - "bugfix/*"
       - "release/*"
-    paths:
-      - "problem4j-spring-*/build.gradle.kts"
-      - "problem4j-spring-*/src/**"
-      - "build.gradle.kts"
-      - "settings.gradle.kts"
-      - "gradle.properties"
-      - "gradle/**"
-      - "buildSrc/**"
-      - "gradlew"
-      - "gradlew.bat"
-      - ".github/workflows/gradle-build.yml"
   pull_request:
     branches:
       - "main"
@@ -27,6 +16,7 @@ on:
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -45,5 +35,5 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Build with Gradle Wrapper
+      - name: Build
         run: ./gradlew build
