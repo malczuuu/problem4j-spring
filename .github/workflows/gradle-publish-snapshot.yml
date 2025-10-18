@@ -90,5 +90,6 @@ jobs:
           SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
           PUBLISHING_USERNAME: ${{ secrets.PUBLISHING_USERNAME }}
           PUBLISHING_PASSWORD: ${{ secrets.PUBLISHING_PASSWORD }}
+          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.parallel=false"
         run: |
           ./gradlew -Pversion="${{ steps.version.outputs.version }}" publishAggregationToCentralPortalSnapshots
