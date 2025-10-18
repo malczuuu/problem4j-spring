@@ -17,8 +17,8 @@ dependencies {
 
     compileOnly(platform(libs.spring.boot.dependencies))
     compileOnly(libs.spring.boot.autoconfigure)
-    compileOnly(libs.spring.web)
-    compileOnly(libs.spring.webmvc)
+    compileOnly(libs.spring.boot.web.server)
+    compileOnly(libs.spring.boot.webmvc)
 
     compileOnly(libs.jakarta.validation.api)
     compileOnly(libs.jakarta.servlet.api)
@@ -29,8 +29,9 @@ dependencies {
     // Test
     testImplementation(platform(libs.spring.boot.dependencies))
     testImplementation(libs.spring.boot.starter.test)
-    testImplementation(libs.spring.boot.starter.web)
+    testImplementation(libs.spring.boot.starter.webmvc)
     testImplementation(libs.spring.boot.starter.validation)
+    testImplementation(libs.spring.boot.restclient)
 
     testRuntimeOnly(libs.junit.platform.launcher)
 }

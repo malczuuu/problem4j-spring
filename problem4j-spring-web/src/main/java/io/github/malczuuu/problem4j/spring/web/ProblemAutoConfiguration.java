@@ -1,7 +1,6 @@
 package io.github.malczuuu.problem4j.spring.web;
 
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import io.github.malczuuu.problem4j.jackson.ProblemModule;
+import io.github.malczuuu.problem4j.jackson3.ProblemJacksonModule;
 import io.github.malczuuu.problem4j.spring.web.annotation.DefaultProblemMappingProcessor;
 import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
 import io.github.malczuuu.problem4j.spring.web.format.DefaultProblemFormat;
@@ -19,6 +18,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import tools.jackson.databind.module.SimpleModule;
 
 @AutoConfiguration
 @EnableConfigurationProperties({ProblemProperties.class})
@@ -99,19 +99,19 @@ public class ProblemAutoConfiguration {
     return problemResolverStore;
   }
 
-  @ConditionalOnClass({ProblemModule.class, SimpleModule.class})
+  @ConditionalOnClass({ProblemJacksonModule.class, SimpleModule.class})
   @Configuration(proxyBeanMethods = false)
   public static class ProblemModuleConfiguration {
 
     /**
-     * Provides a {@link ProblemModule} if none is defined.
+     * Provides a {@link ProblemJacksonModule} if none is defined.
      *
-     * @return a new {@link ProblemModule}
+     * @return a new {@link ProblemJacksonModule}
      */
-    @ConditionalOnMissingBean(ProblemModule.class)
+    @ConditionalOnMissingBean(ProblemJacksonModule.class)
     @Bean
-    public ProblemModule problemModule() {
-      return new ProblemModule();
+    public ProblemJacksonModule problemJacksonModule() {
+      return new ProblemJacksonModule();
     }
   }
 }

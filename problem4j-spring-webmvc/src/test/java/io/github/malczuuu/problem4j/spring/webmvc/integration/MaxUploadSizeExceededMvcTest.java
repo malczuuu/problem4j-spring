@@ -4,14 +4,13 @@ import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.MAX_UP
 import static io.github.malczuuu.problem4j.spring.webmvc.integration.MaxUploadSizeExceededMvcTest.MaxUploadController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.webmvc.app.MvcTestApp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.test.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
@@ -25,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import tools.jackson.databind.json.JsonMapper;
 
 @SpringBootTest(
     classes = {MvcTestApp.class},
@@ -45,10 +45,10 @@ class MaxUploadSizeExceededMvcTest {
   }
 
   @Autowired private TestRestTemplate restTemplate;
-  @Autowired private ObjectMapper objectMapper;
+  @Autowired private JsonMapper jsonMapper;
 
   @Test
-  void givenMaxUploadSizeExceeded_shouldReturnProblem() throws Exception {
+  void givenMaxUploadSizeExceeded_shouldReturnProblem() {
     MultiValueMap<String, Object> body = prepareMultipartBody();
 
     HttpHeaders headers = new HttpHeaders();
@@ -59,10 +59,11 @@ class MaxUploadSizeExceededMvcTest {
     ResponseEntity<String> response =
         restTemplate.postForEntity("/max-upload-size", requestEntity, String.class);
 
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.PAYLOAD_TOO_LARGE);
+    // FIXME should be able to call equal on enum itself, but HttpStatus.valueOf returns old one
+    assertThat(response.getStatusCode().value()).isEqualTo(HttpStatus.CONTENT_TOO_LARGE.value());
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
     assertThat(problem)
         .isEqualTo(
             Problem.builder()

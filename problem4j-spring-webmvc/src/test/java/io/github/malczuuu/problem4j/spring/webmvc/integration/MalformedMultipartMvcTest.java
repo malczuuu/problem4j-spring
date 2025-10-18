@@ -5,14 +5,13 @@ import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.PARAM_
 import static io.github.malczuuu.problem4j.spring.webmvc.integration.MalformedMultipartMvcTest.RequestPartController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.webmvc.app.MvcTestApp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.test.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -25,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import tools.jackson.databind.json.JsonMapper;
 
 @SpringBootTest(
     classes = {MvcTestApp.class},
@@ -41,10 +41,10 @@ class MalformedMultipartMvcTest {
   }
 
   @Autowired private TestRestTemplate restTemplate;
-  @Autowired private ObjectMapper objectMapper;
+  @Autowired private JsonMapper jsonMapper;
 
   @Test
-  void givenRequestWithMalformedRequestPart_shouldReturnProblem() throws Exception {
+  void givenRequestWithMalformedRequestPart_shouldReturnProblem() {
     MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.MULTIPART_FORM_DATA);
@@ -57,7 +57,7 @@ class MalformedMultipartMvcTest {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem)
         .isEqualTo(

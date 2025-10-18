@@ -6,14 +6,13 @@ import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.TYPE_M
 import static io.github.malczuuu.problem4j.spring.webmvc.integration.TypeMismatchMvcTest.TypeMismatchController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.webmvc.app.MvcTestApp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.test.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -26,6 +25,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import tools.jackson.databind.json.JsonMapper;
 
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
@@ -58,17 +58,17 @@ class TypeMismatchMvcTest {
   }
 
   @Autowired private TestRestTemplate restTemplate;
-  @Autowired private ObjectMapper objectMapper;
+  @Autowired private JsonMapper jsonMapper;
 
   @Test
-  void givenRequestWithInvalidPathVariable_shouldReturnProblem() throws Exception {
+  void givenRequestWithInvalidPathVariable_shouldReturnProblem() {
     ResponseEntity<String> response =
         restTemplate.getForEntity("/type-mismatch/path-variable/abc", String.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem)
         .isEqualTo(
@@ -90,14 +90,14 @@ class TypeMismatchMvcTest {
   }
 
   @Test
-  void givenRequestWithInvalidParameterType_shouldReturnProblem() throws Exception {
+  void givenRequestWithInvalidParameterType_shouldReturnProblem() {
     ResponseEntity<String> response =
         restTemplate.getForEntity("/type-mismatch/request-param?id=abc", String.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem)
         .isEqualTo(
@@ -119,7 +119,7 @@ class TypeMismatchMvcTest {
   }
 
   @Test
-  void givenRequestWithInvalidRequestHeader_shouldReturnProblem() throws Exception {
+  void givenRequestWithInvalidRequestHeader_shouldReturnProblem() {
     HttpHeaders headers = new HttpHeaders();
     headers.set("X-Id", "abc");
 
@@ -132,7 +132,7 @@ class TypeMismatchMvcTest {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem)
         .isEqualTo(
@@ -160,7 +160,7 @@ class TypeMismatchMvcTest {
   }
 
   @Test
-  void givenRequestWithInvalidCookieValue_shouldReturnProblem() throws Exception {
+  void givenRequestWithInvalidCookieValue_shouldReturnProblem() {
     HttpHeaders headers = new HttpHeaders();
     headers.add(HttpHeaders.COOKIE, "id=abc");
 
@@ -172,7 +172,7 @@ class TypeMismatchMvcTest {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem)
         .isEqualTo(

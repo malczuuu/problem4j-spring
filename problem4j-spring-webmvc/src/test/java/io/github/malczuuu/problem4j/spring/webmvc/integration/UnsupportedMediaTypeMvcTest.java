@@ -2,7 +2,6 @@ package io.github.malczuuu.problem4j.spring.webmvc.integration;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.webmvc.app.MvcTestApp;
@@ -11,7 +10,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.test.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -21,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import tools.jackson.databind.json.JsonMapper;
 
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
@@ -37,10 +37,10 @@ class UnsupportedMediaTypeMvcTest {
   }
 
   @Autowired private TestRestTemplate restTemplate;
-  @Autowired private ObjectMapper objectMapper;
+  @Autowired private JsonMapper jsonMapper;
 
   @Test
-  void givenRequestWithUnsupportedContentType_shouldReturnProblem() throws Exception {
+  void givenRequestWithUnsupportedContentType_shouldReturnProblem() {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.TEXT_PLAIN);
 
@@ -52,7 +52,7 @@ class UnsupportedMediaTypeMvcTest {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem)
         .isEqualTo(Problem.builder().status(ProblemStatus.UNSUPPORTED_MEDIA_TYPE).build());

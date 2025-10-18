@@ -8,7 +8,7 @@ plugins {
 dependencies {
     constraints {
         api(libs.problem4j.core)
-        api(libs.problem4j.jackson)
+        api(libs.problem4j.jackson3)
         api(project(":problem4j-spring-web"))
         api(project(":problem4j-spring-webflux"))
         api(project(":problem4j-spring-webmvc"))
