@@ -16,14 +16,13 @@ import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.PARAM_
 import static io.github.malczuuu.problem4j.spring.webmvc.integration.MissingParameterMvcTest.MissingParameterController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.webmvc.app.MvcTestApp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.test.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
@@ -45,6 +44,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
+import tools.jackson.databind.json.JsonMapper;
 
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
@@ -93,17 +93,17 @@ class MissingParameterMvcTest {
   }
 
   @Autowired private TestRestTemplate restTemplate;
-  @Autowired private ObjectMapper objectMapper;
+  @Autowired private JsonMapper jsonMapper;
 
   @Test
-  void givenRequestWithoutPathVariable_shouldReturnProblem() throws Exception {
+  void givenRequestWithoutPathVariable_shouldReturnProblem() {
     ResponseEntity<String> response =
         restTemplate.getForEntity("/missing-parameter/path-variable", String.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem)
         .isEqualTo(
@@ -124,14 +124,14 @@ class MissingParameterMvcTest {
   }
 
   @Test
-  void givenRequestWithoutRequestParam_shouldReturnProblem() throws Exception {
+  void givenRequestWithoutRequestParam_shouldReturnProblem() {
     ResponseEntity<String> response =
         restTemplate.getForEntity("/missing-parameter/request-param", String.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem)
         .isEqualTo(
@@ -153,7 +153,7 @@ class MissingParameterMvcTest {
   }
 
   @Test
-  void givenRequestWithoutRequestPartParam_shouldReturnProblem() throws Exception {
+  void givenRequestWithoutRequestPartParam_shouldReturnProblem() {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
@@ -166,7 +166,7 @@ class MissingParameterMvcTest {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem)
         .isEqualTo(
@@ -178,7 +178,7 @@ class MissingParameterMvcTest {
   }
 
   @Test
-  void givenRequestWithoutRequestPartHeader_shouldReturnProblem() throws Exception {
+  void givenRequestWithoutRequestPartHeader_shouldReturnProblem() {
     ResponseEntity<String> response =
         restTemplate.postForEntity(
             "/missing-parameter/request-part",
@@ -188,7 +188,7 @@ class MissingParameterMvcTest {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem).isEqualTo(Problem.builder().status(ProblemStatus.BAD_REQUEST).build());
   }
@@ -217,12 +217,12 @@ class MissingParameterMvcTest {
   }
 
   @Test
-  void givenRequestWithoutRequestHeader_shouldReturnProblem() throws Exception {
+  void givenRequestWithoutRequestHeader_shouldReturnProblem() {
     ResponseEntity<String> response =
         restTemplate.getForEntity("/missing-parameter/request-header", String.class);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
     assertThat(problem)
         .isEqualTo(
             Problem.builder()
@@ -245,12 +245,12 @@ class MissingParameterMvcTest {
   }
 
   @Test
-  void givenRequestWithoutCookieValue_shouldReturnProblem() throws Exception {
+  void givenRequestWithoutCookieValue_shouldReturnProblem() {
     ResponseEntity<String> response =
         restTemplate.getForEntity("/missing-parameter/cookie-value", String.class);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
     assertThat(problem)
         .isEqualTo(
             Problem.builder()
@@ -273,12 +273,12 @@ class MissingParameterMvcTest {
   }
 
   @Test
-  void givenRequestWithoutRequestAttribute_shouldReturnProblem() throws Exception {
+  void givenRequestWithoutRequestAttribute_shouldReturnProblem() {
     ResponseEntity<String> response =
         restTemplate.getForEntity("/missing-parameter/request-attribute", String.class);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
     assertThat(problem)
         .isEqualTo(
             Problem.builder()
@@ -289,12 +289,12 @@ class MissingParameterMvcTest {
   }
 
   @Test
-  void givenRequestWithoutSessionAttribute_shouldReturnProblem() throws Exception {
+  void givenRequestWithoutSessionAttribute_shouldReturnProblem() {
     ResponseEntity<String> response =
         restTemplate.getForEntity("/missing-parameter/session-attribute", String.class);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
     assertThat(problem)
         .isEqualTo(
             Problem.builder()

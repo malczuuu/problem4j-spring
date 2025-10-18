@@ -5,7 +5,6 @@ import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.VALIDA
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.InstanceOfAssertFactories.LIST;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.webmvc.app.MvcTestApp;
@@ -19,7 +18,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.test.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -33,6 +32,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import tools.jackson.databind.json.JsonMapper;
 
 @SpringBootTest(
     classes = {MvcTestApp.class},
@@ -91,17 +91,17 @@ class ValidateMethodArgumentFailingWithAdaptionMvcTest {
   }
 
   @Autowired private TestRestTemplate restTemplate;
-  @Autowired private ObjectMapper objectMapper;
+  @Autowired private JsonMapper jsonMapper;
 
   @Test
-  void givenTooShortPathVariable_shouldReturnValidationProblem() throws Exception {
+  void givenTooShortPathVariable_shouldReturnValidationProblem() {
     ResponseEntity<String> response =
         restTemplate.getForEntity("/validate-parameter/path-variable/v", String.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
     assertThat(problem)
         .isEqualTo(
             Problem.builder()
@@ -113,14 +113,14 @@ class ValidateMethodArgumentFailingWithAdaptionMvcTest {
   }
 
   @Test
-  void givenTooShortRequestParam_shouldReturnValidationProblem() throws Exception {
+  void givenTooShortRequestParam_shouldReturnValidationProblem() {
     ResponseEntity<String> response =
         restTemplate.getForEntity("/validate-parameter/request-param?query=v", String.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem)
         .isEqualTo(
@@ -133,7 +133,7 @@ class ValidateMethodArgumentFailingWithAdaptionMvcTest {
   }
 
   @Test
-  void givenTooShortRequestHeader_shouldReturnValidationProblem() throws Exception {
+  void givenTooShortRequestHeader_shouldReturnValidationProblem() {
     HttpHeaders headers = new HttpHeaders();
     headers.set("X-Custom-Header", "v");
 
@@ -147,7 +147,7 @@ class ValidateMethodArgumentFailingWithAdaptionMvcTest {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem)
         .isEqualTo(
@@ -161,7 +161,7 @@ class ValidateMethodArgumentFailingWithAdaptionMvcTest {
   }
 
   @Test
-  void givenTooShortCookieValue_shouldReturnValidationProblem() throws Exception {
+  void givenTooShortCookieValue_shouldReturnValidationProblem() {
     HttpHeaders headers = new HttpHeaders();
     headers.add("Cookie", "x_session=v");
 
@@ -175,7 +175,7 @@ class ValidateMethodArgumentFailingWithAdaptionMvcTest {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem)
         .isEqualTo(
@@ -189,21 +189,21 @@ class ValidateMethodArgumentFailingWithAdaptionMvcTest {
   }
 
   @Test
-  void givenValueViolatingAllConstraints_shouldReturnAllErrors() throws Exception {
+  void givenValueViolatingAllConstraints_shouldReturnAllErrors() {
     ResponseEntity<String> response =
         restTemplate.getForEntity("/validate-parameter/multi-constraint?input=v", String.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem.getExtensionValue(ERRORS_EXTENSION)).asInstanceOf(LIST).hasSize(2);
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"vvvvv", "iiiii"})
-  void givenValueViolatingSingleConstraint_shouldReturnCorrectError(String input) throws Exception {
+  void givenValueViolatingSingleConstraint_shouldReturnCorrectError(String input) {
     ResponseEntity<String> response =
         restTemplate.getForEntity(
             "/validate-parameter/multi-constraint?input=" + input, String.class);
@@ -211,13 +211,13 @@ class ValidateMethodArgumentFailingWithAdaptionMvcTest {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem.getExtensionValue(ERRORS_EXTENSION)).asInstanceOf(LIST).hasSize(1);
   }
 
   @Test
-  void givenFirstParamTooShort_shouldReturnValidationError() throws Exception {
+  void givenFirstParamTooShort_shouldReturnValidationError() {
     ResponseEntity<String> response =
         restTemplate.getForEntity(
             "/validate-parameter/two-arg?first=v&second=anything", String.class);
@@ -225,7 +225,7 @@ class ValidateMethodArgumentFailingWithAdaptionMvcTest {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem.getExtensionValue(ERRORS_EXTENSION))
         .asInstanceOf(LIST)
@@ -234,7 +234,7 @@ class ValidateMethodArgumentFailingWithAdaptionMvcTest {
   }
 
   @Test
-  void givenSecondParamTooShort_shouldReturnValidationError() throws Exception {
+  void givenSecondParamTooShort_shouldReturnValidationError() {
     ResponseEntity<String> response =
         restTemplate.getForEntity(
             "/validate-parameter/three-arg?first=anything&second=v&third=anything", String.class);
@@ -242,7 +242,7 @@ class ValidateMethodArgumentFailingWithAdaptionMvcTest {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem.getExtensionValue(ERRORS_EXTENSION))
         .asInstanceOf(LIST)

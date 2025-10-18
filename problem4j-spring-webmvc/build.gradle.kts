@@ -17,8 +17,8 @@ dependencies {
 
     compileOnly(platform("org.springframework.boot:spring-boot-dependencies:${property("spring-boot.version")}"))
     compileOnly("org.springframework.boot:spring-boot-autoconfigure")
-    compileOnly("org.springframework:spring-web")
-    compileOnly("org.springframework:spring-webmvc")
+    compileOnly("org.springframework.boot:spring-boot-web-server")
+    compileOnly("org.springframework.boot:spring-boot-webmvc")
 
     compileOnly("jakarta.validation:jakarta.validation-api")
     compileOnly("jakarta.servlet:jakarta.servlet-api")
@@ -29,8 +29,9 @@ dependencies {
     // Test
     testImplementation(platform("org.springframework.boot:spring-boot-dependencies:${property("spring-boot.version")}"))
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.boot:spring-boot-starter-web")
+    testImplementation("org.springframework.boot:spring-boot-starter-webmvc")
     testImplementation("org.springframework.boot:spring-boot-starter-validation")
+    testImplementation("org.springframework.boot:spring-boot-restclient")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }

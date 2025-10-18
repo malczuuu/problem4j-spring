@@ -2,9 +2,9 @@ package io.github.malczuuu.problem4j.spring.webmvc.error;
 
 import io.github.malczuuu.problem4j.spring.web.processor.ProblemPostProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
-import org.springframework.boot.web.servlet.error.ErrorAttributes;
-import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.boot.webmvc.error.DefaultErrorAttributes;
+import org.springframework.boot.webmvc.error.ErrorAttributes;
+import org.springframework.boot.webmvc.error.ErrorController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
  * with {@link ProblemErrorController}, which renders {@code Problem} objects instead of HTML or
  * plain JSON errors.
  *
- * @see org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration
+ * @see org.springframework.boot.webmvc.autoconfigure.error.ErrorMvcAutoConfiguration
  */
 @Configuration(proxyBeanMethods = false)
 public class ProblemErrorMvcConfiguration {
@@ -41,7 +41,7 @@ public class ProblemErrorMvcConfiguration {
    *
    * @param errorAttributes provides error information for requests
    * @return a new {@link ProblemErrorController} instance
-   * @see org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration
+   * @see org.springframework.boot.webmvc.autoconfigure.error.ErrorMvcAutoConfiguration
    */
   @ConditionalOnMissingBean(ErrorController.class)
   @Bean

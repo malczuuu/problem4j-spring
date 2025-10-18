@@ -6,8 +6,8 @@ import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
 import io.github.malczuuu.problem4j.spring.web.processor.ProblemPostProcessor;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
-import org.springframework.boot.web.servlet.error.ErrorAttributes;
+import org.springframework.boot.webmvc.autoconfigure.error.AbstractErrorController;
+import org.springframework.boot.webmvc.error.ErrorAttributes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * A simple {@link org.springframework.boot.web.servlet.error.ErrorController} implementation that
+ * A simple {@link org.springframework.boot.webmvc.error.ErrorController} implementation that
  * returns HTTP problems (RFC 7807) instead of HTML error pages.
  *
  * <p>It converts generic servlet errors into {@link Problem} responses with the appropriate HTTP
