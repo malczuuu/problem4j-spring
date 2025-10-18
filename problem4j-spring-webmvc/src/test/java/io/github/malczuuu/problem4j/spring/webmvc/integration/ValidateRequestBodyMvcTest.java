@@ -6,8 +6,6 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.webmvc.app.MvcTestApp;
@@ -30,7 +28,7 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.test.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -40,6 +38,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import tools.jackson.databind.json.JsonMapper;
 
 @SpringBootTest(
     classes = {MvcTestApp.class},
@@ -62,7 +61,7 @@ class ValidateRequestBodyMvcTest {
   }
 
   @Autowired private TestRestTemplate restTemplate;
-  @Autowired private ObjectMapper objectMapper;
+  @Autowired private JsonMapper jsonMapper;
 
   record TestRequest(@NotBlank String name, Integer age) {}
 
@@ -90,7 +89,7 @@ class ValidateRequestBodyMvcTest {
   }
 
   @Test
-  void givenInvalidRequestBody_shouldReturnProblem() throws Exception {
+  void givenInvalidRequestBody_shouldReturnProblem() {
     TestRequest invalidRequest = new TestRequest("", null);
 
     ResponseEntity<String> response =
@@ -99,7 +98,7 @@ class ValidateRequestBodyMvcTest {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem)
         .isEqualTo(
@@ -113,7 +112,7 @@ class ValidateRequestBodyMvcTest {
   }
 
   @Test
-  void givenGlobalValidationViolation_shouldReturnProblemWithoutFieldName() throws Exception {
+  void givenGlobalValidationViolation_shouldReturnProblemWithoutFieldName() {
     AlwaysInvalidRequest body = new AlwaysInvalidRequest("value");
 
     ResponseEntity<String> response =
@@ -122,7 +121,7 @@ class ValidateRequestBodyMvcTest {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     Map<String, String> error = new HashMap<>();
     error.put("field", null);
@@ -140,7 +139,7 @@ class ValidateRequestBodyMvcTest {
   @ValueSource(
       strings = {"{ \"name\": \"Alice\"", "{ \"name\": \"Alice\", \"age\": \"too young\"}", ""})
   @NullSource
-  void givenMalformedRequestBody_shouldReturnProblem(String json) throws JsonProcessingException {
+  void givenMalformedRequestBody_shouldReturnProblem(String json) {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -152,7 +151,7 @@ class ValidateRequestBodyMvcTest {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem).isEqualTo(Problem.builder().status(ProblemStatus.BAD_REQUEST).build());
   }

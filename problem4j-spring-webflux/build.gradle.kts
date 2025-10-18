@@ -17,8 +17,8 @@ dependencies {
 
     compileOnly(platform("org.springframework.boot:spring-boot-dependencies:${property("spring-boot.version")}"))
     compileOnly("org.springframework.boot:spring-boot-autoconfigure")
-    compileOnly("org.springframework:spring-web")
-    compileOnly("org.springframework:spring-webflux")
+    compileOnly("org.springframework.boot:spring-boot-web-server")
+    compileOnly("org.springframework.boot:spring-boot-webflux")
 
     compileOnly("jakarta.validation:jakarta.validation-api")
     compileOnly("org.slf4j:slf4j-api")
@@ -29,7 +29,7 @@ dependencies {
     testImplementation(platform("org.springframework.boot:spring-boot-dependencies:${property("spring-boot.version")}"))
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.boot:spring-boot-starter-webflux")
-    testImplementation("org.springframework.boot:spring-boot-starter-validation")
+    testImplementation("org.springframework.boot:spring-boot-validation")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }

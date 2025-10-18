@@ -14,13 +14,13 @@ java {
 dependencies {
     // Main
     api("io.github.malczuuu.problem4j:problem4j-core:${property("problem4j-core.version")}")
-    api("io.github.malczuuu.problem4j:problem4j-jackson:${property("problem4j-jackson.version")}")
+    api("io.github.malczuuu.problem4j:problem4j-jackson3:${property("problem4j-jackson3.version")}")
 
     compileOnly(platform("org.springframework.boot:spring-boot-dependencies:${property("spring-boot.version")}"))
     compileOnly("org.springframework.boot:spring-boot-autoconfigure")
     compileOnly("org.springframework:spring-web")
 
-    compileOnly("com.fasterxml.jackson.core:jackson-databind")
+    compileOnly("tools.jackson.core:jackson-databind")
     compileOnly("jakarta.servlet:jakarta.servlet-api")
     compileOnly("jakarta.validation:jakarta.validation-api")
 
@@ -31,8 +31,8 @@ dependencies {
     // Test
     testImplementation(platform("org.springframework.boot:spring-boot-dependencies:${property("spring-boot.version")}"))
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.boot:spring-boot-starter-web")
-    testImplementation("org.springframework.boot:spring-boot-starter-validation")
+    testImplementation("org.springframework.boot:spring-boot-web-server")
+    testImplementation("org.springframework.boot:spring-boot-validation")
     testImplementation("jakarta.servlet:jakarta.servlet-api")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")

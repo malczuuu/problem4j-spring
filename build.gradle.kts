@@ -35,6 +35,18 @@ subprojects {
 allprojects {
     repositories {
         mavenCentral()
+        maven {
+            url = uri("https://central.sonatype.com/repository/maven-snapshots/")
+            content {
+                includeGroup("io.github.malczuuu.problem4j")
+            }
+            mavenContent {
+                snapshotsOnly()
+            }
+        }
+    }
+    configurations.all {
+        resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS)
     }
 }
 

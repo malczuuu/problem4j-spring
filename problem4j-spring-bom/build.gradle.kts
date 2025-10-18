@@ -8,7 +8,7 @@ plugins {
 dependencies {
     constraints {
         api("io.github.malczuuu.problem4j:problem4j-core:${property("problem4j-core.version")}")
-        api("io.github.malczuuu.problem4j:problem4j-jackson:${property("problem4j-jackson.version")}")
+        api("io.github.malczuuu.problem4j:problem4j-jackson3:${property("problem4j-jackson3.version")}")
         api(project(":problem4j-spring-web"))
         api(project(":problem4j-spring-webflux"))
         api(project(":problem4j-spring-webmvc"))

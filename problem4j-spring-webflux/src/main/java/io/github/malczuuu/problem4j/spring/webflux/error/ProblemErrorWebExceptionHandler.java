@@ -11,8 +11,8 @@ import io.github.malczuuu.problem4j.spring.web.processor.ProblemPostProcessor;
 import java.util.Optional;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.WebProperties;
-import org.springframework.boot.autoconfigure.web.reactive.error.DefaultErrorWebExceptionHandler;
-import org.springframework.boot.web.reactive.error.ErrorAttributes;
+import org.springframework.boot.webflux.autoconfigure.error.DefaultErrorWebExceptionHandler;
+import org.springframework.boot.webflux.error.ErrorAttributes;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -22,8 +22,8 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 /**
- * A WebFlux {@link org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler} that
- * renders HTTP problems (RFC 7807) instead of the default JSON error response.
+ * A WebFlux {@link org.springframework.boot.webflux.error.ErrorWebExceptionHandler} that renders
+ * HTTP problems (RFC 7807) instead of the default JSON error response.
  *
  * <p>It replaces the response body with a {@link Problem} object while preserving the original HTTP
  * status and content type {@code application/problem+json}.

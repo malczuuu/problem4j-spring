@@ -3,7 +3,6 @@ package io.github.malczuuu.problem4j.spring.webmvc.integration;
 import static io.github.malczuuu.problem4j.spring.webmvc.integration.ProblemOverrideMvcTest.InstanceOverrideController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemException;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
@@ -12,7 +11,7 @@ import java.net.URI;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.test.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -21,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import tools.jackson.databind.json.JsonMapper;
 
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
@@ -48,10 +48,10 @@ class ProblemOverrideMvcTest {
   }
 
   @Autowired private TestRestTemplate restTemplate;
-  @Autowired private ObjectMapper objectMapper;
+  @Autowired private JsonMapper jsonMapper;
 
   @Test
-  void givenNonEmptyType_shouldRewriteType() throws Exception {
+  void givenNonEmptyType_shouldRewriteType() {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -63,13 +63,13 @@ class ProblemOverrideMvcTest {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem.getType()).isEqualTo(URI.create("https://example.org/type/not-blank"));
   }
 
   @Test
-  void givenEmptyType_shouldNotRewriteType() throws Exception {
+  void givenEmptyType_shouldNotRewriteType() {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -81,12 +81,12 @@ class ProblemOverrideMvcTest {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
     assertThat(problem.getType()).isEqualTo(Problem.BLANK_TYPE);
   }
 
   @Test
-  void givenNonEmptyTraceId_shouldRewriteInstanceField() throws Exception {
+  void givenNonEmptyTraceId_shouldRewriteInstanceField() {
     String traceId = "12345-trace";
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
@@ -101,7 +101,7 @@ class ProblemOverrideMvcTest {
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
     assertThat(response.getHeaders().getFirst("X-Trace-ID")).isEqualTo(traceId);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem.getInstance()).isEqualTo(URI.create("https://example.org/trace/" + traceId));
   }
