@@ -5,7 +5,7 @@ on:
   push:
     branches:
       - "main"
-      - "release/*"
+      - "release-*"
     paths:
       - "problem4j-spring-*/build.gradle.kts"
       - "build.gradle.kts"

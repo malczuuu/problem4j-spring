@@ -1,18 +1,15 @@
 name: Gradle Build
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - "main"
-      - "dev"
-      - "dev/*"
-      - "feature/*"
-      - "bugfix/*"
-      - "release/*"
+      - "release-*"
   pull_request:
     branches:
       - "main"
-      - "release/*"
+      - "release-*"
 
 jobs:
   build:

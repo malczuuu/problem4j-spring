@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - "main"
-      - "release/*"
+      - "release-*"
     paths:
       - ".github/utils/next_version.txt"
       - ".github/utils/validate_version_file.sh"
