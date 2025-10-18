@@ -4,7 +4,6 @@ import static io.github.malczuuu.problem4j.spring.webmvc.integration.ProblemAdvi
 import static io.github.malczuuu.problem4j.spring.webmvc.integration.ProblemAdviceMvcTest.ResolvableExceptionResolver;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemBuilder;
 import io.github.malczuuu.problem4j.core.ProblemException;
@@ -18,7 +17,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.test.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -28,6 +27,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import tools.jackson.databind.json.JsonMapper;
 
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
@@ -89,15 +89,15 @@ class ProblemAdviceMvcTest {
   }
 
   @Autowired private TestRestTemplate restTemplate;
-  @Autowired private ObjectMapper objectMapper;
+  @Autowired private JsonMapper jsonMapper;
 
   @ParameterizedTest
   @CsvSource({
     "string1, 1, true",
     "string2, 2, false",
   })
-  void givenExtendedProblemException_shouldReturnProblem(String value1, Long value2, boolean value3)
-      throws Exception {
+  void givenExtendedProblemException_shouldReturnProblem(
+      String value1, Long value2, boolean value3) {
     ResponseEntity<String> response =
         restTemplate.getForEntity(
             "/problem/exception?value1=" + value1 + "&value2=" + value2 + "&value3=" + value3,
@@ -106,7 +106,7 @@ class ProblemAdviceMvcTest {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.valueOf(418));
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem)
         .isEqualTo(
@@ -124,8 +124,7 @@ class ProblemAdviceMvcTest {
     "string1, 1, true",
     "string2, 2, false",
   })
-  void givenAnnotatedException_shouldReturnProblem(String value1, Long value2, boolean value3)
-      throws Exception {
+  void givenAnnotatedException_shouldReturnProblem(String value1, Long value2, boolean value3) {
     ResponseEntity<String> response =
         restTemplate.getForEntity(
             "/problem/annotation?value1=" + value1 + "&value2=" + value2 + "&value3=" + value3,
@@ -134,7 +133,7 @@ class ProblemAdviceMvcTest {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.valueOf(418));
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem)
         .isEqualTo(
@@ -148,27 +147,27 @@ class ProblemAdviceMvcTest {
   }
 
   @Test
-  void givenAnnotationEmptyException_returnProblemWithUnknownStatus() throws Exception {
+  void givenAnnotationEmptyException_returnProblemWithUnknownStatus() {
     ResponseEntity<String> response =
         restTemplate.getForEntity("/problem/annotation-empty", String.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem).isEqualTo(Problem.builder().status(0).build());
   }
 
   @Test
-  void givenResolvableException_shouldReturnProblem() throws Exception {
+  void givenResolvableException_shouldReturnProblem() {
     ResponseEntity<String> response =
         restTemplate.getForEntity("/problem/resolvable", String.class);
 
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_CONTENT);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem)
         .isEqualTo(
@@ -181,14 +180,14 @@ class ProblemAdviceMvcTest {
   }
 
   @Test
-  void givenUnresolvableException_shouldReturnInternalServerErrorProblem() throws Exception {
+  void givenUnresolvableException_shouldReturnInternalServerErrorProblem() {
     ResponseEntity<String> response =
         restTemplate.getForEntity("/problem/unresolvable", String.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem)
         .isEqualTo(Problem.builder().status(ProblemStatus.INTERNAL_SERVER_ERROR).build());

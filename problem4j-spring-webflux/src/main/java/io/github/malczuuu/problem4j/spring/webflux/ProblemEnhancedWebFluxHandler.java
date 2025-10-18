@@ -57,14 +57,6 @@ public class ProblemEnhancedWebFluxHandler extends ResponseEntityExceptionHandle
     this.adviceWebFluxInspectors = adviceWebFluxInspectors;
   }
 
-  /**
-   * <b>Note:</b> Although {@link HttpHeaders#writableHttpHeaders(HttpHeaders)} is deprecated, it is
-   * used here for backward compatibility with older Spring Framework versions.
-   *
-   * <p>The deprecation alternative provided by Spring is not available in versions {@code 6.0.*}
-   * and {@code 6.1.*} (Spring Framework versions, not Spring Boot). Therefore, this method is
-   * retained to ensure compatibility across those versions.
-   */
   @Override
   protected Mono<ResponseEntity<Object>> handleExceptionInternal(
       Exception ex,
@@ -75,7 +67,7 @@ public class ProblemEnhancedWebFluxHandler extends ResponseEntityExceptionHandle
     ProblemContext context =
         exchange.getAttributeOrDefault(PROBLEM_CONTEXT, ProblemContext.empty());
 
-    headers = headers != null ? HttpHeaders.writableHttpHeaders(headers) : new HttpHeaders();
+    headers = headers != null ? new HttpHeaders(headers) : new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
 
     Problem problem;

@@ -3,19 +3,19 @@ package io.github.malczuuu.problem4j.spring.webmvc.integration;
 import static io.github.malczuuu.problem4j.spring.webmvc.integration.MethodNotAllowedMvcTest.MethodNotAllowedController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.webmvc.app.MvcTestApp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.test.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import tools.jackson.databind.json.JsonMapper;
 
 @SpringBootTest(
     classes = {MvcTestApp.class},
@@ -32,17 +32,17 @@ class MethodNotAllowedMvcTest {
   }
 
   @Autowired private TestRestTemplate restTemplate;
-  @Autowired private ObjectMapper objectMapper;
+  @Autowired private JsonMapper jsonMapper;
 
   @Test
-  void givenCallToNotAllowedMethod_shouldReturnProblem() throws Exception {
+  void givenCallToNotAllowedMethod_shouldReturnProblem() {
     ResponseEntity<String> response =
         restTemplate.postForEntity("/method-not-allowed", null, String.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.METHOD_NOT_ALLOWED);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem)
         .isEqualTo(Problem.builder().status(ProblemStatus.METHOD_NOT_ALLOWED).build());

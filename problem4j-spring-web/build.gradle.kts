@@ -19,7 +19,7 @@ val springBootVersion: String by project
 dependencies {
     // Main
     api(libs.problem4j.core)
-    api(libs.problem4j.jackson)
+    api(libs.problem4j.jackson3)
 
     compileOnly(platform(libs.spring.boot.dependencies))
     compileOnly(libs.spring.boot.autoconfigure)
@@ -36,8 +36,8 @@ dependencies {
     // Test
     testImplementation(platform(libs.spring.boot.dependencies))
     testImplementation(libs.spring.boot.starter.test)
-    testImplementation(libs.spring.boot.starter.web)
-    testImplementation(libs.spring.boot.starter.validation)
+    testImplementation(libs.spring.boot.web.server)
+    testImplementation(libs.spring.boot.validation)
     testImplementation(libs.jakarta.servlet.api)
 
     testRuntimeOnly(libs.junit.platform.launcher)

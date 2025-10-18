@@ -19,8 +19,8 @@ dependencies {
 
     compileOnly(platform(libs.spring.boot.dependencies))
     compileOnly(libs.spring.boot.autoconfigure)
-    compileOnly(libs.spring.web)
-    compileOnly(libs.spring.webflux)
+    compileOnly(libs.spring.boot.web.server)
+    compileOnly(libs.spring.boot.webflux)
 
     compileOnly(libs.jakarta.validation.api)
     compileOnly(libs.slf4j.api)
@@ -31,7 +31,7 @@ dependencies {
     testImplementation(platform(libs.spring.boot.dependencies))
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.spring.boot.starter.webflux)
-    testImplementation(libs.spring.boot.starter.validation)
+    testImplementation(libs.spring.boot.validation)
 
     testRuntimeOnly(libs.junit.platform.launcher)
 }

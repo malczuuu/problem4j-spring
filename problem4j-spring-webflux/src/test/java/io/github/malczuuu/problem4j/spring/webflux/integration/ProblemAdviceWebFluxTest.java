@@ -173,7 +173,7 @@ class ProblemAdviceWebFluxTest {
         .uri(uriBuilder -> uriBuilder.path("/problem/resolvable").build())
         .exchange()
         .expectStatus()
-        .isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY)
+        .isEqualTo(HttpStatus.UNPROCESSABLE_CONTENT)
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
