@@ -16,23 +16,25 @@ dependencies {
     api("io.github.malczuuu.problem4j:problem4j-core:${property("problem4j-core.version")}")
     api("io.github.malczuuu.problem4j:problem4j-jackson:${property("problem4j-jackson.version")}")
 
-    compileOnly("org.springframework.boot:spring-boot-autoconfigure:${property("spring-boot.version")}")
-    compileOnly("org.springframework:spring-web:${property("spring.version")}")
+    compileOnly(platform("org.springframework.boot:spring-boot-dependencies:${property("spring-boot.version")}"))
+    compileOnly("org.springframework.boot:spring-boot-autoconfigure")
+    compileOnly("org.springframework:spring-web")
 
-    compileOnly("com.fasterxml.jackson.core:jackson-databind:${property("jackson.version")}")
-    compileOnly("jakarta.servlet:jakarta.servlet-api:${property("jakarta.servlet-api.version")}")
-    compileOnly("jakarta.validation:jakarta.validation-api:${property("jakarta.validation-api.version")}")
+    compileOnly("com.fasterxml.jackson.core:jackson-databind")
+    compileOnly("jakarta.servlet:jakarta.servlet-api")
+    compileOnly("jakarta.validation:jakarta.validation-api")
+
     compileOnly("org.jetbrains:annotations:${property("jetbrains.annotations.version")}")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:${property("spring-boot.version")}")
 
     // Test
-    testImplementation("org.springframework.boot:spring-boot-starter-test:${property("spring-boot.version")}")
-    testImplementation("org.springframework.boot:spring-boot-starter-web:${property("spring-boot.version")}")
-    testImplementation("org.springframework.boot:spring-boot-starter-validation:${property("spring-boot.version")}")
-    testImplementation("jakarta.servlet:jakarta.servlet-api:${property("jakarta.servlet-api.version")}")
+    testImplementation(platform("org.springframework.boot:spring-boot-dependencies:${property("spring-boot.version")}"))
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-web")
+    testImplementation("org.springframework.boot:spring-boot-starter-validation")
+    testImplementation("jakarta.servlet:jakarta.servlet-api")
 
-    testImplementation(platform("org.junit:junit-bom:${property("junit-bom.version")}"))
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 

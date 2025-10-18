@@ -15,21 +15,22 @@ dependencies {
     // Main
     api(project(":problem4j-spring-web"))
 
-    compileOnly("org.springframework.boot:spring-boot-autoconfigure:${property("spring-boot.version")}")
-    compileOnly("org.springframework:spring-web:${property("spring.version")}")
-    compileOnly("org.springframework:spring-webflux:${property("spring.version")}")
+    compileOnly(platform("org.springframework.boot:spring-boot-dependencies:${property("spring-boot.version")}"))
+    compileOnly("org.springframework.boot:spring-boot-autoconfigure")
+    compileOnly("org.springframework:spring-web")
+    compileOnly("org.springframework:spring-webflux")
 
-    compileOnly("jakarta.validation:jakarta.validation-api:${property("jakarta.validation-api.version")}")
-    compileOnly("org.slf4j:slf4j-api:${property("slf4j-api.version")}")
+    compileOnly("jakarta.validation:jakarta.validation-api")
+    compileOnly("org.slf4j:slf4j-api")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:${property("spring-boot.version")}")
 
     // Test
-    testImplementation("org.springframework.boot:spring-boot-starter-test:${property("spring-boot.version")}")
-    testImplementation("org.springframework.boot:spring-boot-starter-webflux:${property("spring-boot.version")}")
-    testImplementation("org.springframework.boot:spring-boot-starter-validation:${property("spring-boot.version")}")
+    testImplementation(platform("org.springframework.boot:spring-boot-dependencies:${property("spring-boot.version")}"))
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-webflux")
+    testImplementation("org.springframework.boot:spring-boot-starter-validation")
 
-    testImplementation(platform("org.junit:junit-bom:${property("junit-bom.version")}"))
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
