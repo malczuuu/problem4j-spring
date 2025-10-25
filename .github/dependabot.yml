@@ -15,9 +15,3 @@ updates:
         update-types:
           - "version-update:semver-minor"
           - "version-update:semver-major"
-    groups:
-      spring:
-        patterns:
-          - "org.springframework.boot:spring-boot-dependencies"
-        update-types:
-          - "patch"
