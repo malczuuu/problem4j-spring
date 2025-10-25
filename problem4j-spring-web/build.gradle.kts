@@ -18,29 +18,29 @@ val springBootVersion: String by project
 
 dependencies {
     // Main
-    api("io.github.malczuuu.problem4j:problem4j-core:${problem4jCoreVersion}")
-    api("io.github.malczuuu.problem4j:problem4j-jackson:${problem4jJacksonVersion}")
+    api(libs.problem4j.core)
+    api(libs.problem4j.jackson)
 
-    compileOnly(platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"))
-    compileOnly("org.springframework.boot:spring-boot-autoconfigure")
-    compileOnly("org.springframework:spring-web")
+    compileOnly(platform(libs.spring.boot.dependencies))
+    compileOnly(libs.spring.boot.autoconfigure)
+    compileOnly(libs.spring.web)
 
-    compileOnly("com.fasterxml.jackson.core:jackson-databind")
-    compileOnly("jakarta.servlet:jakarta.servlet-api")
-    compileOnly("jakarta.validation:jakarta.validation-api")
+    compileOnly(libs.jackson.databind)
+    compileOnly(libs.jakarta.servlet.api)
+    compileOnly(libs.jakarta.validation.api)
 
-    compileOnly("org.jetbrains:annotations:${jetbrainsAnnotationsVersion}")
+    compileOnly(libs.jetbrains.annotations)
 
-    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}")
+    annotationProcessor(libs.spring.boot.configuration.processor)
 
     // Test
-    testImplementation(platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"))
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.boot:spring-boot-starter-web")
-    testImplementation("org.springframework.boot:spring-boot-starter-validation")
-    testImplementation("jakarta.servlet:jakarta.servlet-api")
+    testImplementation(platform(libs.spring.boot.dependencies))
+    testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.spring.boot.starter.web)
+    testImplementation(libs.spring.boot.starter.validation)
+    testImplementation(libs.jakarta.servlet.api)
 
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 publishing {

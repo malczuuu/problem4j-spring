@@ -17,24 +17,24 @@ dependencies {
     // Main
     api(project(":problem4j-spring-web"))
 
-    compileOnly(platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"))
-    compileOnly("org.springframework.boot:spring-boot-autoconfigure")
-    compileOnly("org.springframework:spring-web")
-    compileOnly("org.springframework:spring-webmvc")
+    compileOnly(platform(libs.spring.boot.dependencies))
+    compileOnly(libs.spring.boot.autoconfigure)
+    compileOnly(libs.spring.web)
+    compileOnly(libs.spring.webmvc)
 
-    compileOnly("jakarta.validation:jakarta.validation-api")
-    compileOnly("jakarta.servlet:jakarta.servlet-api")
-    compileOnly("org.slf4j:slf4j-api")
+    compileOnly(libs.jakarta.validation.api)
+    compileOnly(libs.jakarta.servlet.api)
+    compileOnly(libs.slf4j.api)
 
-    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}")
+    annotationProcessor(libs.spring.boot.configuration.processor)
 
     // Test
-    testImplementation(platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"))
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.boot:spring-boot-starter-web")
-    testImplementation("org.springframework.boot:spring-boot-starter-validation")
+    testImplementation(platform(libs.spring.boot.dependencies))
+    testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.spring.boot.starter.web)
+    testImplementation(libs.spring.boot.starter.validation)
 
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 publishing {

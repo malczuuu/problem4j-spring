@@ -1,0 +1,29 @@
+[versions]
+jetbrains-annotations = "26.0.2-1"
+problem4j-core = "1.1.0"
+problem4j-jackson = "1.1.0"
+spring-boot = "3.5.6"
+
+[libraries]
+jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrains-annotations" }
+
+problem4j-core = { module = "io.github.malczuuu.problem4j:problem4j-core", version.ref = "problem4j-core" }
+problem4j-jackson = { module = "io.github.malczuuu.problem4j:problem4j-jackson", version.ref = "problem4j-jackson" }
+
+spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
+spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor", version.ref = "spring-boot" }
+
+# versions managed by spring-boot-dependencies
+spring-boot-autoconfigure = { module = "org.springframework.boot:spring-boot-autoconfigure" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
+spring-boot-starter-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux" }
+spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
+spring-web = { module = "org.springframework:spring-web" }
+spring-webflux = { module = "org.springframework:spring-webflux" }
+spring-webmvc = { module = "org.springframework:spring-webmvc" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
+jakarta-servlet-api = { module = "jakarta.servlet:jakarta.servlet-api" }
+jakarta-validation-api = { module = "jakarta.validation:jakarta.validation-api" }
+slf4j-api = { module = "org.slf4j:slf4j-api" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
