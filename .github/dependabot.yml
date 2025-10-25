@@ -3,19 +3,21 @@ updates:
   - package-ecosystem: "gradle"
     directory: "/"
     schedule:
-      interval: "daily"
-      time: "18:00"
+      interval: "weekly"
+      day: "sunday"
+      time: "00:00"
       timezone: "Europe/Warsaw"
     open-pull-requests-limit: 10
     allow:
       - dependency-type: "direct"
     ignore:
       - dependency-name: "*"
-        update-types: [ "version-update:semver-minor", "version-update:semver-major" ]
+        update-types:
+          - "version-update:semver-minor"
+          - "version-update:semver-major"
     groups:
       spring:
         patterns:
-          - "org.springframework.boot:*"
-          - "org.springframework:*"
+          - "org.springframework.boot:spring-boot-dependencies"
         update-types:
           - "patch"
