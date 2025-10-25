@@ -9,7 +9,7 @@ updates:
       timezone: "Europe/Warsaw"
     open-pull-requests-limit: 10
     allow:
-      - dependency-type: "direct"
+      - dependency-type: "all"
     ignore:
       - dependency-name: "*"
         update-types:
