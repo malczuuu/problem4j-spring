@@ -11,11 +11,13 @@ java {
     withJavadocJar()
 }
 
+val springBootVersion: String by project
+
 dependencies {
     // Main
     api(project(":problem4j-spring-web"))
 
-    compileOnly(platform("org.springframework.boot:spring-boot-dependencies:${property("spring-boot.version")}"))
+    compileOnly(platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"))
     compileOnly("org.springframework.boot:spring-boot-autoconfigure")
     compileOnly("org.springframework:spring-web")
     compileOnly("org.springframework:spring-webmvc")
@@ -24,10 +26,10 @@ dependencies {
     compileOnly("jakarta.servlet:jakarta.servlet-api")
     compileOnly("org.slf4j:slf4j-api")
 
-    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:${property("spring-boot.version")}")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}")
 
     // Test
-    testImplementation(platform("org.springframework.boot:spring-boot-dependencies:${property("spring-boot.version")}"))
+    testImplementation(platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"))
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.boot:spring-boot-starter-web")
     testImplementation("org.springframework.boot:spring-boot-starter-validation")

@@ -5,10 +5,13 @@ plugins {
     id("com.gradleup.nmcp")
 }
 
+val problem4jCoreVersion: String by project
+val problem4jJacksonVersion: String by project
+
 dependencies {
     constraints {
-        api("io.github.malczuuu.problem4j:problem4j-core:${property("problem4j-core.version")}")
-        api("io.github.malczuuu.problem4j:problem4j-jackson:${property("problem4j-jackson.version")}")
+        api("io.github.malczuuu.problem4j:problem4j-core:${problem4jCoreVersion}")
+        api("io.github.malczuuu.problem4j:problem4j-jackson:${problem4jJacksonVersion}")
         api(project(":problem4j-spring-web"))
         api(project(":problem4j-spring-webflux"))
         api(project(":problem4j-spring-webmvc"))
