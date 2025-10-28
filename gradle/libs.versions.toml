@@ -1,7 +1,7 @@
 [versions]
 jetbrains-annotations = "26.0.2-1"
 problem4j-core = "1.1.1"
-problem4j-jackson = "1.1.0"
+problem4j-jackson = "1.1.1"
 spring-boot = "3.5.7"
 
 [libraries]
