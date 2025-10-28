@@ -15,15 +15,21 @@ spring-boot-configuration-processor = { module = "org.springframework.boot:sprin
 
 # versions managed by spring-boot-dependencies
 spring-boot-autoconfigure = { module = "org.springframework.boot:spring-boot-autoconfigure" }
+
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
 spring-boot-starter-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux" }
 spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
+
 spring-web = { module = "org.springframework:spring-web" }
 spring-webflux = { module = "org.springframework:spring-webflux" }
 spring-webmvc = { module = "org.springframework:spring-webmvc" }
+
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
+
 jakarta-servlet-api = { module = "jakarta.servlet:jakarta.servlet-api" }
 jakarta-validation-api = { module = "jakarta.validation:jakarta.validation-api" }
+
 slf4j-api = { module = "org.slf4j:slf4j-api" }
+
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
