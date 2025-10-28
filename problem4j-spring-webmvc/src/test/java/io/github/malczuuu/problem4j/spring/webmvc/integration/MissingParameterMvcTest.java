@@ -21,8 +21,9 @@ import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.webmvc.app.MvcTestApp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.test.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
@@ -50,6 +51,7 @@ import tools.jackson.databind.json.JsonMapper;
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     classes = {MvcTestApp.class})
 @Import({MissingParameterController.class})
+@AutoConfigureTestRestTemplate
 class MissingParameterMvcTest {
 
   @RestController

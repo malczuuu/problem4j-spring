@@ -32,8 +32,8 @@ dependencies {
     testImplementation(platform(libs.spring.boot.dependencies))
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.spring.boot.starter.webmvc)
-    testImplementation(libs.spring.boot.starter.validation)
-    testImplementation(libs.spring.boot.restclient)
+    testImplementation(libs.spring.boot.validation)
+    testImplementation(libs.spring.boot.resttestclient)
 
     testRuntimeOnly(libs.junit.platform.launcher)
 }

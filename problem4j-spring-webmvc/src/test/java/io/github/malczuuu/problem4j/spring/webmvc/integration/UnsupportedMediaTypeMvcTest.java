@@ -9,8 +9,9 @@ import io.github.malczuuu.problem4j.spring.webmvc.integration.UnsupportedMediaTy
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.test.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -26,6 +27,7 @@ import tools.jackson.databind.json.JsonMapper;
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     classes = {MvcTestApp.class})
 @Import({UnsupportedMediaTypeController.class})
+@AutoConfigureTestRestTemplate
 class UnsupportedMediaTypeMvcTest {
 
   @RestController

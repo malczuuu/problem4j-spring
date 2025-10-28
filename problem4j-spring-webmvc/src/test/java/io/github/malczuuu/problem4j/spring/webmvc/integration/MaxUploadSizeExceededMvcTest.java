@@ -9,8 +9,9 @@ import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.webmvc.app.MvcTestApp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.test.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
@@ -34,6 +35,7 @@ import tools.jackson.databind.json.JsonMapper;
       "spring.servlet.multipart.max-request-size=1KB"
     })
 @Import({MaxUploadController.class})
+@AutoConfigureTestRestTemplate
 class MaxUploadSizeExceededMvcTest {
 
   @RestController
@@ -59,7 +61,6 @@ class MaxUploadSizeExceededMvcTest {
     ResponseEntity<String> response =
         restTemplate.postForEntity("/max-upload-size", requestEntity, String.class);
 
-    // FIXME should be able to call equal on enum itself, but HttpStatus.valueOf returns old one
     assertThat(response.getStatusCode().value()).isEqualTo(HttpStatus.CONTENT_TOO_LARGE.value());
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 

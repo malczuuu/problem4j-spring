@@ -7,8 +7,9 @@ import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.webmvc.app.MvcTestApp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.test.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import tools.jackson.databind.json.JsonMapper;
@@ -20,6 +21,7 @@ import tools.jackson.databind.json.JsonMapper;
       "spring.mvc.throw-exception-if-no-handler-found=true",
       "spring.web.resources.add-mappings=false"
     })
+@AutoConfigureTestRestTemplate
 class NotFoundNoHandlerFoundMvcTest {
 
   @Autowired private TestRestTemplate restTemplate;

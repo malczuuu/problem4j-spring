@@ -7,8 +7,9 @@ import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.webmvc.app.MvcTestApp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.test.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import tools.jackson.databind.json.JsonMapper;
@@ -17,6 +18,7 @@ import tools.jackson.databind.json.JsonMapper;
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     classes = {MvcTestApp.class},
     properties = {"spring.web.resources.add-mappings=true"})
+@AutoConfigureTestRestTemplate
 class NotFoundNoResourceFoundMvcTest {
 
   @Autowired private TestRestTemplate restTemplate;

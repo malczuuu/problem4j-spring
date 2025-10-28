@@ -10,8 +10,8 @@ import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.webflux.app.WebFluxTestApp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webtestclient.AutoConfigureWebTestClient;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -43,7 +43,7 @@ class MaxUploadSizeExceededWebFluxTest {
         .uri("/max-upload-size")
         .exchange()
         .expectStatus()
-        .isEqualTo(HttpStatus.PAYLOAD_TOO_LARGE)
+        .isEqualTo(HttpStatus.CONTENT_TOO_LARGE)
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
