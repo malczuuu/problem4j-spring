@@ -2,6 +2,7 @@ package io.github.malczuuu.problem4j.spring.webflux.integration;
 
 import static io.github.malczuuu.problem4j.spring.webflux.integration.ProblemAdviceWebFluxTest.ProblemExceptionController;
 import static io.github.malczuuu.problem4j.spring.webflux.integration.ProblemAdviceWebFluxTest.ResolvableExceptionResolver;
+import static org.hamcrest.Matchers.notNullValue;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemBuilder;
@@ -105,10 +106,11 @@ class ProblemAdviceWebFluxTest {
                     .build())
         .exchange()
         .expectStatus()
-        .isEqualTo(HttpStatus.I_AM_A_TEAPOT)
+        .isEqualTo(HttpStatus.valueOf(418))
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
+        .value(notNullValue())
         .isEqualTo(
             Problem.builder()
                 .type("https://example.org/extended/" + value1)
@@ -134,10 +136,11 @@ class ProblemAdviceWebFluxTest {
                     .build())
         .exchange()
         .expectStatus()
-        .isEqualTo(HttpStatus.I_AM_A_TEAPOT)
+        .isEqualTo(HttpStatus.valueOf(418))
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
+        .value(notNullValue())
         .isEqualTo(
             Problem.builder()
                 .type("https://example.org/annotated/" + value1)
@@ -159,6 +162,7 @@ class ProblemAdviceWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
+        .value(notNullValue())
         .isEqualTo(Problem.builder().status(0).build());
   }
 
@@ -173,6 +177,7 @@ class ProblemAdviceWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
+        .value(notNullValue())
         .isEqualTo(
             Problem.builder()
                 .type("http://exception.example.org/resolvable")
@@ -193,6 +198,7 @@ class ProblemAdviceWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
+        .value(notNullValue())
         .isEqualTo(Problem.builder().status(ProblemStatus.INTERNAL_SERVER_ERROR).build());
   }
 
@@ -226,6 +232,18 @@ class ProblemAdviceWebFluxTest {
       this.value2 = value2;
       this.value3 = value3;
     }
+
+    public String getValue1() {
+      return value1;
+    }
+
+    public Long getValue2() {
+      return value2;
+    }
+
+    public boolean isValue3() {
+      return value3;
+    }
   }
 
   @ProblemMapping
@@ -239,6 +257,18 @@ class ProblemAdviceWebFluxTest {
       this.value1 = value1;
       this.value2 = value2;
       this.value3 = value3;
+    }
+
+    public String getValue1() {
+      return value1;
+    }
+
+    public Long getValue2() {
+      return value2;
+    }
+
+    public boolean isValue3() {
+      return value3;
     }
   }
 

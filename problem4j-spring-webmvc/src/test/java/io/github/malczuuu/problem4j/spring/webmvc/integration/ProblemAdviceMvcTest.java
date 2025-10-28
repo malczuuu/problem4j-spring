@@ -224,6 +224,18 @@ class ProblemAdviceMvcTest {
       this.value2 = value2;
       this.value3 = value3;
     }
+
+    public String getValue1() {
+      return value1;
+    }
+
+    public Long getValue2() {
+      return value2;
+    }
+
+    public boolean isValue3() {
+      return value3;
+    }
   }
 
   @ProblemMapping
@@ -237,6 +249,18 @@ class ProblemAdviceMvcTest {
       this.value1 = value1;
       this.value2 = value2;
       this.value3 = value3;
+    }
+
+    public String getValue1() {
+      return value1;
+    }
+
+    public Long getValue2() {
+      return value2;
+    }
+
+    public boolean isValue3() {
+      return value3;
     }
   }
 

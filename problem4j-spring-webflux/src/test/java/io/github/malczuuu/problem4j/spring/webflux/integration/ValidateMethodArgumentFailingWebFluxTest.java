@@ -5,6 +5,7 @@ import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.VALIDA
 import static io.github.malczuuu.problem4j.spring.webflux.integration.ValidateMethodArgumentFailingWebFluxTest.ValidateParameterController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.InstanceOfAssertFactories.LIST;
+import static org.hamcrest.Matchers.notNullValue;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
@@ -102,17 +103,14 @@ class ValidateMethodArgumentFailingWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .value(
-            problem ->
-                assertThat(problem)
-                    .isEqualTo(
-                        Problem.builder()
-                            .status(ProblemStatus.BAD_REQUEST)
-                            .detail(VALIDATION_FAILED_DETAIL)
-                            .extension(
-                                ERRORS_EXTENSION,
-                                List.of(Map.of("field", "idVar", "error", VIOLATION_ERROR)))
-                            .build()));
+        .value(notNullValue())
+        .isEqualTo(
+            Problem.builder()
+                .status(ProblemStatus.BAD_REQUEST)
+                .detail(VALIDATION_FAILED_DETAIL)
+                .extension(
+                    ERRORS_EXTENSION, List.of(Map.of("field", "idVar", "error", VIOLATION_ERROR)))
+                .build());
   }
 
   /**
@@ -134,17 +132,15 @@ class ValidateMethodArgumentFailingWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .value(
-            problem ->
-                assertThat(problem)
-                    .isEqualTo(
-                        Problem.builder()
-                            .status(ProblemStatus.BAD_REQUEST)
-                            .detail(VALIDATION_FAILED_DETAIL)
-                            .extension(
-                                ERRORS_EXTENSION,
-                                List.of(Map.of("field", "queryParam", "error", VIOLATION_ERROR)))
-                            .build()));
+        .value(notNullValue())
+        .isEqualTo(
+            Problem.builder()
+                .status(ProblemStatus.BAD_REQUEST)
+                .detail(VALIDATION_FAILED_DETAIL)
+                .extension(
+                    ERRORS_EXTENSION,
+                    List.of(Map.of("field", "queryParam", "error", VIOLATION_ERROR)))
+                .build());
   }
 
   /**
@@ -162,17 +158,15 @@ class ValidateMethodArgumentFailingWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .value(
-            problem ->
-                assertThat(problem)
-                    .isEqualTo(
-                        Problem.builder()
-                            .status(ProblemStatus.BAD_REQUEST)
-                            .detail(VALIDATION_FAILED_DETAIL)
-                            .extension(
-                                ERRORS_EXTENSION,
-                                List.of(Map.of("field", "xCustomHeader", "error", VIOLATION_ERROR)))
-                            .build()));
+        .value(notNullValue())
+        .isEqualTo(
+            Problem.builder()
+                .status(ProblemStatus.BAD_REQUEST)
+                .detail(VALIDATION_FAILED_DETAIL)
+                .extension(
+                    ERRORS_EXTENSION,
+                    List.of(Map.of("field", "xCustomHeader", "error", VIOLATION_ERROR)))
+                .build());
   }
 
   /**
@@ -190,17 +184,16 @@ class ValidateMethodArgumentFailingWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .value(
-            problem ->
-                assertThat(problem)
-                    .isEqualTo(
-                        Problem.builder()
-                            .status(ProblemStatus.BAD_REQUEST)
-                            .detail(VALIDATION_FAILED_DETAIL)
-                            .extension(
-                                ERRORS_EXTENSION,
-                                List.of(Map.of("field", "xSession", "error", VIOLATION_ERROR)))
-                            .build()));
+        .value(notNullValue())
+        .value(notNullValue())
+        .isEqualTo(
+            Problem.builder()
+                .status(ProblemStatus.BAD_REQUEST)
+                .detail(VALIDATION_FAILED_DETAIL)
+                .extension(
+                    ERRORS_EXTENSION,
+                    List.of(Map.of("field", "xSession", "error", VIOLATION_ERROR)))
+                .build());
   }
 
   /**
@@ -222,6 +215,7 @@ class ValidateMethodArgumentFailingWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
+        .value(notNullValue())
         .value(
             problem ->
                 assertThat(problem.getExtensionValue(ERRORS_EXTENSION))
@@ -249,6 +243,7 @@ class ValidateMethodArgumentFailingWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
+        .value(notNullValue())
         .value(
             problem ->
                 assertThat(problem.getExtensionValue(ERRORS_EXTENSION))
@@ -276,6 +271,7 @@ class ValidateMethodArgumentFailingWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
+        .value(notNullValue())
         .value(
             problem ->
                 assertThat(problem.getExtensionValue(ERRORS_EXTENSION))
@@ -306,6 +302,7 @@ class ValidateMethodArgumentFailingWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
+        .value(notNullValue())
         .value(
             problem ->
                 assertThat(problem.getExtensionValue(ERRORS_EXTENSION))
@@ -333,6 +330,7 @@ class ValidateMethodArgumentFailingWebFluxTest {
         .expectStatus()
         .isOk()
         .expectBody(String.class)
+        .value(notNullValue())
         .isEqualTo("OK");
   }
 }

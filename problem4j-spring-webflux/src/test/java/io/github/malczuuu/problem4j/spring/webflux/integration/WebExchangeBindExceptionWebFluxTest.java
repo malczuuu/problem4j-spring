@@ -3,7 +3,7 @@ package io.github.malczuuu.problem4j.spring.webflux.integration;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.ERRORS_EXTENSION;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.VALIDATION_FAILED_DETAIL;
 import static io.github.malczuuu.problem4j.spring.webflux.integration.WebExchangeBindExceptionWebFluxTest.BindingController;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
@@ -51,17 +51,14 @@ class WebExchangeBindExceptionWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .value(
-            problem ->
-                assertThat(problem)
-                    .isEqualTo(
-                        Problem.builder()
-                            .status(ProblemStatus.BAD_REQUEST)
-                            .detail(VALIDATION_FAILED_DETAIL)
-                            .extension(
-                                ERRORS_EXTENSION,
-                                List.of(Map.of("field", "number", "error", "is not valid")))
-                            .build()));
+        .value(notNullValue())
+        .isEqualTo(
+            Problem.builder()
+                .status(ProblemStatus.BAD_REQUEST)
+                .detail(VALIDATION_FAILED_DETAIL)
+                .extension(
+                    ERRORS_EXTENSION, List.of(Map.of("field", "number", "error", "is not valid")))
+                .build());
   }
 
   static class TestForm {

@@ -4,6 +4,7 @@ import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.KIND_E
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.PROPERTY_EXTENSION;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.TYPE_MISMATCH_DETAIL;
 import static io.github.malczuuu.problem4j.spring.webflux.integration.TypeMismatchWebFluxTest.TypeMismatchController;
+import static org.hamcrest.Matchers.notNullValue;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
@@ -65,6 +66,7 @@ class TypeMismatchWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
+        .value(notNullValue())
         .isEqualTo(
             Problem.builder()
                 .status(ProblemStatus.BAD_REQUEST)
@@ -83,6 +85,7 @@ class TypeMismatchWebFluxTest {
         .expectStatus()
         .isEqualTo(HttpStatus.OK)
         .expectBody(String.class)
+        .value(notNullValue())
         .isEqualTo("OK");
   }
 
@@ -99,6 +102,7 @@ class TypeMismatchWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
+        .value(notNullValue())
         .isEqualTo(
             Problem.builder()
                 .status(ProblemStatus.BAD_REQUEST)
@@ -119,6 +123,7 @@ class TypeMismatchWebFluxTest {
         .expectStatus()
         .isEqualTo(HttpStatus.OK)
         .expectBody(String.class)
+        .value(notNullValue())
         .isEqualTo("OK");
   }
 
@@ -134,6 +139,7 @@ class TypeMismatchWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
+        .value(notNullValue())
         .isEqualTo(
             Problem.builder()
                 .status(ProblemStatus.BAD_REQUEST)
@@ -153,6 +159,7 @@ class TypeMismatchWebFluxTest {
         .expectStatus()
         .isEqualTo(HttpStatus.OK)
         .expectBody(String.class)
+        .value(notNullValue())
         .isEqualTo("OK");
   }
 
@@ -168,6 +175,7 @@ class TypeMismatchWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
+        .value(notNullValue())
         .isEqualTo(
             Problem.builder()
                 .status(ProblemStatus.BAD_REQUEST)
@@ -187,6 +195,7 @@ class TypeMismatchWebFluxTest {
         .expectStatus()
         .isEqualTo(HttpStatus.OK)
         .expectBody(String.class)
+        .value(notNullValue())
         .isEqualTo("OK");
   }
 }

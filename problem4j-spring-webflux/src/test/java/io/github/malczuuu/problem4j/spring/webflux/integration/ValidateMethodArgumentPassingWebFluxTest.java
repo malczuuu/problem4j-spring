@@ -1,6 +1,7 @@
 package io.github.malczuuu.problem4j.spring.webflux.integration;
 
 import static io.github.malczuuu.problem4j.spring.webflux.integration.ValidateMethodArgumentPassingWebFluxTest.ValidateParameterController;
+import static org.hamcrest.Matchers.notNullValue;
 
 import io.github.malczuuu.problem4j.spring.webflux.app.WebFluxTestApp;
 import jakarta.validation.constraints.Pattern;
@@ -87,6 +88,7 @@ class ValidateMethodArgumentPassingWebFluxTest {
         .expectStatus()
         .isOk()
         .expectBody(String.class)
+        .value(notNullValue())
         .isEqualTo("OK");
   }
 
@@ -107,6 +109,7 @@ class ValidateMethodArgumentPassingWebFluxTest {
         .expectStatus()
         .isOk()
         .expectBody(String.class)
+        .value(notNullValue())
         .isEqualTo("OK");
   }
 
@@ -123,6 +126,7 @@ class ValidateMethodArgumentPassingWebFluxTest {
         .expectStatus()
         .isOk()
         .expectBody(String.class)
+        .value(notNullValue())
         .isEqualTo("OK");
   }
 
@@ -139,6 +143,7 @@ class ValidateMethodArgumentPassingWebFluxTest {
         .expectStatus()
         .isOk()
         .expectBody(String.class)
+        .value(notNullValue())
         .isEqualTo("OK");
   }
 
@@ -160,6 +165,7 @@ class ValidateMethodArgumentPassingWebFluxTest {
         .expectStatus()
         .isOk()
         .expectBody(String.class)
+        .value(notNullValue())
         .isEqualTo("OK");
   }
 
@@ -182,6 +188,7 @@ class ValidateMethodArgumentPassingWebFluxTest {
         .expectStatus()
         .isOk()
         .expectBody(String.class)
+        .value(notNullValue())
         .isEqualTo("OK");
   }
 }

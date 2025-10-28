@@ -1,7 +1,7 @@
 package io.github.malczuuu.problem4j.spring.webflux.integration;
 
 import static io.github.malczuuu.problem4j.spring.webflux.integration.MalformedMultipartWebFluxTest.RequestPartController;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
@@ -47,11 +47,7 @@ class MalformedMultipartWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .consumeWith(
-            res -> {
-              Problem problem = res.getResponseBody();
-              assertThat(problem)
-                  .isEqualTo(Problem.builder().status(ProblemStatus.BAD_REQUEST).build());
-            });
+        .value(notNullValue())
+        .isEqualTo(Problem.builder().status(ProblemStatus.BAD_REQUEST).build());
   }
 }

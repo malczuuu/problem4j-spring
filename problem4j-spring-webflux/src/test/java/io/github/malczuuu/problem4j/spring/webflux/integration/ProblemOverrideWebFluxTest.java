@@ -2,6 +2,7 @@ package io.github.malczuuu.problem4j.spring.webflux.integration;
 
 import static io.github.malczuuu.problem4j.spring.webflux.integration.ProblemOverrideWebFluxTest.InstanceOverrideController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemException;
@@ -60,6 +61,7 @@ class ProblemOverrideWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
+        .value(notNullValue())
         .value(
             problem ->
                 assertThat(problem.getType())
@@ -79,6 +81,7 @@ class ProblemOverrideWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
+        .value(notNullValue())
         .value(problem -> assertThat(problem.getType()).isEqualTo(Problem.BLANK_TYPE));
   }
 
@@ -99,6 +102,7 @@ class ProblemOverrideWebFluxTest {
         .expectHeader()
         .value("X-Trace-Id", v -> assertThat(v).isEqualTo(traceId))
         .expectBody(Problem.class)
+        .value(notNullValue())
         .value(
             problem ->
                 assertThat(problem.getInstance())

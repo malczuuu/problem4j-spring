@@ -1,6 +1,7 @@
 package io.github.malczuuu.problem4j.spring.webflux.integration;
 
 import static io.github.malczuuu.problem4j.spring.webflux.integration.ErrorResponseWebFluxTest.ErrorResponseController;
+import static org.hamcrest.Matchers.notNullValue;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
@@ -48,6 +49,7 @@ class ErrorResponseWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
+        .value(notNullValue())
         .isEqualTo(
             Problem.builder().status(ProblemStatus.CONFLICT).detail("this is detail").build());
   }
