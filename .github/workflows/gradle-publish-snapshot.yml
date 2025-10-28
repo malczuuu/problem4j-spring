@@ -2,8 +2,6 @@ name: Gradle Publish [snapshot]
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 15 * * 5"  # friday 15:00 UTC
 
 jobs:
   check-branch:
@@ -14,42 +12,14 @@ jobs:
         if: startsWith(github.ref, 'refs/heads/')
         run: |
           BRANCH="${GITHUB_REF#refs/heads/}"
-          if [[ "$BRANCH" != "main" && "$BRANCH" != "dev" && "$BRANCH" != dev-* && "$BRANCH" != release-* ]]; then
-            echo "::error title=wrong branch selected::this workflow must be run on 'main', 'dev', 'dev-*' or 'release-*' branches"
+          if [[ "$BRANCH" != "main" && "$BRANCH" != release-* ]]; then
+            echo "::error title=wrong branch selected::this workflow must be run on 'main' or 'release-*' branches"
             exit 1
-          fi
-
-  check-updates:
-    name: Check Updates
-    runs-on: ubuntu-latest
-    outputs:
-      should_run: ${{ steps.check.outputs.should_run }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 50
-
-      - name: Check if SNAPSHOT publish is applicable
-        id: check
-        run: |
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            echo "::notice::publish will always execute on manual trigger"
-            echo "should_run=true" >> $GITHUB_OUTPUT
-          else
-            if git log --since="7 days ago" --oneline | grep .; then
-              echo "::notice::commits found within last 7 days window, publish will execute"
-              echo "should_run=true" >> $GITHUB_OUTPUT
-            else
-              echo "::notice::no commits found within last 7 days window, publish will abort"
-              echo "should_run=false" >> $GITHUB_OUTPUT
-            fi
           fi
 
   publish-snapshot:
     name: Publish problem4j-spring SNAPSHOT
-    needs: [ check-branch, check-updates ]
-    if: needs.check-updates.outputs.should_run == 'true'
+    needs: [ check-branch ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
