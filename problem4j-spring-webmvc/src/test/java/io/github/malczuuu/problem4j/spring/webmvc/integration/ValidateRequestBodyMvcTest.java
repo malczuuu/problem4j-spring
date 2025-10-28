@@ -27,8 +27,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.test.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -44,6 +45,7 @@ import tools.jackson.databind.json.JsonMapper;
     classes = {MvcTestApp.class},
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import({ValidateRequestBodyController.class})
+@AutoConfigureTestRestTemplate
 class ValidateRequestBodyMvcTest {
 
   @RestController

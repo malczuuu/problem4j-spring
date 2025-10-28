@@ -17,8 +17,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.test.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -39,6 +40,7 @@ import tools.jackson.databind.json.JsonMapper;
     properties = "spring.validation.method.adapt-constraint-violations=false",
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import({ValidateParameterController.class})
+@AutoConfigureTestRestTemplate
 class ValidateMethodArgumentFailingMvcTest {
 
   private static final String VIOLATION_ERROR = "size must be between 5 and " + Integer.MAX_VALUE;

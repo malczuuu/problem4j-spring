@@ -10,8 +10,9 @@ import io.github.malczuuu.problem4j.spring.webmvc.app.MvcTestApp;
 import java.net.URI;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.test.client.TestRestTemplate;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -31,6 +32,7 @@ import tools.jackson.databind.json.JsonMapper;
       "problem4j.tracing-header-name=X-Trace-Id"
     })
 @Import({InstanceOverrideController.class})
+@AutoConfigureTestRestTemplate
 class ProblemOverrideMvcTest {
 
   @RestController

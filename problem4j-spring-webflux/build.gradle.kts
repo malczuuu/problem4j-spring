@@ -29,6 +29,7 @@ dependencies {
     testImplementation(platform(libs.spring.boot.dependencies))
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.spring.boot.starter.webflux)
+    testImplementation(libs.spring.boot.webtestclient)
     testImplementation(libs.spring.boot.validation)
 
     testRuntimeOnly(libs.junit.platform.launcher)
