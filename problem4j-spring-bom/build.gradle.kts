@@ -5,9 +5,6 @@ plugins {
     id("com.gradleup.nmcp")
 }
 
-val problem4jCoreVersion: String by project
-val problem4jJacksonVersion: String by project
-
 dependencies {
     constraints {
         api(libs.problem4j.core)

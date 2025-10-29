@@ -11,11 +11,6 @@ java {
     withJavadocJar()
 }
 
-val jetbrainsAnnotationsVersion: String by project
-val problem4jCoreVersion: String by project
-val problem4jJacksonVersion: String by project
-val springBootVersion: String by project
-
 dependencies {
     // Main
     api(libs.problem4j.core)
