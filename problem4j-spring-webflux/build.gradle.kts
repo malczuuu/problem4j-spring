@@ -11,8 +11,6 @@ java {
     withJavadocJar()
 }
 
-val springBootVersion: String by project
-
 dependencies {
     // Main
     api(project(":problem4j-spring-web"))
