@@ -1,4 +1,5 @@
 import com.diffplug.spotless.LineEnding
+import com.diffplug.spotless.kotlin.KtfmtStep.TrailingCommaManagementStrategy
 
 plugins {
     id("com.diffplug.spotless").version("8.0.0")
@@ -10,14 +11,15 @@ subprojects {
     group = "io.github.malczuuu.problem4j"
 
     /**
-     * In order to avoid hardcoding snapshot versions, we derive the version from the current Git commit hash. For CI/CD
-     * add -Pversion={releaseVersion} parameter to match Git tag.
+     * In order to avoid hardcoding snapshot versions, we derive the version from the current Git
+     * commit hash. For CI/CD add -Pversion={releaseVersion} parameter to match Git tag.
      */
     version =
-        if (version == "unspecified")
+        if (version == "unspecified") {
             getSnapshotVersion(rootProject.rootDir)
-        else
+        } else {
             version
+        }
 
     /**
      * Usage:
@@ -46,7 +48,7 @@ dependencies {
 }
 
 nmcpAggregation {
-    centralPortal  {
+    centralPortal {
         username = System.getenv("PUBLISHING_USERNAME")
         password = System.getenv("PUBLISHING_PASSWORD")
 
@@ -56,7 +58,7 @@ nmcpAggregation {
 
 spotless {
     format("misc") {
-        target("**/*.gradle.kts", "**/.gitattributes", "**/.gitignore")
+        target("**/.gitattributes", "**/.gitignore")
 
         trimTrailingWhitespace()
         leadingTabsToSpaces(4)
@@ -65,10 +67,26 @@ spotless {
     }
 
     java {
-        target("problem4j-*/src/**/*.java")
+        target("**/src/**/*.java")
 
         googleJavaFormat("1.28.0")
         forbidWildcardImports()
+        lineEndings = LineEnding.UNIX
+    }
+
+    kotlin {
+        target("**/src/**/*.kt")
+
+        ktfmt("0.59").metaStyle()
+        endWithNewline()
+        lineEndings = LineEnding.UNIX
+    }
+
+    kotlinGradle {
+        target("**/*.gradle.kts")
+
+        ktlint()
+        endWithNewline()
         lineEndings = LineEnding.UNIX
     }
 }

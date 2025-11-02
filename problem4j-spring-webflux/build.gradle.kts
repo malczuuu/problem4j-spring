@@ -76,10 +76,7 @@ publishing {
 
 signing {
     if (project.hasProperty("sign")) {
-        useInMemoryPgpKeys(
-            System.getenv("SIGNING_KEY"),
-            System.getenv("SIGNING_PASSWORD")
-        )
+        useInMemoryPgpKeys(System.getenv("SIGNING_KEY"), System.getenv("SIGNING_PASSWORD"))
         sign(publishing.publications["maven"])
     }
 }
