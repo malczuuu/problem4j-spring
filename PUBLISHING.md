@@ -20,7 +20,7 @@ Artifacts are published to Snapshot Repository, using following Gradle task.
            <id>maven-central</id>
            <url>https://repo.maven.apache.org/maven2/</url>
        </repository>
-   
+
        <!-- add snapshot repository (for unpublished or nightly builds) -->
        <repository>
            <id>sonatype-snapshots</id>
@@ -35,16 +35,16 @@ Artifacts are published to Snapshot Repository, using following Gradle task.
            </snapshots>
        </repository>
    </repositories>
-   
+
    <dependencies>
    <!-- choose the one appropriate for your project setup -->
-   
+
    <dependency>
        <groupId>io.github.malczuuu.problem4j</groupId>
        <artifactId>problem4j-spring-webflux</artifactId>
        <version>1.1.0-SNAPSHOT</version>
    </dependency>
-   
+
    <dependency>
        <groupId>io.github.malczuuu.problem4j</groupId>
        <artifactId>problem4j-spring-webmvc</artifactId>
@@ -56,7 +56,7 @@ Artifacts are published to Snapshot Repository, using following Gradle task.
    ```kotlin
    repositories {
        mavenCentral()
-   
+
        // add snapshot repository (for unpublished or nightly builds)
        maven {
            url = uri("https://central.sonatype.com/repository/maven-snapshots/")
@@ -69,15 +69,15 @@ Artifacts are published to Snapshot Repository, using following Gradle task.
            }
        }
    }
-   
+
    // always refresh "changing" dependencies (e.g., SNAPSHOT versions)
    configurations.all {
        resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS)
    }
-   
+
    dependencies {
        // choose the one appropriate for your project setup
-       
+
        implementation("io.github.malczuuu.problem4j:problem4j-spring-webflux:1.1.0-SNAPSHOT") {
            // ensures Gradle re-checks for new snapshot versions
            isChanging = true   

@@ -14,7 +14,7 @@ Add the BOM to `implementation(platform(...))`, then declare modules without ver
 
 ```kotlin
 dependencies {
-    implementation(platform("io.github.malczuuu.problem4j:problem4j-spring-bom:1.0.1"))
+    implementation(platform("io.github.malczuuu.problem4j:problem4j-spring-bom:{version}"))
 
     implementation("io.github.malczuuu.problem4j:problem4j-core")
     implementation("io.github.malczuuu.problem4j:problem4j-jackson")
@@ -35,7 +35,7 @@ Add the BOM to `<dependencyManagement>` with `import` scope, then declare module
         <dependency>
             <groupId>io.github.malczuuu.problem4j</groupId>
             <artifactId>problem4j-spring-bom</artifactId>
-            <version>1.0.1</version>
+            <version>{version}</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
