@@ -1,5 +1,4 @@
 import com.diffplug.spotless.LineEnding
-import com.diffplug.spotless.kotlin.KtfmtStep.TrailingCommaManagementStrategy
 
 plugins {
     id("com.diffplug.spotless").version("8.0.0")
