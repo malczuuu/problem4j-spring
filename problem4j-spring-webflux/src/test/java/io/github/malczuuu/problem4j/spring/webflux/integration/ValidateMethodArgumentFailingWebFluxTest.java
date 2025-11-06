@@ -5,7 +5,6 @@ import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.VALIDA
 import static io.github.malczuuu.problem4j.spring.webflux.integration.ValidateMethodArgumentFailingWebFluxTest.ValidateParameterController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.InstanceOfAssertFactories.LIST;
-import static org.hamcrest.Matchers.notNullValue;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
@@ -14,12 +13,13 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.util.List;
 import java.util.Map;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webtestclient.AutoConfigureWebTestClient;
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.validation.annotation.Validated;
@@ -103,7 +103,7 @@ class ValidateMethodArgumentFailingWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .value(notNullValue())
+        .value(v -> assertThat(v).isNotNull())
         .isEqualTo(
             Problem.builder()
                 .status(ProblemStatus.BAD_REQUEST)
@@ -132,7 +132,7 @@ class ValidateMethodArgumentFailingWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .value(notNullValue())
+        .value(v -> Assertions.assertThat(v).isNotNull())
         .isEqualTo(
             Problem.builder()
                 .status(ProblemStatus.BAD_REQUEST)
@@ -158,7 +158,7 @@ class ValidateMethodArgumentFailingWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .value(notNullValue())
+        .value(v -> assertThat(v).isNotNull())
         .isEqualTo(
             Problem.builder()
                 .status(ProblemStatus.BAD_REQUEST)
@@ -184,8 +184,8 @@ class ValidateMethodArgumentFailingWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .value(notNullValue())
-        .value(notNullValue())
+        .value(v -> assertThat(v).isNotNull())
+        .value(v -> assertThat(v).isNotNull())
         .isEqualTo(
             Problem.builder()
                 .status(ProblemStatus.BAD_REQUEST)
@@ -215,7 +215,7 @@ class ValidateMethodArgumentFailingWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .value(notNullValue())
+        .value(v -> assertThat(v).isNotNull())
         .value(
             problem ->
                 assertThat(problem.getExtensionValue(ERRORS_EXTENSION))
@@ -243,7 +243,7 @@ class ValidateMethodArgumentFailingWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .value(notNullValue())
+        .value(v -> assertThat(v).isNotNull())
         .value(
             problem ->
                 assertThat(problem.getExtensionValue(ERRORS_EXTENSION))
@@ -271,7 +271,7 @@ class ValidateMethodArgumentFailingWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .value(notNullValue())
+        .value(v -> assertThat(v).isNotNull())
         .value(
             problem ->
                 assertThat(problem.getExtensionValue(ERRORS_EXTENSION))
@@ -302,7 +302,7 @@ class ValidateMethodArgumentFailingWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .value(notNullValue())
+        .value(v -> assertThat(v).isNotNull())
         .value(
             problem ->
                 assertThat(problem.getExtensionValue(ERRORS_EXTENSION))
@@ -330,7 +330,7 @@ class ValidateMethodArgumentFailingWebFluxTest {
         .expectStatus()
         .isOk()
         .expectBody(String.class)
-        .value(notNullValue())
+        .value(v -> assertThat(v).isNotNull())
         .isEqualTo("OK");
   }
 }

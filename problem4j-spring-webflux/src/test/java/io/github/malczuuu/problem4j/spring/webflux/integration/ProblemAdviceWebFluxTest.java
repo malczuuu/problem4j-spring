@@ -2,7 +2,7 @@ package io.github.malczuuu.problem4j.spring.webflux.integration;
 
 import static io.github.malczuuu.problem4j.spring.webflux.integration.ProblemAdviceWebFluxTest.ProblemExceptionController;
 import static io.github.malczuuu.problem4j.spring.webflux.integration.ProblemAdviceWebFluxTest.ResolvableExceptionResolver;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemBuilder;
@@ -17,7 +17,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webtestclient.AutoConfigureWebTestClient;
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -110,7 +110,7 @@ class ProblemAdviceWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .value(notNullValue())
+        .value(v -> assertThat(v).isNotNull())
         .isEqualTo(
             Problem.builder()
                 .type("https://example.org/extended/" + value1)
@@ -140,7 +140,7 @@ class ProblemAdviceWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .value(notNullValue())
+        .value(v -> assertThat(v).isNotNull())
         .isEqualTo(
             Problem.builder()
                 .type("https://example.org/annotated/" + value1)
@@ -162,7 +162,7 @@ class ProblemAdviceWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .value(notNullValue())
+        .value(v -> assertThat(v).isNotNull())
         .isEqualTo(Problem.builder().status(0).build());
   }
 
@@ -177,7 +177,7 @@ class ProblemAdviceWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .value(notNullValue())
+        .value(v -> assertThat(v).isNotNull())
         .isEqualTo(
             Problem.builder()
                 .type("http://exception.example.org/resolvable")
@@ -198,7 +198,7 @@ class ProblemAdviceWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .value(notNullValue())
+        .value(v -> assertThat(v).isNotNull())
         .isEqualTo(Problem.builder().status(ProblemStatus.INTERNAL_SERVER_ERROR).build());
   }
 

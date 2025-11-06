@@ -1,7 +1,7 @@
 package io.github.malczuuu.problem4j.spring.webflux.integration;
 
 import static io.github.malczuuu.problem4j.spring.webflux.integration.ValidateMethodArgumentPassingWebFluxTest.ValidateParameterController;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.malczuuu.problem4j.spring.webflux.app.WebFluxTestApp;
 import jakarta.validation.constraints.Pattern;
@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Size;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webtestclient.AutoConfigureWebTestClient;
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.validation.annotation.Validated;
@@ -88,7 +88,7 @@ class ValidateMethodArgumentPassingWebFluxTest {
         .expectStatus()
         .isOk()
         .expectBody(String.class)
-        .value(notNullValue())
+        .value(v -> assertThat(v).isNotNull())
         .isEqualTo("OK");
   }
 
@@ -109,7 +109,7 @@ class ValidateMethodArgumentPassingWebFluxTest {
         .expectStatus()
         .isOk()
         .expectBody(String.class)
-        .value(notNullValue())
+        .value(v -> assertThat(v).isNotNull())
         .isEqualTo("OK");
   }
 
@@ -126,7 +126,7 @@ class ValidateMethodArgumentPassingWebFluxTest {
         .expectStatus()
         .isOk()
         .expectBody(String.class)
-        .value(notNullValue())
+        .value(v -> assertThat(v).isNotNull())
         .isEqualTo("OK");
   }
 
@@ -143,7 +143,7 @@ class ValidateMethodArgumentPassingWebFluxTest {
         .expectStatus()
         .isOk()
         .expectBody(String.class)
-        .value(notNullValue())
+        .value(v -> assertThat(v).isNotNull())
         .isEqualTo("OK");
   }
 
@@ -165,7 +165,7 @@ class ValidateMethodArgumentPassingWebFluxTest {
         .expectStatus()
         .isOk()
         .expectBody(String.class)
-        .value(notNullValue())
+        .value(v -> assertThat(v).isNotNull())
         .isEqualTo("OK");
   }
 
@@ -188,7 +188,7 @@ class ValidateMethodArgumentPassingWebFluxTest {
         .expectStatus()
         .isOk()
         .expectBody(String.class)
-        .value(notNullValue())
+        .value(v -> assertThat(v).isNotNull())
         .isEqualTo("OK");
   }
 }

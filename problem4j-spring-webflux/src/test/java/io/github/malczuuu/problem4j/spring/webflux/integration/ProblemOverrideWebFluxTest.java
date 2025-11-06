@@ -2,17 +2,17 @@ package io.github.malczuuu.problem4j.spring.webflux.integration;
 
 import static io.github.malczuuu.problem4j.spring.webflux.integration.ProblemOverrideWebFluxTest.InstanceOverrideController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.hamcrest.Matchers.notNullValue;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemException;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.webflux.app.WebFluxTestApp;
 import java.net.URI;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webtestclient.AutoConfigureWebTestClient;
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -61,7 +61,7 @@ class ProblemOverrideWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .value(notNullValue())
+        .value(v -> Assertions.assertThat(v).isNotNull())
         .value(
             problem ->
                 assertThat(problem.getType())
@@ -81,7 +81,7 @@ class ProblemOverrideWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .value(notNullValue())
+        .value(v -> assertThat(v).isNotNull())
         .value(problem -> assertThat(problem.getType()).isEqualTo(Problem.BLANK_TYPE));
   }
 
@@ -102,7 +102,7 @@ class ProblemOverrideWebFluxTest {
         .expectHeader()
         .value("X-Trace-Id", v -> assertThat(v).isEqualTo(traceId))
         .expectBody(Problem.class)
-        .value(notNullValue())
+        .value(v -> assertThat(v).isNotNull())
         .value(
             problem ->
                 assertThat(problem.getInstance())

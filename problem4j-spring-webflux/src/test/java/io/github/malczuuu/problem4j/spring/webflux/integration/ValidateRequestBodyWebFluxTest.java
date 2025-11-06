@@ -5,7 +5,7 @@ import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.VALIDA
 import static io.github.malczuuu.problem4j.spring.webflux.integration.ValidateRequestBodyWebFluxTest.ValidateRequestBodyController;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
@@ -29,7 +29,7 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webtestclient.AutoConfigureWebTestClient;
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -76,7 +76,7 @@ class ValidateRequestBodyWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .value(notNullValue())
+        .value(v -> assertThat(v).isNotNull())
         .isEqualTo(
             Problem.builder()
                 .status(ProblemStatus.BAD_REQUEST)
@@ -100,7 +100,7 @@ class ValidateRequestBodyWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .value(notNullValue())
+        .value(v -> assertThat(v).isNotNull())
         .value(
             problem -> {
               Map<String, String> error = new HashMap<>();
@@ -134,7 +134,7 @@ class ValidateRequestBodyWebFluxTest {
         .expectHeader()
         .contentType(Problem.CONTENT_TYPE)
         .expectBody(Problem.class)
-        .value(notNullValue())
+        .value(v -> assertThat(v).isNotNull())
         .isEqualTo(Problem.builder().status(ProblemStatus.BAD_REQUEST).build());
   }
 
