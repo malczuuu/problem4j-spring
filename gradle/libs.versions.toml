@@ -2,7 +2,7 @@
 jetbrains-annotations = "26.0.2-1"
 problem4j-core = "1.1.1"
 problem4j-jackson3 = "1.0.2"
-spring-boot = "4.0.0-RC1"
+spring-boot = "4.0.0-RC2"
 
 [libraries]
 jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrains-annotations" }
