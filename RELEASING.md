@@ -27,7 +27,7 @@ release-v1.0.x: original bugfix
 ## Sonatype Snapshots
 
 [![Publish Snapshot Status](https://github.com/malczuuu/problem4j-spring/actions/workflows/gradle-publish-snapshot.yml/badge.svg)](https://github.com/malczuuu/problem4j-spring/actions/workflows/gradle-publish-snapshot.yml)
-![Sonatype Snapshot](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fio%2Fgithub%2Fmalczuuu%2Fproblem4j%2Fproblem4j-spring-bom%2Fmaven-metadata.xml&filter=1.0.*-SNAPSHOT&label=snapshot)
+![Sonatype Snapshot](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fio%2Fgithub%2Fmalczuuu%2Fproblem4j%2Fproblem4j-spring-bom%2Fmaven-metadata.xml&label=snapshot)
 
 See [`gradle-publish-snapshot.yml`](.github/workflows/gradle-publish-snapshot.yml) for publishing snapshot version
 instructions. Workflow requires manual trigger for snapshot build so it's not published regularly.
@@ -120,7 +120,7 @@ Artifacts are published to Snapshot Repository, using following Gradle task.
 ## Maven Central
 
 [![Publish Release Status](https://github.com/malczuuu/problem4j-spring/actions/workflows/gradle-publish-release.yml/badge.svg)](https://github.com/malczuuu/problem4j-spring/actions/workflows/gradle-publish-release.yml)
-[![Sonatype](https://img.shields.io/maven-central/v/io.github.malczuuu.problem4j/problem4j-spring-bom?filter=1.0.*)][maven-central]
+[![Sonatype](https://img.shields.io/maven-central/v/io.github.malczuuu.problem4j/problem4j-spring-bom)][maven-central]
 
 1. Keep Git tags with `vX.Y.Z-suffix` format. GitHub Actions job will only trigger on such tags and will remove `v`
    prefix.
