@@ -62,19 +62,13 @@ public class TypeMismatchProblemResolver extends AbstractProblemResolver {
             .status(ProblemStatus.BAD_REQUEST)
             .detail(formatDetail(TYPE_MISMATCH_DETAIL));
 
-    TypeMismatchException ex1 = (TypeMismatchException) ex;
+    TypeMismatchException e = (TypeMismatchException) ex;
 
-    String property = ex1.getPropertyName();
+    String property = e.getPropertyName();
     String kind =
-        ex1.getRequiredType() != null
-            ? ex1.getRequiredType().getSimpleName().toLowerCase(Locale.ROOT)
+        e.getRequiredType() != null
+            ? e.getRequiredType().getSimpleName().toLowerCase(Locale.ROOT)
             : null;
-
-    // could happen in some early 3.0.x versions of Spring Boot, cannot add tests for it as newer
-    // versions assign it to propertyName in constructor
-    if (property == null && ex instanceof MethodArgumentTypeMismatchException ex2) {
-      property = ex2.getName();
-    }
 
     if (property != null) {
       builder = builder.extension(PROPERTY_EXTENSION, property);
