@@ -8,6 +8,8 @@ for HTTP APIs*.
 Importing this BOM lets you declare the individual `problem4j-*` Spring modules **without repeating versions** and keeps
 all components aligned.
 
+This BOM includes also modules from [`problem4j-core`][problem4j-core] and [`problem4j-jackson`][problem4j-jackson].
+
 ## Using the BOM
 
 ### Gradle (Kotlin DSL)
@@ -31,7 +33,6 @@ dependencies {
 Add the BOM to `<dependencyManagement>` with `import` scope, then declare modules without versions.
 
 ```xml
-
 <dependencyManagement>
     <dependencies>
         <dependency>
@@ -67,3 +68,7 @@ Add the BOM to `<dependencyManagement>` with `import` scope, then declare module
 </dependency>
 </dependencies>
 ```
+
+[problem4j-core]: https://github.com/malczuuu/problem4j-core
+
+[problem4j-jackson]: https://github.com/malczuuu/problem4j-jackson
