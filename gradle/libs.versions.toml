@@ -1,6 +1,7 @@
 [versions]
 jetbrains-annotations = "26.0.2-1"
 problem4j-core = "1.1.1"
+problem4j-jackson = "1.1.1"
 problem4j-jackson3 = "1.0.2"
 spring-boot = "4.0.0-RC2"
 
@@ -8,6 +9,7 @@ spring-boot = "4.0.0-RC2"
 jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrains-annotations" }
 
 problem4j-core = { module = "io.github.malczuuu.problem4j:problem4j-core", version.ref = "problem4j-core" }
+problem4j-jackson = { module = "io.github.malczuuu.problem4j:problem4j-jackson", version.ref = "problem4j-jackson" }
 problem4j-jackson3 = { module = "io.github.malczuuu.problem4j:problem4j-jackson3", version.ref = "problem4j-jackson3" }
 
 spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }

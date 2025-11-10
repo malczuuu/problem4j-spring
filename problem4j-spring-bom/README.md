@@ -22,6 +22,7 @@ dependencies {
 
     implementation("io.github.malczuuu.problem4j:problem4j-core")
     implementation("io.github.malczuuu.problem4j:problem4j-jackson")
+    implementation("io.github.malczuuu.problem4j:problem4j-jackson3")
     implementation("io.github.malczuuu.problem4j:problem4j-spring-web")
     implementation("io.github.malczuuu.problem4j:problem4j-spring-webmvc")
     implementation("io.github.malczuuu.problem4j:problem4j-spring-webflux")
@@ -53,6 +54,10 @@ Add the BOM to `<dependencyManagement>` with `import` scope, then declare module
 <dependency>
     <groupId>io.github.malczuuu.problem4j</groupId>
     <artifactId>problem4j-jackson</artifactId>
+</dependency>
+<dependency>
+    <groupId>io.github.malczuuu.problem4j</groupId>
+    <artifactId>problem4j-jackson3</artifactId>
 </dependency>
 <dependency>
     <groupId>io.github.malczuuu.problem4j</groupId>
