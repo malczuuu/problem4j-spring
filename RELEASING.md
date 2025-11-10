@@ -1,6 +1,33 @@
-# Publishing
+# Releasing
 
-## Snapshots
+## Branching and Release Workflow
+
+This repository maintains two major versions, supporting Spring Boot 3 and 4. The goal is to maintain both versions at
+least until Spring Boot 3 reaches its end of life or becomes irrelevant.
+
+| branch           | info                                       |
+|------------------|--------------------------------------------|
+| `main`           | version `2.x` supporting Spring Boot `4.x` |
+| `release-v1.0.x` | version `1.x` supporting Spring Boot `3.x` |
+
+Bugfixes that apply to `1.x` are to be merged to `release-v1.0.x` branch, which will then be merged to newer version
+branches.
+
+Right now there are two branches so the flow is simple, but if in the future a `release-v1.1.x` will arrive, the merge
+direction would look as follows.
+
+```txt
+release-v1.0.x: original bugfix
+    │
+    └─> release-v1.1.x: merge commit with release-v1.0.x
+            │
+            └─> main: merge commit with release-v1.1.x
+```
+
+## Sonatype Snapshots
+
+[![Publish Snapshot Status](https://github.com/malczuuu/problem4j-spring/actions/workflows/gradle-publish-snapshot.yml/badge.svg)](https://github.com/malczuuu/problem4j-spring/actions/workflows/gradle-publish-snapshot.yml)
+![Sonatype Snapshot](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fio%2Fgithub%2Fmalczuuu%2Fproblem4j%2Fproblem4j-spring-bom%2Fmaven-metadata.xml&filter=1.0.*-SNAPSHOT&label=snapshot)
 
 See [`gradle-publish-snapshot.yml`](.github/workflows/gradle-publish-snapshot.yml) for publishing snapshot version
 instructions. Workflow requires manual trigger for snapshot build so it's not published regularly.
@@ -11,7 +38,7 @@ Artifacts are published to Snapshot Repository, using following Gradle task.
 ./gradlew -Pversion=<version> publishAggregationToCentralPortalSnapshots
 ```
 
-### Accessing SNAPSHOT versions
+### Accessing packages from Sonatype Snapshots
 
 1. Maven:
    ```xml
@@ -42,13 +69,13 @@ Artifacts are published to Snapshot Repository, using following Gradle task.
    <dependency>
        <groupId>io.github.malczuuu.problem4j</groupId>
        <artifactId>problem4j-spring-webflux</artifactId>
-       <version>1.1.0-SNAPSHOT</version>
+       <version>{snapshot}</version>
    </dependency>
 
    <dependency>
        <groupId>io.github.malczuuu.problem4j</groupId>
        <artifactId>problem4j-spring-webmvc</artifactId>
-       <version>1.1.0-SNAPSHOT</version>
+       <version>{snapshot}</version>
    </dependency>
    </dependencies>
    ```
@@ -78,19 +105,22 @@ Artifacts are published to Snapshot Repository, using following Gradle task.
    dependencies {
        // choose the one appropriate for your project setup
 
-       implementation("io.github.malczuuu.problem4j:problem4j-spring-webflux:1.1.0-SNAPSHOT") {
+       implementation("io.github.malczuuu.problem4j:problem4j-spring-webflux:{snapshot}") {
            // ensures Gradle re-checks for new snapshot versions
            isChanging = true   
        }
    
-       implementation("io.github.malczuuu.problem4j:problem4j-spring-webmvc:1.1.0-SNAPSHOT") {
+       implementation("io.github.malczuuu.problem4j:problem4j-spring-webmvc:{snapshot}") {
            // ensures Gradle re-checks for new snapshot versions
            isChanging = true
        }
    }
    ```
 
-## Releases
+## Maven Central
+
+[![Publish Release Status](https://github.com/malczuuu/problem4j-spring/actions/workflows/gradle-publish-release.yml/badge.svg)](https://github.com/malczuuu/problem4j-spring/actions/workflows/gradle-publish-release.yml)
+[![Sonatype](https://img.shields.io/maven-central/v/io.github.malczuuu.problem4j/problem4j-spring-bom?filter=1.0.*)][maven-central]
 
 1. Keep Git tags with `vX.Y.Z-suffix` format. GitHub Actions job will only trigger on such tags and will remove `v`
    prefix.
@@ -121,3 +151,5 @@ Artifacts are published to Maven Central via Sonatype, using following Gradle ta
 ```
 
 This command uses `nmcp` Gradle plugin - [link](https://github.com/GradleUp/nmcp).
+
+[maven-central]: https://central.sonatype.com/namespace/io.github.malczuuu.problem4j

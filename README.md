@@ -73,13 +73,13 @@ extension to it and does not bring it transitively.
 
 ## Repository
 
-This repository maintains two main versions, supporting Spring Boot 3 and 4. The goal is to maintain both versions at
+This repository maintains two major versions, supporting Spring Boot 3 and 4. The goal is to maintain both versions at
 least until Spring Boot 3 reaches its end of life or becomes irrelevant.
 
-| branch         | info                                       |
-|----------------|--------------------------------------------|
-| `main`         | version `2.x` supporting Spring Boot `4.x` |
-| `release-v1.x` | version `1.x` supporting Spring Boot `3.x` |
+| branch           | info                                       |
+|------------------|--------------------------------------------|
+| `main`           | version `2.x` supporting Spring Boot `4.x` |
+| `release-v1.0.x` | version `1.x` supporting Spring Boot `3.x` |
 
 ## Problem4J Links
 
