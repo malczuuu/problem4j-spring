@@ -1,3 +1,5 @@
+import java.time.Instant
+
 plugins {
     id("java-library")
     id("maven-publish")
@@ -84,6 +86,17 @@ signing {
 
 tasks.withType<JavaCompile>().configureEach {
     options.compilerArgs.add("-parameters")
+}
+
+tasks.withType<Jar>().configureEach {
+    manifest {
+        attributes(
+            "Implementation-Title" to project.name,
+            "Implementation-Version" to project.version,
+            "Build-Jdk-Spec" to java.toolchain.languageVersion.get().toString(),
+            "Created-By" to "Gradle ${gradle.gradleVersion}",
+        )
+    }
 }
 
 /**
