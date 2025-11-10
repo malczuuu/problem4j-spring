@@ -40,7 +40,7 @@ class MaxUploadSizeExceededMvcTest {
   static class MaxUploadController {
     @PostMapping("/max-upload-size")
     String maxUploadSize(@RequestParam("file") MultipartFile file) {
-      return "OK"; // size limit configured in servlet properties
+      return "OK";
     }
   }
 
