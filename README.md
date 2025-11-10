@@ -1,7 +1,7 @@
 # Problem4J Spring
 
 [![Build Status](https://github.com/malczuuu/problem4j-spring/actions/workflows/gradle-build.yml/badge.svg)](https://github.com/malczuuu/problem4j-spring/actions/workflows/gradle-build.yml)
-[![Sonatype](https://img.shields.io/maven-central/v/io.github.malczuuu.problem4j/problem4j-spring-bom?filter=1.*.*)][maven-central]
+[![Sonatype](https://img.shields.io/maven-central/v/io.github.malczuuu.problem4j/problem4j-spring-bom?filter=1.0.*)][maven-central]
 [![License](https://img.shields.io/github/license/malczuuu/problem4j-spring)](https://github.com/malczuuu/problem4j-spring/blob/main/LICENSE)
 
 Designing clear and consistent error responses in a REST API is often harder than it looks. Without a shared standard,
@@ -73,13 +73,13 @@ extension to it and does not bring it transitively.
 
 ## Repository
 
-This repository maintains two main versions, supporting Spring Boot 3 and 4. The goal is to maintain both versions at
+This repository maintains two major versions, supporting Spring Boot 3 and 4. The goal is to maintain both versions at
 least until Spring Boot 3 reaches its end of life or becomes irrelevant.
 
-| branch         | info                                       |
-|----------------|--------------------------------------------|
-| `main`         | version `2.x` supporting Spring Boot `4.x` |
-| `release-v1.x` | version `1.x` supporting Spring Boot `3.x` |
+| branch           | info                                       |
+|------------------|--------------------------------------------|
+| `main`           | version `2.x` supporting Spring Boot `4.x` |
+| `release-v1.0.x` | version `1.x` supporting Spring Boot `3.x` |
 
 ## Problem4J Links
 
