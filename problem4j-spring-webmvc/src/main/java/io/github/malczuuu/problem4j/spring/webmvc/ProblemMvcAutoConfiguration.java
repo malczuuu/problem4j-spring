@@ -45,6 +45,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @Import({ProblemErrorMvcConfiguration.class, ProblemResolverMvcConfiguration.class})
 public class ProblemMvcAutoConfiguration {
 
+  /**
+   * Creates the default {@link ExceptionMvcAdvice} used for handling exceptions in WebMVC
+   * applications.
+   *
+   * <p>The advice intercepts thrown exceptions and resolves them to {@code Problem} objects
+   * according {@code ProblemResolver}-s managed by {@link ProblemResolverStore}.
+   */
   @Order(Ordered.LOWEST_PRECEDENCE)
   @ConditionalOnMissingBean(ExceptionMvcAdvice.class)
   @Bean
@@ -57,6 +64,13 @@ public class ProblemMvcAutoConfiguration {
         problemMappingProcessor, problemResolverStore, problemPostProcessor, adviceMvcInspectors);
   }
 
+  /**
+   * Creates the default {@link ProblemExceptionMvcAdvice}, responsible for handling
+   * Problem4J-specific exception types in WebMVC pipelines.
+   *
+   * <p>This advice focuses on translating {@code Problem}-domain exceptions into standardized
+   * problem responses, using the configured post processor and inspectors.
+   */
   @Order(Ordered.LOWEST_PRECEDENCE - 10)
   @ConditionalOnMissingBean(ProblemExceptionMvcAdvice.class)
   @Bean
@@ -65,9 +79,18 @@ public class ProblemMvcAutoConfiguration {
     return new ProblemExceptionMvcAdvice(problemPostProcessor, adviceMvcInspectors);
   }
 
+  /**
+   * Nested configuration that registers the {@link ProblemContextMvcFilter} responsible for
+   * preparing and propagating the Problem4J context across WebMVC request handling.
+   */
   @ConditionalOnClass(OncePerRequestFilter.class)
   @Configuration(proxyBeanMethods = false)
   public static class ProblemContextMvcFilterConfiguration {
+
+    /**
+     * Registers the default {@link ProblemContextMvcFilter}, which initializes and propagates
+     * Problem4J contextual metadata throughout the request lifecycle.
+     */
     @ConditionalOnMissingBean(ProblemContextMvcFilter.class)
     @Bean
     public ProblemContextMvcFilter problemContextMvcFilter(ProblemProperties properties) {
@@ -75,9 +98,18 @@ public class ProblemMvcAutoConfiguration {
     }
   }
 
+  /**
+   * Nested configuration that replaces the default WebMVC exception handler with a
+   * Problem4j-enhanced implementation.
+   */
   @ConditionalOnClass(ResponseEntityExceptionHandler.class)
   @Configuration(proxyBeanMethods = false)
   public static class ResponseEntityExceptionHandlerConfiguration {
+
+    /**
+     * Provides the Problem4J-enhanced {@link ResponseEntityExceptionHandler} implementation for
+     * WebMVC applications.
+     */
     @Order(Ordered.LOWEST_PRECEDENCE - 10)
     @ConditionalOnMissingBean(ResponseEntityExceptionHandler.class)
     @Bean

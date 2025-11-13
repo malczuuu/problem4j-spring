@@ -45,6 +45,13 @@ import org.springframework.web.server.WebFilter;
 @Import({ProblemErrorWebFluxConfiguration.class, ProblemResolverWebFluxConfiguration.class})
 public class ProblemWebFluxAutoConfiguration {
 
+  /**
+   * Creates the default {@link ExceptionWebFluxAdvice} used for handling exceptions in WebFlux
+   * applications.
+   *
+   * <p>The advice intercepts thrown exceptions and resolves them to {@code Problem} objects
+   * according {@code ProblemResolver}-s managed by {@link ProblemResolverStore}.
+   */
   @Order(Ordered.LOWEST_PRECEDENCE)
   @ConditionalOnMissingBean(ExceptionWebFluxAdvice.class)
   @Bean
@@ -60,6 +67,13 @@ public class ProblemWebFluxAutoConfiguration {
         adviceWebFluxInspectors);
   }
 
+  /**
+   * Creates the default {@link ProblemExceptionWebFluxAdvice}, responsible for handling
+   * Problem4J-specific exception types in WebFlux pipelines.
+   *
+   * <p>This advice focuses on translating {@code Problem}-domain exceptions into standardized
+   * problem responses, using the configured post processor and inspectors.
+   */
   @Order(Ordered.LOWEST_PRECEDENCE - 10)
   @ConditionalOnMissingBean(ProblemExceptionWebFluxAdvice.class)
   @Bean
@@ -69,9 +83,18 @@ public class ProblemWebFluxAutoConfiguration {
     return new ProblemExceptionWebFluxAdvice(problemPostProcessor, adviceWebFluxInspectors);
   }
 
+  /**
+   * Nested configuration that registers the {@link ProblemContextWebFluxFilter} responsible for
+   * preparing and propagating the Problem4J context across WebFlux request handling.
+   */
   @ConditionalOnClass(WebFilter.class)
   @Configuration(proxyBeanMethods = false)
   public static class ProblemContextWebFluxFilterConfiguration {
+
+    /**
+     * Registers the default {@link ProblemContextWebFluxFilter}, which initializes and propagates
+     * Problem4J contextual metadata throughout the request lifecycle.
+     */
     @ConditionalOnMissingBean(ProblemContextWebFluxFilter.class)
     @Bean
     public ProblemContextWebFluxFilter problemContextWebFluxFilter(ProblemProperties properties) {
@@ -79,9 +102,18 @@ public class ProblemWebFluxAutoConfiguration {
     }
   }
 
+  /**
+   * Nested configuration that replaces the default WebFlux exception handler with a
+   * Problem4j-enhanced implementation.
+   */
   @ConditionalOnClass(ResponseEntityExceptionHandler.class)
   @Configuration(proxyBeanMethods = false)
   public static class ResponseEntityExceptionHandlerConfiguration {
+
+    /**
+     * Provides the Problem4J-enhanced {@link ResponseEntityExceptionHandler} implementation for
+     * WebFlux applications.
+     */
     @Order(Ordered.LOWEST_PRECEDENCE - 10)
     @ConditionalOnMissingBean(ResponseEntityExceptionHandler.class)
     @Bean
