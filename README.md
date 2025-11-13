@@ -79,7 +79,7 @@ least until Spring Boot 3 reaches its end of life or becomes irrelevant.
 | branch           | info                                       |
 |------------------|--------------------------------------------|
 | `main`           | version `2.x` supporting Spring Boot `4.x` |
-| `release-v1.0.x` | version `1.x` supporting Spring Boot `3.x` |
+| `release-v1.*.x` | version `1.x` supporting Spring Boot `3.x` |
 
 ## Problem4J Links
 

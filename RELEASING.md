@@ -8,20 +8,20 @@ least until Spring Boot 3 reaches its end of life or becomes irrelevant.
 | branch           | info                                       |
 |------------------|--------------------------------------------|
 | `main`           | version `2.x` supporting Spring Boot `4.x` |
-| `release-v1.0.x` | version `1.x` supporting Spring Boot `3.x` |
+| `release-v1.*.x` | version `1.x` supporting Spring Boot `3.x` |
 
-Bugfixes that apply to `1.x` are to be merged to `release-v1.0.x` branch, which will then be merged to newer version
-branches.
+Bugfixes for `1.x` should be merged into the lowest applicable `1.x` release branch. From there, they are cascaded
+forward into newer version branches if applicable, so fixes propagate through the release line without being duplicated
+unnecessarily.
 
-Right now there are two branches so the flow is simple, but if in the future a `release-v1.1.x` will arrive, the merge
-direction would look as follows.
+Following diagram demonstrates the merge direction that comes from `release-v1.0.x` up to `main`.
 
-```txt
-release-v1.0.x: original bugfix
-    │
-    └─> release-v1.1.x: merge commit with release-v1.0.x
-            │
-            └─> main: merge commit with release-v1.1.x
+```mermaid
+graph LR
+
+    A[release-v1.0.x<br/>original bugfix]
+    A --> B[release-v1.1.x<br/>merge commit with release-v1.0.x]
+    B --> C[main<br/>merge commit with release-v1.1.x]
 ```
 
 ## Sonatype Snapshots
