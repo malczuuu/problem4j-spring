@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(classes = {TestApp.class})
-class ProblemConfigurationTest {
+class ProblemAutoConfigurationTest {
 
   @Autowired(required = false)
   private ProblemAutoConfiguration problemAutoConfiguration;

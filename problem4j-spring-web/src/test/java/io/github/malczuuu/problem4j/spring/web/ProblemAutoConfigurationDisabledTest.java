@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest(
     classes = {TestApp.class},
     properties = {"problem4j.enabled=false"})
-class ProblemConfigurationDisabledTest {
+class ProblemAutoConfigurationDisabledTest {
 
   @Autowired(required = false)
   private ProblemAutoConfiguration problemAutoConfiguration;
