@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Import;
 
 @AutoConfiguration
 @EnableConfigurationProperties({ProblemProperties.class})
-@ConditionalOnProperty(prefix = "problem4j", name = "enabled", matchIfMissing = true)
+@ConditionalOnProperty(name = "problem4j.enabled", matchIfMissing = true)
 @Import({ProblemResolverConfiguration.class})
 public class ProblemAutoConfiguration {
 

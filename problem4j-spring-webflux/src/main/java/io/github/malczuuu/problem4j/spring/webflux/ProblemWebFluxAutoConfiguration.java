@@ -40,7 +40,7 @@ import org.springframework.web.server.WebFilter;
  */
 @AutoConfiguration
 @EnableConfigurationProperties({ProblemProperties.class})
-@ConditionalOnProperty(prefix = "problem4j", name = "enabled", matchIfMissing = true)
+@ConditionalOnProperty(name = "problem4j.enabled", matchIfMissing = true)
 @AutoConfigureBefore({ErrorWebFluxAutoConfiguration.class, WebFluxAutoConfiguration.class})
 @Import({ProblemErrorWebFluxConfiguration.class, ProblemResolverWebFluxConfiguration.class})
 public class ProblemWebFluxAutoConfiguration {
