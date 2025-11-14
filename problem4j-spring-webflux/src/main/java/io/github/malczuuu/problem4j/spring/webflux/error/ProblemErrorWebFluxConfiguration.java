@@ -2,6 +2,7 @@ package io.github.malczuuu.problem4j.spring.webflux.error;
 
 import io.github.malczuuu.problem4j.spring.web.processor.ProblemPostProcessor;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.autoconfigure.web.WebProperties;
@@ -24,6 +25,7 @@ import org.springframework.web.reactive.result.view.ViewResolver;
  *
  * @see org.springframework.boot.autoconfigure.web.reactive.error.ErrorWebFluxAutoConfiguration
  */
+@ConditionalOnClass(ErrorWebExceptionHandler.class)
 @Configuration(proxyBeanMethods = false)
 public class ProblemErrorWebFluxConfiguration {
 
