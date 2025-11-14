@@ -142,17 +142,6 @@ public class ProblemProperties implements ProblemContextSettings, PostProcessorS
   }
 
   /**
-   * Returns the caching configuration.
-   *
-   * @return caching settings
-   * @deprecated as the method was named incorrectly, use {@link #getResolverCaching()}
-   */
-  @Deprecated(since = "1.0.2", forRemoval = true)
-  public ResolverCaching getCaching() {
-    return getResolverCaching();
-  }
-
-  /**
    * Caching configuration for ({@link CachingProblemResolverStore}).
    *
    * <p>Controls whether resolver lookup caching is enabled and its maximum size.
