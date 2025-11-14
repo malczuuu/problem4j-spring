@@ -28,6 +28,15 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  * <p>This class extends {@link ResponseEntityExceptionHandler} and overrides {@code
  * handleExceptionInternal} to replace the response body with a {@link Problem} object.
  *
+ * <p>Behavior:
+ *
+ * <ul>
+ *   <li>Delegates exception-to-problem mapping to {@link ProblemResolverStore}.
+ *   <li>Sets content type to {@code application/problem+json}.
+ *   <li>Falls back to {@link ProblemStatus#INTERNAL_SERVER_ERROR} if mapping fails.
+ * </ul>
+ *
+ * @see #handleExceptionInternal
  * @see io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver
  */
 @RestControllerAdvice

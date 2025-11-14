@@ -51,11 +51,12 @@ public class ProblemErrorWebExceptionHandler extends DefaultErrorWebExceptionHan
   }
 
   /**
-   * Returns a routing function that handles all requests and delegates to {@link
+   * Returns a routing function that handles all requests and delegates to {@code
    * #renderErrorResponse(ServerRequest)}.
    *
    * @param errorAttributes the error attributes used to resolve errors
    * @return a routing function for handling errors
+   * @see #renderErrorResponse(ServerRequest)
    */
   @Override
   protected RouterFunction<ServerResponse> getRoutingFunction(ErrorAttributes errorAttributes) {

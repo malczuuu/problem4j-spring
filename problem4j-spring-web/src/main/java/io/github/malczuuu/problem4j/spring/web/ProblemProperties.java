@@ -13,6 +13,7 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 @ConfigurationProperties(prefix = "problem4j")
 public class ProblemProperties implements ProblemContextSettings, PostProcessorSettings {
 
+  private final boolean enabled;
   private final String detailFormat;
   private final String tracingHeaderName;
   private final String typeOverride;
@@ -23,6 +24,7 @@ public class ProblemProperties implements ProblemContextSettings, PostProcessorS
   /**
    * Creates a new instance.
    *
+   * @param enabled whether problem handling is enabled
    * @param detailFormat format for the "detail" field (one of {@link DetailFormat#LOWERCASE},
    *     {@link DetailFormat#CAPITALIZED}, {@link DetailFormat#UPPERCASE})
    * @param tracingHeaderName name of the HTTP header carrying a trace ID (nullable)
@@ -32,17 +34,28 @@ public class ProblemProperties implements ProblemContextSettings, PostProcessorS
    *     defaults to {@link ResolverCaching#createDefault()}
    */
   public ProblemProperties(
+      @DefaultValue("true") boolean enabled,
       @DefaultValue(DetailFormat.CAPITALIZED) String detailFormat,
       String tracingHeaderName,
       String typeOverride,
       String instanceOverride,
       ResolverCaching resolverCaching) {
+    this.enabled = enabled;
     this.detailFormat = detailFormat;
     this.tracingHeaderName = tracingHeaderName;
     this.typeOverride = typeOverride;
     this.instanceOverride = instanceOverride;
     this.resolverCaching =
         resolverCaching != null ? resolverCaching : ResolverCaching.createDefault();
+  }
+
+  /**
+   * Indicates whether problem handling is currently enabled.
+   *
+   * @return {@code true} if problem handling is enabled; {@code false} otherwise
+   */
+  public boolean isEnabled() {
+    return enabled;
   }
 
   /**
@@ -124,8 +137,19 @@ public class ProblemProperties implements ProblemContextSettings, PostProcessorS
    *
    * @return caching settings
    */
-  public ResolverCaching getCaching() {
+  public ResolverCaching getResolverCaching() {
     return resolverCaching;
+  }
+
+  /**
+   * Returns the caching configuration.
+   *
+   * @return caching settings
+   * @deprecated as the method was named incorrectly, use {@link #getResolverCaching()}
+   */
+  @Deprecated(since = "1.0.2", forRemoval = true)
+  public ResolverCaching getCaching() {
+    return getResolverCaching();
   }
 
   /**

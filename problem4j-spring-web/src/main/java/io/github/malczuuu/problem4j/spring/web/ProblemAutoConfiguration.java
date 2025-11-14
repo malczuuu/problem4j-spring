@@ -22,7 +22,7 @@ import tools.jackson.databind.module.SimpleModule;
 
 @AutoConfiguration
 @EnableConfigurationProperties({ProblemProperties.class})
-@ConditionalOnProperty(prefix = "problem4j", name = "enabled", matchIfMissing = true)
+@ConditionalOnProperty(name = "problem4j.enabled", matchIfMissing = true)
 @Import({ProblemResolverConfiguration.class})
 public class ProblemAutoConfiguration {
 
@@ -90,10 +90,10 @@ public class ProblemAutoConfiguration {
       List<ProblemResolver> problemResolvers, ProblemProperties properties) {
     ProblemResolverStore problemResolverStore = new HashMapProblemResolverStore(problemResolvers);
 
-    if (properties.getCaching().isEnabled()) {
+    if (properties.getResolverCaching().isEnabled()) {
       problemResolverStore =
           new CachingProblemResolverStore(
-              problemResolverStore, properties.getCaching().getMaxCacheSize());
+              problemResolverStore, properties.getResolverCaching().getMaxCacheSize());
     }
 
     return problemResolverStore;

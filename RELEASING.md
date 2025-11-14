@@ -5,24 +5,27 @@
 This repository maintains two major versions, supporting Spring Boot 3 and 4. The goal is to maintain both versions at
 least until Spring Boot 3 reaches its end of life or becomes irrelevant.
 
-| branch           | info                                       |
-|------------------|--------------------------------------------|
-| `main`           | version `2.x` supporting Spring Boot `4.x` |
-| `release-v1.0.x` | version `1.x` supporting Spring Boot `3.x` |
+| branch           | info                                       | latest                                                                                                                              |
+|------------------|--------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
+| `main`           | version `2.x` supporting Spring Boot `4.x` | [![Sonatype](https://img.shields.io/maven-central/v/io.github.malczuuu.problem4j/problem4j-spring-bom)][maven-central]              |
+| `release-v1.*.x` | version `1.x` supporting Spring Boot `3.x` | [![Sonatype](https://img.shields.io/maven-central/v/io.github.malczuuu.problem4j/problem4j-spring-bom?filter=1.0.*)][maven-central] |
 
-Bugfixes that apply to `1.x` are to be merged to `release-v1.0.x` branch, which will then be merged to newer version
-branches.
+Bugfixes for `1.x` should be merged into the lowest applicable `1.x` release branch. From there, they are cascaded
+forward into newer version branches if applicable, so fixes propagate through the release line without being duplicated
+unnecessarily.
 
-Right now there are two branches so the flow is simple, but if in the future a `release-v1.1.x` will arrive, the merge
-direction would look as follows.
+Following diagram demonstrates the merge direction that comes from `release-v1.0.x` up to `main`.
 
-```txt
-release-v1.0.x: original bugfix
-    │
-    └─> release-v1.1.x: merge commit with release-v1.0.x
-            │
-            └─> main: merge commit with release-v1.1.x
+```mermaid
+graph LR
+    A[release-v1.0.x<br/>original bugfix]
+    A --> B[release-v1.1.x<br/>merge commit with release-v1.0.x]
+    B --> C[main<br/>merge commit with release-v1.1.x]
 ```
+
+**Note** that the `1.x` major version is supported, but older minor release lines may not be maintained long-term. Bug
+fixes are applied only when necessary, and maintenance typically focuses on the more recent `1.*.x` branches unless an
+issue is critical or a change can be backported with minimal effort.
 
 ## Sonatype Snapshots
 
@@ -47,9 +50,7 @@ Artifacts are published to Snapshot Repository, using following Gradle task.
            <id>maven-central</id>
            <url>https://repo.maven.apache.org/maven2/</url>
        </repository>
-
-       <!-- add snapshot repository (for unpublished or nightly builds) -->
-       <repository>
+       <repository> <!-- add snapshot repository (for unpublished or nightly builds) -->
            <id>sonatype-snapshots</id>
            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
            <releases>
@@ -57,21 +58,16 @@ Artifacts are published to Snapshot Repository, using following Gradle task.
            </releases>
            <snapshots>
                <enabled>true</enabled>
-               <!-- always check for new snapshots -->
-               <updatePolicy>always</updatePolicy>
+               <updatePolicy>always</updatePolicy> <!-- always check for new snapshots -->
            </snapshots>
        </repository>
    </repositories>
-
    <dependencies>
-   <!-- choose the one appropriate for your project setup -->
-
    <dependency>
        <groupId>io.github.malczuuu.problem4j</groupId>
        <artifactId>problem4j-spring-webflux</artifactId>
        <version>{snapshot}</version>
    </dependency>
-
    <dependency>
        <groupId>io.github.malczuuu.problem4j</groupId>
        <artifactId>problem4j-spring-webmvc</artifactId>
@@ -83,9 +79,7 @@ Artifacts are published to Snapshot Repository, using following Gradle task.
    ```kotlin
    repositories {
        mavenCentral()
-
-       // add snapshot repository (for unpublished or nightly builds)
-       maven {
+       maven { // add snapshot repository (for unpublished or nightly builds)
            url = uri("https://central.sonatype.com/repository/maven-snapshots/")
            content {
                // only include snapshots from this group to avoid conflicts
@@ -96,23 +90,16 @@ Artifacts are published to Snapshot Repository, using following Gradle task.
            }
        }
    }
-
    // always refresh "changing" dependencies (e.g., SNAPSHOT versions)
    configurations.all {
        resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS)
    }
-
    dependencies {
-       // choose the one appropriate for your project setup
-
        implementation("io.github.malczuuu.problem4j:problem4j-spring-webflux:{snapshot}") {
-           // ensures Gradle re-checks for new snapshot versions
-           isChanging = true   
+           isChanging = true // ensures Gradle re-checks for new snapshot versions
        }
-   
        implementation("io.github.malczuuu.problem4j:problem4j-spring-webmvc:{snapshot}") {
-           // ensures Gradle re-checks for new snapshot versions
-           isChanging = true
+           isChanging = true // ensures Gradle re-checks for new snapshot versions
        }
    }
    ```

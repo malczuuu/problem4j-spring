@@ -2,7 +2,9 @@ package io.github.malczuuu.problem4j.spring.webflux.error;
 
 import io.github.malczuuu.problem4j.spring.web.processor.ProblemPostProcessor;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.boot.web.server.autoconfigure.ServerProperties;
 import org.springframework.boot.webflux.error.DefaultErrorAttributes;
@@ -19,9 +21,15 @@ import org.springframework.web.reactive.result.view.ViewResolver;
  * Configures a custom {@link ErrorWebExceptionHandler} that produces {@code
  * application/problem+json} responses according to RFC 7807.
  *
- * <p>This configuration replaces Spring Boot’s default WebFlux error handler defined in {@link
- * org.springframework.boot.webflux.autoconfigure.error.ErrorWebFluxAutoConfiguration}.
+ * <p>This configuration replaces Spring Boot’s default WebFlux error handler defined in {@code
+ * ErrorWebFluxAutoConfiguration}.
+ *
+ * @see org.springframework.boot.webflux.autoconfigure.error.ErrorWebFluxAutoConfiguration
  */
+@ConditionalOnProperty(
+    name = "problem4j.webflux.error-web-exception-handler.enabled",
+    matchIfMissing = true)
+@ConditionalOnClass(ErrorWebExceptionHandler.class)
 @Configuration(proxyBeanMethods = false)
 public class ProblemErrorWebFluxConfiguration {
 

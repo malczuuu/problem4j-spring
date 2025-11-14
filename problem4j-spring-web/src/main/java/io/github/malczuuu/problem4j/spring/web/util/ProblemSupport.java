@@ -72,12 +72,13 @@ public final class ProblemSupport {
   /**
    * Resolves a {@link Problem} to a corresponding {@link HttpStatus}.
    *
-   * <p>If the problem's status value is not a valid HTTP status code, {@link
+   * <p>If the problem's status value is not a valid HTTP status code, {@code
    * HttpStatus#INTERNAL_SERVER_ERROR} is returned as a fallback.
    *
    * @param problem the {@link Problem} instance containing the status code
    * @return the corresponding {@link HttpStatus}, or {@link HttpStatus#INTERNAL_SERVER_ERROR} if
    *     the status is invalid
+   * @see HttpStatus#INTERNAL_SERVER_ERROR
    */
   public static HttpStatus resolveStatus(Problem problem) {
     try {
