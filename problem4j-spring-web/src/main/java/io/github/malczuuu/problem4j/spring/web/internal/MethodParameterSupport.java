@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
  * should not be used directly by external applications. The API may change or be removed without
  * notice.
  *
- * <p><b>Use at your own risk</b>
+ * <p><b>Use at your own risk.</b>
  *
  * @implNote This is an internal API and may change at any time.
  * @see ApiStatus.Internal

@@ -147,7 +147,7 @@ public class ProblemProperties implements ProblemContextSettings, PostProcessorS
    * @return caching settings
    * @deprecated as the method was named incorrectly, use {@link #getResolverCaching()}
    */
-  @Deprecated(since = "1.0.1", forRemoval = true)
+  @Deprecated(since = "1.0.2", forRemoval = true)
   public ResolverCaching getCaching() {
     return getResolverCaching();
   }

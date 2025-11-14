@@ -19,8 +19,10 @@ import org.springframework.web.reactive.result.view.ViewResolver;
  * Configures a custom {@link ErrorWebExceptionHandler} that produces {@code
  * application/problem+json} responses according to RFC 7807.
  *
- * <p>This configuration replaces Spring Boot’s default WebFlux error handler defined in {@link
- * org.springframework.boot.autoconfigure.web.reactive.error.ErrorWebFluxAutoConfiguration}.
+ * <p>This configuration replaces Spring Boot’s default WebFlux error handler defined in {@code
+ * ErrorWebFluxAutoConfiguration}.
+ *
+ * @see org.springframework.boot.autoconfigure.web.reactive.error.ErrorWebFluxAutoConfiguration
  */
 @Configuration(proxyBeanMethods = false)
 public class ProblemErrorWebFluxConfiguration {
