@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(
     classes = {WebFluxTestApp.class},
-    properties = {"problem4j.enabled=false"})
+    properties = {"problem4j.webflux.enabled=false"})
 class ProblemWebFluxAutoConfigurationDisabledTest {
 
   @Autowired(required = false)

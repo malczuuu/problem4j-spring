@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(
     classes = {MvcTestApp.class},
-    properties = {"problem4j.enabled=false"})
+    properties = {"problem4j.webmvc.enabled=false"})
 class ProblemMvcAutoConfigurationDisabledTest {
 
   @Autowired(required = false)

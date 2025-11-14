@@ -27,7 +27,9 @@ public class ProblemWebFluxProperties {
    * @param problemExceptionAdvice configuration for {@link ProblemExceptionWebFluxAdvice}
    * @param problemContextFilter configuration for {@code ProblemContextWebFluxFilter}
    * @param exceptionHandler configuration for {@link ProblemEnhancedWebFluxHandler}
+   * @param errorWebExceptionHandler configuration for {@code ProblemErrorWebExceptionHandler}
    * @see io.github.malczuuu.problem4j.spring.webflux.context.ProblemContextWebFluxFilter
+   * @see io.github.malczuuu.problem4j.spring.webflux.error.ProblemErrorWebExceptionHandler
    */
   public ProblemWebFluxProperties(
       @DefaultValue("true") boolean enabled,
@@ -102,12 +104,12 @@ public class ProblemWebFluxProperties {
    * @return the configuration for the overwritten exception handler
    * @see org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler
    */
-  public ExceptionHandler getOverwrittenExceptionHandler() {
+  public ExceptionHandler getExceptionHandler() {
     return exceptionHandler;
   }
 
   /**
-   * Returns configuration for {@code ProblemEnhancedWebFluxHandler} replacement, which allows
+   * Returns configuration for {@code ProblemErrorWebExceptionHandler} replacement, which allows
    * Problem4J to take control of exception handling normally performed by Spring’s {@code
    * ErrorWebExceptionHandler}.
    *
@@ -115,7 +117,7 @@ public class ProblemWebFluxProperties {
    * @see org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler
    * @see io.github.malczuuu.problem4j.spring.webflux.error.ProblemErrorWebExceptionHandler
    */
-  public ErrorWebExceptionHandler getOverwrittenErrorWebExceptionHandler() {
+  public ErrorWebExceptionHandler getErrorWebExceptionHandler() {
     return errorWebExceptionHandler;
   }
 

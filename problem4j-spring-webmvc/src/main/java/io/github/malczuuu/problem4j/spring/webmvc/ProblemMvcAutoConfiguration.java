@@ -39,8 +39,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  * </ul>
  */
 @AutoConfiguration
-@EnableConfigurationProperties({ProblemProperties.class})
-@ConditionalOnProperty(name = "problem4j.enabled", matchIfMissing = true)
+@EnableConfigurationProperties({ProblemMvcProperties.class})
+@ConditionalOnProperty(name = "problem4j.webmvc.enabled", matchIfMissing = true)
 @AutoConfigureBefore({ErrorMvcAutoConfiguration.class, WebMvcAutoConfiguration.class})
 @Import({ProblemErrorMvcConfiguration.class, ProblemResolverMvcConfiguration.class})
 public class ProblemMvcAutoConfiguration {
@@ -53,6 +53,7 @@ public class ProblemMvcAutoConfiguration {
    * according {@code ProblemResolver}-s managed by {@link ProblemResolverStore}.
    */
   @Order(Ordered.LOWEST_PRECEDENCE)
+  @ConditionalOnProperty(name = "problem4j.webmvc.exception-advice.enabled", matchIfMissing = true)
   @ConditionalOnMissingBean(ExceptionMvcAdvice.class)
   @Bean
   public ExceptionMvcAdvice exceptionMvcAdvice(
@@ -72,6 +73,9 @@ public class ProblemMvcAutoConfiguration {
    * problem responses, using the configured post processor and inspectors.
    */
   @Order(Ordered.LOWEST_PRECEDENCE - 10)
+  @ConditionalOnProperty(
+      name = "problem4j.webmvc.problem-exception-advice.enabled",
+      matchIfMissing = true)
   @ConditionalOnMissingBean(ProblemExceptionMvcAdvice.class)
   @Bean
   public ProblemExceptionMvcAdvice problemExceptionMvcAdvice(
@@ -83,6 +87,9 @@ public class ProblemMvcAutoConfiguration {
    * Nested configuration that registers the {@link ProblemContextMvcFilter} responsible for
    * preparing and propagating the Problem4J context across WebMVC request handling.
    */
+  @ConditionalOnProperty(
+      name = "problem4j.webmvc.problem-context-filter.enabled",
+      matchIfMissing = true)
   @ConditionalOnClass(OncePerRequestFilter.class)
   @Configuration(proxyBeanMethods = false)
   public static class ProblemContextMvcFilterConfiguration {
@@ -102,6 +109,7 @@ public class ProblemMvcAutoConfiguration {
    * Nested configuration that replaces the default WebMVC exception handler with a
    * Problem4j-enhanced implementation.
    */
+  @ConditionalOnProperty(name = "problem4j.webmvc.exception-handler.enabled", matchIfMissing = true)
   @ConditionalOnClass(ResponseEntityExceptionHandler.class)
   @Configuration(proxyBeanMethods = false)
   public static class ResponseEntityExceptionHandlerConfiguration {

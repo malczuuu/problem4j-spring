@@ -39,8 +39,8 @@ import org.springframework.web.server.WebFilter;
  * </ul>
  */
 @AutoConfiguration
-@EnableConfigurationProperties({ProblemProperties.class})
-@ConditionalOnProperty(name = "problem4j.enabled", matchIfMissing = true)
+@EnableConfigurationProperties({ProblemWebFluxProperties.class})
+@ConditionalOnProperty(name = "problem4j.webflux.enabled", matchIfMissing = true)
 @AutoConfigureBefore({ErrorWebFluxAutoConfiguration.class, WebFluxAutoConfiguration.class})
 @Import({ProblemErrorWebFluxConfiguration.class, ProblemResolverWebFluxConfiguration.class})
 public class ProblemWebFluxAutoConfiguration {
@@ -53,6 +53,7 @@ public class ProblemWebFluxAutoConfiguration {
    * according {@code ProblemResolver}-s managed by {@link ProblemResolverStore}.
    */
   @Order(Ordered.LOWEST_PRECEDENCE)
+  @ConditionalOnProperty(name = "problem4j.webflux.exception-advice.enabled", matchIfMissing = true)
   @ConditionalOnMissingBean(ExceptionWebFluxAdvice.class)
   @Bean
   public ExceptionWebFluxAdvice exceptionWebFluxAdvice(
@@ -75,6 +76,9 @@ public class ProblemWebFluxAutoConfiguration {
    * problem responses, using the configured post processor and inspectors.
    */
   @Order(Ordered.LOWEST_PRECEDENCE - 10)
+  @ConditionalOnProperty(
+      name = "problem4j.webflux.problem-exception-advice.enabled",
+      matchIfMissing = true)
   @ConditionalOnMissingBean(ProblemExceptionWebFluxAdvice.class)
   @Bean
   public ProblemExceptionWebFluxAdvice problemExceptionWebFluxAdvice(
@@ -87,6 +91,9 @@ public class ProblemWebFluxAutoConfiguration {
    * Nested configuration that registers the {@link ProblemContextWebFluxFilter} responsible for
    * preparing and propagating the Problem4J context across WebFlux request handling.
    */
+  @ConditionalOnProperty(
+      name = "problem4j.webflux.problem-context-filter.enabled",
+      matchIfMissing = true)
   @ConditionalOnClass(WebFilter.class)
   @Configuration(proxyBeanMethods = false)
   public static class ProblemContextWebFluxFilterConfiguration {
@@ -106,6 +113,9 @@ public class ProblemWebFluxAutoConfiguration {
    * Nested configuration that replaces the default WebFlux exception handler with a
    * Problem4j-enhanced implementation.
    */
+  @ConditionalOnProperty(
+      name = "problem4j.webflux.exception-handler.enabled",
+      matchIfMissing = true)
   @ConditionalOnClass(ResponseEntityExceptionHandler.class)
   @Configuration(proxyBeanMethods = false)
   public static class ResponseEntityExceptionHandlerConfiguration {

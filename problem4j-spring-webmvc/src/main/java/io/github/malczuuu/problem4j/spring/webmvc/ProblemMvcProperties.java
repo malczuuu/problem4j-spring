@@ -17,6 +17,7 @@ public class ProblemMvcProperties {
   private final ProblemExceptionAdvice problemExceptionAdvice;
   private final ProblemContextFilter problemContextFilter;
   private final ExceptionHandler exceptionHandler;
+  private final ErrorController errorController;
 
   /**
    * Creates a new instance.
@@ -26,14 +27,17 @@ public class ProblemMvcProperties {
    * @param problemExceptionAdvice configuration for {@link ProblemExceptionMvcAdvice}
    * @param problemContextFilter configuration for {@code ProblemContextMvcFilter}
    * @param exceptionHandler configuration for {@link ProblemEnhancedMvcHandler}
+   * @param errorController configuration for {@code ProblemErrorController}
    * @see io.github.malczuuu.problem4j.spring.webmvc.context.ProblemContextMvcFilter
+   * @see io.github.malczuuu.problem4j.spring.webmvc.error.ProblemErrorController
    */
   public ProblemMvcProperties(
       @DefaultValue("true") boolean enabled,
       ExceptionAdvice exceptionAdvice,
       ProblemExceptionAdvice problemExceptionAdvice,
       ProblemContextFilter problemContextFilter,
-      ExceptionHandler exceptionHandler) {
+      ExceptionHandler exceptionHandler,
+      ErrorController errorController) {
     this.enabled = enabled;
     this.exceptionAdvice =
         exceptionAdvice != null ? exceptionAdvice : ExceptionAdvice.createDefault();
@@ -45,6 +49,8 @@ public class ProblemMvcProperties {
         problemContextFilter != null ? problemContextFilter : ProblemContextFilter.createDefault();
     this.exceptionHandler =
         exceptionHandler != null ? exceptionHandler : ExceptionHandler.createDefault();
+    this.errorController =
+        errorController != null ? errorController : ErrorController.createDefault();
   }
 
   /**
@@ -96,8 +102,20 @@ public class ProblemMvcProperties {
    * @return the configuration for the overwritten exception handler
    * @see org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
    */
-  public ExceptionHandler getOverwrittenExceptionHandler() {
+  public ExceptionHandler getExceptionHandler() {
     return exceptionHandler;
+  }
+
+  /**
+   * Returns configuration for {@code ProblemErrorController} replacement, which allows Problem4J to
+   * take control of exception handling normally performed by Spring’s {@code ErrorController}.
+   *
+   * @return the configuration for the overwritten error handler
+   * @see org.springframework.boot.web.servlet.error.ErrorController
+   * @see io.github.malczuuu.problem4j.spring.webmvc.error.ProblemErrorController
+   */
+  public ErrorController getErrorController() {
+    return errorController;
   }
 
   /**
