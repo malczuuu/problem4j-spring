@@ -5,10 +5,10 @@
 This repository maintains two major versions, supporting Spring Boot 3 and 4. The goal is to maintain both versions at
 least until Spring Boot 3 reaches its end of life or becomes irrelevant.
 
-| branch           | info                                       | latest                                                                                                                              |
-|------------------|--------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
-| `main`           | version `2.x` supporting Spring Boot `4.x` | [![Sonatype](https://img.shields.io/maven-central/v/io.github.malczuuu.problem4j/problem4j-spring-bom)][maven-central]              |
-| `release-v1.*.x` | version `1.x` supporting Spring Boot `3.x` | [![Sonatype](https://img.shields.io/maven-central/v/io.github.malczuuu.problem4j/problem4j-spring-bom?filter=1.0.*)][maven-central] |
+| branch           | info                                       | latest                                                                                                                            |
+|------------------|--------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| `main`           | version `2.x` supporting Spring Boot `4.x` | [![Sonatype](https://img.shields.io/maven-central/v/io.github.malczuuu.problem4j/problem4j-spring-bom?filter=2.*)][maven-central] |
+| `release-v1.*.x` | version `1.x` supporting Spring Boot `3.x` | [![Sonatype](https://img.shields.io/maven-central/v/io.github.malczuuu.problem4j/problem4j-spring-bom?filter=1.*)][maven-central] |
 
 Bugfixes for `1.x` should be merged into the lowest applicable `1.x` release branch. From there, they are cascaded
 forward into newer version branches if applicable, so fixes propagate through the release line without being duplicated
