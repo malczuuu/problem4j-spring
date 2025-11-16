@@ -3,30 +3,21 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "sunday"
-      time: "00:00"
-      timezone: "Europe/Warsaw"
+      interval: "monthly"
     target-branch: main
     open-pull-requests-limit: 10
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "sunday"
-      time: "00:00"
-      timezone: "Europe/Warsaw"
+      interval: "monthly"
     target-branch: release-v1.1.x
     open-pull-requests-limit: 10
 
   - package-ecosystem: "gradle"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "sunday"
-      time: "00:00"
-      timezone: "Europe/Warsaw"
+      interval: "monthly"
     target-branch: main
     open-pull-requests-limit: 10
     allow:
@@ -39,10 +30,7 @@ updates:
   - package-ecosystem: "gradle"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "sunday"
-      time: "00:00"
-      timezone: "Europe/Warsaw"
+      interval: "monthly"
     target-branch: release-v1.1.x
     open-pull-requests-limit: 10
     allow:

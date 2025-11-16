@@ -10,18 +10,28 @@ import org.springframework.web.context.request.WebRequest;
 class MvcAdviceSupport {
 
   static void logAdviceException(Logger log, Exception ex, WebRequest request, Exception e) {
-    if (request instanceof ServletWebRequest req) {
-      if (req.getRequest().getRequestURI() != null) {
-        log.warn(
-            "Unable to resolve problem response (method={}, endpoint={}, traceId={}, message={}, originalException=[{} : {}])",
-            req.getHttpMethod(),
-            req.getRequest().getRequestURI(),
-            req.getAttribute(TRACE_ID, SCOPE_REQUEST),
-            e.getMessage(),
-            ex.getClass().getName(),
-            ex.getMessage(),
-            e);
+    String method = "<unknown>";
+    String endpoint = "<unknown>";
+    String traceId = null;
+
+    if (request instanceof ServletWebRequest req && req.getRequest().getRequestURI() != null) {
+      method = String.valueOf(req.getHttpMethod());
+      endpoint = req.getRequest().getRequestURI();
+
+      Object traceIdAttr = req.getAttribute(TRACE_ID, SCOPE_REQUEST);
+      if (traceIdAttr != null) {
+        traceId = traceIdAttr.toString();
       }
     }
+
+    log.warn(
+        "Unable to resolve problem response (method={}, endpoint={}, traceId={}, message={}, originalException=[{} : {}])",
+        method,
+        endpoint,
+        traceId,
+        e.getMessage(),
+        ex.getClass().getName(),
+        ex.getMessage(),
+        e);
   }
 }

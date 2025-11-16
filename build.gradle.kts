@@ -2,8 +2,8 @@ import com.diffplug.spotless.LineEnding
 
 plugins {
     id("com.diffplug.spotless").version("8.0.0")
-    id("com.gradleup.nmcp.aggregation").version("1.2.0")
-    id("com.gradleup.nmcp").version("1.2.0").apply(false)
+    id("com.gradleup.nmcp.aggregation").version("1.2.1")
+    id("com.gradleup.nmcp").version("1.2.1").apply(false)
 }
 
 subprojects {
