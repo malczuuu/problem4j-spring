@@ -2,8 +2,8 @@ import com.diffplug.spotless.LineEnding
 
 plugins {
     id("com.diffplug.spotless").version("8.0.0")
-    id("com.gradleup.nmcp.aggregation").version("1.2.1")
-    id("com.gradleup.nmcp").version("1.2.1").apply(false)
+    id("com.gradleup.nmcp.aggregation").version("1.3.0")
+    id("com.gradleup.nmcp").version("1.3.0").apply(false)
 }
 
 subprojects {
@@ -70,6 +70,7 @@ spotless {
 
         googleJavaFormat("1.28.0")
         forbidWildcardImports()
+        endWithNewline()
         lineEndings = LineEnding.UNIX
     }
 

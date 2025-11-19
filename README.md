@@ -19,20 +19,31 @@ flexible enough for custom exceptions and business-specific details.
 - [Usage](#usage)
 - [Repository](#repository)
 - [Problem4J Links](#problem4j-links)
+- [Building from source](#building-from-source)
 
 ## Why bother with Problem4J
 
 Even though Spring provides `ProblemDetail` and `ErrorResponseException` for [**RFC 7807**][rfc7807]-compliant error
-responses, they are quite rough, minimalistic, and often require manual population of fields. In contrast, **Problem4J**
-was created to:
+responses, they have different approach than this library offers. It resolves around throwing `ErrorResponseException`
+(or any exception that extends from it) or returning `ProblemDetail` in `@ExceptionHandler` methods for handlers of
+individual exceptions. Spring Boot includes some default exception handlers in `ResponseEntityExceptionHandler`, but
+that exceptions usually return exact `getMessage()` in `detail` field which may leak framework-internals to client
+applications.
+
+In contrast, **Problem4J** was created to:
 
 - Provide a **fully immutable, fluent `Problem` model** with support for extensions.
-- Support **declarative exception mapping** via `@ProblemMapping` or **programmatic one** via `ProblemException` and
-  `ProblemResolver`.
-- Automatically **interpolate exception fields and context metadata** (e.g., `traceId`) into responses.
+- Support **declarative exception mapping** via `@ProblemMapping` or **programmatic one** via `ProblemException` (as a
+  base class) and `ProblemResolver` (as a library-specific way to add `Exception`-to-`Problem` transformations).
+- Interpolate exception fields and context metadata (e.g., `context.traceId`) if using declarative approach.
 - Offer **consistent error responses** across WebMVC and WebFlux, including validation and framework exceptions.
 - Allow **custom extensions** without boilerplate, making structured errors easier to trace and consume.
 - Configure painlessly thanks to Spring Boot autoconfiguration.
+- Provide a predefined set of `@RestControllerAdvice` implementations to override default Spring Boot responses, so
+  framework details (such as full exception messages) are not leaked to client applications.
+- Include support for built-in `ErrorResponseException` for compatibility.
+- Integrate seamlessly with existing Spring Boot applications, by possibility to enable selected components only (via
+  `@ConditionalOnMissingBean` or application properties).
 
 Problem4J is designed for robust, traceable, and fully configurable REST API errors.
 
@@ -87,6 +98,36 @@ least until Spring Boot 3 reaches its end of life or becomes irrelevant.
 - [`problem4j-jackson`][problem4j-jackson] - Jackson module for serializing and deserializing `Problem` objects.
 - [`problem4j-spring`][problem4j-spring] - Spring modules extending `ResponseEntityExceptionHandler` for handling
   exceptions and returning `Problem` responses.
+
+## Building from source
+
+<details>
+<summary><b>Expand...</b></summary>
+
+To build the project from source you need **Java 17+**, because this is required by Gradle itself.
+
+Module of this project are compiled using a **Java 17 toolchain**, so the produced artifacts are compatible with
+**Java 17**.
+
+```bash
+./gradlew clean build
+```
+
+To format the code according to the style defined in [`build.gradle.kts`](./build.gradle.kts) rules use `spotlessApply`
+task.
+
+```bash
+./gradlew spotlessApply
+```
+
+To publish the built artifacts to local Maven repository, run following command, replacing `XXXX` with the desired
+version. By default, the version is derived from git commit hash.
+
+```bash
+./gradlew -Pversion=XXXX clean build publishToMavenLocal
+```
+
+</details>
 
 [maven-central]: https://central.sonatype.com/namespace/io.github.malczuuu.problem4j
 
