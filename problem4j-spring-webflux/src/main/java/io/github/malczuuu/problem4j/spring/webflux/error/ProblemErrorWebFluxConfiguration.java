@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.web.WebProperties;
-import org.springframework.boot.web.server.autoconfigure.ServerProperties;
 import org.springframework.boot.webflux.error.DefaultErrorAttributes;
 import org.springframework.boot.webflux.error.ErrorAttributes;
 import org.springframework.boot.webflux.error.ErrorWebExceptionHandler;
@@ -33,10 +32,10 @@ import org.springframework.web.reactive.result.view.ViewResolver;
 @Configuration(proxyBeanMethods = false)
 public class ProblemErrorWebFluxConfiguration {
 
-  private final ServerProperties serverProperties;
+  private final WebProperties webProperties;
 
-  public ProblemErrorWebFluxConfiguration(ServerProperties serverProperties) {
-    this.serverProperties = serverProperties;
+  public ProblemErrorWebFluxConfiguration(WebProperties webProperties) {
+    this.webProperties = webProperties;
   }
 
   /**
@@ -75,7 +74,7 @@ public class ProblemErrorWebFluxConfiguration {
             problemPostProcessor,
             errorAttributes,
             webProperties.getResources(),
-            this.serverProperties.getError(),
+            this.webProperties.getError(),
             applicationContext);
     exceptionHandler.setViewResolvers(viewResolvers.orderedStream().toList());
     exceptionHandler.setMessageWriters(serverCodecConfigurer.getWriters());
