@@ -1,6 +1,8 @@
 package io.github.malczuuu.problem4j.spring.web;
 
 import io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver;
+import io.github.malczuuu.problem4j.spring.web.util.ClassDistanceEvaluation;
+import io.github.malczuuu.problem4j.spring.web.util.GraphClassDistanceEvaluation;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -19,6 +21,7 @@ import java.util.Optional;
 public class HashMapProblemResolverStore implements ProblemResolverStore {
 
   private final Map<Class<? extends Exception>, ProblemResolver> resolvers;
+  private final ClassDistanceEvaluation classDistanceEvaluation;
 
   /**
    * Creates a new store initialized with the given resolvers.
@@ -27,10 +30,16 @@ public class HashMapProblemResolverStore implements ProblemResolverStore {
    * @throws NullPointerException if any resolver or its exception class is {@code null}
    */
   public HashMapProblemResolverStore(List<ProblemResolver> problemResolvers) {
+    this(problemResolvers, new GraphClassDistanceEvaluation());
+  }
+
+  public HashMapProblemResolverStore(
+      List<ProblemResolver> problemResolvers, ClassDistanceEvaluation classDistanceEvaluation) {
     Map<Class<? extends Exception>, ProblemResolver> copy = new HashMap<>(problemResolvers.size());
     problemResolvers.forEach(
         resolver -> copy.put(resolver.getExceptionClass(), Objects.requireNonNull(resolver)));
     this.resolvers = Map.copyOf(copy);
+    this.classDistanceEvaluation = classDistanceEvaluation;
   }
 
   /**
@@ -52,30 +61,8 @@ public class HashMapProblemResolverStore implements ProblemResolverStore {
     }
 
     return candidates.stream()
-        .min(Comparator.comparingInt(m -> distance(clazz, m.getExceptionClass())));
-  }
-
-  /**
-   * Calculates the inheritance distance between two exception types.
-   *
-   * <p>The distance represents how far the resolver’s exception type is from the thrown type in the
-   * class hierarchy.
-   *
-   * @param thrown the actual thrown exception class
-   * @param resolverKey the resolver’s exception class
-   * @return number of superclass steps between the two types, or {@link Integer#MAX_VALUE} if not
-   *     assignable
-   */
-  private static int distance(Class<?> thrown, Class<?> resolverKey) {
-    if (!resolverKey.isAssignableFrom(thrown)) {
-      return Integer.MAX_VALUE;
-    }
-    int distance = 0;
-    Class<?> current = thrown;
-    while (current != null && !current.equals(resolverKey)) {
-      current = current.getSuperclass();
-      distance++;
-    }
-    return distance;
+        .min(
+            Comparator.comparingInt(
+                m -> classDistanceEvaluation.calculate(clazz, m.getExceptionClass())));
   }
 }

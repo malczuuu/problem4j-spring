@@ -6,6 +6,8 @@ updates:
       interval: "monthly"
     target-branch: main
     open-pull-requests-limit: 10
+    labels:
+      - branch:main
 
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -13,6 +15,8 @@ updates:
       interval: "monthly"
     target-branch: release-v1.1.x
     open-pull-requests-limit: 10
+    labels:
+      - branch:release-v1.1.x
 
   - package-ecosystem: "gradle"
     directory: "/"
@@ -26,6 +30,8 @@ updates:
       - dependency-name: "*"
         update-types:
           - "version-update:semver-major"
+    labels:
+      - branch:main
 
   - package-ecosystem: "gradle"
     directory: "/"
@@ -39,3 +45,5 @@ updates:
       - dependency-name: "*"
         update-types:
           - "version-update:semver-major"
+    labels:
+      - branch:release-v1.1.x
