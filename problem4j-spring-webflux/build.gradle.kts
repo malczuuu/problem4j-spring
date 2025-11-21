@@ -43,7 +43,7 @@ publishing {
             from(components["java"])
 
             pom {
-                name = project.name
+                name = "Problem4J Spring WebFlux"
                 description = "Spring WebFlux integration for library implementing RFC7807"
                 url = "https://github.com/malczuuu/${rootProject.name}"
                 inceptionYear = "2025"

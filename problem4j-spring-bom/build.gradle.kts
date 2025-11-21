@@ -24,7 +24,7 @@ publishing {
             from(components["javaPlatform"])
 
             pom {
-                name = project.name
+                name = "Problem4J Spring BOM"
                 description = "BOM of Spring integration for library implementing RFC7807"
                 url = "https://github.com/malczuuu/${rootProject.name}"
                 inceptionYear = "2025"
