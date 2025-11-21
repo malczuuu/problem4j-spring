@@ -38,7 +38,8 @@ spring-boot-webtestclient = { module = "org.springframework.boot:spring-boot-web
 
 spring-web = { module = "org.springframework:spring-web" }
 
-jackson-databind = { module = "tools.jackson.core:jackson-databind" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
+jackson3-databind = { module = "tools.jackson.core:jackson-databind" }
 
 jakarta-servlet-api = { module = "jakarta.servlet:jakarta.servlet-api" }
 jakarta-validation-api = { module = "jakarta.validation:jakarta.validation-api" }

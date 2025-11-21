@@ -20,11 +20,15 @@ dependencies {
     compileOnly(libs.spring.boot.autoconfigure)
     compileOnly(libs.spring.web)
 
-    compileOnly(libs.jackson.databind)
+    compileOnly(libs.jackson3.databind)
     compileOnly(libs.jakarta.servlet.api)
     compileOnly(libs.jakarta.validation.api)
 
     compileOnly(libs.jetbrains.annotations)
+
+    // FIXME: for backwards compatibility with jackson-databind v2, remove if not required anymore
+    compileOnly(libs.jackson.databind)
+    compileOnly(libs.problem4j.jackson)
 
     annotationProcessor(libs.spring.boot.configuration.processor)
 

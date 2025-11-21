@@ -1,5 +1,7 @@
 package io.github.malczuuu.problem4j.spring.web;
 
+import com.fasterxml.jackson.databind.Module;
+import io.github.malczuuu.problem4j.jackson.ProblemModule;
 import io.github.malczuuu.problem4j.jackson3.ProblemJacksonModule;
 import io.github.malczuuu.problem4j.spring.web.annotation.DefaultProblemMappingProcessor;
 import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
@@ -18,7 +20,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import tools.jackson.databind.module.SimpleModule;
+import tools.jackson.databind.JacksonModule;
 
 @AutoConfiguration
 @EnableConfigurationProperties({ProblemProperties.class})
@@ -99,9 +101,9 @@ public class ProblemAutoConfiguration {
     return problemResolverStore;
   }
 
-  @ConditionalOnClass({ProblemJacksonModule.class, SimpleModule.class})
+  @ConditionalOnClass({ProblemJacksonModule.class, JacksonModule.class})
   @Configuration(proxyBeanMethods = false)
-  public static class ProblemModuleConfiguration {
+  public static class ProblemJacksonModuleConfiguration {
 
     /**
      * Provides a {@link ProblemJacksonModule} if none is defined.
@@ -112,6 +114,33 @@ public class ProblemAutoConfiguration {
     @Bean
     public ProblemJacksonModule problemJacksonModule() {
       return new ProblemJacksonModule();
+    }
+  }
+
+  /**
+   * If Jackson2 is present on the classpath, configures a {@link ProblemModule} bean. Note that
+   * Spring Boot 4 does not include Jackson2 by default. To make it work, add {@code
+   * spring-boot-jackson2} dependency manually.
+   *
+   * @see <a
+   *     href="https://github.com/spring-projects/spring-boot/blob/v4.0.0/module/spring-boot-jackson2/src/main/java/org/springframework/boot/jackson2/autoconfigure/Jackson2AutoConfiguration.java#L86">
+   *     <code>Jackson2AutoConfiguration</code></a>
+   * @deprecated since 2.0.0 as Spring Boot team plans to remove Jackson 2 legacy support in 4.2.0
+   */
+  @ConditionalOnClass({ProblemModule.class, Module.class})
+  @Configuration(proxyBeanMethods = false)
+  @Deprecated(since = "2.0.0", forRemoval = true)
+  public static class ProblemJackson2ModuleConfiguration {
+
+    /**
+     * Provides a {@link ProblemModule} if none is defined.
+     *
+     * @return a new {@link ProblemModule}
+     */
+    @ConditionalOnMissingBean(ProblemModule.class)
+    @Bean
+    public ProblemModule problemJackson2Module() {
+      return new ProblemModule();
     }
   }
 }
