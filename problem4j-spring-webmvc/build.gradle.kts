@@ -43,7 +43,7 @@ publishing {
             from(components["java"])
 
             pom {
-                name = project.name
+                name = "Problem4J Spring WebMVC"
                 description = "Spring WebMVC integration for library implementing RFC7807"
                 url = "https://github.com/malczuuu/${rootProject.name}"
                 inceptionYear = "2025"
@@ -96,9 +96,7 @@ tasks.withType<Jar>().configureEach {
     }
 }
 
-/**
- * Disable doclint to avoid errors and warnings on missing JavaDoc comments.
- */
+// Disable doclint to avoid errors and warnings on missing JavaDoc comments.
 tasks.withType<Javadoc>().configureEach {
     (options as StandardJavadocDocletOptions).apply {
         addStringOption("Xdoclint:none", "-quiet")

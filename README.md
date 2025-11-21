@@ -17,6 +17,7 @@ flexible enough for custom exceptions and business-specific details.
 
 - [Why bother with Problem4J](#why-bother-with-problem4j)
 - [Usage](#usage)
+- [Maven Dependency](#maven-dependency)
 - [Repository](#repository)
 - [Problem4J Links](#problem4j-links)
 - [Building from source](#building-from-source)
@@ -50,6 +51,61 @@ Problem4J is designed for robust, traceable, and fully configurable REST API err
 ## Usage
 
 Extensive usage manual explaining library features can be found on [repository wiki pages][repository-wiki-pages].
+
+The primary use case is to either throw `ProblemException` (or your created subclass), throw `@ProblemMapping`-annotated
+exception or create `ProblemResolver` component that converts exception to `Problem` object.
+
+1. ```java
+   throw new ProblemException(
+       Problem.builder()
+           .type("errors/invalid-request")
+           .title("Invalid Request")
+           .status(400)
+           .detail("not a valid json")
+           .build());
+   ```
+2. ```java
+   @ProblemMapping(
+       type = "errors/invalid-request",
+       title = "Invalid Request",
+       status = 400,
+       detail = "{message}: {fieldName}",
+       extensions = {"userId", "fieldName"})
+   public class ExampleException extends RuntimeException {
+   
+     private final String userId;
+     private final String fieldName;
+   
+     public ExampleException(String userId, String fieldName) {
+       super("bad input for user " + userId);
+       this.userId = userId;
+       this.fieldName = fieldName;
+     }
+   }
+   ```
+3. ```java
+   @Component
+   public class ExampleExceptionResolver implements ProblemResolver {
+   
+     @Override
+     public Class<? extends Exception> getExceptionClass() {
+       return ExampleException.class;
+     }
+   
+     @Override
+     public ProblemBuilder resolveBuilder(
+         ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
+       ExampleException e = (ExampleException) ex;
+       return Problem.builder()
+           .type("errors/invalid-request")
+           .title("Invalid Request")
+           .status(400)
+           .detail("bad input for user " + e.getUserId());
+     }
+   }
+   ```
+
+## Maven Dependency
 
 Add library as dependency to Maven or Gradle. See the actual versions on [Maven Central][maven-central]. Add it along
 with repository in your dependency manager. **Java 17** or higher is required to use this library.
