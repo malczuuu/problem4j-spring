@@ -27,4 +27,5 @@ distinguishes between `Accept` header to display a formatted page or JSON with b
 - Exclude [`ProblemErrorMvcConfiguration`][ProblemErrorMvcConfiguration] do disable this override.
 
 [ProblemErrorController]: src/main/java/io/github/malczuuu/problem4j/spring/webmvc/error/ProblemErrorController.java
+
 [ProblemErrorMvcConfiguration]: src/main/java/io/github/malczuuu/problem4j/spring/webmvc/error/ProblemErrorMvcConfiguration.java
