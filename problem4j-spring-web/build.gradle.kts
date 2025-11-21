@@ -26,7 +26,7 @@ dependencies {
 
     compileOnly(libs.jetbrains.annotations)
 
-    // FIXME: for backwards compatibility with jackson-databind v2, remove if not required anymore
+    // for backwards compatibility with jackson-databind v2
     compileOnly(libs.jackson.databind)
     compileOnly(libs.problem4j.jackson)
 
@@ -35,6 +35,7 @@ dependencies {
     // Test
     testImplementation(platform(libs.spring.boot.dependencies))
     testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.spring.boot.jackson)
     testImplementation(libs.spring.boot.web.server)
     testImplementation(libs.spring.boot.validation)
     testImplementation(libs.jakarta.servlet.api)

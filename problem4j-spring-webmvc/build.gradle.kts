@@ -17,21 +17,19 @@ dependencies {
 
     compileOnly(platform(libs.spring.boot.dependencies))
     compileOnly(libs.spring.boot.autoconfigure)
-    compileOnly(libs.spring.boot.web.server)
     compileOnly(libs.spring.boot.webmvc)
 
-    compileOnly(libs.jakarta.validation.api)
     compileOnly(libs.jakarta.servlet.api)
+    compileOnly(libs.jakarta.validation.api)
     compileOnly(libs.slf4j.api)
 
     annotationProcessor(libs.spring.boot.configuration.processor)
 
     // Test
     testImplementation(platform(libs.spring.boot.dependencies))
-    testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.spring.boot.starter.webmvc.test)
     testImplementation(libs.spring.boot.starter.webmvc)
     testImplementation(libs.spring.boot.validation)
-    testImplementation(libs.spring.boot.resttestclient)
 
     testRuntimeOnly(libs.junit.platform.launcher)
 }
