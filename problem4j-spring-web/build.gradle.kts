@@ -18,9 +18,11 @@ dependencies {
 
     compileOnly(platform(libs.spring.boot.dependencies))
     compileOnly(libs.spring.boot.autoconfigure)
+    compileOnly(libs.spring.boot.jackson)
     compileOnly(libs.spring.web)
 
     compileOnly(libs.jackson3.databind)
+    compileOnly(libs.jackson3.dataformat.xml)
     compileOnly(libs.jakarta.servlet.api)
     compileOnly(libs.jakarta.validation.api)
 

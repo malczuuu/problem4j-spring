@@ -2,11 +2,12 @@ package io.github.malczuuu.problem4j.spring.web;
 
 import com.fasterxml.jackson.databind.Module;
 import io.github.malczuuu.problem4j.jackson.ProblemModule;
-import io.github.malczuuu.problem4j.jackson3.ProblemJacksonModule;
 import io.github.malczuuu.problem4j.spring.web.annotation.DefaultProblemMappingProcessor;
 import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
 import io.github.malczuuu.problem4j.spring.web.format.DefaultProblemFormat;
 import io.github.malczuuu.problem4j.spring.web.format.ProblemFormat;
+import io.github.malczuuu.problem4j.spring.web.format.ProblemJsonMapperBuilderCustomizer;
+import io.github.malczuuu.problem4j.spring.web.format.ProblemXmlMapperBuilderCustomizer;
 import io.github.malczuuu.problem4j.spring.web.processor.OverridingProblemPostProcessor;
 import io.github.malczuuu.problem4j.spring.web.processor.ProblemPostProcessor;
 import io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver;
@@ -17,10 +18,13 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.jackson.autoconfigure.JsonMapperBuilderCustomizer;
+import org.springframework.boot.jackson.autoconfigure.XmlMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import tools.jackson.databind.JacksonModule;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.dataformat.xml.XmlMapper;
 
 @AutoConfiguration
 @EnableConfigurationProperties({ProblemProperties.class})
@@ -101,19 +105,41 @@ public class ProblemAutoConfiguration {
     return problemResolverStore;
   }
 
-  @ConditionalOnClass({ProblemJacksonModule.class, JacksonModule.class})
+  /** Configuration for JSON support in Problem serialization. */
+  @ConditionalOnClass({JsonMapperBuilderCustomizer.class, JsonMapper.class})
   @Configuration(proxyBeanMethods = false)
-  public static class ProblemJacksonModuleConfiguration {
+  public static class ProblemJsonMapperConfiguration {
 
     /**
-     * Provides a {@link ProblemJacksonModule} if none is defined.
+     * Creates a {@link ProblemJsonMapperBuilderCustomizer} to add the {@code ProblemJacksonMixIn}
+     * to the JSON mapper for consistent Problem serialization.
      *
-     * @return a new {@link ProblemJacksonModule}
+     * @return a new ProblemJsonMapperBuilderCustomizer bean
+     * @see io.github.malczuuu.problem4j.jackson3.ProblemJacksonMixIn
      */
-    @ConditionalOnMissingBean(ProblemJacksonModule.class)
+    @ConditionalOnMissingBean(ProblemJsonMapperBuilderCustomizer.class)
     @Bean
-    public ProblemJacksonModule problemJacksonModule() {
-      return new ProblemJacksonModule();
+    public ProblemJsonMapperBuilderCustomizer problemJsonMapperBuilderCustomizer() {
+      return new ProblemJsonMapperBuilderCustomizer();
+    }
+  }
+
+  /** Configuration for XML support in Problem serialization. */
+  @ConditionalOnClass({XmlMapperBuilderCustomizer.class, XmlMapper.class})
+  @Configuration(proxyBeanMethods = false)
+  public static class ProblemXmlMapperConfiguration {
+
+    /**
+     * Creates a {@link ProblemXmlMapperBuilderCustomizer} to add the {@code ProblemJacksonMixIn} to
+     * the XML mapper for consistent Problem serialization.
+     *
+     * @return a new ProblemJsonMapperBuilderCustomizer bean
+     * @see io.github.malczuuu.problem4j.jackson3.ProblemJacksonMixIn
+     */
+    @ConditionalOnMissingBean(ProblemXmlMapperBuilderCustomizer.class)
+    @Bean
+    public ProblemXmlMapperBuilderCustomizer problemXmlMapperBuilderCustomizer() {
+      return new ProblemXmlMapperBuilderCustomizer();
     }
   }
 
