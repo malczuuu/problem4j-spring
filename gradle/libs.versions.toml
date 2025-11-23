@@ -40,7 +40,6 @@ spring-boot-webmvc = { module = "org.springframework.boot:spring-boot-webmvc" }
 spring-web = { module = "org.springframework:spring-web" }
 
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
-jackson3-databind = { module = "tools.jackson.core:jackson-databind" }
 jackson3-dataformat-xml = { module = "tools.jackson.dataformat:jackson-dataformat-xml" }
 
 jakarta-servlet-api = { module = "jakarta.servlet:jakarta.servlet-api" }
