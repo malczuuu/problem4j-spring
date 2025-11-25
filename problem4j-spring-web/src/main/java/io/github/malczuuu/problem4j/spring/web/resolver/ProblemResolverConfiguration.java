@@ -5,6 +5,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.codec.DecodingException;
@@ -36,6 +37,7 @@ import org.springframework.web.server.ServerWebInputException;
  * only resolvers for classes present on the classpath are created. This design allows the library
  * to remain compatible previous versions.
  */
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.ANY)
 @Configuration(proxyBeanMethods = false)
 public class ProblemResolverConfiguration {
 

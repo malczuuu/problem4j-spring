@@ -1,6 +1,7 @@
 package io.github.malczuuu.problem4j.spring.webflux.resolver;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -10,5 +11,6 @@ import org.springframework.context.annotation.Configuration;
  *
  * @see io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolverConfiguration
  */
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
 @Configuration(proxyBeanMethods = false)
 public class ProblemResolverWebFluxConfiguration {}
