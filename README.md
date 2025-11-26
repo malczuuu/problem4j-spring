@@ -3,6 +3,7 @@
 [![Build Status](https://github.com/malczuuu/problem4j-spring/actions/workflows/gradle-build.yml/badge.svg)](https://github.com/malczuuu/problem4j-spring/actions/workflows/gradle-build.yml)
 [![Sonatype](https://img.shields.io/maven-central/v/io.github.malczuuu.problem4j/problem4j-spring-bom)][maven-central]
 [![License](https://img.shields.io/github/license/malczuuu/problem4j-spring)](https://github.com/malczuuu/problem4j-spring/blob/main/LICENSE)
+[![Spring Boot](https://img.shields.io/badge/v3,v4-6DB33F?label=Spring%20Boot)](https://spring.io/projects/spring-boot)
 
 Designing clear and consistent error responses in a REST API is often harder than it looks. Without a shared standard,
 each application ends up inventing its own ad-hoc format, which quickly leads to inconsistency and confusion.
@@ -160,10 +161,9 @@ least until Spring Boot 3 reaches its end of life or becomes irrelevant.
 <details>
 <summary><b>Expand...</b></summary>
 
-To build the project from source you need **Java 17+**, because this is required by Gradle itself.
-
-Module of this project are compiled using a **Java 17 toolchain**, so the produced artifacts are compatible with
-**Java 17**.
+Gradle **9.x+** requires **Java 17+** to run, but higher Java versions can also be used. All modules of this project are
+compiled using a **Java 17 toolchain**, so the produced artifacts are compatible with **Java 17**, regardless of the
+Java version Gradle runs on.
 
 ```bash
 ./gradlew clean build
