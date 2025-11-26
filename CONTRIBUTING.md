@@ -1,71 +1,70 @@
 # Contributing to Problem4J
 
-Problem4J is released under [The MIT License][mit]. By contributing to this project, you
-agree that your contributions will be licensed under it.
+Problem4J is released under the [MIT License][mit]. By contributing to this project, you agree that your contributions
+will be licensed under the same terms.
 
 ## How to Contribute
 
 ### Opening Issues or Discussions
 
-1. Open an [issue][issues] to report a bug, with a clear description and, if possible, a minimal reproducible example.
-2. Open an issue or start a [discussion][discussions] to ask your questions or to suggest your features.
-3. You may also participate in already existing issues, discussions or open reviews. Every insight is appreciated.
+1. Open an [issue][issues] to report bugs. Please include a clear description and, if possible, a minimal reproducible
+   example.
+2. Open an issue or start a [discussion][discussions] to ask questions or propose new features.
+3. Feel free to participate in existing issues, discussions, or open reviews. Every insight is appreciated.
 
 ### Submitting a Pull Request
 
-Consider asking first if suggested feature is planned or not to avoid making unnecessary work, as this library aims to
-be minimalistic, yet extensible.
+Before starting work on a feature, consider asking whether it is planned. This project aims to be minimalistic yet
+extensible, so early coordination can help avoid unnecessary effort.
 
-1. Fork the repository, create a feature branch, and submit a pull request.
-2. Please check out or rebase your branch against the current `main` branch.
-3. Please squash and cleanup your commits as much as possible to avoid unnecessary noise.
-4. If there is an issue you're trying to resolve, please reference it in your PR description.
-5. Please include tests if able and apply code formatting with `./gradlew spotlessApply` task.
+1. Rebase or update your fork/branch against the current `main` branch.
+2. Squash or clean up your commits to reduce unnecessary noise.
+3. If your PR addresses an existing issue, reference it in the description.
+4. Include tests when possible and apply formatting using the `./gradlew spotlessApply` task.
 
-Your contribution may be modified prior to merging, or backported into a different branch than original PR. You will
-however keep being the author for your Git commits. You may also be asked to introduce additional changes to the
-contribution.
+Your contribution may be modified during review or merged into a different branch than the original PR. You will remain
+the author of your Git commits. Additional changes may be requested before merging.
 
-### Developer Certificate of Origin (DCO)
+## Developer Certificate of Origin (DCO)
 
-By submitting a Pull Request or commit to this project, you are certifying that you have the right to contribute the
-code under the project's license ([MIT][mit]). This is done using the [Developer Certificate of Origin][dco].
+By submitting a Pull Request or commit, you certify that you have the right to contribute the code under the project's
+license (MIT), as defined by the [Developer Certificate of Origin][dco].
 
-The sign-off ensures that:
+The DCO sign-off confirms that:
 
-1. You wrote the code or have permission to submit it.
-2. You agree to license your contribution under [MIT][mit].
-3. Project maintainers can safely merge your work without needing to verify IP ownership.
+1. You wrote the code or otherwise have permission to submit it.
+2. You agree to license your contribution under the [MIT license][mit].
+3. Project maintainers can safely merge your work without further IP verification.
 
-If a PR contains unsigned commits, you'll be asked to amend them before merging.
+If a PR contains unsigned commits, you will be asked to amend them.
 
-#### How to sign off
+### How to Sign Off
 
-Add following line at the end of your commit message:
+Add the following line at the end of your commit message:
 
 ```txt
 Signed-off-by: Your Name <your.email@example.com>
 ```
 
-If you have your Git `user.name` and `user.email` configured, you can add this automatically with `-s` option.
+If your Git `user.name` and `user.email` are configured, you can add the sign-off automatically:
 
 ```bash
 git commit -s -m "message"
 ```
 
-If you prefer not to expose your personal email, you **may use your GitHub nickname and/or GitHub-provided noreply
-address**, for example:
+If you prefer not to expose your personal email, you may use your GitHub nickname and/or GitHub-provided noreply
+address, for example:
 
 ```txt
 Signed-off-by: nickname <12345678+nickname@users.noreply.github.com>
 ```
 
-Repository maintainers and codeowners are not required to sign off their commits. For all external contributors, **every
-commit in a PR must include a DCO sign-off**.
+Repository maintainers and code owners are not required to sign off their commits. For external contributors, every
+commit in a PR must include a DCO sign-off.
 
 ## Code of Conduct
 
-Please be respectful and constructive.
+Please remain respectful, constructive, and considerate of others.
 
 [dco]: https://developercertificate.org/
 
