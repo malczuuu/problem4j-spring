@@ -84,7 +84,8 @@ class ServerWebInputProblemResolverTest {
     ServerWebInputException ex = new ServerWebInputException("irrelevant reason");
 
     Problem problem =
-        serverWebInputMapping.resolveProblem(ProblemContext.ofTraceId("traceId"), ex, null, null);
+        serverWebInputMapping.resolveProblem(
+            ProblemContext.ofTraceId("traceId"), ex, new HttpHeaders(), ex.getStatusCode());
 
     assertThat(problem)
         .isEqualTo(Problem.builder().status(resolveStatus(ex.getStatusCode())).build());

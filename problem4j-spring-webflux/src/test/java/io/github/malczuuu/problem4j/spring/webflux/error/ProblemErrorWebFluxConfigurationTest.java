@@ -19,11 +19,9 @@ class ProblemErrorWebFluxConfigurationTest {
     @Autowired(required = false)
     private ProblemErrorWebFluxConfiguration problemErrorWebFluxConfiguration;
 
-    @Autowired(required = false)
-    private ErrorWebExceptionHandler errorWebExceptionHandler;
+    @Autowired private ErrorWebExceptionHandler errorWebExceptionHandler;
 
-    @Autowired(required = false)
-    private ProblemWebFluxProperties properties;
+    @Autowired private ProblemWebFluxProperties properties;
 
     @Test
     void contextLoads() {
@@ -42,11 +40,9 @@ class ProblemErrorWebFluxConfigurationTest {
     @Autowired(required = false)
     private ProblemErrorWebFluxConfiguration problemErrorWebFluxConfiguration;
 
-    @Autowired(required = false)
-    private ErrorWebExceptionHandler errorWebExceptionHandler;
+    @Autowired private ErrorWebExceptionHandler errorWebExceptionHandler;
 
-    @Autowired(required = false)
-    private ProblemWebFluxProperties properties;
+    @Autowired private ProblemWebFluxProperties properties;
 
     @Test
     void contextLoads() {

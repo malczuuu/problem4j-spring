@@ -105,6 +105,9 @@ public class ServerErrorProblemResolver extends AbstractProblemResolver {
    *     null})
    */
   private String findParameterName(MethodParameter methodParameter) {
+    if (methodParameter == null) {
+      return null;
+    }
     PathVariable annotation = methodParameter.getParameterAnnotation(PathVariable.class);
     return (annotation != null && StringUtils.hasLength(annotation.name()))
         ? annotation.name()

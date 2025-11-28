@@ -22,11 +22,10 @@ class ProblemContextImpl implements ProblemContext {
     if (this == o) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
+    if (!(o instanceof ProblemContext that)) {
       return false;
     }
-    ProblemContextImpl that = (ProblemContextImpl) o;
-    return Objects.equals(traceId, that.traceId);
+    return Objects.equals(getTraceId(), that.getTraceId());
   }
 
   @Override

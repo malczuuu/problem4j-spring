@@ -88,7 +88,7 @@ public class ProblemContextWebFluxFilter implements WebFilter {
    * @return the existing or newly generated trace ID
    */
   protected String initTraceId(ServerWebExchange exchange) {
-    if (getSettings().getTracingHeaderName() == null) {
+    if (!StringUtils.hasLength(getSettings().getTracingHeaderName())) {
       return createNewTraceId(exchange);
     }
     String traceId =
@@ -131,7 +131,7 @@ public class ProblemContextWebFluxFilter implements WebFilter {
    * @param context the current {@link ProblemContext}
    */
   protected void assignTracingHeader(ServerWebExchange exchange, ProblemContext context) {
-    if (getSettings().getTracingHeaderName() != null) {
+    if (StringUtils.hasLength(getSettings().getTracingHeaderName())) {
       exchange
           .getResponse()
           .getHeaders()
@@ -148,7 +148,11 @@ public class ProblemContextWebFluxFilter implements WebFilter {
    * @return an updated {@link Context} containing the problem context and trace ID
    */
   protected Context contextWrite(Context ctx, ServerWebExchange exchange, ProblemContext context) {
-    return ctx.put(PROBLEM_CONTEXT, context).put(TRACE_ID, context.getTraceId());
+    ctx = ctx.put(PROBLEM_CONTEXT, context);
+    if (StringUtils.hasLength(context.getTraceId())) {
+      ctx = ctx.put(TRACE_ID, context.getTraceId());
+    }
+    return ctx;
   }
 
   /**
