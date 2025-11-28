@@ -8,6 +8,7 @@ import io.github.malczuuu.problem4j.spring.web.format.IdentityProblemFormat;
 import io.github.malczuuu.problem4j.spring.web.format.ProblemFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.lang.Nullable;
 
 /** Convenience base class for {@link ProblemResolver}-s. */
 public abstract class AbstractProblemResolver implements ProblemResolver {
@@ -64,6 +65,7 @@ public abstract class AbstractProblemResolver implements ProblemResolver {
    * @param detail original detail (nullable)
    * @return formatted detail (never null if input not null)
    */
+  @Nullable
   protected String formatDetail(String detail) {
     return problemFormat.formatDetail(detail);
   }

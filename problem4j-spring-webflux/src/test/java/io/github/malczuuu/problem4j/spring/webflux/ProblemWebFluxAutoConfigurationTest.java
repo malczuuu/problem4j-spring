@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.lang.Nullable;
 import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
 
 class ProblemWebFluxAutoConfigurationTest {
@@ -19,12 +20,15 @@ class ProblemWebFluxAutoConfigurationTest {
   class WithEnabled {
 
     @Autowired(required = false)
+    @Nullable
     private ProblemWebFluxAutoConfiguration problemWebFluxAutoConfiguration;
 
     @Autowired(required = false)
+    @Nullable
     private ProblemErrorWebFluxConfiguration problemErrorWebFluxConfiguration;
 
     @Autowired(required = false)
+    @Nullable
     private ProblemResolverWebFluxConfiguration problemResolverWebFluxConfiguration;
 
     @Autowired private ProblemWebFluxProperties properties;
@@ -46,15 +50,19 @@ class ProblemWebFluxAutoConfigurationTest {
   class WithDisabled {
 
     @Autowired(required = false)
+    @Nullable
     private ProblemWebFluxAutoConfiguration problemWebFluxAutoConfiguration;
 
     @Autowired(required = false)
+    @Nullable
     private ProblemErrorWebFluxConfiguration problemErrorWebFluxConfiguration;
 
     @Autowired(required = false)
+    @Nullable
     private ProblemResolverWebFluxConfiguration problemResolverWebFluxConfiguration;
 
     @Autowired(required = false)
+    @Nullable
     private ProblemWebFluxProperties properties;
 
     @Test
@@ -72,6 +80,7 @@ class ProblemWebFluxAutoConfigurationTest {
   class WithExceptionAdviceEnabled {
 
     @Autowired(required = false)
+    @Nullable
     private ExceptionWebFluxAdvice exceptionWebFluxAdvice;
 
     @Autowired private ProblemWebFluxProperties properties;
@@ -90,6 +99,7 @@ class ProblemWebFluxAutoConfigurationTest {
   class WithExceptionAdviceDisabled {
 
     @Autowired(required = false)
+    @Nullable
     private ExceptionWebFluxAdvice exceptionWebFluxAdvice;
 
     @Autowired private ProblemWebFluxProperties properties;
@@ -106,6 +116,7 @@ class ProblemWebFluxAutoConfigurationTest {
   class WithProblemExceptionAdviceEnabled {
 
     @Autowired(required = false)
+    @Nullable
     private ProblemExceptionWebFluxAdvice problemExceptionWebFluxAdvice;
 
     @Autowired private ProblemWebFluxProperties properties;
@@ -124,6 +135,7 @@ class ProblemWebFluxAutoConfigurationTest {
   class WithProblemExceptionAdviceDisabled {
 
     @Autowired(required = false)
+    @Nullable
     private ProblemExceptionWebFluxAdvice problemExceptionWebFluxAdvice;
 
     @Autowired private ProblemWebFluxProperties properties;
@@ -140,6 +152,7 @@ class ProblemWebFluxAutoConfigurationTest {
   class WithProblemContextFilterEnabled {
 
     @Autowired(required = false)
+    @Nullable
     private ProblemContextWebFluxFilter problemContextWebFluxFilter;
 
     @Autowired private ProblemWebFluxProperties properties;
@@ -158,6 +171,7 @@ class ProblemWebFluxAutoConfigurationTest {
   class WithProblemContextFilterDisabled {
 
     @Autowired(required = false)
+    @Nullable
     private ProblemContextWebFluxFilter problemContextWebFluxFilter;
 
     @Autowired private ProblemWebFluxProperties properties;
@@ -174,6 +188,7 @@ class ProblemWebFluxAutoConfigurationTest {
   class WithExceptionHandlerEnabled {
 
     @Autowired(required = false)
+    @Nullable
     private ResponseEntityExceptionHandler exceptionHandler;
 
     @Autowired private ProblemWebFluxProperties properties;
@@ -192,6 +207,7 @@ class ProblemWebFluxAutoConfigurationTest {
   class WithExceptionHandlerDisabled {
 
     @Autowired(required = false)
+    @Nullable
     private ResponseEntityExceptionHandler exceptionHandler;
 
     @Autowired private ProblemWebFluxProperties properties;

@@ -8,6 +8,7 @@ import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.springframework.lang.Nullable;
 
 class OverridingProblemPostProcessorTest {
 
@@ -182,7 +183,7 @@ class OverridingProblemPostProcessorTest {
       },
       nullValues = "null")
   void givenProblemInstanceAndContextTraceIdPlaceholders_shouldNotOverrideIfAnyIsMissing(
-      String problemInstance, String contextTraceId, String expectedResult) {
+      @Nullable String problemInstance, String contextTraceId, String expectedResult) {
     PostProcessorSettings settings = getSettings(null, "{context.traceId}/{problem.instance}");
 
     ProblemBuilder builder = Problem.builder().type("bad_request");
@@ -214,13 +215,17 @@ class OverridingProblemPostProcessorTest {
     assertThat(result).isSameAs(problem);
   }
 
-  private PostProcessorSettings getSettings(String typeOverride, String instanceOverride) {
+  private PostProcessorSettings getSettings(
+      @Nullable String typeOverride, @Nullable String instanceOverride) {
+
     return new PostProcessorSettings() {
+      @Nullable
       @Override
       public String getTypeOverride() {
         return typeOverride;
       }
 
+      @Nullable
       @Override
       public String getInstanceOverride() {
         return instanceOverride;

@@ -4,6 +4,7 @@ import io.github.malczuuu.problem4j.spring.web.context.ProblemContextSettings;
 import io.github.malczuuu.problem4j.spring.web.processor.PostProcessorSettings;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.DefaultValue;
+import org.springframework.lang.Nullable;
 
 /**
  * Configuration properties for Problem Details integration.
@@ -15,10 +16,9 @@ public class ProblemProperties implements ProblemContextSettings, PostProcessorS
 
   private final boolean enabled;
   private final String detailFormat;
-  private final String tracingHeaderName;
-  private final String typeOverride;
-  private final String instanceOverride;
-
+  @Nullable private final String tracingHeaderName;
+  @Nullable private final String typeOverride;
+  @Nullable private final String instanceOverride;
   private final ResolverCaching resolverCaching;
 
   /**
@@ -36,10 +36,10 @@ public class ProblemProperties implements ProblemContextSettings, PostProcessorS
   public ProblemProperties(
       @DefaultValue("true") boolean enabled,
       @DefaultValue(DetailFormat.CAPITALIZED) String detailFormat,
-      String tracingHeaderName,
-      String typeOverride,
-      String instanceOverride,
-      ResolverCaching resolverCaching) {
+      @Nullable String tracingHeaderName,
+      @Nullable String typeOverride,
+      @Nullable String instanceOverride,
+      @Nullable ResolverCaching resolverCaching) {
     this.enabled = enabled;
     this.detailFormat = detailFormat;
     this.tracingHeaderName = tracingHeaderName;
@@ -78,6 +78,7 @@ public class ProblemProperties implements ProblemContextSettings, PostProcessorS
    *
    * @return the tracing header name, or {@code null} if not set
    */
+  @Nullable
   @Override
   public String getTracingHeaderName() {
     return tracingHeaderName;
@@ -103,6 +104,7 @@ public class ProblemProperties implements ProblemContextSettings, PostProcessorS
    * @return the configured type override string, or {@code null} if not set
    * @see io.github.malczuuu.problem4j.spring.web.context.ProblemContext
    */
+  @Nullable
   @Override
   public String getTypeOverride() {
     return typeOverride;
@@ -127,6 +129,7 @@ public class ProblemProperties implements ProblemContextSettings, PostProcessorS
    * @return the configured instance override string, or {@code null} if not set
    * @see io.github.malczuuu.problem4j.spring.web.context.ProblemContext
    */
+  @Nullable
   @Override
   public String getInstanceOverride() {
     return instanceOverride;

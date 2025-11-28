@@ -2,6 +2,7 @@ package io.github.malczuuu.problem4j.spring.web.format;
 
 import io.github.malczuuu.problem4j.spring.web.ProblemProperties;
 import java.util.Locale;
+import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 
 /**
@@ -39,8 +40,9 @@ public class DefaultProblemFormat implements ProblemFormat {
    * @param detail the raw text, may be {@code null}
    * @return the formatted text, or {@code null} if input was {@code null}
    */
+  @Nullable
   @Override
-  public String formatDetail(String detail) {
+  public String formatDetail(@Nullable String detail) {
     if (!StringUtils.hasLength(detail)) {
       return detail;
     }

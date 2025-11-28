@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.lang.Nullable;
 
 @SpringBootTest(classes = {TestApp.class})
 class ProblemAutoConfigurationTest {
@@ -42,12 +43,15 @@ class ProblemAutoConfigurationTest {
   class WithDisabled {
 
     @Autowired(required = false)
+    @Nullable
     private ProblemAutoConfiguration problemAutoConfiguration;
 
     @Autowired(required = false)
+    @Nullable
     private ProblemResolverConfiguration problemResolverConfiguration;
 
     @Autowired(required = false)
+    @Nullable
     private ProblemProperties properties;
 
     @Test

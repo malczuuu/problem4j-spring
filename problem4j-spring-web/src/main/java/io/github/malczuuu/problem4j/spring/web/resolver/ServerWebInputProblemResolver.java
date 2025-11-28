@@ -13,6 +13,7 @@ import org.springframework.beans.TypeMismatchException;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.lang.Nullable;
 import org.springframework.web.server.ServerWebInputException;
 
 /**
@@ -66,7 +67,7 @@ public class ServerWebInputProblemResolver extends AbstractProblemResolver {
   }
 
   private ProblemBuilder tryAppendingPropertyFromMethodParameter(
-      MethodParameter parameter, ProblemBuilder builder) {
+      @Nullable MethodParameter parameter, ProblemBuilder builder) {
     Optional<String> optionalProperty = findParameterName(parameter);
     if (optionalProperty.isPresent()) {
       builder = builder.extension(PROPERTY_EXTENSION, optionalProperty.get());

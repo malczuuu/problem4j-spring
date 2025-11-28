@@ -18,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -66,9 +67,14 @@ public class ProblemEnhancedMvcHandler extends ResponseEntityExceptionHandler {
    * and {@code 6.1.*} (Spring Framework versions, not Spring Boot). Therefore, this method is
    * retained to ensure compatibility across those versions.
    */
+  @Nullable
   @Override
   protected ResponseEntity<Object> handleExceptionInternal(
-      Exception ex, Object body, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+      Exception ex,
+      @Nullable Object body,
+      @Nullable HttpHeaders headers,
+      HttpStatusCode status,
+      WebRequest request) {
     ProblemContext context = (ProblemContext) request.getAttribute(PROBLEM_CONTEXT, SCOPE_REQUEST);
     if (context == null) {
       context = ProblemContext.empty();

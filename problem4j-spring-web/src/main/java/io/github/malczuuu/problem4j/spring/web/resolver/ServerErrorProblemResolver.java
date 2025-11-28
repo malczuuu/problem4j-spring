@@ -12,6 +12,7 @@ import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -104,7 +105,8 @@ public class ServerErrorProblemResolver extends AbstractProblemResolver {
    * @return explicit annotation name, falling back to the reflective parameter name (may be {@code
    *     null})
    */
-  private String findParameterName(MethodParameter methodParameter) {
+  @Nullable
+  private String findParameterName(@Nullable MethodParameter methodParameter) {
     if (methodParameter == null) {
       return null;
     }

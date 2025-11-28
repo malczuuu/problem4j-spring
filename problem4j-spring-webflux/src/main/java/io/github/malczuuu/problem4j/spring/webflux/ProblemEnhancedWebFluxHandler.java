@@ -17,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.server.ServerWebExchange;
@@ -69,8 +70,8 @@ public class ProblemEnhancedWebFluxHandler extends ResponseEntityExceptionHandle
   @Override
   protected Mono<ResponseEntity<Object>> handleExceptionInternal(
       Exception ex,
-      Object body,
-      HttpHeaders headers,
+      @Nullable Object body,
+      @Nullable HttpHeaders headers,
       HttpStatusCode status,
       ServerWebExchange exchange) {
     ProblemContext context =

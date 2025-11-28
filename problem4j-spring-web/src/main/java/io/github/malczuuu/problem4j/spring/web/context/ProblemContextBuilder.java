@@ -1,5 +1,7 @@
 package io.github.malczuuu.problem4j.spring.web.context;
 
+import org.springframework.lang.Nullable;
+
 /** Builder for creating {@link ProblemContext} instances. */
 public interface ProblemContextBuilder {
 
@@ -9,7 +11,7 @@ public interface ProblemContextBuilder {
    * @param traceId trace identifier object, may be {@code null}
    * @return this builder
    */
-  ProblemContextBuilder traceId(Object traceId);
+  ProblemContextBuilder traceId(@Nullable Object traceId);
 
   /**
    * Sets the trace identifier for this context.
@@ -17,7 +19,7 @@ public interface ProblemContextBuilder {
    * @param traceId trace identifier string, may be {@code null}
    * @return this builder
    */
-  ProblemContextBuilder traceId(String traceId);
+  ProblemContextBuilder traceId(@Nullable String traceId);
 
   /**
    * Builds a new {@link ProblemContext} instance.
