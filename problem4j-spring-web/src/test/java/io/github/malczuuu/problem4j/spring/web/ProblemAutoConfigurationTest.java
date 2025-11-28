@@ -43,16 +43,13 @@ class ProblemAutoConfigurationTest {
   class WithDisabled {
 
     @Autowired(required = false)
-    @Nullable
-    private ProblemAutoConfiguration problemAutoConfiguration;
+    private @Nullable ProblemAutoConfiguration problemAutoConfiguration;
 
     @Autowired(required = false)
-    @Nullable
-    private ProblemResolverConfiguration problemResolverConfiguration;
+    private @Nullable ProblemResolverConfiguration problemResolverConfiguration;
 
     @Autowired(required = false)
-    @Nullable
-    private ProblemProperties properties;
+    private @Nullable ProblemProperties properties;
 
     @Test
     void contextLoadsWithoutProblemConfiguration() {

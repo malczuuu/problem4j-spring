@@ -98,8 +98,7 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
   }
 
   /** Returns the {@link ProblemMapping} annotation from the class if present, otherwise null. */
-  @Nullable
-  private ProblemMapping findAnnotation(Class<?> clazz) {
+  private @Nullable ProblemMapping findAnnotation(Class<?> clazz) {
     return clazz.getAnnotation(ProblemMapping.class);
   }
 
@@ -235,8 +234,7 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
   }
 
   /** Resolves a placeholder by reflective field lookup up the throwable class hierarchy. */
-  @Nullable
-  private Object resolvePlaceholderSource(Throwable t, String name) {
+  private @Nullable Object resolvePlaceholderSource(Throwable t, String name) {
     if (!StringUtils.hasLength(name)) {
       return null;
     }

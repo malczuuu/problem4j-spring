@@ -67,9 +67,8 @@ public class ProblemEnhancedMvcHandler extends ResponseEntityExceptionHandler {
    * and {@code 6.1.*} (Spring Framework versions, not Spring Boot). Therefore, this method is
    * retained to ensure compatibility across those versions.
    */
-  @Nullable
   @Override
-  protected ResponseEntity<Object> handleExceptionInternal(
+  protected @Nullable ResponseEntity<Object> handleExceptionInternal(
       Exception ex,
       @Nullable Object body,
       @Nullable HttpHeaders headers,

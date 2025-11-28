@@ -105,8 +105,7 @@ public class ServerErrorProblemResolver extends AbstractProblemResolver {
    * @return explicit annotation name, falling back to the reflective parameter name (may be {@code
    *     null})
    */
-  @Nullable
-  private String findParameterName(@Nullable MethodParameter methodParameter) {
+  private @Nullable String findParameterName(@Nullable MethodParameter methodParameter) {
     if (methodParameter == null) {
       return null;
     }

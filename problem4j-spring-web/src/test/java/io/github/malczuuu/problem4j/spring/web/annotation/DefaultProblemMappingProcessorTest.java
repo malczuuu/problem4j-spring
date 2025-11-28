@@ -132,7 +132,7 @@ class DefaultProblemMappingProcessorTest {
     class ExtensionsException extends RuntimeException {
 
       private final String secret;
-      @Nullable private final Integer other;
+      private final @Nullable Integer other;
 
       ExtensionsException(String secret, @Nullable Integer other) {
 

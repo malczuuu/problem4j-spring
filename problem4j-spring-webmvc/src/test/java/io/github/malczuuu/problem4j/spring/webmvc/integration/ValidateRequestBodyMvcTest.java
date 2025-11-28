@@ -65,7 +65,7 @@ class ValidateRequestBodyMvcTest {
   @Autowired private TestRestTemplate restTemplate;
   @Autowired private ObjectMapper objectMapper;
 
-  record TestRequest(@NotBlank @Nullable String name, @Nullable Integer age) {}
+  record TestRequest(@NotBlank String name, @Nullable Integer age) {}
 
   @AlwaysInvalid
   record AlwaysInvalidRequest(String field) {}

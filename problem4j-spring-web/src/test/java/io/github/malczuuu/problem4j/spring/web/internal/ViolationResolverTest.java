@@ -14,6 +14,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
+import org.springframework.lang.Nullable;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -106,8 +107,8 @@ class ViolationResolverTest {
   }
 
   static class TestObject {
-    private String name;
-    private Integer age;
+    private @Nullable String name;
+    private @Nullable Integer age;
   }
 
   static class SampleValidatedMethods {

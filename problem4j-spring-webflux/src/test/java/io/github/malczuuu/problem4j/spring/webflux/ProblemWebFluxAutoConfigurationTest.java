@@ -20,16 +20,13 @@ class ProblemWebFluxAutoConfigurationTest {
   class WithEnabled {
 
     @Autowired(required = false)
-    @Nullable
-    private ProblemWebFluxAutoConfiguration problemWebFluxAutoConfiguration;
+    private @Nullable ProblemWebFluxAutoConfiguration problemWebFluxAutoConfiguration;
 
     @Autowired(required = false)
-    @Nullable
-    private ProblemErrorWebFluxConfiguration problemErrorWebFluxConfiguration;
+    private @Nullable ProblemErrorWebFluxConfiguration problemErrorWebFluxConfiguration;
 
     @Autowired(required = false)
-    @Nullable
-    private ProblemResolverWebFluxConfiguration problemResolverWebFluxConfiguration;
+    private @Nullable ProblemResolverWebFluxConfiguration problemResolverWebFluxConfiguration;
 
     @Autowired private ProblemWebFluxProperties properties;
 
@@ -50,20 +47,16 @@ class ProblemWebFluxAutoConfigurationTest {
   class WithDisabled {
 
     @Autowired(required = false)
-    @Nullable
-    private ProblemWebFluxAutoConfiguration problemWebFluxAutoConfiguration;
+    private @Nullable ProblemWebFluxAutoConfiguration problemWebFluxAutoConfiguration;
 
     @Autowired(required = false)
-    @Nullable
-    private ProblemErrorWebFluxConfiguration problemErrorWebFluxConfiguration;
+    private @Nullable ProblemErrorWebFluxConfiguration problemErrorWebFluxConfiguration;
 
     @Autowired(required = false)
-    @Nullable
-    private ProblemResolverWebFluxConfiguration problemResolverWebFluxConfiguration;
+    private @Nullable ProblemResolverWebFluxConfiguration problemResolverWebFluxConfiguration;
 
     @Autowired(required = false)
-    @Nullable
-    private ProblemWebFluxProperties properties;
+    private @Nullable ProblemWebFluxProperties properties;
 
     @Test
     void contextLoadsWithoutProblemConfiguration() {

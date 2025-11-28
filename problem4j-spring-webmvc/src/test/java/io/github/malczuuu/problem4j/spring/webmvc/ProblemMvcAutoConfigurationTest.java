@@ -47,20 +47,16 @@ class ProblemMvcAutoConfigurationTest {
   class WithDisabled {
 
     @Autowired(required = false)
-    @Nullable
-    private ProblemMvcAutoConfiguration problemMvcAutoConfiguration;
+    private @Nullable ProblemMvcAutoConfiguration problemMvcAutoConfiguration;
 
     @Autowired(required = false)
-    @Nullable
-    private ProblemErrorMvcConfiguration problemErrorMvcConfiguration;
+    private @Nullable ProblemErrorMvcConfiguration problemErrorMvcConfiguration;
 
     @Autowired(required = false)
-    @Nullable
-    private ProblemResolverMvcConfiguration problemResolverMvcConfiguration;
+    private @Nullable ProblemResolverMvcConfiguration problemResolverMvcConfiguration;
 
     @Autowired(required = false)
-    @Nullable
-    private ProblemMvcProperties properties;
+    private @Nullable ProblemMvcProperties properties;
 
     @Test
     void contextLoadsWithoutConfiguration() {
@@ -95,8 +91,7 @@ class ProblemMvcAutoConfigurationTest {
   class WithExceptionAdviceDisabled {
 
     @Autowired(required = false)
-    @Nullable
-    private ExceptionMvcAdvice exceptionMvcAdvice;
+    private @Nullable ExceptionMvcAdvice exceptionMvcAdvice;
 
     @Autowired private ProblemMvcProperties properties;
 
@@ -130,8 +125,7 @@ class ProblemMvcAutoConfigurationTest {
   class WithProblemExceptionAdviceDisabled {
 
     @Autowired(required = false)
-    @Nullable
-    private ProblemExceptionMvcAdvice problemExceptionMvcAdvice;
+    private @Nullable ProblemExceptionMvcAdvice problemExceptionMvcAdvice;
 
     @Autowired private ProblemMvcProperties properties;
 
@@ -166,8 +160,7 @@ class ProblemMvcAutoConfigurationTest {
   class WithProblemContextFilterDisabled {
 
     @Autowired(required = false)
-    @Nullable
-    private ProblemContextMvcFilter problemContextMvcFilter;
+    private @Nullable ProblemContextMvcFilter problemContextMvcFilter;
 
     @Autowired private ProblemMvcProperties properties;
 
@@ -183,8 +176,7 @@ class ProblemMvcAutoConfigurationTest {
   class WithExceptionHandlerEnabled {
 
     @Autowired(required = false)
-    @Nullable
-    private ResponseEntityExceptionHandler exceptionHandler;
+    private @Nullable ResponseEntityExceptionHandler exceptionHandler;
 
     @Autowired private ProblemMvcProperties properties;
 
@@ -202,8 +194,7 @@ class ProblemMvcAutoConfigurationTest {
   class WithExceptionHandlerDisabled {
 
     @Autowired(required = false)
-    @Nullable
-    private ResponseEntityExceptionHandler exceptionHandler;
+    private @Nullable ResponseEntityExceptionHandler exceptionHandler;
 
     @Autowired private ProblemMvcProperties properties;
 

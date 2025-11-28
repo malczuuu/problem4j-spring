@@ -219,15 +219,14 @@ class OverridingProblemPostProcessorTest {
       @Nullable String typeOverride, @Nullable String instanceOverride) {
 
     return new PostProcessorSettings() {
-      @Nullable
+
       @Override
-      public String getTypeOverride() {
+      public @Nullable String getTypeOverride() {
         return typeOverride;
       }
 
-      @Nullable
       @Override
-      public String getInstanceOverride() {
+      public @Nullable String getInstanceOverride() {
         return instanceOverride;
       }
     };

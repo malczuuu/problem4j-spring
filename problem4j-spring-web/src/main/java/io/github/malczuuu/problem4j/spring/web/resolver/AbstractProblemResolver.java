@@ -65,8 +65,7 @@ public abstract class AbstractProblemResolver implements ProblemResolver {
    * @param detail original detail (nullable)
    * @return formatted detail (never null if input not null)
    */
-  @Nullable
-  protected String formatDetail(String detail) {
+  protected @Nullable String formatDetail(String detail) {
     return problemFormat.formatDetail(detail);
   }
 }

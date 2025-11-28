@@ -7,15 +7,14 @@ class ProblemContextImpl implements ProblemContext {
 
   static final ProblemContext EMPTY = ProblemContext.builder().build();
 
-  @Nullable private final String traceId;
+  private final @Nullable String traceId;
 
   ProblemContextImpl(@Nullable String traceId) {
     this.traceId = traceId;
   }
 
   @Override
-  @Nullable
-  public String getTraceId() {
+  public @Nullable String getTraceId() {
     return traceId;
   }
 

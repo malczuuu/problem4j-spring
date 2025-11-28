@@ -4,7 +4,7 @@ import org.springframework.lang.Nullable;
 
 class ProblemContextBuilderImpl implements ProblemContextBuilder {
 
-  @Nullable private String traceId;
+  private @Nullable String traceId;
 
   @Override
   public ProblemContextBuilderImpl traceId(@Nullable Object traceId) {

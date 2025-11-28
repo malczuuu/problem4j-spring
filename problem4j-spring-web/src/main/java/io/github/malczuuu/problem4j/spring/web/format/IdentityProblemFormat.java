@@ -11,9 +11,8 @@ public class IdentityProblemFormat implements ProblemFormat {
    * @param detail original detail text (may be {@code null})
    * @return the same {@code detail} value
    */
-  @Nullable
   @Override
-  public String formatDetail(@Nullable String detail) {
+  public @Nullable String formatDetail(@Nullable String detail) {
     return detail;
   }
 }

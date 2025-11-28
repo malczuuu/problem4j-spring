@@ -33,6 +33,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.lang.Nullable;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -138,7 +139,7 @@ class ValidateRequestBodyWebFluxTest {
         .isEqualTo(Problem.builder().status(ProblemStatus.BAD_REQUEST).build());
   }
 
-  record TestRequest(@NotBlank String name, Integer age) {}
+  record TestRequest(@NotBlank String name, @Nullable Integer age) {}
 
   @AlwaysInvalid
   record AlwaysInvalidRequest(String field) {}

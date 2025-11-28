@@ -16,8 +16,8 @@ public class Violation implements Serializable {
 
   @Serial private static final long serialVersionUID = 1L;
 
-  @Nullable private final String field;
-  @Nullable private final String error;
+  private final @Nullable String field;
+  private final @Nullable String error;
 
   /**
    * Creates a new violation.
@@ -39,8 +39,7 @@ public class Violation implements Serializable {
    * @return the field name
    */
   @JsonProperty("field")
-  @Nullable
-  public String getField() {
+  public @Nullable String getField() {
     return field;
   }
 
@@ -50,8 +49,7 @@ public class Violation implements Serializable {
    * @return the error message
    */
   @JsonProperty("error")
-  @Nullable
-  public String getError() {
+  public @Nullable String getError() {
     return error;
   }
 

@@ -40,9 +40,8 @@ public class DefaultProblemFormat implements ProblemFormat {
    * @param detail the raw text, may be {@code null}
    * @return the formatted text, or {@code null} if input was {@code null}
    */
-  @Nullable
   @Override
-  public String formatDetail(@Nullable String detail) {
+  public @Nullable String formatDetail(@Nullable String detail) {
     if (!StringUtils.hasLength(detail)) {
       return detail;
     }
