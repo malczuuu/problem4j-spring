@@ -2,6 +2,7 @@ package io.github.malczuuu.problem4j.spring.webmvc;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.DefaultValue;
+import org.springframework.lang.Nullable;
 
 /**
  * Configuration properties for Problem Details WebMVC integration.
@@ -33,11 +34,11 @@ public class ProblemMvcProperties {
    */
   public ProblemMvcProperties(
       @DefaultValue("true") boolean enabled,
-      ExceptionAdvice exceptionAdvice,
-      ProblemExceptionAdvice problemExceptionAdvice,
-      ProblemContextFilter problemContextFilter,
-      ExceptionHandler exceptionHandler,
-      ErrorController errorController) {
+      @Nullable ExceptionAdvice exceptionAdvice,
+      @Nullable ProblemExceptionAdvice problemExceptionAdvice,
+      @Nullable ProblemContextFilter problemContextFilter,
+      @Nullable ExceptionHandler exceptionHandler,
+      @Nullable ErrorController errorController) {
     this.enabled = enabled;
     this.exceptionAdvice =
         exceptionAdvice != null ? exceptionAdvice : ExceptionAdvice.createDefault();

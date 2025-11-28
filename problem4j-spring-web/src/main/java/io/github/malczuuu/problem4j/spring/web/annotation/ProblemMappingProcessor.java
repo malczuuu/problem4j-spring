@@ -3,6 +3,7 @@ package io.github.malczuuu.problem4j.spring.web.annotation;
 import io.github.malczuuu.problem4j.core.ProblemBuilder;
 import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
 import java.util.regex.Pattern;
+import org.springframework.lang.Nullable;
 
 /**
  * Converts exceptions annotated with {@link ProblemMapping} into {@link ProblemBuilder} instances,
@@ -45,7 +46,7 @@ public interface ProblemMappingProcessor {
    * @throws ProblemProcessingException when something goes wrong while building the Problem
    * @see io.github.malczuuu.problem4j.core.Problem
    */
-  ProblemBuilder toProblemBuilder(Throwable t, ProblemContext context);
+  ProblemBuilder toProblemBuilder(@Nullable Throwable t, @Nullable ProblemContext context);
 
   /**
    * Checks whether the given exception class is annotated with {@link ProblemMapping}.
@@ -54,5 +55,5 @@ public interface ProblemMappingProcessor {
    * @return {@code true} if the exception is annotated with {@link ProblemMapping}, {@code false}
    *     otherwise
    */
-  boolean isMappingCandidate(Throwable t);
+  boolean isMappingCandidate(@Nullable Throwable t);
 }

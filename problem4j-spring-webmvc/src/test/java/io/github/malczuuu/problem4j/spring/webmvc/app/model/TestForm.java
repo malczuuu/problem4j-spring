@@ -1,12 +1,13 @@
 package io.github.malczuuu.problem4j.spring.webmvc.app.model;
 
 import jakarta.validation.constraints.NotNull;
+import org.springframework.lang.Nullable;
 
 public class TestForm {
 
-  @NotNull private Integer number;
+  @NotNull @Nullable private Integer number;
 
-  public Integer getNumber() {
+  public @Nullable Integer getNumber() {
     return number;
   }
 

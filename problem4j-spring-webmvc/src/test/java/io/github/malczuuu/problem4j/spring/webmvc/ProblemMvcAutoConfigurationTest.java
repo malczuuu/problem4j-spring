@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 class ProblemMvcAutoConfigurationTest {
@@ -46,16 +47,16 @@ class ProblemMvcAutoConfigurationTest {
   class WithDisabled {
 
     @Autowired(required = false)
-    private ProblemMvcAutoConfiguration problemMvcAutoConfiguration;
+    private @Nullable ProblemMvcAutoConfiguration problemMvcAutoConfiguration;
 
     @Autowired(required = false)
-    private ProblemErrorMvcConfiguration problemErrorMvcConfiguration;
+    private @Nullable ProblemErrorMvcConfiguration problemErrorMvcConfiguration;
 
     @Autowired(required = false)
-    private ProblemResolverMvcConfiguration problemResolverMvcConfiguration;
+    private @Nullable ProblemResolverMvcConfiguration problemResolverMvcConfiguration;
 
     @Autowired(required = false)
-    private ProblemMvcProperties properties;
+    private @Nullable ProblemMvcProperties properties;
 
     @Test
     void contextLoadsWithoutConfiguration() {
@@ -90,7 +91,7 @@ class ProblemMvcAutoConfigurationTest {
   class WithExceptionAdviceDisabled {
 
     @Autowired(required = false)
-    private ExceptionMvcAdvice exceptionMvcAdvice;
+    private @Nullable ExceptionMvcAdvice exceptionMvcAdvice;
 
     @Autowired private ProblemMvcProperties properties;
 
@@ -124,7 +125,7 @@ class ProblemMvcAutoConfigurationTest {
   class WithProblemExceptionAdviceDisabled {
 
     @Autowired(required = false)
-    private ProblemExceptionMvcAdvice problemExceptionMvcAdvice;
+    private @Nullable ProblemExceptionMvcAdvice problemExceptionMvcAdvice;
 
     @Autowired private ProblemMvcProperties properties;
 
@@ -159,7 +160,7 @@ class ProblemMvcAutoConfigurationTest {
   class WithProblemContextFilterDisabled {
 
     @Autowired(required = false)
-    private ProblemContextMvcFilter problemContextMvcFilter;
+    private @Nullable ProblemContextMvcFilter problemContextMvcFilter;
 
     @Autowired private ProblemMvcProperties properties;
 
@@ -175,7 +176,7 @@ class ProblemMvcAutoConfigurationTest {
   class WithExceptionHandlerEnabled {
 
     @Autowired(required = false)
-    private ResponseEntityExceptionHandler exceptionHandler;
+    private @Nullable ResponseEntityExceptionHandler exceptionHandler;
 
     @Autowired private ProblemMvcProperties properties;
 
@@ -193,7 +194,7 @@ class ProblemMvcAutoConfigurationTest {
   class WithExceptionHandlerDisabled {
 
     @Autowired(required = false)
-    private ResponseEntityExceptionHandler exceptionHandler;
+    private @Nullable ResponseEntityExceptionHandler exceptionHandler;
 
     @Autowired private ProblemMvcProperties properties;
 

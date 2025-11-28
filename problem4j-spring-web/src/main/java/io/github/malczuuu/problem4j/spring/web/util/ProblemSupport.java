@@ -4,6 +4,7 @@ import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.lang.Nullable;
 
 /**
  * Central constants and small utilities used when constructing RFC 7807 {@link Problem} responses.
@@ -98,7 +99,7 @@ public final class ProblemSupport {
    * @return the corresponding {@link ProblemStatus}, or {@link ProblemStatus#INTERNAL_SERVER_ERROR}
    *     if the status is {@code null} or invalid
    */
-  public static ProblemStatus resolveStatus(HttpStatusCode status) {
+  public static ProblemStatus resolveStatus(@Nullable HttpStatusCode status) {
     return status == null
         ? ProblemStatus.INTERNAL_SERVER_ERROR
         : ProblemStatus.findValue(status.value()).orElse(ProblemStatus.INTERNAL_SERVER_ERROR);

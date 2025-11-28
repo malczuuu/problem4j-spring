@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.lang.Nullable;
 
 class ProblemErrorMvcConfigurationTest {
 
@@ -17,6 +18,7 @@ class ProblemErrorMvcConfigurationTest {
   class WithEnabled {
 
     @Autowired(required = false)
+    @Nullable
     private ProblemErrorMvcConfiguration problemErrorMvcConfiguration;
 
     @Autowired private ErrorController errorController;
@@ -38,6 +40,7 @@ class ProblemErrorMvcConfigurationTest {
   class WithDisabled {
 
     @Autowired(required = false)
+    @Nullable
     private ProblemErrorMvcConfiguration problemErrorMvcConfiguration;
 
     @Autowired private ErrorController errorController;
