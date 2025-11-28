@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
+import org.springframework.lang.Nullable;
 
 /**
  * Represents a validation violation with a specific field and its corresponding error message.
@@ -15,8 +16,8 @@ public class Violation implements Serializable {
 
   @Serial private static final long serialVersionUID = 1L;
 
-  private final String field;
-  private final String error;
+  private final @Nullable String field;
+  private final @Nullable String error;
 
   /**
    * Creates a new violation.
@@ -25,7 +26,9 @@ public class Violation implements Serializable {
    * @param error the description of the error
    */
   @JsonCreator
-  public Violation(@JsonProperty("field") String field, @JsonProperty("error") String error) {
+  public Violation(
+      @Nullable @JsonProperty("field") String field,
+      @Nullable @JsonProperty("error") String error) {
     this.field = field;
     this.error = error;
   }
@@ -36,7 +39,7 @@ public class Violation implements Serializable {
    * @return the field name
    */
   @JsonProperty("field")
-  public String getField() {
+  public @Nullable String getField() {
     return field;
   }
 
@@ -46,7 +49,7 @@ public class Violation implements Serializable {
    * @return the error message
    */
   @JsonProperty("error")
-  public String getError() {
+  public @Nullable String getError() {
     return error;
   }
 

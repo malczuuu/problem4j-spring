@@ -37,6 +37,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -64,7 +65,7 @@ class ValidateRequestBodyMvcTest {
   @Autowired private TestRestTemplate restTemplate;
   @Autowired private ObjectMapper objectMapper;
 
-  record TestRequest(@NotBlank String name, Integer age) {}
+  record TestRequest(@NotBlank String name, @Nullable Integer age) {}
 
   @AlwaysInvalid
   record AlwaysInvalidRequest(String field) {}

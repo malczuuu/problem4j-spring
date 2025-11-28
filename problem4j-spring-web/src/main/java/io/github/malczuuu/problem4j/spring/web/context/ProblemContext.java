@@ -1,5 +1,7 @@
 package io.github.malczuuu.problem4j.spring.web.context;
 
+import org.springframework.lang.Nullable;
+
 /**
  * Context passed for problem processing.
  *
@@ -38,7 +40,7 @@ public interface ProblemContext {
    * @param traceId trace identifier object, may be {@code null}
    * @return new problem context
    */
-  static ProblemContext ofTraceId(Object traceId) {
+  static ProblemContext ofTraceId(@Nullable Object traceId) {
     return builder().traceId(traceId).build();
   }
 
@@ -48,7 +50,7 @@ public interface ProblemContext {
    * @param traceId trace identifier string, may be {@code null}
    * @return new problem context
    */
-  static ProblemContext ofTraceId(String traceId) {
+  static ProblemContext ofTraceId(@Nullable String traceId) {
     return builder().traceId(traceId).build();
   }
 
@@ -57,5 +59,6 @@ public interface ProblemContext {
    *
    * @return trace identifier, or {@code null} if not set
    */
+  @Nullable
   String getTraceId();
 }

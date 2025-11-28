@@ -29,22 +29,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Import({BindingController.class})
 class MethodArgumentNotValidMvcTest {
 
-  static class Form {
-    private Integer number;
-
-    public Integer getNumber() {
-      return number;
-    }
-
-    public void setNumber(Integer number) {
-      this.number = number;
-    }
-  }
-
   @RestController
   static class BindingController {
     @GetMapping("/binding")
-    String binding(@ModelAttribute Form form) {
+    String binding(@ModelAttribute TestForm form) {
       return "OK";
     }
   }
@@ -72,4 +60,6 @@ class MethodArgumentNotValidMvcTest {
                     List.of(Map.of("field", "number", "error", IS_NOT_VALID_ERROR)))
                 .build());
   }
+
+  record TestForm(Integer number) {}
 }

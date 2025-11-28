@@ -1,5 +1,7 @@
 package io.github.malczuuu.problem4j.spring.web.format;
 
+import org.springframework.lang.Nullable;
+
 /** Convenience implementation for {@link ProblemFormat} which doesn't transform input data. */
 public class IdentityProblemFormat implements ProblemFormat {
 
@@ -10,7 +12,7 @@ public class IdentityProblemFormat implements ProblemFormat {
    * @return the same {@code detail} value
    */
   @Override
-  public String formatDetail(String detail) {
+  public @Nullable String formatDetail(@Nullable String detail) {
     return detail;
   }
 }

@@ -61,16 +61,5 @@ class WebExchangeBindExceptionWebFluxTest {
                 .build());
   }
 
-  static class TestForm {
-
-    @NotNull private Integer number;
-
-    public Integer getNumber() {
-      return number;
-    }
-
-    public void setNumber(Integer number) {
-      this.number = number;
-    }
-  }
+  record TestForm(@NotNull Integer number) {}
 }

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.springframework.lang.Nullable;
 
 class DefaultProblemMappingProcessorTest {
 
@@ -131,9 +132,10 @@ class DefaultProblemMappingProcessorTest {
     class ExtensionsException extends RuntimeException {
 
       private final String secret;
-      private final Integer other;
+      private final @Nullable Integer other;
 
-      ExtensionsException(String secret, Integer other) {
+      ExtensionsException(String secret, @Nullable Integer other) {
+
         super("ignored");
         this.secret = secret;
         this.other = other;

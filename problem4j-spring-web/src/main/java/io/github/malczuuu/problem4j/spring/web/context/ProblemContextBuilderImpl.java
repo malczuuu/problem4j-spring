@@ -1,11 +1,13 @@
 package io.github.malczuuu.problem4j.spring.web.context;
 
+import org.springframework.lang.Nullable;
+
 class ProblemContextBuilderImpl implements ProblemContextBuilder {
 
-  private String traceId;
+  private @Nullable String traceId;
 
   @Override
-  public ProblemContextBuilderImpl traceId(Object traceId) {
+  public ProblemContextBuilderImpl traceId(@Nullable Object traceId) {
     if (traceId != null) {
       this.traceId = traceId.toString();
     }
@@ -13,7 +15,7 @@ class ProblemContextBuilderImpl implements ProblemContextBuilder {
   }
 
   @Override
-  public ProblemContextBuilderImpl traceId(String traceId) {
+  public ProblemContextBuilderImpl traceId(@Nullable String traceId) {
     this.traceId = traceId;
     return this;
   }

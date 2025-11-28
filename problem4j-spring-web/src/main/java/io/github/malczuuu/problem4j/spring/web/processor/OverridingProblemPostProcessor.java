@@ -5,6 +5,7 @@ import io.github.malczuuu.problem4j.core.ProblemBuilder;
 import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
 import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
 import java.util.Optional;
+import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 
 /**
@@ -58,7 +59,7 @@ public class OverridingProblemPostProcessor implements ProblemPostProcessor {
    * {@code about:blank} value is preserved instead of becoming empty.
    */
   @Override
-  public Problem process(ProblemContext context, Problem problem) {
+  public Problem process(@Nullable ProblemContext context, Problem problem) {
     if (context == null) {
       context = ProblemContext.empty();
     }
@@ -179,7 +180,7 @@ public class OverridingProblemPostProcessor implements ProblemPostProcessor {
     return template;
   }
 
-  private String stringOrEmpty(Object value) {
+  private String stringOrEmpty(@Nullable Object value) {
     return value != null ? value.toString() : "";
   }
 

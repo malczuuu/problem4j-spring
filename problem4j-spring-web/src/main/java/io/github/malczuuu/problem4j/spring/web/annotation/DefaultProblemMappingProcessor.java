@@ -5,6 +5,7 @@ import io.github.malczuuu.problem4j.core.ProblemBuilder;
 import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
 import java.lang.reflect.Field;
 import java.util.regex.Matcher;
+import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 
 /**
@@ -56,7 +57,7 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
    * @throws ProblemProcessingException when something goes wrong while building the Problem
    */
   @Override
-  public ProblemBuilder toProblemBuilder(Throwable t, ProblemContext context) {
+  public ProblemBuilder toProblemBuilder(@Nullable Throwable t, @Nullable ProblemContext context) {
     if (t == null) {
       return Problem.builder();
     }
@@ -92,12 +93,12 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
    *     false} otherwise
    */
   @Override
-  public boolean isMappingCandidate(Throwable t) {
+  public boolean isMappingCandidate(@Nullable Throwable t) {
     return t != null && t.getClass().isAnnotationPresent(ProblemMapping.class);
   }
 
   /** Returns the {@link ProblemMapping} annotation from the class if present, otherwise null. */
-  private ProblemMapping findAnnotation(Class<?> clazz) {
+  private @Nullable ProblemMapping findAnnotation(Class<?> clazz) {
     return clazz.getAnnotation(ProblemMapping.class);
   }
 
@@ -106,7 +107,10 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
    * ignores invalid URIs.
    */
   private void applyTypeOnBuilder(
-      ProblemBuilder builder, ProblemMapping mapping, Throwable t, ProblemContext context) {
+      ProblemBuilder builder,
+      ProblemMapping mapping,
+      Throwable t,
+      @Nullable ProblemContext context) {
     String rawType = StringUtils.hasLength(mapping.type()) ? mapping.type().trim() : "";
     if (StringUtils.hasLength(rawType)) {
       String typeInterpolated = interpolate(rawType, t, context);
@@ -122,7 +126,10 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
 
   /** Applies the interpolated title if present and non-empty. */
   private void applyTitleOnBuilder(
-      ProblemBuilder builder, ProblemMapping mapping, Throwable t, ProblemContext context) {
+      ProblemBuilder builder,
+      ProblemMapping mapping,
+      Throwable t,
+      @Nullable ProblemContext context) {
     String titleRaw = StringUtils.hasLength(mapping.title()) ? mapping.title().trim() : "";
     if (StringUtils.hasLength(titleRaw)) {
       String titleInterpolated = interpolate(titleRaw, t, context);
@@ -141,7 +148,10 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
 
   /** Applies the interpolated detail text if non-empty. */
   private void applyDetailOnBuilder(
-      ProblemBuilder builder, ProblemMapping mapping, Throwable t, ProblemContext context) {
+      ProblemBuilder builder,
+      ProblemMapping mapping,
+      Throwable t,
+      @Nullable ProblemContext context) {
     String detailRaw = StringUtils.hasLength(mapping.detail()) ? mapping.detail().trim() : "";
     if (StringUtils.hasLength(detailRaw)) {
       String detailInterpolated = interpolate(detailRaw, t, context);
@@ -153,7 +163,10 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
 
   /** Applies the interpolated instance value; ignores invalid URIs. */
   private void applyInstanceOnBuilder(
-      ProblemBuilder builder, ProblemMapping mapping, Throwable t, ProblemContext context) {
+      ProblemBuilder builder,
+      ProblemMapping mapping,
+      Throwable t,
+      @Nullable ProblemContext context) {
     String rawInstance = StringUtils.hasLength(mapping.instance()) ? mapping.instance().trim() : "";
     if (StringUtils.hasLength(rawInstance)) {
       String instanceInterpolated = interpolate(rawInstance, t, context);
@@ -194,7 +207,7 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
    *
    * <p>Missing values resolve to an empty string.
    */
-  private String interpolate(String template, Throwable t, ProblemContext context) {
+  private String interpolate(String template, Throwable t, @Nullable ProblemContext context) {
     Matcher m = PLACEHOLDER.matcher(template);
 
     StringBuilder sb = new StringBuilder();
@@ -221,7 +234,7 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
   }
 
   /** Resolves a placeholder by reflective field lookup up the throwable class hierarchy. */
-  private Object resolvePlaceholderSource(Throwable t, String name) {
+  private @Nullable Object resolvePlaceholderSource(Throwable t, String name) {
     if (!StringUtils.hasLength(name)) {
       return null;
     }

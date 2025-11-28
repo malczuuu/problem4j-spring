@@ -24,6 +24,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -79,7 +80,10 @@ class ProblemAdviceMvcTest {
 
     @Override
     public ProblemBuilder resolveBuilder(
-        ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
+        ProblemContext context,
+        Exception ex,
+        @Nullable HttpHeaders headers,
+        HttpStatusCode status) {
       return Problem.builder()
           .type("http://exception.example.org/resolvable")
           .title(ex.getClass().getSimpleName())

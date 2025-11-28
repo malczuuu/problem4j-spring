@@ -1,5 +1,7 @@
 package io.github.malczuuu.problem4j.spring.web.processor;
 
+import org.springframework.lang.Nullable;
+
 /**
  * Defines configuration settings used by {@link ProblemPostProcessor} implementations to control
  * how problem responses are modified before being returned to the client.
@@ -21,6 +23,7 @@ public interface PostProcessorSettings {
    *
    * @return the configured type override template, or {@code null} if not set
    */
+  @Nullable
   String getTypeOverride();
 
   /**
@@ -31,5 +34,6 @@ public interface PostProcessorSettings {
    *
    * @return the configured instance override template, or {@code null} if not set
    */
+  @Nullable
   String getInstanceOverride();
 }

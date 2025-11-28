@@ -1,5 +1,7 @@
 package io.github.malczuuu.problem4j.spring.web.format;
 
+import org.springframework.lang.Nullable;
+
 /**
  * Defines a contract for formatting problem detail field and property names (mostly before they are
  * included in a {@code Problem} response).
@@ -10,5 +12,6 @@ package io.github.malczuuu.problem4j.spring.web.format;
 public interface ProblemFormat {
 
   /** Format {@code detail} field of {@code Problem} model. */
-  String formatDetail(String detail);
+  @Nullable
+  String formatDetail(@Nullable String detail);
 }

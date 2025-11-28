@@ -1,5 +1,7 @@
 package io.github.malczuuu.problem4j.spring.web.context;
 
+import org.springframework.lang.Nullable;
+
 /**
  * Settings used when building a {@link ProblemContext} for incoming requests.
  *
@@ -18,5 +20,6 @@ public interface ProblemContextSettings {
    *
    * @return the tracing header name, or {@code null} if tracing is disabled / not configured
    */
+  @Nullable
   String getTracingHeaderName();
 }
