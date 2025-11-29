@@ -64,11 +64,11 @@ public class Violation implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(field, error);
+    return Objects.hash(getField(), getError());
   }
 
   @Override
   public String toString() {
-    return "Violation{field='" + field + "', error='" + error + "'}";
+    return "Violation{field='" + getField() + "', error='" + getError() + "'}";
   }
 }
