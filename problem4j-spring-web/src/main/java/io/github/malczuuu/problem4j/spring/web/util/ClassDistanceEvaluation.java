@@ -11,6 +11,8 @@ package io.github.malczuuu.problem4j.spring.web.util;
  */
 public interface ClassDistanceEvaluation {
 
+  int DEFAULT_MAX_DEPTH = 50;
+
   /**
    * Calculates the inheritance distance between two class types.
    *
@@ -43,6 +45,6 @@ public interface ClassDistanceEvaluation {
    * hierarchies.
    */
   default int getDefaultMaxDepth() {
-    return 50;
+    return DEFAULT_MAX_DEPTH;
   }
 }

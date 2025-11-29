@@ -9,8 +9,6 @@ import java.util.Objects;
  */
 public class GraphClassDistanceEvaluation implements ClassDistanceEvaluation {
 
-  public static final int DEFAULT_MAX_DEPTH = 50;
-
   private final int defaultMaxDepth;
 
   /** Creates a {@link GraphClassDistanceEvaluation} using the default maximum depth. */
