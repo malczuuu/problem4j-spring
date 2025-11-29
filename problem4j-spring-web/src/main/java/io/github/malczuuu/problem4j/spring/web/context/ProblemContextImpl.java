@@ -4,7 +4,7 @@ import java.util.Objects;
 
 class ProblemContextImpl implements ProblemContext {
 
-  static ProblemContext EMPTY = ProblemContext.builder().build();
+  static final ProblemContext EMPTY = ProblemContext.builder().build();
 
   private final String traceId;
 
