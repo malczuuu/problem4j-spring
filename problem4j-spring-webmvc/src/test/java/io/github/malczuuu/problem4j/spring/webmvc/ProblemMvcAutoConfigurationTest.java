@@ -27,8 +27,7 @@ class ProblemMvcAutoConfigurationTest {
     @Autowired(required = false)
     private ProblemResolverMvcConfiguration problemResolverMvcConfiguration;
 
-    @Autowired(required = false)
-    private ProblemMvcProperties properties;
+    @Autowired private ProblemMvcProperties properties;
 
     @Test
     void contextLoads() {
@@ -36,7 +35,6 @@ class ProblemMvcAutoConfigurationTest {
       assertThat(problemErrorMvcConfiguration).isNotNull();
       assertThat(problemResolverMvcConfiguration).isNotNull();
 
-      assertThat(properties).isNotNull();
       assertThat(properties.isEnabled()).isTrue();
     }
   }
@@ -76,8 +74,7 @@ class ProblemMvcAutoConfigurationTest {
     @Autowired(required = false)
     private ExceptionMvcAdvice exceptionMvcAdvice;
 
-    @Autowired(required = false)
-    private ProblemMvcProperties properties;
+    @Autowired private ProblemMvcProperties properties;
 
     @Test
     void contextLoadsWithoutExceptionAdvice() {
@@ -95,8 +92,7 @@ class ProblemMvcAutoConfigurationTest {
     @Autowired(required = false)
     private ExceptionMvcAdvice exceptionMvcAdvice;
 
-    @Autowired(required = false)
-    private ProblemMvcProperties properties;
+    @Autowired private ProblemMvcProperties properties;
 
     @Test
     void contextLoadsWithoutExceptionAdvice() {
@@ -112,8 +108,7 @@ class ProblemMvcAutoConfigurationTest {
     @Autowired(required = false)
     private ProblemExceptionMvcAdvice problemExceptionMvcAdvice;
 
-    @Autowired(required = false)
-    private ProblemMvcProperties properties;
+    @Autowired private ProblemMvcProperties properties;
 
     @Test
     void contextLoadsWithoutExceptionAdvice() {
@@ -131,8 +126,7 @@ class ProblemMvcAutoConfigurationTest {
     @Autowired(required = false)
     private ProblemExceptionMvcAdvice problemExceptionMvcAdvice;
 
-    @Autowired(required = false)
-    private ProblemMvcProperties properties;
+    @Autowired private ProblemMvcProperties properties;
 
     @Test
     void contextLoadsWithoutExceptionAdvice() {
@@ -167,8 +161,7 @@ class ProblemMvcAutoConfigurationTest {
     @Autowired(required = false)
     private ProblemContextMvcFilter problemContextMvcFilter;
 
-    @Autowired(required = false)
-    private ProblemMvcProperties properties;
+    @Autowired private ProblemMvcProperties properties;
 
     @Test
     void contextLoadsWithoutExceptionAdvice() {
@@ -184,8 +177,7 @@ class ProblemMvcAutoConfigurationTest {
     @Autowired(required = false)
     private ResponseEntityExceptionHandler exceptionHandler;
 
-    @Autowired(required = false)
-    private ProblemMvcProperties properties;
+    @Autowired private ProblemMvcProperties properties;
 
     @Test
     void contextLoadsWithoutExceptionAdvice() {
@@ -203,8 +195,7 @@ class ProblemMvcAutoConfigurationTest {
     @Autowired(required = false)
     private ResponseEntityExceptionHandler exceptionHandler;
 
-    @Autowired(required = false)
-    private ProblemMvcProperties properties;
+    @Autowired private ProblemMvcProperties properties;
 
     @Test
     void contextLoadsWithoutExceptionAdvice() {

@@ -41,7 +41,7 @@ public class DefaultProblemFormat implements ProblemFormat {
    */
   @Override
   public String formatDetail(String detail) {
-    if (detailFormat == null || !StringUtils.hasText(detail)) {
+    if (!StringUtils.hasLength(detail)) {
       return detail;
     }
     return switch (detailFormat.toLowerCase()) {

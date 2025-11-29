@@ -10,11 +10,8 @@ import java.util.List;
  *
  * <p>Resolvers are matched to exceptions by assignability, preferring the most specific exception
  * type.
- *
- * @deprecated use {@link DefaultProblemResolverStore}
  */
-@Deprecated(since = "1.1.4", forRemoval = true)
-public class HashMapProblemResolverStore extends AbstractProblemResolverStore {
+public class DefaultProblemResolverStore extends AbstractProblemResolverStore {
 
   /**
    * Creates a new store initialized with the given resolvers.
@@ -22,7 +19,7 @@ public class HashMapProblemResolverStore extends AbstractProblemResolverStore {
    * @param problemResolvers list of available {@link ProblemResolver} instances
    * @throws NullPointerException if any resolver or its exception class is {@code null}
    */
-  public HashMapProblemResolverStore(List<ProblemResolver> problemResolvers) {
+  public DefaultProblemResolverStore(List<ProblemResolver> problemResolvers) {
     super(problemResolvers);
   }
 
@@ -35,7 +32,7 @@ public class HashMapProblemResolverStore extends AbstractProblemResolverStore {
    *     classes (e.g., when finding the best resolver for a specific exception type).
    * @throws NullPointerException if any resolver or its exception class is {@code null}
    */
-  public HashMapProblemResolverStore(
+  public DefaultProblemResolverStore(
       List<ProblemResolver> problemResolvers, ClassDistanceEvaluation classDistanceEvaluation) {
     super(problemResolvers, classDistanceEvaluation);
   }

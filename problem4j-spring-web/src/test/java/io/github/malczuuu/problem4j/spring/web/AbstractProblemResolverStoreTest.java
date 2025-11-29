@@ -10,7 +10,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class HashMapProblemResolverStoreTest {
+class AbstractProblemResolverStoreTest {
 
   private static class MyBaseException extends Exception {}
 
@@ -33,7 +33,7 @@ class HashMapProblemResolverStoreTest {
     ProblemResolver baseResolver = new TestResolver(MyBaseException.class);
     ProblemResolver subResolver = new TestResolver(MySubException.class);
     ProblemResolver otherResolver = new TestResolver(OtherException.class);
-    store = new HashMapProblemResolverStore(List.of(baseResolver, subResolver, otherResolver));
+    store = new AbstractProblemResolverStore(List.of(baseResolver, subResolver, otherResolver)) {};
   }
 
   @Test

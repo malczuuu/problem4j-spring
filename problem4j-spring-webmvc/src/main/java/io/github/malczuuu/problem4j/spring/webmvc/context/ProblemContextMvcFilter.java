@@ -94,7 +94,7 @@ public class ProblemContextMvcFilter extends OncePerRequestFilter {
    * @return existing or newly generated trace identifier
    */
   protected String initTraceId(HttpServletRequest request, HttpServletResponse response) {
-    if (getSettings().getTracingHeaderName() == null) {
+    if (!StringUtils.hasLength(getSettings().getTracingHeaderName())) {
       return createNewTraceId(request, response);
     }
     String traceId = request.getHeader(getSettings().getTracingHeaderName());
@@ -149,7 +149,7 @@ public class ProblemContextMvcFilter extends OncePerRequestFilter {
    */
   protected void assignTracingHeader(
       HttpServletRequest request, HttpServletResponse response, ProblemContext context) {
-    if (getSettings().getTracingHeaderName() != null) {
+    if (StringUtils.hasLength(getSettings().getTracingHeaderName())) {
       response.setHeader(getSettings().getTracingHeaderName(), context.getTraceId());
     }
   }

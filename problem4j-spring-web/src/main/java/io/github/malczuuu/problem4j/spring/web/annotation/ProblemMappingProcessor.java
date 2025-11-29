@@ -39,8 +39,8 @@ public interface ProblemMappingProcessor {
    * annotation. Such builder can be further extended or executed to create {@code Problem}
    * response.
    *
-   * @param t {@link Throwable} to convert (must not be {@code null})
-   * @param context optional {@link ProblemContext} (allows {@code null} value)
+   * @param t {@link Throwable} to convert (may be {@code null})
+   * @param context optional {@link ProblemContext} (may be {@code null})
    * @return a {@link ProblemBuilder} instance
    * @throws ProblemProcessingException when something goes wrong while building the Problem
    * @see io.github.malczuuu.problem4j.core.Problem
@@ -50,7 +50,7 @@ public interface ProblemMappingProcessor {
   /**
    * Checks whether the given exception class is annotated with {@link ProblemMapping}.
    *
-   * @param t {@link Throwable} to check (allows {@code null} value)
+   * @param t {@link Throwable} to check (can be {@code null})
    * @return {@code true} if the exception is annotated with {@link ProblemMapping}, {@code false}
    *     otherwise
    */

@@ -19,11 +19,9 @@ class ProblemErrorMvcConfigurationTest {
     @Autowired(required = false)
     private ProblemErrorMvcConfiguration problemErrorMvcConfiguration;
 
-    @Autowired(required = false)
-    private ErrorController errorController;
+    @Autowired private ErrorController errorController;
 
-    @Autowired(required = false)
-    private ProblemMvcProperties properties;
+    @Autowired private ProblemMvcProperties properties;
 
     @Test
     void contextLoads() {
@@ -42,11 +40,9 @@ class ProblemErrorMvcConfigurationTest {
     @Autowired(required = false)
     private ProblemErrorMvcConfiguration problemErrorMvcConfiguration;
 
-    @Autowired(required = false)
-    private ErrorController errorController;
+    @Autowired private ErrorController errorController;
 
-    @Autowired(required = false)
-    private ProblemMvcProperties properties;
+    @Autowired private ProblemMvcProperties properties;
 
     @Test
     void contextLoads() {

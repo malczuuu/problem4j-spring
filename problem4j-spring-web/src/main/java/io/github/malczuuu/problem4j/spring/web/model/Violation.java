@@ -55,11 +55,11 @@ public class Violation implements Serializable {
     if (this == obj) {
       return true;
     }
-    if (obj == null || getClass() != obj.getClass()) {
+    if (!(obj instanceof Violation that)) {
       return false;
     }
-    Violation violation = (Violation) obj;
-    return Objects.equals(field, violation.field) && Objects.equals(error, violation.error);
+    return Objects.equals(getField(), that.getField())
+        && Objects.equals(getError(), that.getError());
   }
 
   @Override

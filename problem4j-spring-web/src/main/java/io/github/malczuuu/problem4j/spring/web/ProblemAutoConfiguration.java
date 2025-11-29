@@ -89,14 +89,14 @@ public class ProblemAutoConfiguration {
    * implementations.
    *
    * @param problemResolvers all available {@link ProblemResolver} declared as components
-   * @return {@link HashMapProblemResolverStore}, wrapped in {@link CachingProblemResolverStore} if
+   * @return {@link DefaultProblemResolverStore}, wrapped in {@link CachingProblemResolverStore} if
    *     caching is enabled
    */
   @ConditionalOnMissingBean(ProblemResolverStore.class)
   @Bean
   public ProblemResolverStore problemResolverStore(
       List<ProblemResolver> problemResolvers, ProblemProperties properties) {
-    ProblemResolverStore problemResolverStore = new HashMapProblemResolverStore(problemResolvers);
+    ProblemResolverStore problemResolverStore = new DefaultProblemResolverStore(problemResolvers);
 
     if (properties.getResolverCaching().isEnabled()) {
       problemResolverStore =

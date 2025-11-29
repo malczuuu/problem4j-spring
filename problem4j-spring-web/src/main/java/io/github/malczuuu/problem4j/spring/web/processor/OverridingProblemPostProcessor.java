@@ -128,6 +128,10 @@ public class OverridingProblemPostProcessor implements ProblemPostProcessor {
       return Optional.empty();
     }
 
+    if (!StringUtils.hasLength(settings.getTypeOverride())) {
+      return Optional.empty();
+    }
+
     String template = settings.getTypeOverride();
     String original = stringOrEmpty(problem.getType());
     String resolved = template.replace("{problem.type}", original);
@@ -157,6 +161,10 @@ public class OverridingProblemPostProcessor implements ProblemPostProcessor {
    * @see io.github.malczuuu.problem4j.spring.web.annotation.DefaultProblemMappingProcessor
    */
   private String overrideInstance(Problem problem, ProblemContext context) {
+    if (!StringUtils.hasLength(settings.getInstanceOverride())) {
+      return stringOrEmpty(problem.getInstance());
+    }
+
     String template = settings.getInstanceOverride();
     String instanceValue = stringOrEmpty(problem.getInstance());
     String traceIdValue = stringOrEmpty(context.getTraceId());

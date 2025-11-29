@@ -4,6 +4,8 @@ import io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 /**
  * {@link ProblemResolverStore} implementation that caches resolver lookups for better performance.
@@ -13,9 +15,7 @@ import java.util.Optional;
 public class CachingProblemResolverStore implements ProblemResolverStore {
 
   private final ProblemResolverStore delegate;
-  private final int maxCacheSize;
-
-  private final Map<Class<? extends Exception>, Optional<ProblemResolver>> cache;
+  private final ResolverCache cache;
 
   /**
    * Creates a new store initialized with the given delegate and an unbounded cache.
@@ -29,25 +29,12 @@ public class CachingProblemResolverStore implements ProblemResolverStore {
   /**
    * Creates a new store with an LRU cache limited to maxEntries.
    *
-   * @param maxCacheSize maximum number of cached entries (fallbacks to {@link Integer#MAX_VALUE} on
-   *     invalid values)
    * @param delegate the delegate store to use for resolver lookups
+   * @param maxCacheSize maximum number of cached entries (unbounded if {@code -1})
    */
   public CachingProblemResolverStore(ProblemResolverStore delegate, int maxCacheSize) {
     this.delegate = delegate;
-    this.maxCacheSize = maxCacheSize > 0 ? maxCacheSize : Integer.MAX_VALUE;
-
-    // 16 is the default initial capacity of HashMap;
-    // 0.75f is the default load factor;
-    // accessOrder=true - the last accessed entry is moved to the end of the underlying list
-    this.cache =
-        new LinkedHashMap<>(16, 0.75f, true) {
-          @Override
-          protected boolean removeEldestEntry(
-              Map.Entry<Class<? extends Exception>, Optional<ProblemResolver>> eldest) {
-            return size() > CachingProblemResolverStore.this.maxCacheSize;
-          }
-        };
+    cache = maxCacheSize > 0 ? new EvictingCache(maxCacheSize) : new NonEvictingCache();
   }
 
   /**
@@ -60,8 +47,91 @@ public class CachingProblemResolverStore implements ProblemResolverStore {
    */
   @Override
   public Optional<ProblemResolver> findResolver(Class<? extends Exception> clazz) {
-    synchronized (cache) {
-      return cache.computeIfAbsent(clazz, delegate::findResolver);
+    return cache.computeIfAbsent(clazz, delegate::findResolver);
+  }
+
+  /**
+   * Simple abstraction for a thread-safe cache used to resolve {@link ProblemResolver} instances
+   * based on an exception type. Implementations may or may not support eviction.
+   */
+  private interface ResolverCache {
+
+    /**
+     * Returns the cached resolver for the given exception type, computing and storing it if it is
+     * not already present. Implementations must ensure thread safety.
+     */
+    Optional<ProblemResolver> computeIfAbsent(
+        Class<? extends Exception> clazz,
+        Function<Class<? extends Exception>, Optional<ProblemResolver>> supplier);
+  }
+
+  /**
+   * Thread-safe LRU cache backed by a synchronized {@link LinkedHashMap}. Stores up to a fixed
+   * number of entries and evicts the least recently used one when the limit is exceeded.
+   */
+  private static class EvictingCache implements ResolverCache {
+
+    private final int maxCacheSize;
+
+    private final Map<Class<? extends Exception>, Optional<ProblemResolver>> cache;
+
+    /**
+     * Creates an LRU cache with the given maximum number of entries. When the limit is exceeded,
+     * the least recently used entry is evicted.
+     */
+    private EvictingCache(int maxCacheSize) {
+      this.maxCacheSize = maxCacheSize;
+
+      // 16 is the default initial capacity of HashMap;
+      // 0.75f is the default load factor;
+      // accessOrder=true - the last accessed entry is moved to the end of the underlying list
+      cache =
+          new LinkedHashMap<>(16, 0.75f, true) {
+            @Override
+            protected boolean removeEldestEntry(
+                Map.Entry<Class<? extends Exception>, Optional<ProblemResolver>> eldest) {
+              return size() > EvictingCache.this.maxCacheSize;
+            }
+          };
+    }
+
+    /**
+     * Computes or retrieves a cached resolver for the given exception type. The entire operation is
+     * synchronized to ensure thread safety and consistent eviction behavior.
+     */
+    @Override
+    public synchronized Optional<ProblemResolver> computeIfAbsent(
+        Class<? extends Exception> clazz,
+        Function<Class<? extends Exception>, Optional<ProblemResolver>> supplier) {
+      return cache.computeIfAbsent(clazz, supplier);
+    }
+  }
+
+  /**
+   * Thread-safe unbounded cache backed by a {@link ConcurrentHashMap}. Stores all resolved entries
+   * without eviction and supports concurrent access.
+   */
+  private static class NonEvictingCache implements ResolverCache {
+
+    private final Map<Class<? extends Exception>, Optional<ProblemResolver>> cache;
+
+    /**
+     * Creates an unbounded thread-safe cache backed by a {@link ConcurrentHashMap}. No eviction is
+     * performed.
+     */
+    private NonEvictingCache() {
+      cache = new ConcurrentHashMap<>();
+    }
+
+    /**
+     * Computes or retrieves a cached resolver for the given exception type. Safe concurrent updates
+     * are enforced via {@link ConcurrentHashMap#computeIfAbsent}.
+     */
+    @Override
+    public Optional<ProblemResolver> computeIfAbsent(
+        Class<? extends Exception> clazz,
+        Function<Class<? extends Exception>, Optional<ProblemResolver>> supplier) {
+      return cache.computeIfAbsent(clazz, supplier);
     }
   }
 }

@@ -50,8 +50,8 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
    * Convert {@link Throwable} -> {@link ProblemBuilder} according to its {@link ProblemMapping}
    * annotation.
    *
-   * @param t {@link Throwable} to convert (must not be {@code null})
-   * @param context optional {@link ProblemContext} (allows {@code null} value)
+   * @param t {@link Throwable} to convert (may be {@code null})
+   * @param context optional {@link ProblemContext} (may be {@code null})
    * @return a {@link ProblemBuilder} instance
    * @throws ProblemProcessingException when something goes wrong while building the Problem
    */
@@ -87,7 +87,7 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
   /**
    * Checks whether the given exception class is annotated with {@link ProblemMapping}.
    *
-   * @param t {@link Throwable} to check (allows {@code null} value)
+   * @param t {@link Throwable} to check (may be {@code null})
    * @return {@code true} if the exception class has a {@link ProblemMapping} annotation, {@code
    *     false} otherwise
    */
@@ -98,9 +98,6 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
 
   /** Returns the {@link ProblemMapping} annotation from the class if present, otherwise null. */
   private ProblemMapping findAnnotation(Class<?> clazz) {
-    if (clazz == null) {
-      return null;
-    }
     return clazz.getAnnotation(ProblemMapping.class);
   }
 
@@ -110,7 +107,7 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
    */
   private void applyTypeOnBuilder(
       ProblemBuilder builder, ProblemMapping mapping, Throwable t, ProblemContext context) {
-    String rawType = mapping.type() == null ? "" : mapping.type().trim();
+    String rawType = StringUtils.hasLength(mapping.type()) ? mapping.type().trim() : "";
     if (StringUtils.hasLength(rawType)) {
       String typeInterpolated = interpolate(rawType, t, context);
       if (StringUtils.hasLength(typeInterpolated)) {
@@ -126,8 +123,8 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
   /** Applies the interpolated title if present and non-empty. */
   private void applyTitleOnBuilder(
       ProblemBuilder builder, ProblemMapping mapping, Throwable t, ProblemContext context) {
-    String titleRaw = mapping.title() == null ? "" : mapping.title();
-    if (!titleRaw.trim().isEmpty()) {
+    String titleRaw = StringUtils.hasLength(mapping.title()) ? mapping.title().trim() : "";
+    if (StringUtils.hasLength(titleRaw)) {
       String titleInterpolated = interpolate(titleRaw, t, context);
       if (StringUtils.hasLength(titleInterpolated)) {
         builder.title(titleInterpolated);
@@ -145,8 +142,8 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
   /** Applies the interpolated detail text if non-empty. */
   private void applyDetailOnBuilder(
       ProblemBuilder builder, ProblemMapping mapping, Throwable t, ProblemContext context) {
-    String detailRaw = mapping.detail() == null ? "" : mapping.detail();
-    if (!detailRaw.trim().isEmpty()) {
+    String detailRaw = StringUtils.hasLength(mapping.detail()) ? mapping.detail().trim() : "";
+    if (StringUtils.hasLength(detailRaw)) {
       String detailInterpolated = interpolate(detailRaw, t, context);
       if (StringUtils.hasLength(detailInterpolated)) {
         builder.detail(detailInterpolated);
@@ -157,7 +154,7 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
   /** Applies the interpolated instance value; ignores invalid URIs. */
   private void applyInstanceOnBuilder(
       ProblemBuilder builder, ProblemMapping mapping, Throwable t, ProblemContext context) {
-    String rawInstance = mapping.instance() == null ? "" : mapping.instance().trim();
+    String rawInstance = StringUtils.hasLength(mapping.instance()) ? mapping.instance().trim() : "";
     if (StringUtils.hasLength(rawInstance)) {
       String instanceInterpolated = interpolate(rawInstance, t, context);
       if (StringUtils.hasLength(instanceInterpolated)) {
@@ -174,16 +171,14 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
   private void applyExtensionsOnBuilder(
       ProblemBuilder builder, ProblemMapping mapping, Throwable t) {
     String[] extensions = mapping.extensions();
-    if (extensions != null) {
-      for (String name : extensions) {
-        if (!StringUtils.hasText(name)) {
-          continue;
-        }
-        name = name.trim();
-        Object value = resolvePlaceholderSource(t, name);
-        if (value != null && !(value instanceof CharSequence str && !StringUtils.hasLength(str))) {
-          builder.extension(name, value);
-        }
+    for (String name : extensions) {
+      if (!StringUtils.hasText(name)) {
+        continue;
+      }
+      name = name.trim();
+      Object value = resolvePlaceholderSource(t, name);
+      if (value != null && !(value instanceof CharSequence str && !StringUtils.hasLength(str))) {
+        builder.extension(name, value);
       }
     }
   }
@@ -197,12 +192,9 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
    *   <li>Any other token - value of a matching field in the throwable class hierarchy
    * </ul>
    *
-   * Missing values resolve to an empty string.
+   * <p>Missing values resolve to an empty string.
    */
   private String interpolate(String template, Throwable t, ProblemContext context) {
-    if (template == null) {
-      return null;
-    }
     Matcher m = PLACEHOLDER.matcher(template);
 
     StringBuilder sb = new StringBuilder();
@@ -213,7 +205,10 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
       if (MESSAGE_LABEL.equals(key)) {
         replacement = t.getMessage() == null ? "" : String.valueOf(t.getMessage());
       } else if (TRACE_ID_LABEL.equals(key)) {
-        replacement = (context == null || context.getTraceId() == null) ? "" : context.getTraceId();
+        replacement =
+            (context == null || !StringUtils.hasLength(context.getTraceId()))
+                ? ""
+                : context.getTraceId();
       } else {
         Object v = resolvePlaceholderSource(t, key);
         replacement = v == null ? "" : String.valueOf(v);
@@ -227,7 +222,7 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
 
   /** Resolves a placeholder by reflective field lookup up the throwable class hierarchy. */
   private Object resolvePlaceholderSource(Throwable t, String name) {
-    if (t == null || !StringUtils.hasLength(name)) {
+    if (!StringUtils.hasLength(name)) {
       return null;
     }
     Class<?> search = t.getClass();
@@ -238,7 +233,7 @@ public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
         return f.get(t);
       } catch (NoSuchFieldException ignored) {
         // ignored, loop will go to parent class to see if that field exists there
-      } catch (Throwable ignored) {
+      } catch (Exception ignored) {
         return null;
       }
       search = search.getSuperclass();
