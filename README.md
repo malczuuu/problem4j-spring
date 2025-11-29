@@ -53,58 +53,106 @@ Problem4J is designed for robust, traceable, and fully configurable REST API err
 
 Extensive usage manual explaining library features can be found on [repository wiki pages][repository-wiki-pages].
 
-The primary use case is to either throw `ProblemException` (or your created subclass), throw `@ProblemMapping`-annotated
-exception or create `ProblemResolver` component that converts exception to `Problem` object.
+The primary ways to produce a `Problem` response are:
 
-1. ```java
-   throw new ProblemException(
-       Problem.builder()
-           .type("errors/invalid-request")
-           .title("Invalid Request")
-           .status(400)
-           .detail("not a valid json")
-           .build());
-   ```
-2. ```java
-   @ProblemMapping(
-       type = "errors/invalid-request",
-       title = "Invalid Request",
-       status = 400,
-       detail = "{message}: {fieldName}",
-       extensions = {"userId", "fieldName"})
-   public class ExampleException extends RuntimeException {
-   
-     private final String userId;
-     private final String fieldName;
-   
-     public ExampleException(String userId, String fieldName) {
-       super("bad input for user " + userId);
-       this.userId = userId;
-       this.fieldName = fieldName;
-     }
-   }
-   ```
-3. ```java
-   @Component
-   public class ExampleExceptionResolver implements ProblemResolver {
-   
-     @Override
-     public Class<? extends Exception> getExceptionClass() {
-       return ExampleException.class;
-     }
-   
-     @Override
-     public ProblemBuilder resolveBuilder(
-         ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
-       ExampleException e = (ExampleException) ex;
-       return Problem.builder()
-           .type("errors/invalid-request")
-           .title("Invalid Request")
-           .status(400)
-           .detail("bad input for user " + e.getUserId());
-     }
-   }
-   ```
+1. Throwing a `ProblemException` with a manually built `Problem`.
+2. Annotating an exception class with `@ProblemMapping`.
+3. Implementing a custom `ProblemResolver`.
+
+### 1. Throwing a `ProblemException`
+
+```java
+throw new ProblemException(
+    Problem.builder()
+        .type("errors/invalid-request")
+        .title("Invalid Request")
+        .status(400)
+        .detail("not a valid json")
+        .build());
+```
+
+It would produce following response with `application/problem+json`.
+
+```json
+{
+    "type": "errors/invalid-request",
+    "title": "Invalid Request",
+    "status": 400,
+    "detail": "not a valid json"
+}
+```
+
+### 2. Using `@ProblemMapping` on a custom exception
+
+```java
+@ProblemMapping(
+    type = "errors/invalid-request",
+    title = "Invalid Request",
+    status = 400,
+    detail = "{message}: {fieldName}",
+    extensions = {"userId", "fieldName"})
+public class ExampleException extends RuntimeException {
+
+  private final String userId;
+  private final String fieldName;
+
+  public ExampleException(String userId, String fieldName) {
+    super("bad input for user " + userId);
+    this.userId = userId;
+    this.fieldName = fieldName;
+  }
+}
+
+```
+
+It would produce following response with `application/problem+json`.
+
+```json
+{
+    "type": "errors/invalid-request",
+    "title": "Invalid Request",
+    "status": 400,
+    "detail": "bad input for user u-123: age",
+    "userId": "u-123",
+    "fieldName": "age"
+}
+```
+
+### 3. Implementing a custom `ProblemResolver`
+
+```java
+@Component
+public class ExampleExceptionResolver implements ProblemResolver {
+
+  @Override
+  public Class<? extends Exception> getExceptionClass() {
+    return ExampleException.class;
+  }
+
+  @Override
+  public ProblemBuilder resolveBuilder(
+      ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
+    return Problem.builder()
+        .type("errors/invalid-request")
+        .title("Invalid Request")
+        .status(400)
+        .detail("bad input for user " + ((ExampleException) ex).getUserId())
+        .extension("userId", ((ExampleException) ex).getUserId());
+  }
+}
+```
+
+It would produce following response with `application/problem+json`.
+
+```json
+{
+    "type": "errors/invalid-request",
+    "title": "Invalid Request",
+    "status": 400,
+    "detail": "bad input for user u-456",
+    "userId": "u-456"
+}
+```
 
 ## Maven Dependency
 

@@ -4,7 +4,7 @@ import java.util.Objects;
 
 class ProblemContextImpl implements ProblemContext {
 
-  static ProblemContext EMPTY = ProblemContext.builder().build();
+  static final ProblemContext EMPTY = ProblemContext.builder().build();
 
   private final String traceId;
 
@@ -18,11 +18,11 @@ class ProblemContextImpl implements ProblemContext {
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) {
+  public boolean equals(Object obj) {
+    if (this == obj) {
       return true;
     }
-    if (!(o instanceof ProblemContext that)) {
+    if (!(obj instanceof ProblemContext that)) {
       return false;
     }
     return Objects.equals(getTraceId(), that.getTraceId());
@@ -30,11 +30,11 @@ class ProblemContextImpl implements ProblemContext {
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(traceId);
+    return Objects.hashCode(getTraceId());
   }
 
   @Override
   public String toString() {
-    return getClass().getSimpleName() + "{traceId='" + traceId + "'}";
+    return "ProblemContext{traceId='" + getTraceId() + "'}";
   }
 }
