@@ -44,7 +44,7 @@ class CachingProblemResolverStoreTest {
         };
 
     CachingProblemResolverStore store =
-        new CachingProblemResolverStore(new HashMapProblemResolverStore(List.of(resolver)));
+        new CachingProblemResolverStore(new DefaultProblemResolverStore(List.of(resolver)));
 
     Optional<ProblemResolver> firstLookup = store.findResolver(TestException.class);
 

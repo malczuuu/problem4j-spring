@@ -162,8 +162,8 @@ public class ProblemProperties implements ProblemContextSettings, PostProcessorS
     public static final boolean DEFAULT_ENABLED = false;
     public static final String DEFAULT_ENABLED_VALUE = "false";
 
-    public static final int DEFAULT_MAX_CACHE_SIZE = 128;
-    public static final String DEFAULT_MAX_CACHE_SIZE_VALUE = "128";
+    public static final int DEFAULT_MAX_CACHE_SIZE = -1;
+    public static final String DEFAULT_MAX_CACHE_SIZE_VALUE = "-1";
 
     private static ResolverCaching createDefault() {
       return new ResolverCaching(DEFAULT_ENABLED, DEFAULT_MAX_CACHE_SIZE);

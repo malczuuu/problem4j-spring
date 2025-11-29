@@ -2,7 +2,7 @@ package io.github.malczuuu.problem4j.spring.webflux;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.github.malczuuu.problem4j.spring.web.HashMapProblemResolverStore;
+import io.github.malczuuu.problem4j.spring.web.DefaultProblemResolverStore;
 import io.github.malczuuu.problem4j.spring.web.processor.IdentityProblemPostProcessor;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -24,7 +24,7 @@ class ProblemEnhancedWebFluxHandlerTest {
     hits = new AtomicInteger(0);
     advice =
         new ProblemEnhancedWebFluxHandler(
-            new HashMapProblemResolverStore(List.of()),
+            new DefaultProblemResolverStore(List.of()),
             new IdentityProblemPostProcessor(),
             List.of((context, problem, ex, headers, status, exchange) -> hits.incrementAndGet()));
   }
