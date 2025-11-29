@@ -9,14 +9,11 @@ plugins {
 subprojects {
     group = "io.github.malczuuu.problem4j"
 
-    // In order to avoid hardcoding snapshot versions, we derive the version from the current Git commit hash. For CI/CD
+    // In order to avoid hardcoding snapshot versions, version is derived from the current Git commit hash. For CI/CD
     // add -Pversion={releaseVersion} parameter to match Git tag.
-    version =
-        if (version == "unspecified") {
-            getSnapshotVersion(rootProject.rootDir)
-        } else {
-            version
-        }
+    if (version == Project.DEFAULT_VERSION) {
+        version = getSnapshotVersion(rootProject.rootDir)
+    }
 
     // Usage:
     //   ./gradlew printVersion

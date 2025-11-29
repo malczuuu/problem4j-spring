@@ -2,8 +2,7 @@ import java.io.File
 import org.eclipse.jgit.revwalk.RevCommit
 import org.eclipse.jgit.revwalk.RevWalk
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder
-
-private const val UNSPECIFIED = "unspecified"
+import org.gradle.api.Project
 
 /**
  * Returns a snapshot version string based on the abbreviated Git commit hash of HEAD. On error,
@@ -20,7 +19,7 @@ fun getSnapshotVersion(projectRootDir: File): String {
             .findGitDir()
 
     builder.build().use { repository ->
-      val headId = repository.resolve("HEAD") ?: return UNSPECIFIED
+      val headId = repository.resolve("HEAD") ?: return Project.DEFAULT_VERSION
 
       RevWalk(repository).use { revWalk ->
         val headCommit: RevCommit = revWalk.parseCommit(headId)
@@ -29,6 +28,6 @@ fun getSnapshotVersion(projectRootDir: File): String {
     }
   } catch (e: Exception) {
     System.err.println("Error determining version: $e")
-    UNSPECIFIED
+    Project.DEFAULT_VERSION
   }
 }
