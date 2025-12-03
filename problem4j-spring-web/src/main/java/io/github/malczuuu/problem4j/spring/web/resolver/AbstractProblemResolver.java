@@ -45,16 +45,25 @@ public abstract class AbstractProblemResolver implements ProblemResolver {
   }
 
   /**
-   * Default implementation returns a builder with status {@code INTERNAL_SERVER_ERROR}. Subclasses
-   * should override to populate fields like type, title, detail, and extensions.
-   *
-   * @see ProblemResolver#resolveBuilder(ProblemContext, Exception, HttpHeaders, HttpStatusCode)
-   * @see ProblemStatus#INTERNAL_SERVER_ERROR
+   * Default implementation that returns a builder with status {@code INTERNAL_SERVER_ERROR}.
+   * Subclasses should override to populate fields like {@code type}, {@code title}, {@code detail},
+   * and extensions.
    */
   @Override
   public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
     return Problem.builder().status(ProblemStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  /**
+   * Builds the final {@link Problem} instance using the {@link #resolveBuilder} result. Subclasses
+   * typically customize only {@code resolveBuilder}, not this method. Overwritten to explicitly
+   * make it {@code final}, so {@code resolveBuilder} and {@code resolveProblem} never diverge.
+   */
+  @Override
+  public final Problem resolveProblem(
+      ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
+    return resolveBuilder(context, ex, headers, status).build();
   }
 
   /**
