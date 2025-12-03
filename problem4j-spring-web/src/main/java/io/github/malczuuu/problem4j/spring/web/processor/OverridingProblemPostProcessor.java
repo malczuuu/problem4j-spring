@@ -86,7 +86,7 @@ public class OverridingProblemPostProcessor implements ProblemPostProcessor {
       boolean needsProblemInstance = template.contains("{problem.instance}");
       boolean needsTraceId = template.contains("{context.traceId}");
       boolean hasProblemInstance =
-          problem.getInstance() != null && !problem.getInstance().toString().isEmpty();
+          problem.getInstance() != null && StringUtils.hasLength(problem.getInstance().toString());
       boolean hasTraceId = StringUtils.hasLength(context.getTraceId());
 
       boolean canOverride =
@@ -140,12 +140,12 @@ public class OverridingProblemPostProcessor implements ProblemPostProcessor {
       return Optional.empty();
     }
 
-    return Optional.of(resolved).filter(str -> !str.isEmpty());
+    return Optional.of(resolved).filter(StringUtils::hasLength);
   }
 
   private boolean isTypeSet(Problem problem) {
     return problem.getType() != null
-        && !problem.getType().toString().isEmpty()
+        && StringUtils.hasLength(problem.getType().toString())
         && !Problem.BLANK_TYPE.equals(problem.getType());
   }
 
