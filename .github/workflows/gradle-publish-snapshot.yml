@@ -40,7 +40,7 @@ jobs:
           VERSION_FILE: .github/utils/next_version.txt
         run: |
           if [ -n "${VERSION_FILE:-}" ] && [ -f "$VERSION_FILE" ]; then
-            bash .github/utils/validate_version_file.sh "$VERSION_FILE" 
+            bash .github/utils/validate_version_file.sh "$VERSION_FILE"
             NEXT_VERSION=$(cat "$VERSION_FILE" | tr -d '[:space:]')  # trim whitespaces
             echo "::notice::using version from $VERSION_FILE: $NEXT_VERSION"
           else
