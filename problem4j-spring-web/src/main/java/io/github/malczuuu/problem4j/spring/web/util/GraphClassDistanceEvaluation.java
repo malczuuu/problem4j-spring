@@ -1,6 +1,8 @@
 package io.github.malczuuu.problem4j.spring.web.util;
 
+import java.util.Collection;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Implementation of {@link ClassDistanceEvaluation} that calculates inheritance distance using a
@@ -11,18 +13,67 @@ public class GraphClassDistanceEvaluation implements ClassDistanceEvaluation {
 
   private final int defaultMaxDepth;
 
-  /** Creates a {@link GraphClassDistanceEvaluation} using the default maximum depth. */
-  public GraphClassDistanceEvaluation() {
-    this(DEFAULT_MAX_DEPTH);
+  private final boolean superclassIncluded;
+  private final boolean interfacesIncluded;
+
+  /**
+   * Creates a {@link GraphClassDistanceEvaluation} using the default maximum depth and the given
+   * traversal modes.
+   *
+   * <p>Traversal modes define which parts of the inheritance hierarchy may be followed during
+   * distance calculation. If no modes are provided, no traversal will be performed.
+   *
+   * @param modes the traversal modes to enable
+   */
+  public GraphClassDistanceEvaluation(HierarchyTraversalMode... modes) {
+    this(Set.of(modes));
   }
 
   /**
-   * Creates a {@link GraphClassDistanceEvaluation} with a custom default maximum depth.
+   * Creates a {@link GraphClassDistanceEvaluation} using the default maximum depth and the given
+   * collection of traversal modes.
+   *
+   * <p>The collection defines which parts of the inheritance hierarchy should be explored during
+   * distance calculation. If the collection is empty, both superclass and interface traversal are
+   * enabled by default.
+   *
+   * @param modes the traversal modes to enable
+   */
+  public GraphClassDistanceEvaluation(Collection<HierarchyTraversalMode> modes) {
+    this(DEFAULT_MAX_DEPTH, modes);
+  }
+
+  /**
+   * Creates a {@link GraphClassDistanceEvaluation} with a custom maximum depth and the given
+   * traversal modes.
+   *
+   * <p>Traversal modes define which hierarchy paths may be traversed, such as superclasses or
+   * interfaces. The evaluator will only explore the paths enabled by these modes.
    *
    * @param defaultMaxDepth the maximum depth to use for inheritance calculations
+   * @param modes the traversal modes to enable
    */
-  public GraphClassDistanceEvaluation(int defaultMaxDepth) {
+  public GraphClassDistanceEvaluation(int defaultMaxDepth, HierarchyTraversalMode... modes) {
+    this(defaultMaxDepth, Set.of(modes));
+  }
+
+  /**
+   * Creates a {@link GraphClassDistanceEvaluation} with a custom maximum depth and a list of
+   * traversal modes.
+   *
+   * <p>The collection defines which parts of the inheritance hierarchy should be explored during
+   * distance calculation. If the collection is empty, both superclass and interface traversal are
+   * enabled by default.
+   *
+   * @param defaultMaxDepth the maximum depth to use for inheritance calculations
+   * @param modes the traversal modes to enable
+   */
+  public GraphClassDistanceEvaluation(
+      int defaultMaxDepth, Collection<HierarchyTraversalMode> modes) {
     this.defaultMaxDepth = defaultMaxDepth;
+
+    superclassIncluded = modes.isEmpty() || modes.contains(HierarchyTraversalMode.SUPERCLASS);
+    interfacesIncluded = modes.isEmpty() || modes.contains(HierarchyTraversalMode.INTERFACES);
   }
 
   /**
@@ -58,18 +109,22 @@ public class GraphClassDistanceEvaluation implements ClassDistanceEvaluation {
 
     int minDistance = Integer.MAX_VALUE;
 
-    Class<?> superclass = target.getSuperclass();
-    if (superclass != null) {
-      int distance = calculateInternal(superclass, base, currentDepth + 1, maxDepth);
-      if (distance != Integer.MAX_VALUE) {
-        minDistance = distance + 1;
+    if (superclassIncluded) {
+      Class<?> superclass = target.getSuperclass();
+      if (superclass != null) {
+        int distance = calculateInternal(superclass, base, currentDepth + 1, maxDepth);
+        if (distance != Integer.MAX_VALUE) {
+          minDistance = distance + 1;
+        }
       }
     }
 
-    for (Class<?> iface : target.getInterfaces()) {
-      int distance = calculateInternal(iface, base, currentDepth + 1, maxDepth);
-      if (distance != Integer.MAX_VALUE) {
-        minDistance = Math.min(minDistance, distance + 1);
+    if (interfacesIncluded) {
+      for (Class<?> iface : target.getInterfaces()) {
+        int distance = calculateInternal(iface, base, currentDepth + 1, maxDepth);
+        if (distance != Integer.MAX_VALUE) {
+          minDistance = Math.min(minDistance, distance + 1);
+        }
       }
     }
 
