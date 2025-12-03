@@ -97,19 +97,31 @@ public class ProblemEnhancedWebFluxHandler extends ResponseEntityExceptionHandle
     return super.handleExceptionInternal(ex, problem, headers, status, exchange);
   }
 
-  private ProblemBuilder getBuilderForOverridingBody(
+  /**
+   * Returns a {@link ProblemBuilder} for the given exception, using a resolver if available, or a
+   * fallback otherwise.
+   *
+   * @param context the problem context
+   * @param ex the exception to resolve
+   * @param headers the HTTP headers
+   * @param status the HTTP status code
+   * @return a {@link ProblemBuilder} for the exception
+   */
+  protected ProblemBuilder getBuilderForOverridingBody(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
-    try {
-      return problemResolverStore
-          .findResolver(ex.getClass())
-          .map(resolver -> resolver.resolveBuilder(context, ex, headers, status))
-          .orElseGet(() -> fallbackProblem(status));
-    } catch (Exception e) {
-      return fallbackProblem(status);
-    }
+    return problemResolverStore
+        .findResolver(ex.getClass())
+        .map(resolver -> resolver.resolveBuilder(context, ex, headers, status))
+        .orElseGet(() -> fallbackProblem(status));
   }
 
-  private ProblemBuilder fallbackProblem(HttpStatusCode status) {
+  /**
+   * Returns a fallback {@link ProblemBuilder} with the given status.
+   *
+   * @param status the HTTP status code
+   * @return a fallback {@link ProblemBuilder}
+   */
+  protected ProblemBuilder fallbackProblem(HttpStatusCode status) {
     return Problem.builder().status(resolveStatus(status));
   }
 }
