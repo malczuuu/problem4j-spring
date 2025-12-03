@@ -217,6 +217,12 @@ Java version Gradle runs on.
 ./gradlew clean build
 ```
 
+To execute tests use `test` task.
+
+```bash
+./gradlew clean test
+```
+
 To format the code according to the style defined in [`build.gradle.kts`](./build.gradle.kts) rules use `spotlessApply`
 task.
 
