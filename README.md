@@ -224,7 +224,7 @@ To execute tests use `test` task.
 ```
 
 To format the code according to the style defined in [`build.gradle.kts`](./build.gradle.kts) rules use `spotlessApply`
-task.
+task. **Note** that **building will fail** if code is not properly formatted.
 
 ```bash
 ./gradlew spotlessApply
