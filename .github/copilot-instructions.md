@@ -37,9 +37,7 @@
     - CI/CD via GitHub Actions:
         - `.github/workflows/gradle-build.yml` (build/test),
         - `.github/workflows/gradle-dependency-submission.yml` (dependency graph),
-        - `.github/workflows/gradle-publish-release.yml` (release),
-        - `.github/workflows/gradle-publish-snapshot.yml` (snapshot),
-        - `.github/workflows/validate-next_version.txt.yml` (next version for snapshot builds validation).
+        - `.github/workflows/gradle-publish-release.yml` (release).
     - All CI builds use JDK 17 and Gradle Wrapper.
 
 ## Project Layout & Key Files

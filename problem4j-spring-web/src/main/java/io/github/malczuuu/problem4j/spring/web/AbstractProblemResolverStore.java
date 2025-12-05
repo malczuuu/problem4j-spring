@@ -1,5 +1,7 @@
 package io.github.malczuuu.problem4j.spring.web;
 
+import static io.github.malczuuu.problem4j.spring.web.util.HierarchyTraversalMode.SUPERCLASS;
+
 import io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver;
 import io.github.malczuuu.problem4j.spring.web.util.ClassDistanceEvaluation;
 import io.github.malczuuu.problem4j.spring.web.util.GraphClassDistanceEvaluation;
@@ -30,7 +32,7 @@ public abstract class AbstractProblemResolverStore implements ProblemResolverSto
    * @throws NullPointerException if any resolver or its exception class is {@code null}
    */
   public AbstractProblemResolverStore(List<ProblemResolver> problemResolvers) {
-    this(problemResolvers, new GraphClassDistanceEvaluation());
+    this(problemResolvers, new GraphClassDistanceEvaluation(SUPERCLASS));
   }
 
   /**

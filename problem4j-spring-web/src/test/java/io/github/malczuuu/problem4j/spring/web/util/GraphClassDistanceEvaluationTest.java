@@ -268,4 +268,48 @@ class GraphClassDistanceEvaluationTest {
       assertEquals(1, distance);
     }
   }
+
+  @Nested
+  class InclusionFlags {
+
+    @Test
+    void givenSuperclassExcluded_whenSearchingSuperclassHierarchy_thenMaxValue() {
+      GraphClassDistanceEvaluation evaluation =
+          new GraphClassDistanceEvaluation(HierarchyTraversalMode.INTERFACES);
+
+      int distance = evaluation.calculate(Level2Class.class, BaseClass.class);
+
+      assertEquals(Integer.MAX_VALUE, distance);
+    }
+
+    @Test
+    void givenSuperclassExcluded_butInterfaceMatchExists_thenStillFindInterfacePath() {
+      GraphClassDistanceEvaluation evaluation =
+          new GraphClassDistanceEvaluation(HierarchyTraversalMode.INTERFACES);
+
+      int distance = evaluation.calculate(ImplementerClass.class, BaseInterface.class);
+
+      assertEquals(3, distance);
+    }
+
+    @Test
+    void givenInterfacesExcluded_whenSearchingInterfaceHierarchy_thenMaxValue() {
+      GraphClassDistanceEvaluation evaluation =
+          new GraphClassDistanceEvaluation(HierarchyTraversalMode.SUPERCLASS);
+
+      int distance = evaluation.calculate(ImplementerClass.class, BaseInterface.class);
+
+      assertEquals(Integer.MAX_VALUE, distance);
+    }
+
+    @Test
+    void givenInterfacesExcluded_butSuperclassMatchExists_thenStillFindSuperclassPath() {
+      GraphClassDistanceEvaluation evaluation =
+          new GraphClassDistanceEvaluation(HierarchyTraversalMode.SUPERCLASS);
+
+      int distance = evaluation.calculate(Level2Class.class, Level1Class.class);
+
+      assertEquals(1, distance);
+    }
+  }
 }

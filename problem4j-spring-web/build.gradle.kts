@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+
 plugins {
     id("java-library")
     id("maven-publish")
@@ -115,6 +117,16 @@ tasks.withType<Javadoc>().configureEach {
 
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
+
+    testLogging {
+        events("passed", "skipped", "failed", "standardOut", "standardError")
+        exceptionFormat = TestExceptionFormat.SHORT
+        showStandardStreams = true
+    }
+
+    // For resolving warnings from mockito.
+    jvmArgs("-XX:+EnableDynamicAgentLoading")
+
     systemProperty("user.language", "en")
     systemProperty("user.country", "US")
 }

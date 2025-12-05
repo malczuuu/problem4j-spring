@@ -8,6 +8,7 @@ import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.springframework.util.StringUtils;
 
 class OverridingProblemPostProcessorTest {
 
@@ -196,10 +197,10 @@ class OverridingProblemPostProcessorTest {
     OverridingProblemPostProcessor processor = new OverridingProblemPostProcessor(settings);
     Problem result = processor.process(context, problem);
 
-    if (expectedResult.isEmpty()) {
-      assertThat(result).isSameAs(problem);
-    } else {
+    if (StringUtils.hasLength(expectedResult)) {
       assertThat(result).isEqualTo(problem.toBuilder().instance(expectedResult).build());
+    } else {
+      assertThat(result).isSameAs(problem);
     }
   }
 
