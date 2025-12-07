@@ -7,15 +7,13 @@ on:
       - "main"
       - "release-*"
     paths:
-      - "problem4j-spring-*/build.gradle.kts"
-      - "build.gradle.kts"
-      - "settings.gradle.kts"
-      - "gradle.properties"
-      - "gradle/**"
+      - ".github/workflows/gradle-dependency-submission.yml"
       - "buildSrc/**"
+      - "gradle/**"
+      - "**/*.gradle.kts"
+      - "gradle.properties"
       - "gradlew"
       - "gradlew.bat"
-      - ".github/workflows/gradle-dependency-submission.yml"
 
 jobs:
   dependency-submission:
