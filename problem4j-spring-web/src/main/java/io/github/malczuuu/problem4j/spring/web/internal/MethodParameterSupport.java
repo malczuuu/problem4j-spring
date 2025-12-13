@@ -1,7 +1,6 @@
 package io.github.malczuuu.problem4j.spring.web.internal;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.Optional;
 import org.springframework.core.MethodParameter;
 import org.springframework.util.StringUtils;
@@ -41,18 +40,9 @@ public final class MethodParameterSupport {
       return Optional.empty();
     }
 
-    Method method = parameter.getMethod();
-
-    Annotation[][] allParametersAnnotations =
-        method != null ? method.getParameterAnnotations() : null;
-
-    Annotation[] targetParameterAnnotations =
-        allParametersAnnotations != null
-            ? allParametersAnnotations[parameter.getParameterIndex()]
-            : new Annotation[0];
-
+    Annotation[] annotations = parameter.getParameterAnnotations();
     String fieldName = parameter.getParameterName();
-    for (Annotation annotation : targetParameterAnnotations) {
+    for (Annotation annotation : annotations) {
       if (annotation instanceof PathVariable pathVariable) {
         return Optional.ofNullable(findPathVariableName(pathVariable, fieldName));
       } else if (annotation instanceof RequestParam requestParam) {
