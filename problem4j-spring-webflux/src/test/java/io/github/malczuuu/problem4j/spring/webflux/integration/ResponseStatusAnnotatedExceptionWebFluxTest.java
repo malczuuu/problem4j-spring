@@ -1,6 +1,5 @@
 package io.github.malczuuu.problem4j.spring.webflux.integration;
 
-import static io.github.malczuuu.problem4j.spring.webflux.integration.ResponseStatusAnnotatedExceptionWebFluxTest.AnnotatedStatusController;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.malczuuu.problem4j.core.Problem;
@@ -10,39 +9,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootTest(
     classes = {WebFluxTestApp.class},
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Import({AnnotatedStatusController.class})
 @AutoConfigureWebTestClient
 class ResponseStatusAnnotatedExceptionWebFluxTest {
-
-  @ResponseStatus(HttpStatus.FORBIDDEN)
-  static class ForbiddenAnnotatedException extends RuntimeException {}
-
-  @ResponseStatus(code = HttpStatus.FORBIDDEN, reason = "this is reason")
-  static class ReasonAnnotatedException extends RuntimeException {}
-
-  @RestController
-  static class AnnotatedStatusController {
-
-    @GetMapping("/response-status-annotated")
-    String responseStatusAnnotated() {
-      throw new ForbiddenAnnotatedException();
-    }
-
-    @GetMapping("/reason-annotated")
-    String reasonAnnotated() {
-      throw new ReasonAnnotatedException();
-    }
-  }
 
   @Autowired private WebTestClient webTestClient;
 
@@ -50,7 +24,7 @@ class ResponseStatusAnnotatedExceptionWebFluxTest {
   void givenSpringNativeResponseStatusAnnotation_shouldReturnProblemWithStatus() {
     webTestClient
         .get()
-        .uri("/response-status-annotated")
+        .uri("/response-status-annotated/forbidden-status-annotated")
         .exchange()
         .expectStatus()
         .isEqualTo(HttpStatus.FORBIDDEN)
@@ -65,7 +39,7 @@ class ResponseStatusAnnotatedExceptionWebFluxTest {
   void givenSpringNativeResponseStatusAnnotationWithReason_shouldReturnProblem() {
     webTestClient
         .get()
-        .uri("/reason-annotated")
+        .uri("/response-status-annotated/reason-annotated")
         .exchange()
         .expectStatus()
         .isEqualTo(HttpStatus.FORBIDDEN)

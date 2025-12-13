@@ -13,7 +13,6 @@ import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.MISSIN
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.MISSING_SESSION_ATTRIBUTE_DETAIL;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.NAME_EXTENSION;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.PARAM_EXTENSION;
-import static io.github.malczuuu.problem4j.spring.webmvc.integration.MissingParameterMvcTest.MissingParameterController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.github.malczuuu.problem4j.core.Problem;
@@ -24,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.TestRestTemplate;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -34,65 +32,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.SessionAttribute;
-import org.springframework.web.multipart.MultipartFile;
 import tools.jackson.databind.json.JsonMapper;
 
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     classes = {MvcTestApp.class})
-@Import({MissingParameterController.class})
 @AutoConfigureTestRestTemplate
 class MissingParameterMvcTest {
-
-  @RestController
-  static class MissingParameterController {
-
-    @GetMapping(
-        path = {"/missing-parameter/path-variable", "/missing-parameter/path-variable/{var}"})
-    String missingPathVariable(@PathVariable("var") String var) {
-      return "OK";
-    }
-
-    @GetMapping(path = "/missing-parameter/request-param")
-    String missingRequestParam(@RequestParam("param") String param) {
-      return "OK";
-    }
-
-    @PostMapping(path = "/missing-parameter/request-part")
-    String missingRequestPart(@RequestPart("file") MultipartFile file) {
-      return "OK";
-    }
-
-    @GetMapping(path = "/missing-parameter/request-header")
-    String missingRequestHeader(@RequestHeader("X-Custom-Header") String xCustomHeader) {
-      return "OK";
-    }
-
-    @GetMapping(path = "/missing-parameter/cookie-value")
-    String missingCookieValue(@CookieValue("x_session") String xSession) {
-      return "OK";
-    }
-
-    @GetMapping(path = "/missing-parameter/request-attribute")
-    String missingRequestAttribute(@RequestAttribute("attr") String attr) {
-      return "OK";
-    }
-
-    @GetMapping(path = "/missing-parameter/session-attribute")
-    String missingSessionAttribute(@SessionAttribute("attr") String attr) {
-      return "OK";
-    }
-  }
 
   @Autowired private TestRestTemplate restTemplate;
   @Autowired private JsonMapper jsonMapper;

@@ -69,7 +69,7 @@ public class OverridingProblemPostProcessor implements ProblemPostProcessor {
     if (StringUtils.hasLength(settings.getTypeOverride())) {
       String template = settings.getTypeOverride();
       boolean requiresProblemType = template.contains("{problem.type}");
-      boolean hasProblemType = isTypeSet(problem);
+      boolean hasProblemType = problem.isTypeNonBlank();
 
       boolean canOverride = isCanOverride(requiresProblemType, hasProblemType);
 
@@ -124,7 +124,7 @@ public class OverridingProblemPostProcessor implements ProblemPostProcessor {
    * @see io.github.malczuuu.problem4j.spring.web.annotation.DefaultProblemMappingProcessor
    */
   private Optional<String> overrideType(Problem problem) {
-    if (!isTypeSet(problem)) {
+    if (!problem.isTypeNonBlank()) {
       return Optional.empty();
     }
 
@@ -141,12 +141,6 @@ public class OverridingProblemPostProcessor implements ProblemPostProcessor {
     }
 
     return Optional.of(resolved).filter(StringUtils::hasLength);
-  }
-
-  private boolean isTypeSet(Problem problem) {
-    return problem.getType() != null
-        && StringUtils.hasLength(problem.getType().toString())
-        && !Problem.BLANK_TYPE.equals(problem.getType());
   }
 
   /**

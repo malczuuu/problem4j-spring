@@ -1,6 +1,5 @@
 package io.github.malczuuu.problem4j.spring.webmvc.integration;
 
-import static io.github.malczuuu.problem4j.spring.webmvc.integration.MethodNotAllowedMvcTest.MethodNotAllowedController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.github.malczuuu.problem4j.core.Problem;
@@ -11,27 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.TestRestTemplate;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 import tools.jackson.databind.json.JsonMapper;
 
 @SpringBootTest(
     classes = {MvcTestApp.class},
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Import({MethodNotAllowedController.class})
 @AutoConfigureTestRestTemplate
 class MethodNotAllowedMvcTest {
-
-  @RestController
-  static class MethodNotAllowedController {
-    @GetMapping(path = "/method-not-allowed")
-    String methodNotAllowed() {
-      return "OK";
-    }
-  }
 
   @Autowired private TestRestTemplate restTemplate;
   @Autowired private JsonMapper jsonMapper;

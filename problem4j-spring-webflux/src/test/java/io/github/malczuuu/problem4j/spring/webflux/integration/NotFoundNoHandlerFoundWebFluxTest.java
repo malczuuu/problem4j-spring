@@ -23,7 +23,7 @@ class NotFoundNoHandlerFoundWebFluxTest {
   void givenUnknownPath_shouldReturnProblem() {
     webTestClient
         .get()
-        .uri("/not-found-controller")
+        .uri("/no-handler-found")
         .exchange()
         .expectStatus()
         .isNotFound()

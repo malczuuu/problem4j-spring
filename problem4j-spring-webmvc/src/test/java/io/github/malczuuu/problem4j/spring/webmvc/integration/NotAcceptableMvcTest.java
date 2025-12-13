@@ -1,6 +1,5 @@
 package io.github.malczuuu.problem4j.spring.webmvc.integration;
 
-import static io.github.malczuuu.problem4j.spring.webmvc.integration.NotAcceptableMvcTest.NotAcceptableController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.github.malczuuu.problem4j.core.Problem;
@@ -12,31 +11,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.TestRestTemplate;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 import tools.jackson.databind.json.JsonMapper;
 
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     classes = {MvcTestApp.class})
-@Import({NotAcceptableController.class})
 @AutoConfigureTestRestTemplate
 class NotAcceptableMvcTest {
-
-  @RestController
-  static class NotAcceptableController {
-    @GetMapping(path = "/not-acceptable", produces = MediaType.TEXT_PLAIN_VALUE)
-    String noteAcceptable() {
-      return "OK";
-    }
-  }
 
   @Autowired private TestRestTemplate restTemplate;
   @Autowired private JsonMapper jsonMapper;

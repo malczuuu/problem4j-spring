@@ -1,11 +1,8 @@
 package io.github.malczuuu.problem4j.spring.webmvc.integration;
 
-import static io.github.malczuuu.problem4j.spring.webmvc.integration.ProblemOverrideMvcTest.InstanceOverrideController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.core.ProblemException;
-import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.webmvc.app.MvcTestApp;
 import java.net.URI;
 import org.junit.jupiter.api.Test;
@@ -13,14 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.TestRestTemplate;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
 import tools.jackson.databind.json.JsonMapper;
 
 @SpringBootTest(
@@ -31,23 +25,8 @@ import tools.jackson.databind.json.JsonMapper;
       "problem4j.instance-override=https://example.org/trace/{context.traceId}",
       "problem4j.tracing-header-name=X-Trace-Id"
     })
-@Import({InstanceOverrideController.class})
 @AutoConfigureTestRestTemplate
 class ProblemOverrideMvcTest {
-
-  @RestController
-  static class InstanceOverrideController {
-    @PostMapping(path = "/instance-override")
-    String instanceOverride() {
-      throw new ProblemException(Problem.builder().status(ProblemStatus.BAD_REQUEST).build());
-    }
-
-    @PostMapping(path = "/type-not-blank")
-    String typeNotBlank() {
-      throw new ProblemException(
-          Problem.builder().type("not-blank").status(ProblemStatus.BAD_REQUEST).build());
-    }
-  }
 
   @Autowired private TestRestTemplate restTemplate;
   @Autowired private JsonMapper jsonMapper;
@@ -60,7 +39,7 @@ class ProblemOverrideMvcTest {
     HttpEntity<String> request = new HttpEntity<>("{}", headers);
 
     ResponseEntity<String> response =
-        restTemplate.postForEntity("/type-not-blank", request, String.class);
+        restTemplate.postForEntity("/problem-override/type-not-blank", request, String.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
@@ -78,7 +57,7 @@ class ProblemOverrideMvcTest {
     HttpEntity<String> request = new HttpEntity<>("{}", headers);
 
     ResponseEntity<String> response =
-        restTemplate.postForEntity("/instance-override", request, String.class);
+        restTemplate.postForEntity("/problem-override/instance-override", request, String.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
@@ -97,7 +76,7 @@ class ProblemOverrideMvcTest {
     HttpEntity<String> request = new HttpEntity<>("{}", headers);
 
     ResponseEntity<String> response =
-        restTemplate.postForEntity("/instance-override", request, String.class);
+        restTemplate.postForEntity("/problem-override/instance-override", request, String.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);

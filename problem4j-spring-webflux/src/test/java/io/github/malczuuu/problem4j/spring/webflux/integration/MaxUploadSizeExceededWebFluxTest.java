@@ -2,7 +2,6 @@ package io.github.malczuuu.problem4j.spring.webflux.integration;
 
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.MAX_EXTENSION;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.MAX_UPLOAD_SIZE_EXCEEDED_DETAIL;
-import static io.github.malczuuu.problem4j.spring.webflux.integration.MaxUploadSizeExceededWebFluxTest.MaxUploadController;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.malczuuu.problem4j.core.Problem;
@@ -12,27 +11,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 @SpringBootTest(
     classes = {WebFluxTestApp.class},
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Import({MaxUploadController.class})
 @AutoConfigureWebTestClient
 class MaxUploadSizeExceededWebFluxTest {
-
-  @RestController
-  static class MaxUploadController {
-    @PostMapping("/max-upload-size")
-    String maxUploadSize() {
-      throw new MaxUploadSizeExceededException(1L);
-    }
-  }
 
   @Autowired private WebTestClient webTestClient;
 
@@ -40,7 +26,7 @@ class MaxUploadSizeExceededWebFluxTest {
   void givenMaxUploadSizeExceeded_shouldReturnProblem() {
     webTestClient
         .post()
-        .uri("/max-upload-size")
+        .uri("/max-upload-size-exceeded")
         .exchange()
         .expectStatus()
         .isEqualTo(HttpStatus.CONTENT_TOO_LARGE)

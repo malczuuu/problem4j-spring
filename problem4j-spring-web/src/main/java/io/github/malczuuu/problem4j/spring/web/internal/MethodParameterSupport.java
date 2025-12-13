@@ -3,7 +3,6 @@ package io.github.malczuuu.problem4j.spring.web.internal;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Optional;
-import org.jetbrains.annotations.ApiStatus;
 import org.springframework.core.MethodParameter;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -25,9 +24,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
  * <p><b>Use at your own risk.</b>
  *
  * @implNote This is an internal API and may change at any time.
- * @see ApiStatus.Internal
  */
-@ApiStatus.Internal
 public final class MethodParameterSupport {
 
   /**

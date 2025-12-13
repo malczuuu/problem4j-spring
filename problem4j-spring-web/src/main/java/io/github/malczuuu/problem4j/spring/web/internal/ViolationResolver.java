@@ -11,7 +11,6 @@ import io.github.malczuuu.problem4j.spring.web.format.ProblemFormat;
 import io.github.malczuuu.problem4j.spring.web.model.Violation;
 import java.util.ArrayList;
 import java.util.List;
-import org.jetbrains.annotations.ApiStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -28,9 +27,7 @@ import org.springframework.validation.method.ParameterValidationResult;
  * <p><b>Use at your own risk.</b>
  *
  * @implNote This is an internal API and may change at any time.
- * @see ApiStatus.Internal
  */
-@ApiStatus.Internal
 public class ViolationResolver {
 
   private final ProblemFormat problemFormat;

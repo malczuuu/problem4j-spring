@@ -3,7 +3,6 @@ package io.github.malczuuu.problem4j.spring.webmvc.integration;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.KIND_EXTENSION;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.PROPERTY_EXTENSION;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.TYPE_MISMATCH_DETAIL;
-import static io.github.malczuuu.problem4j.spring.webmvc.integration.TypeMismatchMvcTest.TypeMismatchController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.github.malczuuu.problem4j.core.Problem;
@@ -14,50 +13,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.TestRestTemplate;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import tools.jackson.databind.json.JsonMapper;
 
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     classes = {MvcTestApp.class})
-@Import({TypeMismatchController.class})
 @AutoConfigureTestRestTemplate
 class TypeMismatchMvcTest {
-
-  @RestController
-  static class TypeMismatchController {
-
-    @GetMapping(path = "/type-mismatch/path-variable/{id}")
-    String pathVariable(@PathVariable("id") Integer id) {
-      return "OK";
-    }
-
-    @GetMapping(path = "/type-mismatch/request-param")
-    String requestParam(@RequestParam("id") Integer id) {
-      return "OK";
-    }
-
-    @GetMapping(path = "/type-mismatch/request-header")
-    String requestHeader(@RequestHeader("X-Id") Integer id) {
-      return "OK";
-    }
-
-    @GetMapping(path = "/type-mismatch/cookie-value")
-    String cookieValue(@CookieValue("id") Integer id) {
-      return "OK";
-    }
-  }
 
   @Autowired private TestRestTemplate restTemplate;
   @Autowired private JsonMapper jsonMapper;

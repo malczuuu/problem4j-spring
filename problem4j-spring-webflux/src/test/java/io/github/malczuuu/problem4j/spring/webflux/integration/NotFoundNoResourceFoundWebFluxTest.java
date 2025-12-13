@@ -27,7 +27,7 @@ class NotFoundNoResourceFoundWebFluxTest {
   void givenMissingStaticResource_shouldReturnProblem() {
     webTestClient
         .get()
-        .uri("/not-existing-file.html")
+        .uri("/no-resource-found.html")
         .exchange()
         .expectStatus()
         .isNotFound()
