@@ -1,21 +1,21 @@
-# Copilot Coding Agent Onboarding Guide for problem4j-spring
+# Copilot Coding Agent Onboarding Guide for `problem4j-spring`
 
 ## Project Details
 
-- **Repository:** problem4j-spring
+- **Repository:** `problem4j-spring`.
 - **Purpose:** Spring Boot integrations for RFC 7807 "Problem Details" object, enabling consistent error responses for
-  REST APIs using immutable `Problem` objects. Supports Spring WebMVC and WebFlux. Includes BOM for dependency
+  REST APIs using immutable `Problem` objects. Supports Spring WebMVC and WebFlux. Includes BOM for dependency.
   management and modules for each Spring integration.
-- **Languages:** Java (main), Kotlin (build scripts)
-- **Frameworks/Tools:** Spring Boot, Spring WebMVC, Spring WebFlux, Gradle (Kotlin DSL), JUnit Jupiter,
-  AssertJ, Spotless, GitHub Actions CI
+- **Languages:** Java (main), Kotlin (build scripts).
+- **Frameworks/Tools:** Spring Boot, Spring WebMVC, Spring WebFlux, Gradle (Kotlin DSL), JUnit Jupiter, AssertJ,
+  Spotless, GitHub Actions CI.
 - **Modules:**
-    - `problem4j-spring-bom`: BOM for dependency alignment
-    - `problem4j-spring-web`: Core Spring integration
-    - `problem4j-spring-webmvc`: WebMVC overrides
-    - `problem4j-spring-webflux`: WebFlux overrides
-- **Java Version:** Java 17+
-- **Repo Size:** Medium (multiple modules, ~20+ source/test files per module)
+    - `problem4j-spring-bom`: BOM for dependency alignment,
+    - `problem4j-spring-web`: Core Spring integration,
+    - `problem4j-spring-webmvc`: WebMVC overrides,
+    - `problem4j-spring-webflux`: WebFlux overrides.
+- **Java Version:** Java 17+.
+- **Repo Size:** Medium (multiple modules, ~80+ source/test files per module).
 
 ## Build, Test, Lint, and Validation Steps
 
@@ -43,10 +43,10 @@
 ## Project Layout & Key Files
 
 - **Root Files:** `build.gradle.kts`, `settings.gradle.kts`, `README.md`, `RELEASING.md`, `gradlew`, `gradlew.bat`,
-  `gradle/libs.versions.toml`, `.github/workflows/`
-- **Source Code:** `src/main/java` in each module
-- **Tests:** `src/test/java` in each module
-- **Build Scripts:** All modules have `build.gradle.kts`
+  `gradle/libs.versions.toml`, `.github/workflows/`.
+- **Source Code:** `src/main/java` in each module.
+- **Tests:** `src/test/java` in each module.
+- **Build Scripts:** All modules have `build.gradle.kts`.
 - **Build Utils:** Custom Gradle scripts in `buildSrc`.
 - **Modules:**
   - `problem4j-spring-bom`: BOM for dependency management.
