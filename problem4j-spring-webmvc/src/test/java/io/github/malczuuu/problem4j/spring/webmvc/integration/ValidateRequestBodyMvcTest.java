@@ -2,8 +2,6 @@ package io.github.malczuuu.problem4j.spring.webmvc.integration;
 
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.ERRORS_EXTENSION;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.VALIDATION_FAILED_DETAIL;
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -11,14 +9,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.webmvc.app.MvcTestApp;
-import jakarta.validation.Constraint;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
-import jakarta.validation.Payload;
-import jakarta.validation.constraints.NotBlank;
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import io.github.malczuuu.problem4j.spring.webmvc.app.model.AlwaysInvalidRequest;
+import io.github.malczuuu.problem4j.spring.webmvc.app.model.TestRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,31 +34,6 @@ class ValidateRequestBodyMvcTest {
 
   @Autowired private TestRestTemplate restTemplate;
   @Autowired private ObjectMapper objectMapper;
-
-  record TestRequest(@NotBlank String name, Integer age) {}
-
-  @AlwaysInvalid
-  record AlwaysInvalidRequest(String field) {}
-
-  @Documented
-  @Constraint(validatedBy = AlwaysInvalidValidator.class)
-  @Target(TYPE)
-  @Retention(RUNTIME)
-  @interface AlwaysInvalid {
-
-    String message() default "always invalid";
-
-    Class<?>[] groups() default {};
-
-    Class<? extends Payload>[] payload() default {};
-  }
-
-  static class AlwaysInvalidValidator implements ConstraintValidator<AlwaysInvalid, Object> {
-    @Override
-    public boolean isValid(Object value, ConstraintValidatorContext context) {
-      return false;
-    }
-  }
 
   @Test
   void givenInvalidRequestBody_shouldReturnProblem() throws Exception {
