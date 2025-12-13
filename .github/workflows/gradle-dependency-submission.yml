@@ -36,7 +36,11 @@ jobs:
       - name: Generate and submit dependency graph
         uses: gradle/actions/dependency-submission@v5
         env:
-          GRADLE_OPTS: "-Dorg.gradle.configuration-cache=false -Dorg.gradle.daemon=false -Dorg.gradle.parallel=false"
+          GRADLE_OPTS: >-
+            -Dorg.gradle.configuration-cache=false
+            -Dorg.gradle.daemon=false
+            -Dorg.gradle.parallel=false
+            -Dorg.gradle.workers.max=1
         with:
           dependency-graph-exclude-projects: ":buildSrc"
           dependency-graph-exclude-configurations: ".*[Tt]est(Compile|Runtime)Classpath"
