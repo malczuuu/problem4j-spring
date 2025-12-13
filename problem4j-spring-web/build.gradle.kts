@@ -26,8 +26,7 @@ dependencies {
     compileOnly(libs.jakarta.servlet.api)
     compileOnly(libs.jakarta.validation.api)
 
-    compileOnly(libs.jetbrains.annotations)
-
+    annotationProcessor(platform(libs.spring.boot.dependencies))
     annotationProcessor(libs.spring.boot.configuration.processor)
 
     // Test

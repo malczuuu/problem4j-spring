@@ -26,6 +26,7 @@ dependencies {
     compileOnly(libs.jakarta.servlet.api)
     compileOnly(libs.slf4j.api)
 
+    annotationProcessor(platform(libs.spring.boot.dependencies))
     annotationProcessor(libs.spring.boot.configuration.processor)
 
     // Test
