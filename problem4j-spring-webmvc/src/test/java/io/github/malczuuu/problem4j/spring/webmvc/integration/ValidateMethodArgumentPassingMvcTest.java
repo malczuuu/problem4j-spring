@@ -3,72 +3,20 @@ package io.github.malczuuu.problem4j.spring.webmvc.integration;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.github.malczuuu.problem4j.spring.webmvc.app.MvcTestApp;
-import io.github.malczuuu.problem4j.spring.webmvc.integration.ValidateMethodArgumentPassingMvcTest.ValidateParameterController;
-import jakarta.validation.constraints.Size;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootTest(
     classes = {MvcTestApp.class},
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Import({ValidateParameterController.class})
 class ValidateMethodArgumentPassingMvcTest {
-
-  @Validated
-  @RestController
-  static class ValidateParameterController {
-
-    @GetMapping("/validate-parameter/path-variable/{id}")
-    String validatePathVariable(@PathVariable("id") @Size(min = 5) String idVar) {
-      return "OK";
-    }
-
-    @GetMapping("/validate-parameter/request-param")
-    String validateRequestParam(@RequestParam("query") @Size(min = 5) String queryParam) {
-      return "OK";
-    }
-
-    @GetMapping("/validate-parameter/request-header")
-    String validateRequestHeader(
-        @RequestHeader("X-Custom-Header") @Size(min = 5) String xCustomHeader) {
-      return "OK";
-    }
-
-    @GetMapping("/validate-parameter/cookie-value")
-    String validateCookieValue(@CookieValue("x_session") @Size(min = 5) String xSession) {
-      return "OK";
-    }
-
-    @GetMapping("/validate-parameter/two-arg")
-    String validateTwoArguments(
-        @RequestParam("first") @Size(min = 5) String firstParam,
-        @RequestParam("second") String secondParam) {
-      return "OK";
-    }
-
-    @GetMapping("/validate-parameter/three-arg")
-    String validateThreeArguments(
-        @RequestParam("first") String firstParam,
-        @RequestParam("second") @Size(min = 5) String secondParam,
-        @RequestParam("third") String thirdParam) {
-      return "OK";
-    }
-  }
 
   @Autowired private TestRestTemplate restTemplate;
 

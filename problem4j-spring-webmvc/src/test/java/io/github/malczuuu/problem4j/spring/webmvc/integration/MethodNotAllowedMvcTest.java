@@ -1,6 +1,5 @@
 package io.github.malczuuu.problem4j.spring.webmvc.integration;
 
-import static io.github.malczuuu.problem4j.spring.webmvc.integration.MethodNotAllowedMvcTest.MethodNotAllowedController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,25 +10,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootTest(
     classes = {MvcTestApp.class},
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Import({MethodNotAllowedController.class})
 class MethodNotAllowedMvcTest {
-
-  @RestController
-  static class MethodNotAllowedController {
-    @GetMapping(path = "/method-not-allowed")
-    String methodNotAllowed() {
-      return "OK";
-    }
-  }
 
   @Autowired private TestRestTemplate restTemplate;
   @Autowired private ObjectMapper objectMapper;

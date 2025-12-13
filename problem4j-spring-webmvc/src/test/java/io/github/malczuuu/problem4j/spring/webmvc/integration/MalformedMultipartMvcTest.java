@@ -2,7 +2,6 @@ package io.github.malczuuu.problem4j.spring.webmvc.integration;
 
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.MISSING_REQUEST_PART_DETAIL;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.PARAM_EXTENSION;
-import static io.github.malczuuu.problem4j.spring.webmvc.integration.MalformedMultipartMvcTest.RequestPartController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,24 +19,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 @SpringBootTest(
     classes = {MvcTestApp.class},
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Import({RequestPartController.class})
 class MalformedMultipartMvcTest {
-
-  @RestController
-  static class RequestPartController {
-    @PostMapping(path = "/malformed-multipart")
-    String malformedMultipart(@RequestPart("file") MultipartFile file) {
-      return "OK";
-    }
-  }
 
   @Autowired private TestRestTemplate restTemplate;
   @Autowired private ObjectMapper objectMapper;

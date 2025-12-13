@@ -27,7 +27,7 @@ class NotFoundNoHandlerFoundMvcTest {
 
   @Test
   void givenUnknownPath_shouldReturnProblem() throws Exception {
-    ResponseEntity<String> response = restTemplate.getForEntity("/not-found", String.class);
+    ResponseEntity<String> response = restTemplate.getForEntity("/no-handler-found", String.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);

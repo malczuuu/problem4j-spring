@@ -1,7 +1,6 @@
 package io.github.malczuuu.problem4j.spring.webmvc.integration;
 
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.MAX_UPLOAD_SIZE_EXCEEDED_DETAIL;
-import static io.github.malczuuu.problem4j.spring.webmvc.integration.MaxUploadSizeExceededMvcTest.MaxUploadController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -21,10 +19,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 @SpringBootTest(
     classes = {MvcTestApp.class},
@@ -33,16 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
       "spring.servlet.multipart.max-file-size=1KB",
       "spring.servlet.multipart.max-request-size=1KB"
     })
-@Import({MaxUploadController.class})
 class MaxUploadSizeExceededMvcTest {
-
-  @RestController
-  static class MaxUploadController {
-    @PostMapping("/max-upload-size")
-    String maxUploadSize(@RequestParam("file") MultipartFile file) {
-      return "OK";
-    }
-  }
 
   @Autowired private TestRestTemplate restTemplate;
   @Autowired private ObjectMapper objectMapper;
@@ -57,7 +42,7 @@ class MaxUploadSizeExceededMvcTest {
     HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
     ResponseEntity<String> response =
-        restTemplate.postForEntity("/max-upload-size", requestEntity, String.class);
+        restTemplate.postForEntity("/max-upload-size-exceeded", requestEntity, String.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.PAYLOAD_TOO_LARGE);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
