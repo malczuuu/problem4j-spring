@@ -14,40 +14,40 @@ private val logger = Logging.getLogger("Versioning")
  * @param projectRootDir the root directory of the project (containing .git)
  */
 fun getSnapshotVersion(projectRootDir: File): String {
-    return try {
-        val gitDir = File(projectRootDir, ".git")
-        if (!gitDir.exists()) {
-            logger.info(".git directory not found, using {} version", Project.DEFAULT_VERSION)
-            return Project.DEFAULT_VERSION
-        }
-
-        val headFile = File(gitDir, "HEAD")
-        if (!headFile.exists()) {
-            return Project.DEFAULT_VERSION
-        }
-
-        val headContent = headFile.readText().trim()
-
-        val commitHash =
-            when {
-                headContent.startsWith("ref: ") -> {
-                    val refPath = headContent.substring(5)
-                    val refFile = File(gitDir, refPath)
-                    if (refFile.exists()) {
-                        refFile.readText().trim()
-                    } else {
-                        readPackedRef(gitDir, refPath)
-                    }
-                }
-                headContent.matches(Regex("[0-9a-f]{40}")) -> headContent
-                else -> null
-            }
-
-        commitHash?.take(7) ?: Project.DEFAULT_VERSION
-    } catch (e: Exception) {
-        logger.error("Error determining version: {}", e.message)
-        Project.DEFAULT_VERSION
+  return try {
+    val gitDir = File(projectRootDir, ".git")
+    if (!gitDir.exists()) {
+      logger.info(".git directory not found, using {} version", Project.DEFAULT_VERSION)
+      return Project.DEFAULT_VERSION
     }
+
+    val headFile = File(gitDir, "HEAD")
+    if (!headFile.exists()) {
+      return Project.DEFAULT_VERSION
+    }
+
+    val headContent = headFile.readText().trim()
+
+    val commitHash =
+        when {
+          headContent.startsWith("ref: ") -> {
+            val refPath = headContent.substring(5)
+            val refFile = File(gitDir, refPath)
+            if (refFile.exists()) {
+              refFile.readText().trim()
+            } else {
+              readPackedRef(gitDir, refPath)
+            }
+          }
+          headContent.matches(Regex("[0-9a-f]{40}")) -> headContent
+          else -> null
+        }
+
+    commitHash?.take(7) ?: Project.DEFAULT_VERSION
+  } catch (e: Exception) {
+    logger.error("Error determining version: {}", e.message)
+    Project.DEFAULT_VERSION
+  }
 }
 
 /**
@@ -61,18 +61,18 @@ fun getSnapshotVersion(projectRootDir: File): String {
  * @return the SHA-1 hash of the reference if found, or `null` if the reference does not exist
  */
 private fun readPackedRef(gitDir: File, refPath: String): String? {
-    val packedRefsFile = File(gitDir, "packed-refs")
-    if (!packedRefsFile.exists()) {
-        return null
-    }
+  val packedRefsFile = File(gitDir, "packed-refs")
+  if (!packedRefsFile.exists()) {
+    return null
+  }
 
-    return packedRefsFile.useLines { lines ->
-        lines
-            .map { it.trim() }
-            .filter { it.isNotEmpty() && !it.startsWith("#") && !it.startsWith("^") }
-            .firstNotNullOfOrNull { line ->
-                val parts = line.split(" ", limit = 2)
-                if (parts.size == 2 && parts[1] == refPath) parts[0] else null
-            }
-    }
+  return packedRefsFile.useLines { lines ->
+    lines
+        .map { it.trim() }
+        .filter { it.isNotEmpty() && !it.startsWith("#") && !it.startsWith("^") }
+        .firstNotNullOfOrNull { line ->
+          val parts = line.split(" ", limit = 2)
+          if (parts.size == 2 && parts[1] == refPath) parts[0] else null
+        }
+  }
 }
