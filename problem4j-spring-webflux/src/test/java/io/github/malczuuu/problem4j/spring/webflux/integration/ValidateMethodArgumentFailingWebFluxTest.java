@@ -2,7 +2,6 @@ package io.github.malczuuu.problem4j.spring.webflux.integration;
 
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.ERRORS_EXTENSION;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.VALIDATION_FAILED_DETAIL;
-import static io.github.malczuuu.problem4j.spring.webflux.integration.ValidateMethodArgumentFailingWebFluxTest.ValidateParameterController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.InstanceOfAssertFactories.LIST;
 import static org.hamcrest.Matchers.notNullValue;
@@ -10,8 +9,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import io.github.malczuuu.problem4j.core.Problem;
 import io.github.malczuuu.problem4j.core.ProblemStatus;
 import io.github.malczuuu.problem4j.spring.webflux.app.WebFluxTestApp;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import io.github.malczuuu.problem4j.spring.webflux.app.rest.ValidateMethodArgumentController;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -20,77 +18,20 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootTest(
     classes = {WebFluxTestApp.class},
-    properties = {"spring.validation.method.adapt-constraint-violations=false"},
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Import({ValidateParameterController.class})
 @AutoConfigureWebTestClient
 class ValidateMethodArgumentFailingWebFluxTest {
 
   private static final String VIOLATION_ERROR = "size must be between 5 and " + Integer.MAX_VALUE;
 
-  @Validated
-  @RestController
-  static class ValidateParameterController {
-
-    @GetMapping("/validate-parameter/path-variable/{id}")
-    String validatePathVariable(@PathVariable("id") @Size(min = 5) String idVar) {
-      return "OK";
-    }
-
-    @GetMapping("/validate-parameter/request-param")
-    String validateRequestParam(@RequestParam("query") @Size(min = 5) String queryParam) {
-      return "OK";
-    }
-
-    @GetMapping("/validate-parameter/request-header")
-    String validateRequestHeader(
-        @RequestHeader("X-Custom-Header") @Size(min = 5) String xCustomHeader) {
-      return "OK";
-    }
-
-    @GetMapping("/validate-parameter/cookie-value")
-    String validateCookieValue(@CookieValue("x_session") @Size(min = 5) String xSession) {
-      return "OK";
-    }
-
-    @GetMapping("/validate-parameter/multi-constraint")
-    String validateMultiConstraint(
-        @RequestParam("input") @Size(min = 5) @Pattern(regexp = "i") String inputParam) {
-      return "OK";
-    }
-
-    @GetMapping("/validate-parameter/two-arg")
-    String validateTwoArguments(
-        @RequestParam("first") @Size(min = 5) String firstParam,
-        @RequestParam("second") String secondParam) {
-      return "OK";
-    }
-
-    @GetMapping("/validate-parameter/three-arg")
-    String validateThreeArguments(
-        @RequestParam("first") String firstParam,
-        @RequestParam("second") @Size(min = 5) String secondParam,
-        @RequestParam("third") String thirdParam) {
-      return "OK";
-    }
-  }
-
   @Autowired private WebTestClient webTestClient;
 
   /**
-   * @see ValidateParameterController#validatePathVariable(String)
+   * @see ValidateMethodArgumentController#validatePathVariable(String)
    */
   @Test
   void givenTooShortPathVariable_shouldReturnValidationProblem() {
@@ -114,7 +55,7 @@ class ValidateMethodArgumentFailingWebFluxTest {
   }
 
   /**
-   * @see ValidateParameterController#validateRequestParam(String)
+   * @see ValidateMethodArgumentController#validateRequestParam(String)
    */
   @Test
   void givenTooShortRequestParam_shouldReturnValidationProblem() {
@@ -144,7 +85,7 @@ class ValidateMethodArgumentFailingWebFluxTest {
   }
 
   /**
-   * @see ValidateParameterController#validateRequestHeader(String)
+   * @see ValidateMethodArgumentController#validateRequestHeader(String)
    */
   @Test
   void givenTooShortRequestHeader_shouldReturnValidationProblem() {
@@ -170,7 +111,7 @@ class ValidateMethodArgumentFailingWebFluxTest {
   }
 
   /**
-   * @see ValidateParameterController#validateCookieValue(String)
+   * @see ValidateMethodArgumentController#validateCookieValue(String)
    */
   @Test
   void givenTooShortCookieValue_shouldReturnValidationProblem() {
@@ -197,7 +138,7 @@ class ValidateMethodArgumentFailingWebFluxTest {
   }
 
   /**
-   * @see ValidateParameterController#validateMultiConstraint(String)
+   * @see ValidateMethodArgumentController#validateMultiConstraint(String)
    */
   @Test
   void givenValueViolatingAllConstraints_shouldReturnAllErrors() {
@@ -224,7 +165,7 @@ class ValidateMethodArgumentFailingWebFluxTest {
   }
 
   /**
-   * @see ValidateParameterController#validateMultiConstraint(String)
+   * @see ValidateMethodArgumentController#validateMultiConstraint(String)
    */
   @ParameterizedTest
   @ValueSource(strings = {"vvvvv", "iiiii"})
@@ -252,7 +193,7 @@ class ValidateMethodArgumentFailingWebFluxTest {
   }
 
   /**
-   * @see ValidateParameterController#validateTwoArguments(String, String)
+   * @see ValidateMethodArgumentController#validateTwoArguments(String, String)
    */
   @Test
   void givenFirstParamTooShort_shouldReturnValidationError() {
@@ -282,7 +223,7 @@ class ValidateMethodArgumentFailingWebFluxTest {
   }
 
   /**
-   * @see ValidateParameterController#validateThreeArguments(String, String, String)
+   * @see ValidateMethodArgumentController#validateThreeArguments(String, String, String)
    */
   @Test
   void givenSecondParamTooShort_shouldReturnValidationError() {
@@ -313,7 +254,7 @@ class ValidateMethodArgumentFailingWebFluxTest {
   }
 
   /**
-   * @see ValidateParameterController#validateTwoArguments(String, String)
+   * @see ValidateMethodArgumentController#validateTwoArguments(String, String)
    */
   @Test
   void givenBothParamsValid_shouldReturnOk() {

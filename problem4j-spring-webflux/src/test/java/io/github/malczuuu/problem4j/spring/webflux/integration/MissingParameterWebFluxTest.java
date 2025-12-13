@@ -13,7 +13,6 @@ import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.MISSIN
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.MISSING_SESSION_ATTRIBUTE_DETAIL;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.NAME_EXTENSION;
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.PARAM_EXTENSION;
-import static io.github.malczuuu.problem4j.spring.webflux.integration.MissingParameterWebFluxTest.MissingParameterController;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 
@@ -24,72 +23,19 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
-import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.reactive.function.BodyInserters;
 
 @SpringBootTest(
     classes = {WebFluxTestApp.class},
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Import({MissingParameterController.class})
 @AutoConfigureWebTestClient
 class MissingParameterWebFluxTest {
 
   @Autowired private WebTestClient webTestClient;
-
-  @RestController
-  static class MissingParameterController {
-
-    @GetMapping(
-        path = {"/missing-parameter/path-variable", "/missing-parameter/path-variable/{var}"})
-    String pathVariable(@PathVariable("var") String var) {
-      return "OK";
-    }
-
-    @GetMapping(path = "/missing-parameter/request-param")
-    String requestParam(@RequestParam("param") String param) {
-      return "OK";
-    }
-
-    @PostMapping(path = "/missing-parameter/request-part")
-    String requestPart(@RequestPart("file") FilePart file) {
-      return "OK";
-    }
-
-    @GetMapping(path = "/missing-parameter/request-header")
-    String requestHeader(@RequestHeader("X-Custom-Header") String xCustomHeader) {
-      return "OK";
-    }
-
-    @GetMapping(path = "/missing-parameter/cookie-value")
-    String cookieValue(@CookieValue("x_session") String xSession) {
-      return "OK";
-    }
-
-    @GetMapping(path = "/missing-parameter/request-attribute")
-    String requestAttribute(@RequestAttribute("attr") String attr) {
-      return "OK";
-    }
-
-    @GetMapping(path = "/missing-parameter/session-attribute")
-    String sessionAttribute(@SessionAttribute("attr") String attr) {
-      return "OK";
-    }
-  }
 
   @Test
   void givenRequestWithoutPathVariable_shouldReturnProblem() {
