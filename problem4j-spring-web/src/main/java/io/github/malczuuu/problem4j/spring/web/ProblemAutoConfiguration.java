@@ -6,7 +6,7 @@ import io.github.malczuuu.problem4j.spring.web.annotation.DefaultProblemMappingP
 import io.github.malczuuu.problem4j.spring.web.annotation.ProblemMappingProcessor;
 import io.github.malczuuu.problem4j.spring.web.format.DefaultProblemFormat;
 import io.github.malczuuu.problem4j.spring.web.format.ProblemFormat;
-import io.github.malczuuu.problem4j.spring.web.processor.OverridingProblemPostProcessor;
+import io.github.malczuuu.problem4j.spring.web.processor.DefaultProblemPostProcessor;
 import io.github.malczuuu.problem4j.spring.web.processor.ProblemPostProcessor;
 import io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver;
 import io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolverConfiguration;
@@ -55,7 +55,7 @@ public class ProblemAutoConfiguration {
    * Provides a {@link ProblemPostProcessor} that applies post-processing rules to {@code Problem}
    * instances before they are returned in HTTP responses.
    *
-   * <p>The default implementation, {@link OverridingProblemPostProcessor}, supports configurable
+   * <p>The default implementation, {@link DefaultProblemPostProcessor}, supports configurable
    * overrides for problem fields such as {@code type} and {@code instance}, based on the properties
    * defined in {@link ProblemProperties}. These overrides may include runtime placeholders such as:
    *
@@ -69,13 +69,13 @@ public class ProblemAutoConfiguration {
    * exception mapping logic.
    *
    * @param properties the configuration properties containing override templates and settings
-   * @return a new {@link OverridingProblemPostProcessor} instance
+   * @return a new {@link DefaultProblemPostProcessor} instance
    * @see io.github.malczuuu.problem4j.core.Problem
    */
   @ConditionalOnMissingBean(ProblemPostProcessor.class)
   @Bean
   public ProblemPostProcessor problemPostProcessor(ProblemProperties properties) {
-    return new OverridingProblemPostProcessor(properties);
+    return new DefaultProblemPostProcessor(properties);
   }
 
   /**
