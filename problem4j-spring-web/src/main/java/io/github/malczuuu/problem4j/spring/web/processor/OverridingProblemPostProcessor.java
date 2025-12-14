@@ -40,8 +40,9 @@ import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
  * @deprecated use {@link DefaultProblemPostProcessor}
  */
 @Deprecated(since = "1.1.7", forRemoval = true)
-public class OverridingProblemPostProcessor extends DefaultProblemPostProcessor {
+public class OverridingProblemPostProcessor extends AbstractProblemPostProcessor {
 
+  /** Creates a post-processor using the given override settings. */
   public OverridingProblemPostProcessor(PostProcessorSettings settings) {
     super(settings);
   }

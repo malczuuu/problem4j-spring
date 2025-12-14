@@ -10,7 +10,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.util.StringUtils;
 
-class DefaultProblemPostProcessorTest {
+class AbstractProblemPostProcessorTest {
 
   @Test
   void shouldReturnSameProblemWhenNoOverrides() {
@@ -19,7 +19,7 @@ class DefaultProblemPostProcessorTest {
     ProblemContext context = ProblemContext.ofTraceId("trace-123");
     Problem problem = Problem.builder().type("bad_request").instance("instance-1").build();
 
-    DefaultProblemPostProcessor processor = new DefaultProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
     Problem result = processor.process(context, problem);
 
     assertThat(result).isSameAs(problem);
@@ -30,7 +30,7 @@ class DefaultProblemPostProcessorTest {
     PostProcessorSettings settings = getSettings("", null);
 
     Problem problem = Problem.builder().type("bad_request").instance("instance-1").build();
-    DefaultProblemPostProcessor processor = new DefaultProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
 
     Problem result = processor.process(null, problem);
 
@@ -42,7 +42,7 @@ class DefaultProblemPostProcessorTest {
     PostProcessorSettings settings = getSettings(null, "");
 
     Problem problem = Problem.builder().type("bad_request").instance("instance-1").build();
-    DefaultProblemPostProcessor processor = new DefaultProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
 
     Problem result = processor.process(null, problem);
 
@@ -55,7 +55,7 @@ class DefaultProblemPostProcessorTest {
 
     Problem problem = Problem.builder().type("bad_request").instance("instance-1").build();
 
-    DefaultProblemPostProcessor processor = new DefaultProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
     Problem result = processor.process(null, problem);
 
     assertThat(result).isEqualTo(problem.toBuilder().type("/errors/static").build());
@@ -67,7 +67,7 @@ class DefaultProblemPostProcessorTest {
 
     Problem problem = Problem.builder().type("bad_request").instance("instance-1").build();
 
-    DefaultProblemPostProcessor processor = new DefaultProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
     Problem result = processor.process(null, problem);
 
     assertThat(result).isEqualTo(problem.toBuilder().instance("/instances/static").build());
@@ -79,7 +79,7 @@ class DefaultProblemPostProcessorTest {
 
     Problem problem = Problem.builder().type("bad_request").instance("instance-1").build();
 
-    DefaultProblemPostProcessor processor = new DefaultProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
     Problem result = processor.process(null, problem);
 
     assertThat(result).isEqualTo(problem.toBuilder().type("/errors/bad_request").build());
@@ -91,7 +91,7 @@ class DefaultProblemPostProcessorTest {
 
     Problem problem = Problem.builder().type("").instance("instance-1").build();
 
-    DefaultProblemPostProcessor processor = new DefaultProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
     Problem result = processor.process(null, problem);
 
     assertThat(result).isSameAs(problem);
@@ -104,7 +104,7 @@ class DefaultProblemPostProcessorTest {
     ProblemContext context = ProblemContext.ofTraceId("trace-abc");
     Problem problem = Problem.builder().type("bad_request").instance("instance-1").build();
 
-    DefaultProblemPostProcessor processor = new DefaultProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
     Problem result = processor.process(context, problem);
 
     assertThat(result).isEqualTo(problem.toBuilder().instance("trace:trace-abc").build());
@@ -117,7 +117,7 @@ class DefaultProblemPostProcessorTest {
     ProblemContext context = ProblemContext.empty();
     Problem problem = Problem.builder().type("bad_request").instance("instance-1").build();
 
-    DefaultProblemPostProcessor processor = new DefaultProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
     Problem result = processor.process(context, problem);
 
     assertThat(result).isSameAs(problem);
@@ -130,7 +130,7 @@ class DefaultProblemPostProcessorTest {
     ProblemContext context = ProblemContext.ofTraceId("");
     Problem problem = Problem.builder().type("bad_request").instance("instance-1").build();
 
-    DefaultProblemPostProcessor processor = new DefaultProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
     Problem result = processor.process(context, problem);
 
     assertThat(result).isSameAs(problem);
@@ -142,7 +142,7 @@ class DefaultProblemPostProcessorTest {
 
     Problem problem = Problem.builder().type("bad_request").instance("inst-777").build();
 
-    DefaultProblemPostProcessor processor = new DefaultProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
     Problem result = processor.process(null, problem);
 
     assertThat(result).isEqualTo(problem.toBuilder().instance("original:inst-777").build());
@@ -154,7 +154,7 @@ class DefaultProblemPostProcessorTest {
 
     Problem problem = Problem.builder().type("bad_request").build();
 
-    DefaultProblemPostProcessor processor = new DefaultProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
     Problem result = processor.process(null, problem);
 
     assertThat(result).isSameAs(problem);
@@ -166,7 +166,7 @@ class DefaultProblemPostProcessorTest {
 
     Problem problem = Problem.builder().type("bad_request").instance("").build();
 
-    DefaultProblemPostProcessor processor = new DefaultProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
     Problem result = processor.process(null, problem);
 
     assertThat(result).isSameAs(problem);
@@ -194,7 +194,7 @@ class DefaultProblemPostProcessorTest {
 
     ProblemContext context = ProblemContext.ofTraceId(contextTraceId);
 
-    DefaultProblemPostProcessor processor = new DefaultProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
     Problem result = processor.process(context, problem);
 
     if (StringUtils.hasLength(expectedResult)) {
@@ -207,7 +207,7 @@ class DefaultProblemPostProcessorTest {
   @Test
   void givenOverrideWithUnknownPlaceholders_shouldRemoveUnknownPlaceholders() {
     PostProcessorSettings settings = getSettings("type-{unknown}", "instance-{unknown}");
-    DefaultProblemPostProcessor processor = new DefaultProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
 
     Problem problem = Problem.builder().type("bad_request").instance("instance-1").build();
     Problem result = processor.process(ProblemContext.ofTraceId("x"), problem);
