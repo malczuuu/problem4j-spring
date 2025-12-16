@@ -14,7 +14,6 @@
  */
 package io.github.problem4j.spring.web.resolver;
 
-import static io.github.problem4j.spring.web.internal.MethodParameterSupport.findParameterName;
 import static io.github.problem4j.spring.web.util.ProblemSupport.PROPERTY_EXTENSION;
 import static io.github.problem4j.spring.web.util.ProblemSupport.resolveStatus;
 
@@ -22,6 +21,8 @@ import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.spring.web.format.ProblemFormat;
+import io.github.problem4j.spring.web.parameter.DefaultMethodParameterSupport;
+import io.github.problem4j.spring.web.parameter.MethodParameterSupport;
 import java.util.Optional;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.core.MethodParameter;
@@ -42,9 +43,16 @@ import org.springframework.web.server.ServerWebInputException;
 public class ServerWebInputProblemResolver extends AbstractProblemResolver {
 
   private final TypeMismatchProblemResolver typeMismatchProblemResolver;
+  private final MethodParameterSupport methodParameterSupport;
 
   public ServerWebInputProblemResolver(ProblemFormat problemFormat) {
+    this(problemFormat, new DefaultMethodParameterSupport());
+  }
+
+  public ServerWebInputProblemResolver(
+      ProblemFormat problemFormat, MethodParameterSupport methodParameterSupport) {
     super(ServerWebInputException.class, problemFormat);
+    this.methodParameterSupport = methodParameterSupport;
     typeMismatchProblemResolver = new TypeMismatchProblemResolver(problemFormat);
   }
 
@@ -81,7 +89,7 @@ public class ServerWebInputProblemResolver extends AbstractProblemResolver {
 
   private ProblemBuilder tryAppendingPropertyFromMethodParameter(
       MethodParameter parameter, ProblemBuilder builder) {
-    Optional<String> optionalProperty = findParameterName(parameter);
+    Optional<String> optionalProperty = methodParameterSupport.findParameterName(parameter);
     if (optionalProperty.isPresent()) {
       builder = builder.extension(PROPERTY_EXTENSION, optionalProperty.get());
     }

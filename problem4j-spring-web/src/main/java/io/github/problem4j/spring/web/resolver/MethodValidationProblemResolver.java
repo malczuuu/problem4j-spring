@@ -14,11 +14,16 @@
  */
 package io.github.problem4j.spring.web.resolver;
 
+import static io.github.problem4j.spring.web.util.ProblemSupport.ERRORS_EXTENSION;
+import static io.github.problem4j.spring.web.util.ProblemSupport.VALIDATION_FAILED_DETAIL;
+
+import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.core.ProblemStatus;
 import io.github.problem4j.spring.web.format.ProblemFormat;
-import io.github.problem4j.spring.web.internal.ViolationResolver;
+import io.github.problem4j.spring.web.parameter.DefaultMethodValidationResultSupport;
+import io.github.problem4j.spring.web.parameter.MethodValidationResultSupport;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.validation.method.MethodValidationException;
@@ -38,18 +43,23 @@ import org.springframework.validation.method.MethodValidationException;
  * Spring-specific exception type instead of the raw Jakarta exception.
  *
  * <p>Always resolves to a problem with status {@link ProblemStatus#BAD_REQUEST} and an {@code
- * errors} extension populated via {@link ViolationResolver} (one entry per violated parameter /
- * return value).
+ * errors} extension populated via {@link MethodValidationResultSupport} (one entry per violated
+ * parameter / return value).
  *
  * @see jakarta.validation.ConstraintViolationException
  */
 public class MethodValidationProblemResolver extends AbstractProblemResolver {
 
-  private final ViolationResolver violationResolver;
+  private final MethodValidationResultSupport methodValidationResultSupport;
 
   public MethodValidationProblemResolver(ProblemFormat problemFormat) {
+    this(problemFormat, new DefaultMethodValidationResultSupport());
+  }
+
+  public MethodValidationProblemResolver(
+      ProblemFormat problemFormat, MethodValidationResultSupport methodValidationResultSupport) {
     super(MethodValidationException.class, problemFormat);
-    violationResolver = new ViolationResolver(problemFormat);
+    this.methodValidationResultSupport = methodValidationResultSupport;
   }
 
   /**
@@ -69,6 +79,9 @@ public class MethodValidationProblemResolver extends AbstractProblemResolver {
   public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
     MethodValidationException e = (MethodValidationException) ex;
-    return violationResolver.from(e).status(ProblemStatus.BAD_REQUEST);
+    return Problem.builder()
+        .status(ProblemStatus.BAD_REQUEST)
+        .detail(formatDetail(VALIDATION_FAILED_DETAIL))
+        .extension(ERRORS_EXTENSION, methodValidationResultSupport.fetchViolations(e));
   }
 }

@@ -22,7 +22,7 @@ import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.core.ProblemStatus;
 import io.github.problem4j.spring.web.format.ProblemFormat;
-import io.github.problem4j.spring.web.model.Violation;
+import io.github.problem4j.spring.web.parameter.Violation;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Path;

@@ -12,7 +12,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-package io.github.problem4j.spring.web.internal;
+package io.github.problem4j.spring.web.parameter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,14 +29,16 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
-class MethodParameterSupportTest {
+class DefaultMethodParameterSupportTest {
+
+  private final MethodParameterSupport support = new DefaultMethodParameterSupport();
 
   @Test
   void givenPathVariable_whenFindParameterName_thenReturnsName() throws NoSuchMethodException {
     Method method = TestController.class.getMethod("pathVariableMethod", String.class);
     MethodParameter parameter = new MethodParameter(method, 0);
 
-    Optional<String> name = MethodParameterSupport.findParameterName(parameter);
+    Optional<String> name = support.findParameterName(parameter);
 
     assertThat(name).contains("id");
   }
@@ -46,7 +48,7 @@ class MethodParameterSupportTest {
     Method method = TestController.class.getMethod("requestParamMethod", String.class);
     MethodParameter parameter = new MethodParameter(method, 0);
 
-    Optional<String> name = MethodParameterSupport.findParameterName(parameter);
+    Optional<String> name = support.findParameterName(parameter);
 
     assertThat(name).contains("param");
   }
@@ -56,7 +58,7 @@ class MethodParameterSupportTest {
     Method method = TestController.class.getMethod("requestHeaderMethod", String.class);
     MethodParameter parameter = new MethodParameter(method, 0);
 
-    Optional<String> name = MethodParameterSupport.findParameterName(parameter);
+    Optional<String> name = support.findParameterName(parameter);
 
     assertThat(name).contains("X-Custom-Header");
   }
@@ -66,7 +68,7 @@ class MethodParameterSupportTest {
     Method method = TestController.class.getMethod("cookieValueMethod", String.class);
     MethodParameter parameter = new MethodParameter(method, 0);
 
-    Optional<String> name = MethodParameterSupport.findParameterName(parameter);
+    Optional<String> name = support.findParameterName(parameter);
 
     assertThat(name).contains("SESSIONID");
   }
@@ -76,7 +78,7 @@ class MethodParameterSupportTest {
     Method method = TestController.class.getMethod("sessionAttributeMethod", String.class);
     MethodParameter parameter = new MethodParameter(method, 0);
 
-    Optional<String> name = MethodParameterSupport.findParameterName(parameter);
+    Optional<String> name = support.findParameterName(parameter);
 
     assertThat(name).contains("user");
   }
@@ -86,7 +88,7 @@ class MethodParameterSupportTest {
     Method method = TestController.class.getMethod("requestAttributeMethod", String.class);
     MethodParameter parameter = new MethodParameter(method, 0);
 
-    Optional<String> name = MethodParameterSupport.findParameterName(parameter);
+    Optional<String> name = support.findParameterName(parameter);
 
     assertThat(name).contains("attr");
   }
@@ -96,7 +98,7 @@ class MethodParameterSupportTest {
     Method method = TestController.class.getMethod("matrixVariableMethod", String.class);
     MethodParameter parameter = new MethodParameter(method, 0);
 
-    Optional<String> name = MethodParameterSupport.findParameterName(parameter);
+    Optional<String> name = support.findParameterName(parameter);
 
     assertThat(name).contains("matrix");
   }
@@ -107,7 +109,7 @@ class MethodParameterSupportTest {
     MethodParameter parameter = new MethodParameter(method, 0);
     parameter.initParameterNameDiscovery(new DefaultParameterNameDiscoverer());
 
-    Optional<String> name = MethodParameterSupport.findParameterName(parameter);
+    Optional<String> name = support.findParameterName(parameter);
 
     assertThat(name).contains("value");
   }

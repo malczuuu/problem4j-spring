@@ -19,6 +19,7 @@ import io.github.problem4j.core.ProblemMapper;
 import io.github.problem4j.jackson2.ProblemModule;
 import io.github.problem4j.spring.web.format.DefaultProblemFormat;
 import io.github.problem4j.spring.web.format.ProblemFormat;
+import io.github.problem4j.spring.web.parameter.ProblemParameterConfiguration;
 import io.github.problem4j.spring.web.processor.DefaultProblemPostProcessor;
 import io.github.problem4j.spring.web.processor.ProblemPostProcessor;
 import io.github.problem4j.spring.web.resolver.ProblemResolver;
@@ -38,7 +39,7 @@ import org.springframework.context.annotation.Import;
 @EnableConfigurationProperties({ProblemProperties.class})
 @ConditionalOnProperty(name = "problem4j.enabled", matchIfMissing = true)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.ANY)
-@Import({ProblemResolverConfiguration.class})
+@Import({ProblemParameterConfiguration.class, ProblemResolverConfiguration.class})
 public class ProblemAutoConfiguration {
 
   /**

@@ -14,13 +14,16 @@
  */
 package io.github.problem4j.spring.web.resolver;
 
+import static io.github.problem4j.spring.web.util.ProblemSupport.ERRORS_EXTENSION;
+import static io.github.problem4j.spring.web.util.ProblemSupport.VALIDATION_FAILED_DETAIL;
 import static io.github.problem4j.spring.web.util.ProblemSupport.resolveStatus;
 
 import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.spring.web.format.ProblemFormat;
-import io.github.problem4j.spring.web.internal.ViolationResolver;
+import io.github.problem4j.spring.web.parameter.DefaultMethodValidationResultSupport;
+import io.github.problem4j.spring.web.parameter.MethodValidationResultSupport;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
@@ -30,23 +33,29 @@ import org.springframework.web.method.annotation.HandlerMethodValidationExceptio
  * into a {@link Problem} representation.
  *
  * <p>For 4xx statuses it produces a validation problem containing an {@code errors} extension with
- * parameter violations (via {@link ViolationResolver}). For 5xx statuses it returns only a basic
- * problem with the resolved status, avoiding leaking validation details when the server indicates
- * an internal failure.
+ * parameter violations (via {@link MethodValidationResultSupport}). For 5xx statuses it returns
+ * only a basic problem with the resolved status, avoiding leaking validation details when the
+ * server indicates an internal failure.
  */
 public class HandlerMethodValidationProblemResolver extends AbstractProblemResolver {
 
-  private final ViolationResolver violationResolver;
+  private final MethodValidationResultSupport methodValidationResultSupport;
 
   public HandlerMethodValidationProblemResolver(ProblemFormat problemFormat) {
+    this(problemFormat, new DefaultMethodValidationResultSupport());
+  }
+
+  public HandlerMethodValidationProblemResolver(
+      ProblemFormat problemFormat, MethodValidationResultSupport methodValidationResultSupport) {
     super(HandlerMethodValidationException.class, problemFormat);
-    violationResolver = new ViolationResolver(problemFormat);
+    this.methodValidationResultSupport = methodValidationResultSupport;
   }
 
   /**
    * Builds a {@link ProblemBuilder} for a {@link HandlerMethodValidationException}. If the provided
    * status is 5xx, returns a minimal problem with that status only. Otherwise, includes validation
-   * violations collected by {@link ViolationResolver} and preserves the caller-provided status.
+   * violations collected by {@link MethodValidationResultSupport} and preserves the caller-provided
+   * status.
    *
    * @param context problem context (unused for method validation aggregation)
    * @param ex the thrown validation exception (must be {@link HandlerMethodValidationException})
@@ -61,6 +70,9 @@ public class HandlerMethodValidationProblemResolver extends AbstractProblemResol
     if (status.is5xxServerError()) {
       return Problem.builder().status(resolveStatus(status));
     }
-    return violationResolver.from(e).status(resolveStatus(status));
+    return Problem.builder()
+        .status(resolveStatus(status))
+        .detail(formatDetail(VALIDATION_FAILED_DETAIL))
+        .extension(ERRORS_EXTENSION, methodValidationResultSupport.fetchViolations(e));
   }
 }

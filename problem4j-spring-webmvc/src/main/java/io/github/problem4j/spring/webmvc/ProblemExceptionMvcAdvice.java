@@ -65,7 +65,8 @@ public class ProblemExceptionMvcAdvice {
    */
   @ExceptionHandler(ProblemException.class)
   public ResponseEntity<Problem> handleProblemException(ProblemException ex, WebRequest request) {
-    ProblemContext context = (ProblemContext) request.getAttribute(PROBLEM_CONTEXT_ATTRIBUTE, SCOPE_REQUEST);
+    ProblemContext context =
+        (ProblemContext) request.getAttribute(PROBLEM_CONTEXT_ATTRIBUTE, SCOPE_REQUEST);
     if (context == null) {
       context = ProblemContext.create();
     }

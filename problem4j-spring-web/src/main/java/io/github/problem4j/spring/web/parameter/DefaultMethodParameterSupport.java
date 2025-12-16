@@ -1,18 +1,4 @@
-/*
- * Copyright (c) 2025 Damian Malczewski
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * SPDX-License-Identifier: MIT
- */
-package io.github.problem4j.spring.web.internal;
+package io.github.problem4j.spring.web.parameter;
 
 import java.lang.annotation.Annotation;
 import java.util.Optional;
@@ -27,18 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
-/**
- * <b>For internal use only.</b>
- *
- * <p>This class is intended for internal use within the {@code problem4j-spring-*} libraries and
- * should not be used directly by external applications. The API may change or be removed without
- * notice.
- *
- * <p><b>Use at your own risk.</b>
- *
- * @implNote This is an internal API and may change at any time.
- */
-public final class MethodParameterSupport {
+public class DefaultMethodParameterSupport implements MethodParameterSupport {
 
   /**
    * Resolve a stable logical name for a method parameter, honoring supported Spring binding
@@ -46,10 +21,11 @@ public final class MethodParameterSupport {
    * otherwise falls back to the parameter's discovered name. Unknown or unsupported annotations are
    * ignored.
    *
-   * @param parameter Spring {@link MethodParameter} (may be {@code null})
+   * @param parameter Spring {@link org.springframework.core.MethodParameter} (may be {@code null})
    * @return optional parameter name; empty if the input is {@code null}
    */
-  public static Optional<String> findParameterName(MethodParameter parameter) {
+  @Override
+  public Optional<String> findParameterName(MethodParameter parameter) {
     if (parameter == null) {
       return Optional.empty();
     }
@@ -86,7 +62,7 @@ public final class MethodParameterSupport {
    * @param defaultName fallback (parameter name)
    * @return resolved name or fallback
    */
-  private static String findPathVariableName(PathVariable annotation, String defaultName) {
+  protected String findPathVariableName(PathVariable annotation, String defaultName) {
     String name = annotation.name();
     if (!StringUtils.hasLength(name)) {
       name = annotation.value();
@@ -102,7 +78,7 @@ public final class MethodParameterSupport {
    * @param defaultName fallback (parameter name)
    * @return resolved name or fallback
    */
-  private static String findRequestParamName(RequestParam annotation, String defaultName) {
+  protected String findRequestParamName(RequestParam annotation, String defaultName) {
     String name = annotation.name();
     if (!StringUtils.hasLength(name)) {
       name = annotation.value();
@@ -118,7 +94,7 @@ public final class MethodParameterSupport {
    * @param defaultName fallback (parameter name)
    * @return resolved name or fallback
    */
-  private static String findRequestPartName(RequestPart annotation, String defaultName) {
+  protected String findRequestPartName(RequestPart annotation, String defaultName) {
     String name = annotation.name();
     if (!StringUtils.hasLength(name)) {
       name = annotation.value();
@@ -134,7 +110,7 @@ public final class MethodParameterSupport {
    * @param defaultName fallback (parameter name)
    * @return resolved name or fallback
    */
-  private static String findRequestHeaderName(RequestHeader annotation, String defaultName) {
+  protected String findRequestHeaderName(RequestHeader annotation, String defaultName) {
     String name = annotation.name();
     if (!StringUtils.hasLength(name)) {
       name = annotation.value();
@@ -150,7 +126,7 @@ public final class MethodParameterSupport {
    * @param defaultName fallback (parameter name)
    * @return resolved name or fallback
    */
-  private static String findCookieValueName(CookieValue annotation, String defaultName) {
+  protected String findCookieValueName(CookieValue annotation, String defaultName) {
     String name = annotation.name();
     if (!StringUtils.hasLength(name)) {
       name = annotation.value();
@@ -166,7 +142,7 @@ public final class MethodParameterSupport {
    * @param defaultName fallback (parameter name)
    * @return resolved name or fallback
    */
-  private static String findSessionAttributeName(SessionAttribute annotation, String defaultName) {
+  protected String findSessionAttributeName(SessionAttribute annotation, String defaultName) {
     String name = annotation.name();
     if (!StringUtils.hasLength(name)) {
       name = annotation.value();
@@ -182,7 +158,7 @@ public final class MethodParameterSupport {
    * @param defaultName fallback (parameter name)
    * @return resolved name or fallback
    */
-  private static String findRequestAttributeName(RequestAttribute annotation, String defaultName) {
+  protected String findRequestAttributeName(RequestAttribute annotation, String defaultName) {
     String name = annotation.name();
     if (!StringUtils.hasLength(name)) {
       name = annotation.value();
@@ -198,14 +174,11 @@ public final class MethodParameterSupport {
    * @param defaultName fallback (parameter name)
    * @return resolved name or fallback
    */
-  private static String findMatrixVariableName(MatrixVariable annotation, String defaultName) {
+  protected String findMatrixVariableName(MatrixVariable annotation, String defaultName) {
     String name = annotation.name();
     if (!StringUtils.hasLength(name)) {
       name = annotation.value();
     }
     return StringUtils.hasLength(name) ? name : defaultName;
   }
-
-  /** Utility class; no instances. */
-  private MethodParameterSupport() {}
 }

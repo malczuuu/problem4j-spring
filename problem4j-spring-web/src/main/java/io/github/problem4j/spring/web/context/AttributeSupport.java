@@ -14,6 +14,8 @@
  */
 package io.github.problem4j.spring.web.context;
 
+import io.github.problem4j.core.ProblemContext;
+
 /**
  * Utility class providing constants and helper methods for tracing support within the Problem4J.
  */
@@ -27,7 +29,7 @@ public final class AttributeSupport {
    * sharing contextual information (such as trace identifiers or additional diagnostic data)
    * between components involved in problem handling.
    */
-  public static final String PROBLEM_CONTEXT_ATTRIBUTE = "io.github.problem4j.spring.web.traceId";
+  public static final String PROBLEM_CONTEXT_ATTRIBUTE = ProblemContext.class.getName();
 
   private AttributeSupport() {}
 }

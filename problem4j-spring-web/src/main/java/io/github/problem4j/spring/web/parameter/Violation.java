@@ -12,7 +12,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-package io.github.problem4j.spring.web.model;
+package io.github.problem4j.spring.web.parameter;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 

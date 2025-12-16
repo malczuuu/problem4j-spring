@@ -14,11 +14,16 @@
  */
 package io.github.problem4j.spring.web.resolver;
 
+import static io.github.problem4j.spring.web.util.ProblemSupport.VALIDATION_FAILED_DETAIL;
+
+import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.core.ProblemStatus;
 import io.github.problem4j.spring.web.format.ProblemFormat;
-import io.github.problem4j.spring.web.internal.ViolationResolver;
+import io.github.problem4j.spring.web.parameter.BindingResultSupport;
+import io.github.problem4j.spring.web.parameter.DefaultBindingResultSupport;
+import io.github.problem4j.spring.web.util.ProblemSupport;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.validation.BindException;
@@ -45,11 +50,16 @@ import org.springframework.validation.BindException;
  */
 public class BindProblemResolver extends AbstractProblemResolver {
 
-  private final ViolationResolver violationResolver;
+  private final BindingResultSupport bindingResultSupport;
 
   public BindProblemResolver(ProblemFormat problemFormat) {
+    this(problemFormat, new DefaultBindingResultSupport());
+  }
+
+  public BindProblemResolver(
+      ProblemFormat problemFormat, BindingResultSupport bindingResultSupport) {
     super(BindException.class, problemFormat);
-    violationResolver = new ViolationResolver(problemFormat);
+    this.bindingResultSupport = bindingResultSupport;
   }
 
   /**
@@ -67,6 +77,11 @@ public class BindProblemResolver extends AbstractProblemResolver {
   public ProblemBuilder resolveBuilder(
       ProblemContext context, Exception ex, HttpHeaders headers, HttpStatusCode status) {
     BindException e = (BindException) ex;
-    return violationResolver.from(e.getBindingResult()).status(ProblemStatus.BAD_REQUEST);
+    return Problem.builder()
+        .status(ProblemStatus.BAD_REQUEST)
+        .detail(formatDetail(VALIDATION_FAILED_DETAIL))
+        .extension(
+            ProblemSupport.ERRORS_EXTENSION,
+            bindingResultSupport.fetchViolations(e.getBindingResult()));
   }
 }

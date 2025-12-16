@@ -15,6 +15,8 @@
 package io.github.problem4j.spring.web.resolver;
 
 import io.github.problem4j.spring.web.format.ProblemFormat;
+import io.github.problem4j.spring.web.parameter.BindingResultSupport;
+import io.github.problem4j.spring.web.parameter.MethodValidationResultSupport;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -60,8 +62,9 @@ public class ProblemResolverConfiguration {
   public static class BindProblemConfiguration {
     @ConditionalOnMissingBean(BindProblemResolver.class)
     @Bean
-    public BindProblemResolver bindProblemResolver(ProblemFormat problemFormat) {
-      return new BindProblemResolver(problemFormat);
+    public BindProblemResolver bindProblemResolver(
+        ProblemFormat problemFormat, BindingResultSupport bindingResultSupport) {
+      return new BindProblemResolver(problemFormat, bindingResultSupport);
     }
   }
 
@@ -102,8 +105,9 @@ public class ProblemResolverConfiguration {
     @ConditionalOnMissingBean(HandlerMethodValidationProblemResolver.class)
     @Bean
     public HandlerMethodValidationProblemResolver handlerMethodValidationProblemResolver(
-        ProblemFormat problemFormat) {
-      return new HandlerMethodValidationProblemResolver(problemFormat);
+        ProblemFormat problemFormat, MethodValidationResultSupport methodValidationResultSupport) {
+      return new HandlerMethodValidationProblemResolver(
+          problemFormat, methodValidationResultSupport);
     }
   }
 
@@ -168,8 +172,8 @@ public class ProblemResolverConfiguration {
     @ConditionalOnMissingBean(MethodValidationProblemResolver.class)
     @Bean
     public MethodValidationProblemResolver methodValidationProblemResolver(
-        ProblemFormat problemFormat) {
-      return new MethodValidationProblemResolver(problemFormat);
+        ProblemFormat problemFormat, MethodValidationResultSupport methodValidationResultSupport) {
+      return new MethodValidationProblemResolver(problemFormat, methodValidationResultSupport);
     }
   }
 
@@ -264,8 +268,8 @@ public class ProblemResolverConfiguration {
     @ConditionalOnMissingBean(WebExchangeBindProblemResolver.class)
     @Bean
     public WebExchangeBindProblemResolver webExchangeBindProblemResolver(
-        ProblemFormat problemFormat) {
-      return new WebExchangeBindProblemResolver(problemFormat);
+        ProblemFormat problemFormat, BindingResultSupport bindingResultSupport) {
+      return new WebExchangeBindProblemResolver(problemFormat, bindingResultSupport);
     }
   }
 }

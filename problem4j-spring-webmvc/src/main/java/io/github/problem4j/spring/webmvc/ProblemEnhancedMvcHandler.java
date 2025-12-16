@@ -83,7 +83,8 @@ public class ProblemEnhancedMvcHandler extends ResponseEntityExceptionHandler {
   @Override
   protected ResponseEntity<Object> handleExceptionInternal(
       Exception ex, Object body, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-    ProblemContext context = (ProblemContext) request.getAttribute(PROBLEM_CONTEXT_ATTRIBUTE, SCOPE_REQUEST);
+    ProblemContext context =
+        (ProblemContext) request.getAttribute(PROBLEM_CONTEXT_ATTRIBUTE, SCOPE_REQUEST);
     if (context == null) {
       context = ProblemContext.create();
     }
