@@ -5,6 +5,8 @@ import static org.hamcrest.Matchers.notNullValue;
 import io.github.malczuuu.problem4j.spring.webflux.app.WebFluxTestApp;
 import io.github.malczuuu.problem4j.spring.webflux.app.rest.ValidateMethodArgumentController;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -131,6 +133,74 @@ class ValidateMethodArgumentPassingWebFluxTest {
         .isOk()
         .expectBody(String.class)
         .value(notNullValue())
+        .isEqualTo("OK");
+  }
+
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        "/validate-parameter/query-object/annotated",
+        "/validate-parameter/query-object/unannotated",
+        "/validate-parameter/query-record/annotated",
+        "/validate-parameter/query-record/unannotated",
+      })
+  void givenQuerySimpleObjectsWithoutViolations_shouldReturnOk(String baseUrl) {
+    webTestClient
+        .get()
+        .uri(
+            uriBuilder ->
+                uriBuilder
+                    .path(baseUrl)
+                    .queryParam("text", "fine")
+                    .queryParam("number", "1")
+                    .build())
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody(String.class)
+        .isEqualTo("OK");
+  }
+
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        "/validate-parameter/query-bind-object/annotated",
+        "/validate-parameter/query-bind-object/unannotated",
+        "/validate-parameter/query-bind-record/annotated",
+        "/validate-parameter/query-bind-record/unannotated",
+      })
+  void givenQueryBindObjectsWithoutViolations_shouldReturnOk(String baseUrl) {
+    webTestClient
+        .get()
+        .uri(
+            uriBuilder ->
+                uriBuilder.path(baseUrl).queryParam("text", "fine").queryParam("num", "1").build())
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody(String.class)
+        .isEqualTo("OK");
+  }
+
+  // No methods for Object-based binding with multiple ctors as it's not supported by Spring.
+  // It works only for records, and it will use record's canonical ctor.
+
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        "/validate-parameter/query-bind-ctors-record/annotated",
+        "/validate-parameter/query-bind-ctors-record/unannotated",
+      })
+  void givenQueryBindObjectsWithMultipleCtorsWithoutViolations_shouldReturnOk(String baseUrl) {
+    webTestClient
+        .get()
+        .uri(
+            uriBuilder ->
+                uriBuilder.path(baseUrl).queryParam("text", "fine").queryParam("num", "1").build())
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody(String.class)
         .isEqualTo("OK");
   }
 }

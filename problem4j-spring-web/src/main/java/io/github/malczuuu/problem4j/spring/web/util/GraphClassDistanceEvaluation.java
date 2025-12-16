@@ -93,6 +93,12 @@ public class GraphClassDistanceEvaluation implements ClassDistanceEvaluation {
     return calculateInternal(target, base, 0, maxDepth);
   }
 
+  /**
+   * Returns the default maximum depth used when calculating inheritance distance.
+   *
+   * <p>This limit helps prevent stack overflow when traversing deep or complex class/interface
+   * hierarchies.
+   */
   @Override
   public int getDefaultMaxDepth() {
     return defaultMaxDepth;

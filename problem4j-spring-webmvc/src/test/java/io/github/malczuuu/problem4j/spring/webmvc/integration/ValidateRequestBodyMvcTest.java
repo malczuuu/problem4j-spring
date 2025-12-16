@@ -71,7 +71,6 @@ class ValidateRequestBodyMvcTest {
     Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
 
     Map<String, String> error = new HashMap<>();
-    error.put("field", null);
     error.put("error", "always invalid");
     assertThat(problem)
         .isEqualTo(

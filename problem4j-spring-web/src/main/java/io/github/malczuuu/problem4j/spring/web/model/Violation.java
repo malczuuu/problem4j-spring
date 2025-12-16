@@ -1,6 +1,9 @@
 package io.github.malczuuu.problem4j.spring.web.model;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serial;
 import java.io.Serializable;
@@ -11,6 +14,7 @@ import java.util.Objects;
  *
  * <p>This class is immutable and thread-safe.
  */
+@JsonInclude(NON_NULL)
 public class Violation implements Serializable {
 
   @Serial private static final long serialVersionUID = 1L;

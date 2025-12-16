@@ -1,10 +1,17 @@
 package io.github.malczuuu.problem4j.spring.webmvc.app.rest;
 
+import io.github.malczuuu.problem4j.spring.webmvc.app.model.QueryBindCtorsRecord;
+import io.github.malczuuu.problem4j.spring.webmvc.app.model.QueryBindObject;
+import io.github.malczuuu.problem4j.spring.webmvc.app.model.QueryBindRecord;
+import io.github.malczuuu.problem4j.spring.webmvc.app.model.QueryObject;
+import io.github.malczuuu.problem4j.spring.webmvc.app.model.QueryRecord;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,6 +62,59 @@ public class ValidateMethodArgumentController {
       @RequestParam("first") String firstParam,
       @RequestParam("second") @Size(min = 5) String secondParam,
       @RequestParam("third") String thirdParam) {
+    return "OK";
+  }
+
+  @GetMapping(path = "/query-object/annotated")
+  public String queryObjectAnnotated(@ModelAttribute @Valid QueryObject query) {
+    return "OK";
+  }
+
+  @GetMapping(path = "/query-object/unannotated")
+  public String queryObjectUnannotated(@Valid QueryObject query) {
+    return "OK";
+  }
+
+  @GetMapping(path = "/query-bind-object/annotated")
+  public String queryBindObjectAnnotated(@ModelAttribute @Valid QueryBindObject query) {
+    return "OK";
+  }
+
+  @GetMapping(path = "/query-bind-object/unannotated")
+  public String queryBindObjectUnannotated(@Valid QueryBindObject query) {
+    return "OK";
+  }
+
+  @GetMapping(path = "/query-record/annotated")
+  public String queryRecordAnnotated(@ModelAttribute @Valid QueryRecord query) {
+    return "OK";
+  }
+
+  @GetMapping(path = "/query-record/unannotated")
+  public String queryRecordUnannotated(@Valid QueryRecord query) {
+    return "OK";
+  }
+
+  @GetMapping(path = "/query-bind-record/annotated")
+  public String queryBindRecordAnnotated(@ModelAttribute @Valid QueryBindRecord query) {
+    return "OK";
+  }
+
+  @GetMapping(path = "/query-bind-record/unannotated")
+  public String queryBindRecordUnannotated(@Valid QueryBindRecord query) {
+    return "OK";
+  }
+
+  // No methods for Object-based binding with multiple ctors as it's not supported by Spring. It
+  // works only for records, and it will use record's canonical ctor.
+
+  @GetMapping(path = "/query-bind-ctors-record/annotated")
+  public String queryBindCtorsRecordAnnotated(@ModelAttribute @Valid QueryBindCtorsRecord query) {
+    return "OK";
+  }
+
+  @GetMapping(path = "/query-bind-ctors-record/unannotated")
+  public String queryBindCtorsRecordUnannotated(@Valid QueryBindCtorsRecord query) {
     return "OK";
   }
 }

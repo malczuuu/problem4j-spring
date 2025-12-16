@@ -74,7 +74,6 @@ class ValidateRequestBodyWebFluxTest {
         .value(
             problem -> {
               Map<String, String> error = new HashMap<>();
-              error.put("field", null);
               error.put("error", "always invalid");
               Assertions.assertThat(problem)
                   .isEqualTo(

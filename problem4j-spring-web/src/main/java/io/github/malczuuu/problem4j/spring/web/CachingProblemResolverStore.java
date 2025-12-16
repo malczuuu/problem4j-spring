@@ -34,7 +34,7 @@ public class CachingProblemResolverStore implements ProblemResolverStore {
    */
   public CachingProblemResolverStore(ProblemResolverStore delegate, int maxCacheSize) {
     this.delegate = delegate;
-    cache = maxCacheSize > 0 ? new EvictingCache(maxCacheSize) : new NonEvictingCache();
+    this.cache = maxCacheSize > 0 ? new EvictingCache(maxCacheSize) : new NonEvictingCache();
   }
 
   /**
@@ -85,7 +85,7 @@ public class CachingProblemResolverStore implements ProblemResolverStore {
       // 16 is the default initial capacity of HashMap;
       // 0.75f is the default load factor;
       // accessOrder=true - the last accessed entry is moved to the end of the underlying list
-      cache =
+      this.cache =
           new LinkedHashMap<>(16, 0.75f, true) {
             @Override
             protected boolean removeEldestEntry(
@@ -120,7 +120,7 @@ public class CachingProblemResolverStore implements ProblemResolverStore {
      * performed.
      */
     private NonEvictingCache() {
-      cache = new ConcurrentHashMap<>();
+      this.cache = new ConcurrentHashMap<>();
     }
 
     /**
