@@ -67,13 +67,9 @@ public abstract class AbstractProblemPostProcessor implements ProblemPostProcess
     ProblemBuilder builder = null;
 
     // Override type only if {problem.type} is referenced and original type is valid
-    if (StringUtils.hasLength(settings.getTypeOverride())) {
-      builder = overrideProblemType(context, problem, builder);
-    }
+    builder = overrideProblemType(context, problem, builder);
 
-    if (StringUtils.hasLength(settings.getInstanceOverride())) {
-      builder = overrideProblemInstance(context, problem, builder);
-    }
+    builder = overrideProblemInstance(context, problem, builder);
 
     return builder != null ? builder.build() : problem;
   }
@@ -81,6 +77,10 @@ public abstract class AbstractProblemPostProcessor implements ProblemPostProcess
   /** Applies a {@code type} override based on the configured template. */
   protected ProblemBuilder overrideProblemType(
       ProblemContext context, Problem problem, ProblemBuilder builder) {
+    if (!StringUtils.hasLength(settings.getTypeOverride())) {
+      return builder;
+    }
+
     String template = settings.getTypeOverride();
     boolean requiresProblemType = template.contains("{problem.type}");
     boolean hasProblemType = problem.isTypeNonBlank();
@@ -88,7 +88,10 @@ public abstract class AbstractProblemPostProcessor implements ProblemPostProcess
     if (canOverride(requiresProblemType, hasProblemType)) {
       Optional<String> newTypeCandidate = overrideType(context, problem);
       if (newTypeCandidate.isPresent()) {
-        builder = problem.toBuilder().type(newTypeCandidate.get());
+        if (builder == null) {
+          builder = problem.toBuilder();
+        }
+        builder = builder.type(newTypeCandidate.get());
       }
     }
     return builder;
@@ -113,11 +116,7 @@ public abstract class AbstractProblemPostProcessor implements ProblemPostProcess
    * @see io.github.malczuuu.problem4j.spring.web.annotation.DefaultProblemMappingProcessor
    */
   protected Optional<String> overrideType(ProblemContext context, Problem problem) {
-    if (!problem.isTypeNonBlank()) {
-      return Optional.empty();
-    }
-
-    if (!StringUtils.hasLength(settings.getTypeOverride())) {
+    if (!problem.isTypeNonBlank() || !StringUtils.hasLength(settings.getTypeOverride())) {
       return Optional.empty();
     }
 
@@ -135,6 +134,10 @@ public abstract class AbstractProblemPostProcessor implements ProblemPostProcess
   /** Applies an {@code instance} override based on the configured template. */
   protected ProblemBuilder overrideProblemInstance(
       ProblemContext context, Problem problem, ProblemBuilder builder) {
+    if (!StringUtils.hasLength(settings.getInstanceOverride())) {
+      return builder;
+    }
+
     String template = settings.getInstanceOverride();
     boolean needsProblemInstance = template.contains("{problem.instance}");
     boolean needsTraceId = template.contains("{context.traceId}");

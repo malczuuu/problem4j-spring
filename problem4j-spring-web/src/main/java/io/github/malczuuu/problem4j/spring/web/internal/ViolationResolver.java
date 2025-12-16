@@ -244,7 +244,7 @@ public class ViolationResolver {
    * @return {@code true} if the annotation is a {@code BindParam}, {@code false} otherwise
    * @see org.springframework.web.bind.annotation.BindParam
    */
-  private static boolean isBindParam(Annotation annotation) {
+  private boolean isBindParam(Annotation annotation) {
     return annotation.annotationType().getName().equals(BIND_PARAM_FQCN);
   }
 
@@ -258,10 +258,10 @@ public class ViolationResolver {
    * @return an {@code Optional} containing {@code BindParam.value} if <b>present and non-empty</b>
    * @see org.springframework.web.bind.annotation.BindParam
    */
-  private static Optional<String> findBindParamValue(Annotation annotation) {
+  private Optional<String> findBindParamValue(Annotation annotation) {
     try {
-      Method field = annotation.getClass().getMethod(BIND_PARAM_VALUE_METHOD);
-      Object value = field.invoke(annotation);
+      Method method = annotation.getClass().getMethod(BIND_PARAM_VALUE_METHOD);
+      Object value = method.invoke(annotation);
       return Optional.ofNullable(value).map(Object::toString).filter(StringUtils::hasLength);
     } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {
       // ignore reflective call issues
