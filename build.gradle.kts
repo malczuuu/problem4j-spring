@@ -20,8 +20,12 @@ subprojects {
     tasks.register("printVersion") {
         description = "Prints the current project version to the console"
         group = "help"
+
+        val projectName = project.name
+        val projectVersion = project.version
+
         doLast {
-            println("${project.name} version: ${project.version}")
+            println("$projectName version: $projectVersion")
         }
     }
 }
