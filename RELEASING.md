@@ -1,5 +1,11 @@
 # Releasing
 
+A release is created by pushing an annotated git tag named `v1.2.3` with the message "Release 1.2.3". Preferably, use
+the [`./tools/tagrelease`](./tools/tagrelease) script, which ensures the tag is correctly formatted and prevents
+mistakes. Proper tag format is required to trigger build automation.
+
+See `./tools/tagrelease --help` for reference.
+
 ## Branching and Release Workflow
 
 This repository maintains two major versions, supporting Spring Boot 3 and 4. The goal is to maintain both versions at

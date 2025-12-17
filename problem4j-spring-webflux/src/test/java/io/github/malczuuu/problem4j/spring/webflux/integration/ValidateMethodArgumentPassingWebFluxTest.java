@@ -1,3 +1,17 @@
+/*
+ * Copyright (c) 2025 Damian Malczewski
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * SPDX-License-Identifier: MIT
+ */
 package io.github.malczuuu.problem4j.spring.webflux.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -5,6 +19,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.github.malczuuu.problem4j.spring.webflux.app.WebFluxTestApp;
 import io.github.malczuuu.problem4j.spring.webflux.app.rest.ValidateMethodArgumentController;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
@@ -131,6 +147,74 @@ class ValidateMethodArgumentPassingWebFluxTest {
         .isOk()
         .expectBody(String.class)
         .value(v -> assertThat(v).isNotNull())
+        .isEqualTo("OK");
+  }
+
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        "/validate-parameter/query-object/annotated",
+        "/validate-parameter/query-object/unannotated",
+        "/validate-parameter/query-record/annotated",
+        "/validate-parameter/query-record/unannotated",
+      })
+  void givenQuerySimpleObjectsWithoutViolations_shouldReturnOk(String baseUrl) {
+    webTestClient
+        .get()
+        .uri(
+            uriBuilder ->
+                uriBuilder
+                    .path(baseUrl)
+                    .queryParam("text", "fine")
+                    .queryParam("number", "1")
+                    .build())
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody(String.class)
+        .isEqualTo("OK");
+  }
+
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        "/validate-parameter/query-bind-object/annotated",
+        "/validate-parameter/query-bind-object/unannotated",
+        "/validate-parameter/query-bind-record/annotated",
+        "/validate-parameter/query-bind-record/unannotated",
+      })
+  void givenQueryBindObjectsWithoutViolations_shouldReturnOk(String baseUrl) {
+    webTestClient
+        .get()
+        .uri(
+            uriBuilder ->
+                uriBuilder.path(baseUrl).queryParam("text", "fine").queryParam("num", "1").build())
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody(String.class)
+        .isEqualTo("OK");
+  }
+
+  // No methods for Object-based binding with multiple ctors as it's not supported by Spring.
+  // It works only for records, and it will use record's canonical ctor.
+
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        "/validate-parameter/query-bind-ctors-record/annotated",
+        "/validate-parameter/query-bind-ctors-record/unannotated",
+      })
+  void givenQueryBindObjectsWithMultipleCtorsWithoutViolations_shouldReturnOk(String baseUrl) {
+    webTestClient
+        .get()
+        .uri(
+            uriBuilder ->
+                uriBuilder.path(baseUrl).queryParam("text", "fine").queryParam("num", "1").build())
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody(String.class)
         .isEqualTo("OK");
   }
 }

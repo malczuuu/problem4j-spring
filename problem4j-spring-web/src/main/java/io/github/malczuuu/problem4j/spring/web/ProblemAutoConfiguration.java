@@ -1,3 +1,17 @@
+/*
+ * Copyright (c) 2025 Damian Malczewski
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * SPDX-License-Identifier: MIT
+ */
 package io.github.malczuuu.problem4j.spring.web;
 
 import com.fasterxml.jackson.databind.Module;
@@ -8,7 +22,7 @@ import io.github.malczuuu.problem4j.spring.web.format.DefaultProblemFormat;
 import io.github.malczuuu.problem4j.spring.web.format.ProblemFormat;
 import io.github.malczuuu.problem4j.spring.web.format.ProblemJsonMapperBuilderCustomizer;
 import io.github.malczuuu.problem4j.spring.web.format.ProblemXmlMapperBuilderCustomizer;
-import io.github.malczuuu.problem4j.spring.web.processor.OverridingProblemPostProcessor;
+import io.github.malczuuu.problem4j.spring.web.processor.DefaultProblemPostProcessor;
 import io.github.malczuuu.problem4j.spring.web.processor.ProblemPostProcessor;
 import io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver;
 import io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolverConfiguration;
@@ -61,7 +75,7 @@ public class ProblemAutoConfiguration {
    * Provides a {@link ProblemPostProcessor} that applies post-processing rules to {@code Problem}
    * instances before they are returned in HTTP responses.
    *
-   * <p>The default implementation, {@link OverridingProblemPostProcessor}, supports configurable
+   * <p>The default implementation, {@link DefaultProblemPostProcessor}, supports configurable
    * overrides for problem fields such as {@code type} and {@code instance}, based on the properties
    * defined in {@link ProblemProperties}. These overrides may include runtime placeholders such as:
    *
@@ -75,13 +89,13 @@ public class ProblemAutoConfiguration {
    * exception mapping logic.
    *
    * @param properties the configuration properties containing override templates and settings
-   * @return a new {@link OverridingProblemPostProcessor} instance
+   * @return a new {@link DefaultProblemPostProcessor} instance
    * @see io.github.malczuuu.problem4j.core.Problem
    */
   @ConditionalOnMissingBean(ProblemPostProcessor.class)
   @Bean
   public ProblemPostProcessor problemPostProcessor(ProblemProperties properties) {
-    return new OverridingProblemPostProcessor(properties);
+    return new DefaultProblemPostProcessor(properties);
   }
 
   /**

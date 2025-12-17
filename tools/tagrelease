@@ -1,0 +1,103 @@
+#!/bin/bash
+#
+# Copyright (c) 2025 Damian Malczewski
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# SPDX-License-Identifier: MIT
+#
+
+###############################################################################
+#
+#   An utility script to create git tags for versioning releases.
+#
+#   This script creates an annotated git tag for versioning releases. Version
+#   argument must follow semver-alike format ('1.2.3' or '1.2.3-suffix'). Tag
+#   name will add a 'v' prefix by default, unless --no-tag-prefix is specified.
+#
+#   Usage: tagrelease [OPTIONS] <version>
+#
+#   Example: tagrelease 1.2.3
+#       Which creates tag 'v1.2.3' with message 'Release 1.2.3'.
+#
+#   Example: tagrelease --no-tag-prefix 1.2.3
+#       Which creates tag '1.2.3' with message 'Release 1.2.3'.
+#
+#   On success, the script prints:
+#       info: successfully created annotated tag '<tag_name>', with message '<tag_message>'
+#
+###############################################################################
+
+info() {
+    echo "info: $*" >&2
+}
+
+fatal() {
+    echo "fatal: $*" >&2
+}
+
+if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+    echo "Usage: $0 [OPTIONS] <version>"
+    echo ""
+    echo "Create a git tag with version number."
+    echo ""
+    echo "Arguments:"
+    echo "  version    Version number in format: 1.2.3 or 1.2.3-suffix"
+    echo ""
+    echo "Options:"
+    echo "  -h, --help         Show this help message"
+    echo "  --no-tag-prefix    Create tag without 'v' prefix ('1.2.3' instead of 'v1.2.3')"
+    echo ""
+    echo "Examples:"
+    echo "  $0 1.2.3"
+    echo "  $0 2.0.0-beta"
+    echo "  $0 --no-tag-prefix 1.2.4"
+    echo ""
+    echo "This will create an annotated tag 'v<version>' with message 'Release <version>'."
+    exit 0
+fi
+
+no_tag_prefix=false
+if [ "$1" = "--no-tag-prefix" ]; then
+    no_tag_prefix=true
+    shift
+fi
+
+if [ $# -ne 1 ]; then
+    fatal "exactly one argument required"
+    fatal "usage: $0 [OPTIONS] <version>"
+    fatal "version format: 1.2.3 or 1.2.3-suffix"
+    exit 1
+fi
+
+version="$1"
+
+if ! [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9]+)?$ ]]; then
+    fatal "invalid version format, provided: '$version', expected pattern: '1.2.3' or '1.2.3-suffix'"
+    exit 1
+fi
+
+if [ "$no_tag_prefix" = true ]; then
+    tag_name="${version}"
+else
+    tag_name="v${version}"
+fi
+
+tag_message="Release ${version}"
+
+git tag -a "$tag_name" -m "$tag_message"
+
+if [ $? -eq 0 ]; then
+    info "successfully created annotated tag '$tag_name', with message '$tag_message'"
+else
+    fatal "failed to create tag"
+    exit 1
+fi

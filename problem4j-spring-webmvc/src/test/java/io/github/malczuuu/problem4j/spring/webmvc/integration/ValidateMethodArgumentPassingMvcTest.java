@@ -1,9 +1,25 @@
+/*
+ * Copyright (c) 2025 Damian Malczewski
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * SPDX-License-Identifier: MIT
+ */
 package io.github.malczuuu.problem4j.spring.webmvc.integration;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.github.malczuuu.problem4j.spring.webmvc.app.MvcTestApp;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.TestRestTemplate;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
@@ -88,6 +104,56 @@ class ValidateMethodArgumentPassingMvcTest {
         restTemplate.getForEntity(
             "/validate-parameter/three-arg?first=anything&second=validVal&third=anything",
             String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(response.getBody()).isEqualTo("OK");
+  }
+
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        "/validate-parameter/query-object/annotated",
+        "/validate-parameter/query-object/unannotated",
+        "/validate-parameter/query-record/annotated",
+        "/validate-parameter/query-record/unannotated",
+      })
+  void givenQuerySimpleObjectsWithViolations_shouldReturnValidationProblem(String baseUrl) {
+    ResponseEntity<String> response =
+        restTemplate.getForEntity(baseUrl + "?text=fine&number=1", String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(response.getBody()).isEqualTo("OK");
+  }
+
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        "/validate-parameter/query-bind-object/annotated",
+        "/validate-parameter/query-bind-object/unannotated",
+        "/validate-parameter/query-bind-record/annotated",
+        "/validate-parameter/query-bind-record/unannotated",
+      })
+  void givenQueryBindObjectsWithViolations_shouldReturnValidationProblem(String baseUrl) {
+    ResponseEntity<String> response =
+        restTemplate.getForEntity(baseUrl + "?text=fine&num=1", String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(response.getBody()).isEqualTo("OK");
+  }
+
+  // No methods for Object-based binding with multiple ctors as it's not supported by Spring. It
+  // works only for records, and it will use record's canonical ctor.
+
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        "/validate-parameter/query-bind-ctors-record/annotated",
+        "/validate-parameter/query-bind-ctors-record/unannotated",
+      })
+  void givenQueryBindObjectsWithMultipleCtorsWithViolations_shouldReturnValidationProblem(
+      String baseUrl) {
+    ResponseEntity<String> response =
+        restTemplate.getForEntity(baseUrl + "?text=fine&num=1", String.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isEqualTo("OK");

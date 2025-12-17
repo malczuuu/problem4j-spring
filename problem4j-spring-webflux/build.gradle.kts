@@ -96,6 +96,9 @@ tasks.withType<Jar>().configureEach {
             "Created-By" to "Gradle ${gradle.gradleVersion}",
         )
     }
+    from("../LICENSE") {
+        into("META-INF/")
+    }
 }
 
 // Disable doclint to avoid errors and warnings on missing JavaDoc comments.

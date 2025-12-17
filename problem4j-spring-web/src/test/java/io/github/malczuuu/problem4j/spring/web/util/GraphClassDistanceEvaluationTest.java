@@ -1,3 +1,17 @@
+/*
+ * Copyright (c) 2025 Damian Malczewski
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * SPDX-License-Identifier: MIT
+ */
 package io.github.malczuuu.problem4j.spring.web.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,7 +44,7 @@ class GraphClassDistanceEvaluationTest {
 
     @Test
     void givenSameClass_whenDistance_thenZero() {
-      GraphClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
+      ClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
 
       int distance = evaluation.calculate(Level2Class.class, Level2Class.class);
 
@@ -39,7 +53,7 @@ class GraphClassDistanceEvaluationTest {
 
     @Test
     void givenChildToObject_whenDistance_thenCorrectValue() {
-      GraphClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
+      ClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
 
       int distance = evaluation.calculate(Level2Class.class, Object.class);
 
@@ -48,8 +62,8 @@ class GraphClassDistanceEvaluationTest {
 
     @Test
     void givenLowMaxDepth_whenDistance_thenShortCircuitValue() {
-      GraphClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
-      GraphClassDistanceEvaluation limitedEvaluation = new GraphClassDistanceEvaluation(2);
+      ClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
+      ClassDistanceEvaluation limitedEvaluation = new GraphClassDistanceEvaluation(2);
 
       int distance = evaluation.calculate(ImplementerClass.class, Object.class);
       int limitedDistance = limitedEvaluation.calculate(ImplementerClass.class, Object.class);
@@ -60,7 +74,7 @@ class GraphClassDistanceEvaluationTest {
 
     @Test
     void givenChildToParent_whenDistance_thenCorrectValue() {
-      GraphClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
+      ClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
 
       int distance = evaluation.calculate(Level2Class.class, BaseClass.class);
 
@@ -69,7 +83,7 @@ class GraphClassDistanceEvaluationTest {
 
     @Test
     void givenChildToImmediateParent_whenDistance_thenOne() {
-      GraphClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
+      ClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
 
       int distance = evaluation.calculate(Level2Class.class, Level1Class.class);
 
@@ -78,7 +92,7 @@ class GraphClassDistanceEvaluationTest {
 
     @Test
     void givenClassToImmediateObject_whenDistance_thenOne() {
-      GraphClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
+      ClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
 
       int distance = evaluation.calculate(BaseClass.class, Object.class);
 
@@ -87,7 +101,7 @@ class GraphClassDistanceEvaluationTest {
 
     @Test
     void givenClassToItselfAsObject_whenDistance_thenZero() {
-      GraphClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
+      ClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
 
       int distance = evaluation.calculate(Object.class, Object.class);
 
@@ -100,7 +114,7 @@ class GraphClassDistanceEvaluationTest {
 
     @Test
     void givenSameInterface_whenDistance_thenZero() {
-      GraphClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
+      ClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
 
       int distance = evaluation.calculate(Level2Interface.class, Level2Interface.class);
 
@@ -109,7 +123,7 @@ class GraphClassDistanceEvaluationTest {
 
     @Test
     void givenSubInterfaceToSuperInterface_whenDistance_thenCorrectValue() {
-      GraphClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
+      ClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
 
       int distance = evaluation.calculate(Level2Interface.class, BaseInterface.class);
 
@@ -118,7 +132,7 @@ class GraphClassDistanceEvaluationTest {
 
     @Test
     void givenSubInterfaceToImmediateSuperInterface_whenDistance_thenOne() {
-      GraphClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
+      ClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
 
       int distance = evaluation.calculate(Level2Interface.class, Level1Interface.class);
 
@@ -132,7 +146,7 @@ class GraphClassDistanceEvaluationTest {
     @Test
     void givenImplementerToInterface_whenDistance_thenCorrectValue() {
       // ImplementerClass -> Level2Interface -> Level1Interface -> BaseInterface
-      GraphClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
+      ClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
 
       int distance = evaluation.calculate(ImplementerClass.class, BaseInterface.class);
 
@@ -141,7 +155,7 @@ class GraphClassDistanceEvaluationTest {
 
     @Test
     void givenImplementerToImmediateInterface_whenDistance_thenOne() {
-      GraphClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
+      ClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
 
       int distance = evaluation.calculate(ImplementerClass.class, Level2Interface.class);
 
@@ -150,7 +164,7 @@ class GraphClassDistanceEvaluationTest {
 
     @Test
     void givenClassImplementingInterfaceToInterface_whenDistance_thenCorrectValue() {
-      GraphClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
+      ClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
 
       int distance = evaluation.calculate(Level2Class.class, Cloneable.class);
 
@@ -159,7 +173,7 @@ class GraphClassDistanceEvaluationTest {
 
     @Test
     void givenUnrelatedClassToClass_whenDistance_thenMaxValue() {
-      GraphClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
+      ClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
 
       int distance = evaluation.calculate(Level2Class.class, UnrelatedClass.class);
 
@@ -168,7 +182,7 @@ class GraphClassDistanceEvaluationTest {
 
     @Test
     void givenParentToChildClass_whenDistance_thenMaxValue() {
-      GraphClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
+      ClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
 
       int distance = evaluation.calculate(BaseClass.class, Level2Class.class);
 
@@ -177,7 +191,7 @@ class GraphClassDistanceEvaluationTest {
 
     @Test
     void givenUnrelatedClassToInterface_whenDistance_thenMaxValue() {
-      GraphClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
+      ClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
 
       int distance = evaluation.calculate(Level2Class.class, UnrelatedInterface.class);
 
@@ -186,7 +200,7 @@ class GraphClassDistanceEvaluationTest {
 
     @Test
     void givenClassToUnrelatedInterface_whenDistance_thenMaxValue() {
-      GraphClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
+      ClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
 
       int distance = evaluation.calculate(ImplementerClass.class, UnrelatedInterface.class);
 
@@ -195,7 +209,7 @@ class GraphClassDistanceEvaluationTest {
 
     @Test
     void givenInterfaceToImplementingClass_whenDistance_thenMaxValue() {
-      GraphClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
+      ClassDistanceEvaluation evaluation = new GraphClassDistanceEvaluation();
 
       int distance = evaluation.calculate(BaseInterface.class, ImplementerClass.class);
 
@@ -274,7 +288,7 @@ class GraphClassDistanceEvaluationTest {
 
     @Test
     void givenSuperclassExcluded_whenSearchingSuperclassHierarchy_thenMaxValue() {
-      GraphClassDistanceEvaluation evaluation =
+      ClassDistanceEvaluation evaluation =
           new GraphClassDistanceEvaluation(HierarchyTraversalMode.INTERFACES);
 
       int distance = evaluation.calculate(Level2Class.class, BaseClass.class);
@@ -284,7 +298,7 @@ class GraphClassDistanceEvaluationTest {
 
     @Test
     void givenSuperclassExcluded_butInterfaceMatchExists_thenStillFindInterfacePath() {
-      GraphClassDistanceEvaluation evaluation =
+      ClassDistanceEvaluation evaluation =
           new GraphClassDistanceEvaluation(HierarchyTraversalMode.INTERFACES);
 
       int distance = evaluation.calculate(ImplementerClass.class, BaseInterface.class);
@@ -294,7 +308,7 @@ class GraphClassDistanceEvaluationTest {
 
     @Test
     void givenInterfacesExcluded_whenSearchingInterfaceHierarchy_thenMaxValue() {
-      GraphClassDistanceEvaluation evaluation =
+      ClassDistanceEvaluation evaluation =
           new GraphClassDistanceEvaluation(HierarchyTraversalMode.SUPERCLASS);
 
       int distance = evaluation.calculate(ImplementerClass.class, BaseInterface.class);
@@ -304,7 +318,7 @@ class GraphClassDistanceEvaluationTest {
 
     @Test
     void givenInterfacesExcluded_butSuperclassMatchExists_thenStillFindSuperclassPath() {
-      GraphClassDistanceEvaluation evaluation =
+      ClassDistanceEvaluation evaluation =
           new GraphClassDistanceEvaluation(HierarchyTraversalMode.SUPERCLASS);
 
       int distance = evaluation.calculate(Level2Class.class, Level1Class.class);

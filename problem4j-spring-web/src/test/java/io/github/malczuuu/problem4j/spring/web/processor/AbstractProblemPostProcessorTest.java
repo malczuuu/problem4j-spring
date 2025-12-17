@@ -1,3 +1,17 @@
+/*
+ * Copyright (c) 2025 Damian Malczewski
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * SPDX-License-Identifier: MIT
+ */
 package io.github.malczuuu.problem4j.spring.web.processor;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -10,7 +24,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.util.StringUtils;
 
-class OverridingProblemPostProcessorTest {
+class AbstractProblemPostProcessorTest {
 
   @Test
   void shouldReturnSameProblemWhenNoOverrides() {
@@ -19,7 +33,7 @@ class OverridingProblemPostProcessorTest {
     ProblemContext context = ProblemContext.ofTraceId("trace-123");
     Problem problem = Problem.builder().type("bad_request").instance("instance-1").build();
 
-    OverridingProblemPostProcessor processor = new OverridingProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
     Problem result = processor.process(context, problem);
 
     assertThat(result).isSameAs(problem);
@@ -30,7 +44,7 @@ class OverridingProblemPostProcessorTest {
     PostProcessorSettings settings = getSettings("", null);
 
     Problem problem = Problem.builder().type("bad_request").instance("instance-1").build();
-    OverridingProblemPostProcessor processor = new OverridingProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
 
     Problem result = processor.process(null, problem);
 
@@ -42,7 +56,7 @@ class OverridingProblemPostProcessorTest {
     PostProcessorSettings settings = getSettings(null, "");
 
     Problem problem = Problem.builder().type("bad_request").instance("instance-1").build();
-    OverridingProblemPostProcessor processor = new OverridingProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
 
     Problem result = processor.process(null, problem);
 
@@ -55,7 +69,7 @@ class OverridingProblemPostProcessorTest {
 
     Problem problem = Problem.builder().type("bad_request").instance("instance-1").build();
 
-    OverridingProblemPostProcessor processor = new OverridingProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
     Problem result = processor.process(null, problem);
 
     assertThat(result).isEqualTo(problem.toBuilder().type("/errors/static").build());
@@ -67,7 +81,7 @@ class OverridingProblemPostProcessorTest {
 
     Problem problem = Problem.builder().type("bad_request").instance("instance-1").build();
 
-    OverridingProblemPostProcessor processor = new OverridingProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
     Problem result = processor.process(null, problem);
 
     assertThat(result).isEqualTo(problem.toBuilder().instance("/instances/static").build());
@@ -79,7 +93,7 @@ class OverridingProblemPostProcessorTest {
 
     Problem problem = Problem.builder().type("bad_request").instance("instance-1").build();
 
-    OverridingProblemPostProcessor processor = new OverridingProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
     Problem result = processor.process(null, problem);
 
     assertThat(result).isEqualTo(problem.toBuilder().type("/errors/bad_request").build());
@@ -91,7 +105,7 @@ class OverridingProblemPostProcessorTest {
 
     Problem problem = Problem.builder().type("").instance("instance-1").build();
 
-    OverridingProblemPostProcessor processor = new OverridingProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
     Problem result = processor.process(null, problem);
 
     assertThat(result).isSameAs(problem);
@@ -104,7 +118,7 @@ class OverridingProblemPostProcessorTest {
     ProblemContext context = ProblemContext.ofTraceId("trace-abc");
     Problem problem = Problem.builder().type("bad_request").instance("instance-1").build();
 
-    OverridingProblemPostProcessor processor = new OverridingProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
     Problem result = processor.process(context, problem);
 
     assertThat(result).isEqualTo(problem.toBuilder().instance("trace:trace-abc").build());
@@ -117,7 +131,7 @@ class OverridingProblemPostProcessorTest {
     ProblemContext context = ProblemContext.empty();
     Problem problem = Problem.builder().type("bad_request").instance("instance-1").build();
 
-    OverridingProblemPostProcessor processor = new OverridingProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
     Problem result = processor.process(context, problem);
 
     assertThat(result).isSameAs(problem);
@@ -130,7 +144,7 @@ class OverridingProblemPostProcessorTest {
     ProblemContext context = ProblemContext.ofTraceId("");
     Problem problem = Problem.builder().type("bad_request").instance("instance-1").build();
 
-    OverridingProblemPostProcessor processor = new OverridingProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
     Problem result = processor.process(context, problem);
 
     assertThat(result).isSameAs(problem);
@@ -142,7 +156,7 @@ class OverridingProblemPostProcessorTest {
 
     Problem problem = Problem.builder().type("bad_request").instance("inst-777").build();
 
-    OverridingProblemPostProcessor processor = new OverridingProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
     Problem result = processor.process(null, problem);
 
     assertThat(result).isEqualTo(problem.toBuilder().instance("original:inst-777").build());
@@ -154,7 +168,7 @@ class OverridingProblemPostProcessorTest {
 
     Problem problem = Problem.builder().type("bad_request").build();
 
-    OverridingProblemPostProcessor processor = new OverridingProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
     Problem result = processor.process(null, problem);
 
     assertThat(result).isSameAs(problem);
@@ -166,7 +180,7 @@ class OverridingProblemPostProcessorTest {
 
     Problem problem = Problem.builder().type("bad_request").instance("").build();
 
-    OverridingProblemPostProcessor processor = new OverridingProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
     Problem result = processor.process(null, problem);
 
     assertThat(result).isSameAs(problem);
@@ -194,7 +208,7 @@ class OverridingProblemPostProcessorTest {
 
     ProblemContext context = ProblemContext.ofTraceId(contextTraceId);
 
-    OverridingProblemPostProcessor processor = new OverridingProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
     Problem result = processor.process(context, problem);
 
     if (StringUtils.hasLength(expectedResult)) {
@@ -207,7 +221,7 @@ class OverridingProblemPostProcessorTest {
   @Test
   void givenOverrideWithUnknownPlaceholders_shouldRemoveUnknownPlaceholders() {
     PostProcessorSettings settings = getSettings("type-{unknown}", "instance-{unknown}");
-    OverridingProblemPostProcessor processor = new OverridingProblemPostProcessor(settings);
+    ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
 
     Problem problem = Problem.builder().type("bad_request").instance("instance-1").build();
     Problem result = processor.process(ProblemContext.ofTraceId("x"), problem);

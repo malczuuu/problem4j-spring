@@ -1,3 +1,17 @@
+/*
+ * Copyright (c) 2025 Damian Malczewski
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * SPDX-License-Identifier: MIT
+ */
 package io.github.malczuuu.problem4j.spring.webflux.integration;
 
 import static io.github.malczuuu.problem4j.spring.web.util.ProblemSupport.ERRORS_EXTENSION;
@@ -14,6 +28,7 @@ import java.util.Map;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -253,25 +268,114 @@ class ValidateMethodArgumentFailingWebFluxTest {
                         e -> assertThat(((Map<?, ?>) e).get("field")).isEqualTo("secondParam")));
   }
 
-  /**
-   * @see ValidateMethodArgumentController#validateTwoArguments(String, String)
-   */
-  @Test
-  void givenBothParamsValid_shouldReturnOk() {
+  @ParameterizedTest
+  @CsvSource({
+    "/validate-parameter/query-object/annotated,toolong1,-1",
+    "/validate-parameter/query-object/unannotated,toolong1,-1",
+    "/validate-parameter/query-record/annotated,toolong1,-1",
+    "/validate-parameter/query-record/unannotated,toolong1,-1"
+  })
+  void givenQuerySimpleObjectsWithViolations_shouldReturnValidationProblem(
+      String baseUrl, String text, String number) {
     webTestClient
         .get()
         .uri(
             uriBuilder ->
                 uriBuilder
-                    .path("/validate-parameter/two-arg")
-                    .queryParam("first", "validVal")
-                    .queryParam("second", "anything")
+                    .path(baseUrl)
+                    .queryParam("text", text)
+                    .queryParam("number", number)
                     .build())
         .exchange()
         .expectStatus()
-        .isOk()
-        .expectBody(String.class)
+        .isBadRequest()
+        .expectHeader()
+        .contentType(Problem.CONTENT_TYPE)
+        .expectBody(Problem.class)
         .value(v -> assertThat(v).isNotNull())
-        .isEqualTo("OK");
+        .value(
+            problem -> {
+              assertThat(problem.getType()).isEqualTo(Problem.BLANK_TYPE);
+              assertThat(problem.getTitle()).isEqualTo(ProblemStatus.BAD_REQUEST.getTitle());
+              assertThat(problem.getStatus()).isEqualTo(ProblemStatus.BAD_REQUEST.getStatus());
+
+              assertThat(problem.getExtensionValue(ERRORS_EXTENSION))
+                  .asInstanceOf(LIST)
+                  .containsExactlyInAnyOrder(
+                      Map.of("field", "text", "error", "size must be between 1 and 5"),
+                      Map.of("field", "number", "error", "must be greater than 0"));
+            });
+  }
+
+  @ParameterizedTest
+  @CsvSource({
+    "/validate-parameter/query-bind-object/annotated,toolong1,-1",
+    "/validate-parameter/query-bind-object/unannotated,toolong1,-1",
+    "/validate-parameter/query-bind-record/annotated,toolong1,-1",
+    "/validate-parameter/query-bind-record/unannotated,toolong1,-1"
+  })
+  void givenQueryBindObjectsWithViolations_shouldReturnValidationProblem(
+      String baseUrl, String text, String num) {
+    webTestClient
+        .get()
+        .uri(
+            uriBuilder ->
+                uriBuilder.path(baseUrl).queryParam("text", text).queryParam("num", num).build())
+        .exchange()
+        .expectStatus()
+        .isBadRequest()
+        .expectHeader()
+        .contentType(Problem.CONTENT_TYPE)
+        .expectBody(Problem.class)
+        .value(v -> assertThat(v).isNotNull())
+        .value(
+            problem -> {
+              assertThat(problem.getType()).isEqualTo(Problem.BLANK_TYPE);
+              assertThat(problem.getTitle()).isEqualTo(ProblemStatus.BAD_REQUEST.getTitle());
+              assertThat(problem.getStatus()).isEqualTo(ProblemStatus.BAD_REQUEST.getStatus());
+
+              assertThat(problem.getExtensionValue(ERRORS_EXTENSION))
+                  .asInstanceOf(LIST)
+                  .containsExactlyInAnyOrder(
+                      Map.of("field", "text", "error", "size must be between 1 and 5"),
+                      Map.of("field", "num", "error", "must be greater than 0"));
+            });
+  }
+
+  // No methods for Object-based binding with multiple ctors as it's not supported by Spring. It
+  // works only for records, and it will use record's canonical ctor.
+
+  @ParameterizedTest
+  @CsvSource({
+    "/validate-parameter/query-bind-ctors-record/annotated,toolong1,-1",
+    "/validate-parameter/query-bind-ctors-record/unannotated,toolong1,-1"
+  })
+  void givenQueryBindObjectsWithMultipleCtorsWithViolations_shouldReturnValidationProblem(
+      String baseUrl, String text, String num) {
+
+    webTestClient
+        .get()
+        .uri(
+            uriBuilder ->
+                uriBuilder.path(baseUrl).queryParam("text", text).queryParam("num", num).build())
+        .exchange()
+        .expectStatus()
+        .isBadRequest()
+        .expectHeader()
+        .contentType(Problem.CONTENT_TYPE)
+        .expectBody(Problem.class)
+        .value(v -> assertThat(v).isNotNull())
+        .value(
+            problem -> {
+              assertThat(problem.getType()).isEqualTo(Problem.BLANK_TYPE);
+              assertThat(problem.getTitle()).isEqualTo(ProblemStatus.BAD_REQUEST.getTitle());
+              assertThat(problem.getStatus()).isEqualTo(ProblemStatus.BAD_REQUEST.getStatus());
+
+              assertThat(problem.getExtensionValue(ERRORS_EXTENSION))
+                  .asInstanceOf(LIST)
+                  .containsExactlyInAnyOrder(
+                      Map.of("field", "text", "error", "size must be between 1 and 5"),
+                      Map.of("field", "num", "error", "must be greater than 0"));
+            });
   }
 }
