@@ -25,8 +25,6 @@ import io.github.malczuuu.problem4j.spring.web.format.ProblemFormat;
 import io.github.malczuuu.problem4j.spring.web.model.Violation;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.RecordComponent;
 import java.util.ArrayList;
@@ -41,6 +39,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.method.MethodValidationResult;
 import org.springframework.validation.method.ParameterValidationResult;
+import org.springframework.web.bind.annotation.BindParam;
 
 /**
  * <b>For internal use only.</b>
@@ -54,22 +53,6 @@ import org.springframework.validation.method.ParameterValidationResult;
  * @implNote This is an internal API and may change at any time.
  */
 public class ViolationResolver {
-
-  /**
-   * Fully qualified class name of {@code BindParam} annotation.
-   *
-   * <p>Cannot not use actual {@code BindParam} for backward compatibility with older versions as
-   * that annotation was introduced in Spring Framework 6.1.
-   */
-  private static final String BIND_PARAM_FQCN = "org.springframework.web.bind.annotation.BindParam";
-
-  /**
-   * Name of the method returning the value of {@code BindParam} annotation.
-   *
-   * <p>Cannot not use actual {@code BindParam} for backward compatibility with older versions as
-   * that annotation was introduced in Spring Framework 6.1.
-   */
-  private static final String BIND_PARAM_VALUE_METHOD = "value";
 
   private final ProblemFormat problemFormat;
 
@@ -224,12 +207,11 @@ public class ViolationResolver {
   /**
    * Extracts parameter metadata from the given constructor.
    *
-   * <p>Each constructor parameter is added with its parameter name. {@code BindParam} is taken into
+   * <p>Each constructor parameter is added with its parameter name. {@link BindParam} is taken into
    * account if present.
    *
    * @param constructor the constructor to inspect
    * @return an unmodifiable map of parameter names to their bound names
-   * @see org.springframework.web.bind.annotation.BindParam
    */
   private Map<String, String> getConstructorParameterMetadata(Constructor<?> constructor) {
     Annotation[][] annotations = constructor.getParameterAnnotations();
@@ -241,8 +223,8 @@ public class ViolationResolver {
       metadata.put(rawParamName, rawParamName);
 
       for (Annotation annotation : annotations[i]) {
-        if (isBindParam(annotation)) {
-          findBindParamValue(annotation)
+        if (annotation instanceof BindParam bindParam) {
+          findBindParamValue(bindParam)
               .ifPresent(bindParamName -> metadata.put(rawParamName, bindParamName));
         }
       }
@@ -251,35 +233,13 @@ public class ViolationResolver {
   }
 
   /**
-   * Cannot not use actual {@code BindParam} for backward compatibility with older versions as that
-   * annotation was introduced in Spring Framework 6.1.
-   *
-   * @param annotation the annotation to check
-   * @return {@code true} if the annotation is a {@code BindParam}, {@code false} otherwise
-   * @see org.springframework.web.bind.annotation.BindParam
-   */
-  private boolean isBindParam(Annotation annotation) {
-    return annotation.annotationType().getName().equals(BIND_PARAM_FQCN);
-  }
-
-  /**
-   * Extracts the {@code value} attribute from a {@code BindParam} annotation via reflection.
-   *
-   * <p>Cannot not use actual {@code BindParam} for backward compatibility with older versions as
-   * that annotation was introduced in Spring Framework 6.1.
+   * Returns the {@code value} of a {@link BindParam} annotation if present and {@code value}
+   * non-empty.
    *
    * @param annotation the annotation to inspect
    * @return an {@code Optional} containing {@code BindParam.value} if <b>present and non-empty</b>
-   * @see org.springframework.web.bind.annotation.BindParam
    */
-  private Optional<String> findBindParamValue(Annotation annotation) {
-    try {
-      Method method = annotation.getClass().getMethod(BIND_PARAM_VALUE_METHOD);
-      Object value = method.invoke(annotation);
-      return Optional.ofNullable(value).map(Object::toString).filter(StringUtils::hasLength);
-    } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {
-      // ignore reflective call issues
-    }
-    return Optional.empty();
+  private Optional<String> findBindParamValue(BindParam annotation) {
+    return Optional.of(annotation.value()).map(Object::toString).filter(StringUtils::hasLength);
   }
 }
