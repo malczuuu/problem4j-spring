@@ -90,7 +90,7 @@
 
 ## Additional Notes / Quick Reference
 
-- Always run `./gradlew clean build` before pushing changes.
+- Always run `./gradlew build` before pushing changes.
 - Ensure all tests pass locally and that Spotless does not report errors.
 - For publishing, set required environment variables and use the documented Gradle tasks.
 - Check CI status on GitHub after pushing/PR.

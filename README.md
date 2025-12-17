@@ -214,13 +214,13 @@ compiled using a **Java 17 toolchain**, so the produced artifacts are compatible
 Java version Gradle runs on.
 
 ```bash
-./gradlew clean build
+./gradlew build
 ```
 
 To execute tests use `test` task.
 
 ```bash
-./gradlew clean test
+./gradlew test
 ```
 
 To format the code according to the style defined in [`build.gradle.kts`](./build.gradle.kts) rules use `spotlessApply`
