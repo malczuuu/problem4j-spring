@@ -31,6 +31,9 @@
 #   Example: tagrelease --no-tag-prefix 1.2.3
 #       Which creates tag '1.2.3' with message 'Release 1.2.3'.
 #
+#   On success, the script prints:
+#       info: successfully created annotated tag '<tag_name>', with message '<tag_message>'
+#
 ###############################################################################
 
 info() {
