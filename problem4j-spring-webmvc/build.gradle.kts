@@ -34,6 +34,10 @@ dependencies {
     testImplementation(libs.spring.boot.starter.webmvc)
     testImplementation(libs.spring.boot.validation)
 
+    // Included because TestRestTemplate requires it if used with actual web environment in tests. Not migrating to
+    // WebTestClient either for easier merges with 1.x versions.
+    testImplementation(libs.spring.boot.restclient)
+
     testRuntimeOnly(libs.junit.platform.launcher)
 }
 

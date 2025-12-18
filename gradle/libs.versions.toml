@@ -4,7 +4,7 @@ problem4j-core = "1.2.5"
 problem4j-jackson = "1.2.5"
 problem4j-jackson3 = "1.2.5"
 spotless = "8.1.0"
-spring-boot = "4.0.0"
+spring-boot = "4.0.1"
 
 [plugins]
 nmcp = { id = "com.gradleup.nmcp", version.ref = "nmcp" }
@@ -28,6 +28,7 @@ spring-boot-validation = { module = "org.springframework.boot:spring-boot-valida
 spring-boot-web-server = { module = "org.springframework.boot:spring-boot-web-server" }
 spring-boot-webflux = { module = "org.springframework.boot:spring-boot-webflux" }
 spring-boot-webmvc = { module = "org.springframework.boot:spring-boot-webmvc" }
+spring-boot-restclient = { module = "org.springframework.boot:spring-boot-restclient" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 spring-boot-starter-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux" }
 spring-boot-starter-webflux-test = { module = "org.springframework.boot:spring-boot-starter-webflux-test" }
