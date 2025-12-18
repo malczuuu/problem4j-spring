@@ -234,7 +234,7 @@ To publish the built artifacts to local Maven repository, run following command,
 version. By default, the version is derived from git commit hash.
 
 ```bash
-./gradlew -Pversion=XXXX clean build publishToMavenLocal
+./gradlew -Pversion=XXXX publishToMavenLocal
 ```
 
 </details>
