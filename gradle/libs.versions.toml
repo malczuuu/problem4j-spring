@@ -4,7 +4,7 @@ problem4j-core = "1.2.5"
 problem4j-jackson = "1.2.5"
 problem4j-jackson3 = "1.2.5"
 spotless = "8.1.0"
-spring-boot = "4.0.0"
+spring-boot = "4.0.1"
 
 [plugins]
 nmcp = { id = "com.gradleup.nmcp", version.ref = "nmcp" }
