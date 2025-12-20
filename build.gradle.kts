@@ -1,48 +1,10 @@
 import com.diffplug.spotless.LineEnding
 
 plugins {
+    id("internal.convention-common")
     alias(libs.plugins.nmcp).apply(false)
     alias(libs.plugins.nmcp.aggregation)
     alias(libs.plugins.spotless)
-}
-
-subprojects {
-    group = "io.github.malczuuu.problem4j"
-
-    // In order to avoid hardcoding snapshot versions, version is derived from the current Git commit hash. For CI/CD
-    // add -Pversion={releaseVersion} parameter to match Git tag.
-    if (version == Project.DEFAULT_VERSION) {
-        version = getSnapshotVersion(rootProject.rootDir)
-    }
-
-    // Utility to clean up old jars as they can clutter due to versioning by Git commit hashes.
-    // Usage:
-    //   ./gradlew cleanLibs
-    tasks.register("cleanLibs") {
-        description = "Deletes build/libs directory."
-        group = "build"
-        delete(layout.buildDirectory.dir("libs"))
-    }
-
-    // Usage:
-    //   ./gradlew printVersion
-    tasks.register<DefaultTask>("printVersion") {
-        description = "Prints the current project version to the console."
-        group = "help"
-
-        val projectName = project.name
-        val projectVersion = project.version.toString()
-
-        doLast {
-            println("$projectName version: $projectVersion")
-        }
-    }
-}
-
-allprojects {
-    repositories {
-        mavenCentral()
-    }
 }
 
 dependencies {
@@ -81,7 +43,7 @@ spotless {
     }
 
     kotlinGradle {
-        target("**/*.gradle.kts")
+        target("*.gradle.kts", "problem4j-*/*.kts", "buildSrc/*.kts", "buildSrc/src/**/*.kts")
 
         ktlint("1.8.0").editorConfigOverride(mapOf("max_line_length" to "120"))
         endWithNewline()

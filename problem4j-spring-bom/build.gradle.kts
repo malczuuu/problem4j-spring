@@ -1,7 +1,6 @@
 plugins {
-    id("java-platform")
-    id("maven-publish")
-    id("signing")
+    id("internal.convention-java-platform")
+    id("internal.convention-publishing")
     alias(libs.plugins.nmcp)
 }
 
@@ -15,49 +14,8 @@ dependencies {
     }
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            groupId = project.group.toString()
-            artifactId = project.name
-            version = project.version.toString()
-            from(components["javaPlatform"])
-
-            pom {
-                name = "Problem4J Spring BOM"
-                description = "BOM of Spring integration for library implementing RFC7807"
-                url = "https://github.com/malczuuu/${rootProject.name}"
-                inceptionYear = "2025"
-                licenses {
-                    license {
-                        name = "MIT License"
-                        url = "https://opensource.org/license/MIT"
-                    }
-                }
-                developers {
-                    developer {
-                        id = "malczuuu"
-                        name = "Damian Malczewski"
-                        url = "https://github.com/malczuuu"
-                    }
-                }
-                issueManagement {
-                    system = "GitHub Issues"
-                    url = "https://github.com/malczuuu/${rootProject.name}/issues"
-                }
-                scm {
-                    connection = "scm:git:https://github.com/malczuuu/${rootProject.name}.git"
-                    developerConnection = "scm:git:git@github.com:malczuuu/${rootProject.name}.git"
-                    url = "https://github.com/malczuuu/${rootProject.name}"
-                }
-            }
-        }
-    }
-}
-
-signing {
-    if (project.hasProperty("sign")) {
-        useInMemoryPgpKeys(System.getenv("SIGNING_KEY"), System.getenv("SIGNING_PASSWORD"))
-        sign(publishing.publications["maven"])
-    }
+// see buildSrc/src/main/kotlin/internal.convention-publishing.gradle.kts
+internalPublishing {
+    displayName = "Problem4J Spring BOM"
+    description = "BOM of Spring integration for library implementing RFC7807"
 }

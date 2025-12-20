@@ -12,11 +12,10 @@
  *
  * SPDX-License-Identifier: MIT
  */
+package internal
+
 import java.io.File
 import org.gradle.api.Project
-import org.gradle.api.logging.Logging
-
-private val logger = Logging.getLogger("Versioning")
 
 /**
  * Returns a snapshot version string based on the abbreviated Git commit hash of `HEAD`. On error,
@@ -24,12 +23,10 @@ private val logger = Logging.getLogger("Versioning")
  *
  * It does not use JGit library but instead reads plain `HEAD` and other files within `.git/`
  * directory, to not call any external process. Falls back to `Project.DEFAULT_VERSION`.
- *
- * @param projectRootDir the root directory of the project (containing .git)
  */
-fun getSnapshotVersion(projectRootDir: File): String {
+fun Project.findSnapshotVersion(): String {
   return try {
-    val gitDir = File(projectRootDir, ".git")
+    val gitDir = File(this.rootDir, ".git")
     if (!gitDir.exists()) {
       logger.info(".git directory not found, using {} version", Project.DEFAULT_VERSION)
       return Project.DEFAULT_VERSION
@@ -53,6 +50,7 @@ fun getSnapshotVersion(projectRootDir: File): String {
               readPackedRef(gitDir, refPath)
             }
           }
+
           headContent.matches(Regex("[0-9a-f]{40}")) -> headContent
           else -> null
         }
