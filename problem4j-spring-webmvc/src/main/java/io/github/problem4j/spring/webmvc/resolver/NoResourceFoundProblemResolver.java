@@ -16,8 +16,8 @@ package io.github.problem4j.spring.webmvc.resolver;
 
 import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
-import io.github.problem4j.core.ProblemStatus;
 import io.github.problem4j.core.ProblemContext;
+import io.github.problem4j.core.ProblemStatus;
 import io.github.problem4j.spring.web.format.ProblemFormat;
 import io.github.problem4j.spring.web.resolver.AbstractProblemResolver;
 import org.springframework.http.HttpHeaders;

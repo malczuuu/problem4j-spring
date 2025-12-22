@@ -21,9 +21,9 @@ import static org.springframework.web.context.request.RequestAttributes.SCOPE_RE
 
 import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
+import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.core.ProblemStatus;
 import io.github.problem4j.spring.web.ProblemResolverStore;
-import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.spring.web.processor.ProblemPostProcessor;
 import java.util.List;
 import org.slf4j.Logger;

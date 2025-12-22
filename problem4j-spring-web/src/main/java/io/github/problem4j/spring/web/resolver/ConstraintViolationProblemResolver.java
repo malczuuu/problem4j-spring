@@ -19,8 +19,8 @@ import static io.github.problem4j.spring.web.util.ProblemSupport.VALIDATION_FAIL
 
 import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
-import io.github.problem4j.core.ProblemStatus;
 import io.github.problem4j.core.ProblemContext;
+import io.github.problem4j.core.ProblemStatus;
 import io.github.problem4j.spring.web.format.ProblemFormat;
 import io.github.problem4j.spring.web.model.Violation;
 import jakarta.validation.ConstraintViolation;

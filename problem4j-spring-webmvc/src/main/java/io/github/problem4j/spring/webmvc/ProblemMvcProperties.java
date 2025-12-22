@@ -101,8 +101,8 @@ public class ProblemMvcProperties {
    * {@code ProblemContext}.
    *
    * @return the configuration for the {@code ProblemContextMvcFilter}
+   * @see io.github.problem4j.core.ProblemContext
    * @see io.github.problem4j.spring.webmvc.context.ProblemContextMvcFilter
-   * @see io.github.problem4j.spring.web.context.ProblemContext
    */
   public ProblemContextFilter getProblemContextFilter() {
     return problemContextFilter;

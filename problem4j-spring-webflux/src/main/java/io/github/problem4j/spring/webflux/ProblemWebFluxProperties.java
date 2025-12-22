@@ -103,8 +103,8 @@ public class ProblemWebFluxProperties {
    * with {@code ProblemContext}.
    *
    * @return the configuration for the {@code ProblemContextWebFluxFilter}
+   * @see io.github.problem4j.core.ProblemContext
    * @see io.github.problem4j.spring.webflux.context.ProblemContextWebFluxFilter
-   * @see io.github.problem4j.spring.web.context.ProblemContext
    */
   public ProblemContextFilter getProblemContextFilter() {
     return problemContextFilter;

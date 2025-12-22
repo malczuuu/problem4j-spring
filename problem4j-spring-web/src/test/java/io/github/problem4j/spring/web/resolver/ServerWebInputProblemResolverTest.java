@@ -18,8 +18,8 @@ import static io.github.problem4j.spring.web.util.ProblemSupport.resolveStatus;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.problem4j.core.Problem;
-import io.github.problem4j.core.ProblemStatus;
 import io.github.problem4j.core.ProblemContext;
+import io.github.problem4j.core.ProblemStatus;
 import io.github.problem4j.spring.web.format.IdentityProblemFormat;
 import io.github.problem4j.spring.web.util.ProblemSupport;
 import java.lang.reflect.Method;

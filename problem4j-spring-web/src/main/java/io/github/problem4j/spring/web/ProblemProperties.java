@@ -115,7 +115,6 @@ public class ProblemProperties implements ProblemContextSettings, PostProcessorS
    * original problem type will be preserved.
    *
    * @return the configured type override string, or {@code null} if not set
-   * @see io.github.problem4j.spring.web.context.ProblemContext
    */
   @Override
   public String getTypeOverride() {
@@ -139,7 +138,6 @@ public class ProblemProperties implements ProblemContextSettings, PostProcessorS
    * configuration, along with {@link #tracingHeaderName}, enables this feature.
    *
    * @return the configured instance override string, or {@code null} if not set
-   * @see io.github.problem4j.spring.web.context.ProblemContext
    */
   @Override
   public String getInstanceOverride() {
@@ -153,17 +151,6 @@ public class ProblemProperties implements ProblemContextSettings, PostProcessorS
    */
   public ResolverCaching getResolverCaching() {
     return resolverCaching;
-  }
-
-  /**
-   * Returns the caching configuration.
-   *
-   * @return caching settings
-   * @deprecated as the method was named incorrectly, use {@link #getResolverCaching()}
-   */
-  @Deprecated(since = "1.0.2", forRemoval = true)
-  public ResolverCaching getCaching() {
-    return getResolverCaching();
   }
 
   /**
