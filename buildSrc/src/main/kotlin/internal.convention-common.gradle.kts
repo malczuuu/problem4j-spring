@@ -9,7 +9,6 @@ if (version == Project.DEFAULT_VERSION) {
 }
 
 repositories {
-    mavenLocal()
     mavenCentral()
 }
 
