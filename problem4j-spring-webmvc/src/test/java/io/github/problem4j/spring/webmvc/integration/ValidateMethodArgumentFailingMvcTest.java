@@ -20,8 +20,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.InstanceOfAssertFactories.LIST;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.core.ProblemStatus;
+import io.github.problem4j.core.Problem;
+import io.github.problem4j.core.ProblemStatus;
 import io.github.problem4j.spring.webmvc.app.MvcTestApp;
 import java.util.List;
 import java.util.Map;

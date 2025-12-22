@@ -14,9 +14,9 @@
  */
 package io.github.problem4j.spring.webmvc.app;
 
-import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.core.ProblemBuilder;
-import io.github.problem4j.spring.web.context.ProblemContext;
+import io.github.problem4j.core.Problem;
+import io.github.problem4j.core.ProblemBuilder;
+import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.spring.web.resolver.ProblemResolver;
 import io.github.problem4j.spring.webmvc.app.problem.ResolvableException;
 import org.springframework.http.HttpHeaders;

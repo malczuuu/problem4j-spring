@@ -14,7 +14,7 @@
  */
 package io.github.problem4j.spring.webmvc;
 
-import static io.github.problem4j.spring.web.context.ContextSupport.TRACE_ID;
+import static io.github.problem4j.spring.web.context.AttributeSupport.TRACE_ID;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
 import org.slf4j.Logger;

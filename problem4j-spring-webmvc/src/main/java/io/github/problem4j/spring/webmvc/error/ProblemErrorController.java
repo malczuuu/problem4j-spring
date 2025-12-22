@@ -14,10 +14,10 @@
  */
 package io.github.problem4j.spring.webmvc.error;
 
-import static io.github.problem4j.spring.web.context.ContextSupport.PROBLEM_CONTEXT;
+import static io.github.problem4j.spring.web.context.AttributeSupport.PROBLEM_CONTEXT;
 
-import io.github.malczuuu.problem4j.core.Problem;
-import io.github.problem4j.spring.web.context.ProblemContext;
+import io.github.problem4j.core.Problem;
+import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.spring.web.processor.ProblemPostProcessor;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
@@ -69,7 +69,7 @@ public class ProblemErrorController extends AbstractErrorController {
 
     ProblemContext context = (ProblemContext) request.getAttribute(PROBLEM_CONTEXT);
     if (context == null) {
-      context = ProblemContext.empty();
+      context = ProblemContext.create();
     }
 
     Problem problem = Problem.builder().status(status.value()).build();

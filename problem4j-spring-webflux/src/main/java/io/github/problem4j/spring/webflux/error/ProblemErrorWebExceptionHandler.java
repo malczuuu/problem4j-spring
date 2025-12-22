@@ -14,13 +14,13 @@
  */
 package io.github.problem4j.spring.webflux.error;
 
-import static io.github.problem4j.spring.web.context.ContextSupport.PROBLEM_CONTEXT;
+import static io.github.problem4j.spring.web.context.AttributeSupport.PROBLEM_CONTEXT;
 import static io.github.problem4j.spring.web.util.ProblemSupport.resolveStatus;
 import static org.springframework.web.reactive.function.server.RequestPredicates.all;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
-import io.github.malczuuu.problem4j.core.Problem;
-import io.github.problem4j.spring.web.context.ProblemContext;
+import io.github.problem4j.core.Problem;
+import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.spring.web.processor.ProblemPostProcessor;
 import java.util.Optional;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;

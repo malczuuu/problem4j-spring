@@ -15,11 +15,13 @@
 package io.github.problem4j.spring.web.context;
 
 /**
- * Settings used when building a {@link ProblemContext} for incoming requests.
+ * Settings used when building a {@code ProblemContext} for incoming requests.
  *
  * <p>Provides access to infrastructure configuration such as the HTTP header name that carries a
  * trace identifier. Implementations are typically backed by external configuration (e.g. Spring
  * Boot properties) and are expected to be thread-safe.
+ *
+ * @see io.github.problem4j.core.ProblemContext
  */
 public interface ProblemContextSettings {
 

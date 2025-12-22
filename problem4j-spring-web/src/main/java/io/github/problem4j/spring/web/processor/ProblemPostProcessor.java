@@ -14,8 +14,8 @@
  */
 package io.github.problem4j.spring.web.processor;
 
-import io.github.malczuuu.problem4j.core.Problem;
-import io.github.problem4j.spring.web.context.ProblemContext;
+import io.github.problem4j.core.Problem;
+import io.github.problem4j.core.ProblemContext;
 
 /**
  * Defines a contract for post-processing {@link Problem} instances before they are returned in an

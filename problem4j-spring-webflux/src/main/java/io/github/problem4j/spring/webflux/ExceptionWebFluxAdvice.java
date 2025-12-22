@@ -14,16 +14,16 @@
  */
 package io.github.problem4j.spring.webflux;
 
-import static io.github.problem4j.spring.web.context.ContextSupport.PROBLEM_CONTEXT;
+import static io.github.problem4j.spring.web.context.AttributeSupport.PROBLEM_CONTEXT;
 import static io.github.problem4j.spring.web.util.ProblemSupport.resolveStatus;
 import static io.github.problem4j.spring.webflux.WebFluxAdviceSupport.logAdviceException;
 
-import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.core.ProblemBuilder;
-import io.github.malczuuu.problem4j.core.ProblemStatus;
+import io.github.problem4j.core.Problem;
+import io.github.problem4j.core.ProblemBuilder;
+import io.github.problem4j.core.ProblemContext;
+import io.github.problem4j.core.ProblemMapper;
+import io.github.problem4j.core.ProblemStatus;
 import io.github.problem4j.spring.web.ProblemResolverStore;
-import io.github.problem4j.spring.web.annotation.ProblemMappingProcessor;
-import io.github.problem4j.spring.web.context.ProblemContext;
 import io.github.problem4j.spring.web.processor.ProblemPostProcessor;
 import io.github.problem4j.spring.web.resolver.ProblemResolver;
 import java.util.List;
@@ -63,18 +63,18 @@ public class ExceptionWebFluxAdvice {
 
   private static final Logger log = LoggerFactory.getLogger(ExceptionWebFluxAdvice.class);
 
-  private final ProblemMappingProcessor problemMappingProcessor;
+  private final ProblemMapper problemMapper;
   private final ProblemResolverStore problemResolverStore;
   private final ProblemPostProcessor problemPostProcessor;
 
   private final List<AdviceWebFluxInspector> adviceWebFluxInspectors;
 
   public ExceptionWebFluxAdvice(
-      ProblemMappingProcessor problemMappingProcessor,
+      ProblemMapper problemMapper,
       ProblemResolverStore problemResolverStore,
       ProblemPostProcessor problemPostProcessor,
       List<AdviceWebFluxInspector> adviceWebFluxInspectors) {
-    this.problemMappingProcessor = problemMappingProcessor;
+    this.problemMapper = problemMapper;
     this.problemResolverStore = problemResolverStore;
     this.problemPostProcessor = problemPostProcessor;
     this.adviceWebFluxInspectors = adviceWebFluxInspectors;
@@ -87,7 +87,7 @@ public class ExceptionWebFluxAdvice {
   @ExceptionHandler(Exception.class)
   public Mono<ResponseEntity<Problem>> handleException(Exception ex, ServerWebExchange exchange) {
     ProblemContext context =
-        exchange.getAttributeOrDefault(PROBLEM_CONTEXT, ProblemContext.empty());
+        exchange.getAttributeOrDefault(PROBLEM_CONTEXT, ProblemContext.create());
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
@@ -113,8 +113,8 @@ public class ExceptionWebFluxAdvice {
   private ProblemBuilder getProblemBuilder(
       Exception ex, ProblemContext context, HttpHeaders headers) {
     ProblemBuilder builder;
-    if (problemMappingProcessor.isMappingCandidate(ex)) {
-      builder = problemMappingProcessor.toProblemBuilder(ex, context);
+    if (problemMapper.isMappingCandidate(ex)) {
+      builder = problemMapper.toProblemBuilder(ex, context);
     } else {
       Optional<ProblemResolver> optionalResolver = problemResolverStore.findResolver(ex.getClass());
       if (optionalResolver.isPresent()) {

@@ -19,8 +19,8 @@ import static io.github.problem4j.spring.web.util.ProblemSupport.VALIDATION_FAIL
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.InstanceOfAssertFactories.LIST;
 
-import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.core.ProblemStatus;
+import io.github.problem4j.core.Problem;
+import io.github.problem4j.core.ProblemStatus;
 import io.github.problem4j.spring.webflux.app.WebFluxTestApp;
 import io.github.problem4j.spring.webflux.app.rest.ValidateMethodArgumentController;
 import java.util.List;

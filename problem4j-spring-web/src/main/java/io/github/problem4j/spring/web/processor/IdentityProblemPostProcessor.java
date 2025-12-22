@@ -14,8 +14,8 @@
  */
 package io.github.problem4j.spring.web.processor;
 
-import io.github.malczuuu.problem4j.core.Problem;
-import io.github.problem4j.spring.web.context.ProblemContext;
+import io.github.problem4j.core.Problem;
+import io.github.problem4j.core.ProblemContext;
 
 /**
  * Convenience implementation for {@link ProblemPostProcessor} which doesn't transform input data.

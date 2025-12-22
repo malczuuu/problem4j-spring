@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import io.github.malczuuu.problem4j.core.Problem;
+import io.github.problem4j.core.Problem;
 import io.github.problem4j.spring.web.format.IdentityProblemFormat;
 import io.github.problem4j.spring.web.model.Violation;
 import java.lang.reflect.Method;

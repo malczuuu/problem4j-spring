@@ -14,15 +14,15 @@
  */
 package io.github.problem4j.spring.webflux;
 
-import static io.github.problem4j.spring.web.context.ContextSupport.PROBLEM_CONTEXT;
+import static io.github.problem4j.spring.web.context.AttributeSupport.PROBLEM_CONTEXT;
 import static io.github.problem4j.spring.web.util.ProblemSupport.resolveStatus;
 import static io.github.problem4j.spring.webflux.WebFluxAdviceSupport.logAdviceException;
 
-import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.core.ProblemBuilder;
-import io.github.malczuuu.problem4j.core.ProblemStatus;
+import io.github.problem4j.core.Problem;
+import io.github.problem4j.core.ProblemBuilder;
+import io.github.problem4j.core.ProblemStatus;
 import io.github.problem4j.spring.web.ProblemResolverStore;
-import io.github.problem4j.spring.web.context.ProblemContext;
+import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.spring.web.processor.ProblemPostProcessor;
 import java.util.List;
 import org.slf4j.Logger;
@@ -88,7 +88,7 @@ public class ProblemEnhancedWebFluxHandler extends ResponseEntityExceptionHandle
       HttpStatusCode status,
       ServerWebExchange exchange) {
     ProblemContext context =
-        exchange.getAttributeOrDefault(PROBLEM_CONTEXT, ProblemContext.empty());
+        exchange.getAttributeOrDefault(PROBLEM_CONTEXT, ProblemContext.create());
 
     headers = headers != null ? HttpHeaders.writableHttpHeaders(headers) : new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);

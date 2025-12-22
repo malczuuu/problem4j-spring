@@ -15,9 +15,8 @@
 package io.github.problem4j.spring.web;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import io.github.malczuuu.problem4j.jackson.ProblemModule;
-import io.github.problem4j.spring.web.annotation.DefaultProblemMappingProcessor;
-import io.github.problem4j.spring.web.annotation.ProblemMappingProcessor;
+import io.github.problem4j.core.ProblemMapper;
+import io.github.problem4j.jackson2.ProblemModule;
 import io.github.problem4j.spring.web.format.DefaultProblemFormat;
 import io.github.problem4j.spring.web.format.ProblemFormat;
 import io.github.problem4j.spring.web.processor.DefaultProblemPostProcessor;
@@ -43,14 +42,14 @@ import org.springframework.context.annotation.Import;
 public class ProblemAutoConfiguration {
 
   /**
-   * Provides a {@link ProblemMappingProcessor} if none is defined.
+   * Provides a {@link ProblemMapper} if none is defined.
    *
-   * @return a new {@link DefaultProblemMappingProcessor}
+   * @return a new {@link ProblemMapper}
    */
-  @ConditionalOnMissingBean(ProblemMappingProcessor.class)
+  @ConditionalOnMissingBean(ProblemMapper.class)
   @Bean
-  public ProblemMappingProcessor problemMappingProcessor() {
-    return new DefaultProblemMappingProcessor();
+  public ProblemMapper problemMapper() {
+    return ProblemMapper.create();
   }
 
   /**
@@ -84,7 +83,7 @@ public class ProblemAutoConfiguration {
    *
    * @param properties the configuration properties containing override templates and settings
    * @return a new {@link DefaultProblemPostProcessor} instance
-   * @see io.github.malczuuu.problem4j.core.Problem
+   * @see io.github.problem4j.core.Problem
    */
   @ConditionalOnMissingBean(ProblemPostProcessor.class)
   @Bean

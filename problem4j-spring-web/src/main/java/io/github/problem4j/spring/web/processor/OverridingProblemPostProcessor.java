@@ -14,8 +14,8 @@
  */
 package io.github.problem4j.spring.web.processor;
 
-import io.github.malczuuu.problem4j.core.Problem;
-import io.github.problem4j.spring.web.context.ProblemContext;
+import io.github.problem4j.core.Problem;
+import io.github.problem4j.core.ProblemContext;
 
 /**
  * {@link ProblemPostProcessor} implementation that overrides selected fields of a {@link Problem}

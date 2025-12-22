@@ -17,7 +17,7 @@ package io.github.problem4j.spring.webmvc.integration;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.malczuuu.problem4j.core.Problem;
+import io.github.problem4j.core.Problem;
 import io.github.problem4j.spring.webmvc.app.MvcTestApp;
 import java.net.URI;
 import org.junit.jupiter.api.Test;

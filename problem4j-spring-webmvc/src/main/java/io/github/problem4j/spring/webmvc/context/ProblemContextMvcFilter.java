@@ -14,11 +14,11 @@
  */
 package io.github.problem4j.spring.webmvc.context;
 
-import static io.github.problem4j.spring.web.context.ContextSupport.PROBLEM_CONTEXT;
-import static io.github.problem4j.spring.web.context.ContextSupport.TRACE_ID;
-import static io.github.problem4j.spring.web.context.ContextSupport.getRandomTraceId;
+import static io.github.problem4j.spring.web.context.AttributeSupport.PROBLEM_CONTEXT;
+import static io.github.problem4j.spring.web.context.AttributeSupport.TRACE_ID;
+import static io.github.problem4j.spring.web.context.AttributeSupport.getRandomTraceId;
 
-import io.github.problem4j.spring.web.context.ProblemContext;
+import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.spring.web.context.ProblemContextSettings;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -81,9 +81,10 @@ public class ProblemContextMvcFilter extends OncePerRequestFilter {
       HttpServletRequest request, HttpServletResponse response) {
     return request.getAttribute(PROBLEM_CONTEXT) instanceof ProblemContext attribute
         ? attribute
-        : ProblemContext.builder()
-            .traceId(findTraceId(request, response).orElseGet(() -> initTraceId(request, response)))
-            .build();
+        : ProblemContext.create()
+            .put(
+                "traceId",
+                findTraceId(request, response).orElseGet(() -> initTraceId(request, response)));
   }
 
   /**
@@ -139,7 +140,7 @@ public class ProblemContextMvcFilter extends OncePerRequestFilter {
   protected void assignContextAttributes(
       HttpServletRequest request, HttpServletResponse response, ProblemContext context) {
     request.setAttribute(PROBLEM_CONTEXT, context);
-    request.setAttribute(TRACE_ID, context.getTraceId());
+    request.setAttribute(TRACE_ID, context.get("traceId"));
   }
 
   /**
@@ -164,7 +165,7 @@ public class ProblemContextMvcFilter extends OncePerRequestFilter {
   protected void assignTracingHeader(
       HttpServletRequest request, HttpServletResponse response, ProblemContext context) {
     if (StringUtils.hasLength(getSettings().getTracingHeaderName())) {
-      response.setHeader(getSettings().getTracingHeaderName(), context.getTraceId());
+      response.setHeader(getSettings().getTracingHeaderName(), context.get("traceId"));
     }
   }
 

@@ -16,9 +16,9 @@ package io.github.problem4j.spring.web.processor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.core.ProblemBuilder;
-import io.github.problem4j.spring.web.context.ProblemContext;
+import io.github.problem4j.core.Problem;
+import io.github.problem4j.core.ProblemBuilder;
+import io.github.problem4j.core.ProblemContext;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -30,7 +30,7 @@ class AbstractProblemPostProcessorTest {
   void shouldReturnSameProblemWhenNoOverrides() {
     PostProcessorSettings settings = getSettings(null, null);
 
-    ProblemContext context = ProblemContext.ofTraceId("trace-123");
+    ProblemContext context = ProblemContext.create().put("traceId", "trace-123");
     Problem problem = Problem.builder().type("bad_request").instance("instance-1").build();
 
     ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
@@ -115,7 +115,7 @@ class AbstractProblemPostProcessorTest {
   void givenContextTraceIdPlaceholderWithTraceIdValue_shouldOverrideInstance() {
     PostProcessorSettings settings = getSettings(null, "trace:{context.traceId}");
 
-    ProblemContext context = ProblemContext.ofTraceId("trace-abc");
+    ProblemContext context = ProblemContext.create().put("traceId", "trace-abc");
     Problem problem = Problem.builder().type("bad_request").instance("instance-1").build();
 
     ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
@@ -128,7 +128,7 @@ class AbstractProblemPostProcessorTest {
   void givenContextTraceIdPlaceholderWithoutTraceIdValue_shouldNotOverrideInstance() {
     PostProcessorSettings settings = getSettings(null, "trace:{context.traceId}");
 
-    ProblemContext context = ProblemContext.empty();
+    ProblemContext context = ProblemContext.create();
     Problem problem = Problem.builder().type("bad_request").instance("instance-1").build();
 
     ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
@@ -141,7 +141,7 @@ class AbstractProblemPostProcessorTest {
   void givenContextTraceIdPlaceholderWithEmptyTraceIdValue_shouldNotOverrideInstance() {
     PostProcessorSettings settings = getSettings(null, "trace:{context.traceId}");
 
-    ProblemContext context = ProblemContext.ofTraceId("");
+    ProblemContext context = ProblemContext.create().put("traceId", "");
     Problem problem = Problem.builder().type("bad_request").instance("instance-1").build();
 
     ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
@@ -206,7 +206,7 @@ class AbstractProblemPostProcessorTest {
     }
     Problem problem = builder.build();
 
-    ProblemContext context = ProblemContext.ofTraceId(contextTraceId);
+    ProblemContext context = ProblemContext.create().put("traceId", contextTraceId);
 
     ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
     Problem result = processor.process(context, problem);
@@ -224,7 +224,7 @@ class AbstractProblemPostProcessorTest {
     ProblemPostProcessor processor = new AbstractProblemPostProcessor(settings) {};
 
     Problem problem = Problem.builder().type("bad_request").instance("instance-1").build();
-    Problem result = processor.process(ProblemContext.ofTraceId("x"), problem);
+    Problem result = processor.process(ProblemContext.create().put("traceId", "x"), problem);
 
     assertThat(result).isSameAs(problem);
   }

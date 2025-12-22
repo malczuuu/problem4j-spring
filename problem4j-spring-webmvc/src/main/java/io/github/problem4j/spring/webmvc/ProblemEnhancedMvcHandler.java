@@ -14,16 +14,16 @@
  */
 package io.github.problem4j.spring.webmvc;
 
-import static io.github.problem4j.spring.web.context.ContextSupport.PROBLEM_CONTEXT;
+import static io.github.problem4j.spring.web.context.AttributeSupport.PROBLEM_CONTEXT;
 import static io.github.problem4j.spring.web.util.ProblemSupport.resolveStatus;
 import static io.github.problem4j.spring.webmvc.MvcAdviceSupport.logAdviceException;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
-import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.core.ProblemBuilder;
-import io.github.malczuuu.problem4j.core.ProblemStatus;
+import io.github.problem4j.core.Problem;
+import io.github.problem4j.core.ProblemBuilder;
+import io.github.problem4j.core.ProblemStatus;
 import io.github.problem4j.spring.web.ProblemResolverStore;
-import io.github.problem4j.spring.web.context.ProblemContext;
+import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.spring.web.processor.ProblemPostProcessor;
 import java.util.List;
 import org.slf4j.Logger;
@@ -85,7 +85,7 @@ public class ProblemEnhancedMvcHandler extends ResponseEntityExceptionHandler {
       Exception ex, Object body, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
     ProblemContext context = (ProblemContext) request.getAttribute(PROBLEM_CONTEXT, SCOPE_REQUEST);
     if (context == null) {
-      context = ProblemContext.empty();
+      context = ProblemContext.create();
     }
 
     headers = headers != null ? HttpHeaders.writableHttpHeaders(headers) : new HttpHeaders();

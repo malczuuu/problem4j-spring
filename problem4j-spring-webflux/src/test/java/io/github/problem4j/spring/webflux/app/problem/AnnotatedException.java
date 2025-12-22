@@ -14,7 +14,7 @@
  */
 package io.github.problem4j.spring.webflux.app.problem;
 
-import io.github.problem4j.spring.web.annotation.ProblemMapping;
+import io.github.problem4j.core.ProblemMapping;
 
 @ProblemMapping(
     type = "https://example.org/annotated/{value1}",

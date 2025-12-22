@@ -27,10 +27,10 @@ import static io.github.problem4j.spring.web.util.ProblemSupport.MISSING_SESSION
 import static io.github.problem4j.spring.web.util.ProblemSupport.NAME_EXTENSION;
 import static io.github.problem4j.spring.web.util.ProblemSupport.PARAM_EXTENSION;
 
-import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.core.ProblemBuilder;
-import io.github.malczuuu.problem4j.core.ProblemStatus;
-import io.github.problem4j.spring.web.context.ProblemContext;
+import io.github.problem4j.core.Problem;
+import io.github.problem4j.core.ProblemBuilder;
+import io.github.problem4j.core.ProblemStatus;
+import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.spring.web.format.ProblemFormat;
 import java.util.Locale;
 import java.util.regex.Matcher;

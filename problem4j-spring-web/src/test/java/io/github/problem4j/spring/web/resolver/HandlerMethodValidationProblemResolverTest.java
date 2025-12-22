@@ -17,8 +17,8 @@ package io.github.problem4j.spring.web.resolver;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 
-import io.github.malczuuu.problem4j.core.Problem;
-import io.github.problem4j.spring.web.context.ProblemContext;
+import io.github.problem4j.core.Problem;
+import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.spring.web.format.IdentityProblemFormat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,7 +45,10 @@ class HandlerMethodValidationProblemResolverTest {
 
     Problem problem =
         handlerMethodValidationProblemResolver.resolveProblem(
-            ProblemContext.ofTraceId("traceId"), ex, new HttpHeaders(), ex.getStatusCode());
+            ProblemContext.create().put("traceId", "traceId"),
+            ex,
+            new HttpHeaders(),
+            ex.getStatusCode());
 
     assertEquals(Problem.BLANK_TYPE, problem.getType());
     assertEquals(HttpStatus.BAD_REQUEST.getReasonPhrase(), problem.getTitle());

@@ -14,11 +14,11 @@
  */
 package io.github.problem4j.spring.webflux.context;
 
-import static io.github.problem4j.spring.web.context.ContextSupport.PROBLEM_CONTEXT;
-import static io.github.problem4j.spring.web.context.ContextSupport.TRACE_ID;
-import static io.github.problem4j.spring.web.context.ContextSupport.getRandomTraceId;
+import static io.github.problem4j.spring.web.context.AttributeSupport.PROBLEM_CONTEXT;
+import static io.github.problem4j.spring.web.context.AttributeSupport.TRACE_ID;
+import static io.github.problem4j.spring.web.context.AttributeSupport.getRandomTraceId;
 
-import io.github.problem4j.spring.web.context.ProblemContext;
+import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.spring.web.context.ProblemContextSettings;
 import java.util.Optional;
 import org.springframework.util.StringUtils;
@@ -77,9 +77,8 @@ public class ProblemContextWebFluxFilter implements WebFilter {
   protected ProblemContext buildProblemContext(ServerWebExchange exchange) {
     return exchange.getAttribute(PROBLEM_CONTEXT) instanceof ProblemContext attribute
         ? attribute
-        : ProblemContext.builder()
-            .traceId(findTraceId(exchange).orElseGet(() -> initTraceId(exchange)))
-            .build();
+        : ProblemContext.create()
+            .put("traceId", findTraceId(exchange).orElseGet(() -> initTraceId(exchange)));
   }
 
   /**
@@ -125,7 +124,7 @@ public class ProblemContextWebFluxFilter implements WebFilter {
 
   protected void assignContextAttributes(ServerWebExchange exchange, ProblemContext context) {
     exchange.getAttributes().put(PROBLEM_CONTEXT, context);
-    exchange.getAttributes().put(TRACE_ID, context.getTraceId());
+    exchange.getAttributes().put(TRACE_ID, context.get("traceId"));
   }
 
   /**
@@ -149,7 +148,7 @@ public class ProblemContextWebFluxFilter implements WebFilter {
       exchange
           .getResponse()
           .getHeaders()
-          .set(getSettings().getTracingHeaderName(), context.getTraceId());
+          .set(getSettings().getTracingHeaderName(), context.get("traceId"));
     }
   }
 
@@ -163,8 +162,8 @@ public class ProblemContextWebFluxFilter implements WebFilter {
    */
   protected Context contextWrite(Context ctx, ServerWebExchange exchange, ProblemContext context) {
     ctx = ctx.put(PROBLEM_CONTEXT, context);
-    if (StringUtils.hasLength(context.getTraceId())) {
-      ctx = ctx.put(TRACE_ID, context.getTraceId());
+    if (StringUtils.hasLength(context.get("traceId"))) {
+      ctx = ctx.put(TRACE_ID, context.get("traceId"));
     }
     return ctx;
   }

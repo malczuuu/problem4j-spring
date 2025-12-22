@@ -14,9 +14,9 @@
  */
 package io.github.problem4j.spring.webmvc;
 
+import io.github.problem4j.core.ProblemMapper;
 import io.github.problem4j.spring.web.ProblemProperties;
 import io.github.problem4j.spring.web.ProblemResolverStore;
-import io.github.problem4j.spring.web.annotation.ProblemMappingProcessor;
 import io.github.problem4j.spring.web.processor.ProblemPostProcessor;
 import io.github.problem4j.spring.webmvc.context.ProblemContextMvcFilter;
 import io.github.problem4j.spring.webmvc.error.ProblemErrorMvcConfiguration;
@@ -73,12 +73,12 @@ public class ProblemMvcAutoConfiguration {
   @ConditionalOnMissingBean(ExceptionMvcAdvice.class)
   @Bean
   public ExceptionMvcAdvice exceptionMvcAdvice(
-      ProblemMappingProcessor problemMappingProcessor,
+      ProblemMapper problemMapper,
       ProblemResolverStore problemResolverStore,
       ProblemPostProcessor problemPostProcessor,
       List<AdviceMvcInspector> adviceMvcInspectors) {
     return new ExceptionMvcAdvice(
-        problemMappingProcessor, problemResolverStore, problemPostProcessor, adviceMvcInspectors);
+        problemMapper, problemResolverStore, problemPostProcessor, adviceMvcInspectors);
   }
 
   /**

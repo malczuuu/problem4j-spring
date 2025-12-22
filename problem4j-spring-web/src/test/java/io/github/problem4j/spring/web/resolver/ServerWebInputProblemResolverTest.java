@@ -17,9 +17,9 @@ package io.github.problem4j.spring.web.resolver;
 import static io.github.problem4j.spring.web.util.ProblemSupport.resolveStatus;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.core.ProblemStatus;
-import io.github.problem4j.spring.web.context.ProblemContext;
+import io.github.problem4j.core.Problem;
+import io.github.problem4j.core.ProblemStatus;
+import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.spring.web.format.IdentityProblemFormat;
 import io.github.problem4j.spring.web.util.ProblemSupport;
 import java.lang.reflect.Method;
@@ -54,7 +54,7 @@ class ServerWebInputProblemResolverTest {
 
     Problem problem =
         serverWebInputMapping.resolveProblem(
-            ProblemContext.ofTraceId("traceId"),
+            ProblemContext.create().put("traceId", "traceId"),
             ex,
             new HttpHeaders(),
             HttpStatusCode.valueOf(400));
@@ -78,7 +78,7 @@ class ServerWebInputProblemResolverTest {
 
     Problem problem =
         serverWebInputMapping.resolveProblem(
-            ProblemContext.ofTraceId("traceId"),
+            ProblemContext.create().put("traceId", "traceId"),
             ex,
             new HttpHeaders(),
             HttpStatusCode.valueOf(400));
@@ -99,7 +99,10 @@ class ServerWebInputProblemResolverTest {
 
     Problem problem =
         serverWebInputMapping.resolveProblem(
-            ProblemContext.ofTraceId("traceId"), ex, new HttpHeaders(), ex.getStatusCode());
+            ProblemContext.create().put("traceId", "traceId"),
+            ex,
+            new HttpHeaders(),
+            ex.getStatusCode());
 
     assertThat(problem)
         .isEqualTo(Problem.builder().status(resolveStatus(ex.getStatusCode())).build());

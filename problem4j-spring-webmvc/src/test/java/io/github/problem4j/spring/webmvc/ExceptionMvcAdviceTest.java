@@ -16,8 +16,8 @@ package io.github.problem4j.spring.webmvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.github.problem4j.core.ProblemMapper;
 import io.github.problem4j.spring.web.DefaultProblemResolverStore;
-import io.github.problem4j.spring.web.annotation.DefaultProblemMappingProcessor;
 import io.github.problem4j.spring.web.processor.IdentityProblemPostProcessor;
 import jakarta.validation.ConstraintViolationException;
 import java.util.List;
@@ -40,7 +40,7 @@ class ExceptionMvcAdviceTest {
     hits = new AtomicInteger(0);
     advice =
         new ExceptionMvcAdvice(
-            new DefaultProblemMappingProcessor(),
+            ProblemMapper.create(),
             new DefaultProblemResolverStore(List.of()),
             new IdentityProblemPostProcessor(),
             List.of((context, problem, ex, headers, status, exchange) -> hits.incrementAndGet()));

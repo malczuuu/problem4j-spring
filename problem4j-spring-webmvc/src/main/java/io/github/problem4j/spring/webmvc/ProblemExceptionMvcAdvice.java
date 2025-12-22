@@ -14,14 +14,14 @@
  */
 package io.github.problem4j.spring.webmvc;
 
-import static io.github.problem4j.spring.web.context.ContextSupport.PROBLEM_CONTEXT;
+import static io.github.problem4j.spring.web.context.AttributeSupport.PROBLEM_CONTEXT;
 import static io.github.problem4j.spring.webmvc.MvcAdviceSupport.logAdviceException;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
-import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.core.ProblemException;
-import io.github.malczuuu.problem4j.core.ProblemStatus;
-import io.github.problem4j.spring.web.context.ProblemContext;
+import io.github.problem4j.core.Problem;
+import io.github.problem4j.core.ProblemException;
+import io.github.problem4j.core.ProblemStatus;
+import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.spring.web.processor.ProblemPostProcessor;
 import io.github.problem4j.spring.web.util.ProblemSupport;
 import java.util.List;
@@ -67,7 +67,7 @@ public class ProblemExceptionMvcAdvice {
   public ResponseEntity<Problem> handleProblemException(ProblemException ex, WebRequest request) {
     ProblemContext context = (ProblemContext) request.getAttribute(PROBLEM_CONTEXT, SCOPE_REQUEST);
     if (context == null) {
-      context = ProblemContext.empty();
+      context = ProblemContext.create();
     }
 
     HttpHeaders headers = new HttpHeaders();

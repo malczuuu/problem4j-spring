@@ -19,8 +19,8 @@ import static io.github.problem4j.spring.web.util.ProblemSupport.ERRORS_EXTENSIO
 import static io.github.problem4j.spring.web.util.ProblemSupport.IS_NOT_VALID_ERROR;
 import static io.github.problem4j.spring.web.util.ProblemSupport.VALIDATION_FAILED_DETAIL;
 
-import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.core.ProblemBuilder;
+import io.github.problem4j.core.Problem;
+import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.spring.web.format.ProblemFormat;
 import io.github.problem4j.spring.web.model.Violation;
 import java.lang.annotation.Annotation;

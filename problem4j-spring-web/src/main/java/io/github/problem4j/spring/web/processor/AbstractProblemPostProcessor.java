@@ -14,11 +14,11 @@
  */
 package io.github.problem4j.spring.web.processor;
 
-import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.core.ProblemBuilder;
-import io.github.problem4j.spring.web.annotation.ProblemMappingProcessor;
-import io.github.problem4j.spring.web.context.ProblemContext;
+import io.github.problem4j.core.Problem;
+import io.github.problem4j.core.ProblemBuilder;
+import io.github.problem4j.core.ProblemContext;
 import java.util.Optional;
+import java.util.regex.Pattern;
 import org.springframework.util.StringUtils;
 
 /**
@@ -57,6 +57,8 @@ import org.springframework.util.StringUtils;
  */
 public abstract class AbstractProblemPostProcessor implements ProblemPostProcessor {
 
+  private static final Pattern PLACEHOLDER = Pattern.compile("\\{([^}]+)}");
+
   private final PostProcessorSettings settings;
 
   /** Creates a post-processor using the given override settings. */
@@ -75,7 +77,7 @@ public abstract class AbstractProblemPostProcessor implements ProblemPostProcess
   @Override
   public Problem process(ProblemContext context, Problem problem) {
     if (context == null) {
-      context = ProblemContext.empty();
+      context = ProblemContext.create();
     }
 
     ProblemBuilder builder = null;
@@ -126,8 +128,6 @@ public abstract class AbstractProblemPostProcessor implements ProblemPostProcess
    *
    * <p>If the algorithm discovers remaining placeholders that are unresolved, overriding is aborted
    * and original value is restored.
-   *
-   * @see io.github.problem4j.spring.web.annotation.DefaultProblemMappingProcessor
    */
   protected Optional<String> overrideType(ProblemContext context, Problem problem) {
     if (!problem.isTypeNonBlank() || !StringUtils.hasLength(settings.getTypeOverride())) {
@@ -157,7 +157,7 @@ public abstract class AbstractProblemPostProcessor implements ProblemPostProcess
     boolean needsTraceId = template.contains("{context.traceId}");
     boolean hasProblemInstance =
         problem.getInstance() != null && StringUtils.hasLength(problem.getInstance().toString());
-    boolean hasTraceId = StringUtils.hasLength(context.getTraceId());
+    boolean hasTraceId = StringUtils.hasLength(context.get("traceId"));
 
     if (canOverride(needsProblemInstance, hasProblemInstance, needsTraceId, hasTraceId)) {
       String newInstance = overrideInstance(context, problem);
@@ -188,8 +188,6 @@ public abstract class AbstractProblemPostProcessor implements ProblemPostProcess
    *
    * <p>If the algorithm discovers remaining placeholders that are unresolved, overriding is aborted
    * and original value is restored.
-   *
-   * @see io.github.problem4j.spring.web.annotation.DefaultProblemMappingProcessor
    */
   protected String overrideInstance(ProblemContext context, Problem problem) {
     if (!StringUtils.hasLength(settings.getInstanceOverride())) {
@@ -198,7 +196,7 @@ public abstract class AbstractProblemPostProcessor implements ProblemPostProcess
 
     String template = settings.getInstanceOverride();
     String instanceValue = stringOrEmpty(problem.getInstance());
-    String traceIdValue = stringOrEmpty(context.getTraceId());
+    String traceIdValue = stringOrEmpty(context.get("traceId"));
 
     template = template.replace("{problem.instance}", instanceValue);
     template = template.replace("{context.traceId}", traceIdValue);
@@ -217,14 +215,11 @@ public abstract class AbstractProblemPostProcessor implements ProblemPostProcess
 
   /**
    * Because this implementation does not try to resolve dynamic fields, it does not reuse the code
-   * from {@code DefaultProblemMappingProcessor}. Instead, we rely on simple substring replacement
-   * in form of {@link String#replace(CharSequence, CharSequence)}, and then removing all remaining
-   * unknown variables.
-   *
-   * @see io.github.problem4j.spring.web.annotation.DefaultProblemMappingProcessor
+   * from {@code ProblemMapper}. Instead, we rely on simple substring replacement, and then removing
+   * all remaining unknown variables.
    */
   protected boolean hasRemainingUnknownPlaceholders(String value) {
-    return ProblemMappingProcessor.PLACEHOLDER.matcher(value).find();
+    return PLACEHOLDER.matcher(value).find();
   }
 
   /** Returns the post-processor configuration settings. */

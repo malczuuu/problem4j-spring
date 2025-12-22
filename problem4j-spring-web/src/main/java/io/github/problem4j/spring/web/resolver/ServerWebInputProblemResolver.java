@@ -18,9 +18,9 @@ import static io.github.problem4j.spring.web.internal.MethodParameterSupport.fin
 import static io.github.problem4j.spring.web.util.ProblemSupport.PROPERTY_EXTENSION;
 import static io.github.problem4j.spring.web.util.ProblemSupport.resolveStatus;
 
-import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.core.ProblemBuilder;
-import io.github.problem4j.spring.web.context.ProblemContext;
+import io.github.problem4j.core.Problem;
+import io.github.problem4j.core.ProblemBuilder;
+import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.spring.web.format.ProblemFormat;
 import java.util.Optional;
 import org.springframework.beans.TypeMismatchException;

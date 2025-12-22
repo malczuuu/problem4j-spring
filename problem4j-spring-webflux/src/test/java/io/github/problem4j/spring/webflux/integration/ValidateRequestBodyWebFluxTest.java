@@ -18,8 +18,8 @@ import static io.github.problem4j.spring.web.util.ProblemSupport.ERRORS_EXTENSIO
 import static io.github.problem4j.spring.web.util.ProblemSupport.VALIDATION_FAILED_DETAIL;
 import static org.hamcrest.Matchers.notNullValue;
 
-import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.core.ProblemStatus;
+import io.github.problem4j.core.Problem;
+import io.github.problem4j.core.ProblemStatus;
 import io.github.problem4j.spring.webflux.app.WebFluxTestApp;
 import io.github.problem4j.spring.webflux.app.model.TestRequest;
 import java.util.HashMap;

@@ -14,17 +14,17 @@
  */
 package io.github.problem4j.spring.webmvc;
 
-import static io.github.problem4j.spring.web.context.ContextSupport.PROBLEM_CONTEXT;
+import static io.github.problem4j.spring.web.context.AttributeSupport.PROBLEM_CONTEXT;
 import static io.github.problem4j.spring.web.util.ProblemSupport.resolveStatus;
 import static io.github.problem4j.spring.webmvc.MvcAdviceSupport.logAdviceException;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
-import io.github.malczuuu.problem4j.core.Problem;
-import io.github.malczuuu.problem4j.core.ProblemBuilder;
-import io.github.malczuuu.problem4j.core.ProblemStatus;
+import io.github.problem4j.core.Problem;
+import io.github.problem4j.core.ProblemBuilder;
+import io.github.problem4j.core.ProblemContext;
+import io.github.problem4j.core.ProblemMapper;
+import io.github.problem4j.core.ProblemStatus;
 import io.github.problem4j.spring.web.ProblemResolverStore;
-import io.github.problem4j.spring.web.annotation.ProblemMappingProcessor;
-import io.github.problem4j.spring.web.context.ProblemContext;
 import io.github.problem4j.spring.web.processor.ProblemPostProcessor;
 import io.github.problem4j.spring.web.resolver.ProblemResolver;
 import io.github.problem4j.spring.web.util.ProblemSupport;
@@ -64,18 +64,18 @@ public class ExceptionMvcAdvice {
 
   private static final Logger log = LoggerFactory.getLogger(ExceptionMvcAdvice.class);
 
-  private final ProblemMappingProcessor problemMappingProcessor;
+  private final ProblemMapper problemMapper;
   private final ProblemResolverStore problemResolverStore;
   private final ProblemPostProcessor problemPostProcessor;
 
   private final List<AdviceMvcInspector> adviceMvcInspectors;
 
   public ExceptionMvcAdvice(
-      ProblemMappingProcessor problemMappingProcessor,
+      ProblemMapper problemMapper,
       ProblemResolverStore problemResolverStore,
       ProblemPostProcessor problemPostProcessor,
       List<AdviceMvcInspector> adviceMvcInspectors) {
-    this.problemMappingProcessor = problemMappingProcessor;
+    this.problemMapper = problemMapper;
     this.problemResolverStore = problemResolverStore;
     this.problemPostProcessor = problemPostProcessor;
     this.adviceMvcInspectors = adviceMvcInspectors;
@@ -89,7 +89,7 @@ public class ExceptionMvcAdvice {
   public ResponseEntity<Object> handleException(Exception ex, WebRequest request) {
     ProblemContext context = (ProblemContext) request.getAttribute(PROBLEM_CONTEXT, SCOPE_REQUEST);
     if (context == null) {
-      context = ProblemContext.empty();
+      context = ProblemContext.create();
     }
 
     HttpHeaders headers = new HttpHeaders();
@@ -116,8 +116,8 @@ public class ExceptionMvcAdvice {
   private ProblemBuilder getProblemBuilder(
       Exception ex, ProblemContext context, HttpHeaders headers) {
     ProblemBuilder builder;
-    if (problemMappingProcessor.isMappingCandidate(ex)) {
-      builder = problemMappingProcessor.toProblemBuilder(ex, context);
+    if (problemMapper.isMappingCandidate(ex)) {
+      builder = problemMapper.toProblemBuilder(ex, context);
     } else {
       Optional<ProblemResolver> optionalResolver = problemResolverStore.findResolver(ex.getClass());
 

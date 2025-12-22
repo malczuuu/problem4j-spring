@@ -14,9 +14,9 @@
  */
 package io.github.problem4j.spring.webflux;
 
+import io.github.problem4j.core.ProblemMapper;
 import io.github.problem4j.spring.web.ProblemProperties;
 import io.github.problem4j.spring.web.ProblemResolverStore;
-import io.github.problem4j.spring.web.annotation.ProblemMappingProcessor;
 import io.github.problem4j.spring.web.processor.ProblemPostProcessor;
 import io.github.problem4j.spring.webflux.context.ProblemContextWebFluxFilter;
 import io.github.problem4j.spring.webflux.error.ProblemErrorWebFluxConfiguration;
@@ -73,15 +73,12 @@ public class ProblemWebFluxAutoConfiguration {
   @ConditionalOnMissingBean(ExceptionWebFluxAdvice.class)
   @Bean
   public ExceptionWebFluxAdvice exceptionWebFluxAdvice(
-      ProblemMappingProcessor problemMappingProcessor,
+      ProblemMapper problemMapper,
       ProblemResolverStore problemResolverStore,
       ProblemPostProcessor problemPostProcessor,
       List<AdviceWebFluxInspector> adviceWebFluxInspectors) {
     return new ExceptionWebFluxAdvice(
-        problemMappingProcessor,
-        problemResolverStore,
-        problemPostProcessor,
-        adviceWebFluxInspectors);
+        problemMapper, problemResolverStore, problemPostProcessor, adviceWebFluxInspectors);
   }
 
   /**
