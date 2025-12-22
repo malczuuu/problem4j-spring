@@ -14,7 +14,7 @@
  */
 package io.github.problem4j.spring.webflux;
 
-import static io.github.problem4j.spring.web.context.AttributeSupport.PROBLEM_CONTEXT;
+import static io.github.problem4j.spring.web.context.AttributeSupport.PROBLEM_CONTEXT_ATTRIBUTE;
 import static io.github.problem4j.spring.webflux.WebFluxAdviceSupport.logAdviceException;
 
 import io.github.problem4j.core.Problem;
@@ -67,7 +67,7 @@ public class ProblemExceptionWebFluxAdvice {
   public Mono<ResponseEntity<Problem>> handleProblemException(
       ProblemException ex, ServerWebExchange exchange) {
     ProblemContext context =
-        exchange.getAttributeOrDefault(PROBLEM_CONTEXT, ProblemContext.create());
+        exchange.getAttributeOrDefault(PROBLEM_CONTEXT_ATTRIBUTE, ProblemContext.create());
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);

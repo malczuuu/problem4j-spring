@@ -14,7 +14,7 @@
  */
 package io.github.problem4j.spring.webmvc;
 
-import static io.github.problem4j.spring.web.context.AttributeSupport.PROBLEM_CONTEXT;
+import static io.github.problem4j.spring.web.context.AttributeSupport.PROBLEM_CONTEXT_ATTRIBUTE;
 import static io.github.problem4j.spring.webmvc.MvcAdviceSupport.logAdviceException;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
@@ -65,7 +65,7 @@ public class ProblemExceptionMvcAdvice {
    */
   @ExceptionHandler(ProblemException.class)
   public ResponseEntity<Problem> handleProblemException(ProblemException ex, WebRequest request) {
-    ProblemContext context = (ProblemContext) request.getAttribute(PROBLEM_CONTEXT, SCOPE_REQUEST);
+    ProblemContext context = (ProblemContext) request.getAttribute(PROBLEM_CONTEXT_ATTRIBUTE, SCOPE_REQUEST);
     if (context == null) {
       context = ProblemContext.create();
     }

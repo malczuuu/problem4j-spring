@@ -14,7 +14,7 @@
  */
 package io.github.problem4j.spring.webmvc.error;
 
-import static io.github.problem4j.spring.web.context.AttributeSupport.PROBLEM_CONTEXT;
+import static io.github.problem4j.spring.web.context.AttributeSupport.PROBLEM_CONTEXT_ATTRIBUTE;
 
 import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemContext;
@@ -67,7 +67,7 @@ public class ProblemErrorController extends AbstractErrorController {
       return ResponseEntity.noContent().build();
     }
 
-    ProblemContext context = (ProblemContext) request.getAttribute(PROBLEM_CONTEXT);
+    ProblemContext context = (ProblemContext) request.getAttribute(PROBLEM_CONTEXT_ATTRIBUTE);
     if (context == null) {
       context = ProblemContext.create();
     }

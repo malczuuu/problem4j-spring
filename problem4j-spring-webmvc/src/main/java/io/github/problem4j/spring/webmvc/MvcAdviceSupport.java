@@ -14,7 +14,7 @@
  */
 package io.github.problem4j.spring.webmvc;
 
-import static io.github.problem4j.spring.web.context.AttributeSupport.TRACE_ID;
+import static io.github.problem4j.spring.web.context.AttributeSupport.TRACE_ID_ATTRIBUTE;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
 import org.slf4j.Logger;
@@ -32,7 +32,7 @@ class MvcAdviceSupport {
       method = String.valueOf(req.getHttpMethod());
       endpoint = req.getRequest().getRequestURI();
 
-      Object traceIdAttr = req.getAttribute(TRACE_ID, SCOPE_REQUEST);
+      Object traceIdAttr = req.getAttribute(TRACE_ID_ATTRIBUTE, SCOPE_REQUEST);
       if (traceIdAttr != null) {
         traceId = traceIdAttr.toString();
       }

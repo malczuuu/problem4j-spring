@@ -14,9 +14,8 @@
  */
 package io.github.problem4j.spring.webmvc.context;
 
-import static io.github.problem4j.spring.web.context.AttributeSupport.PROBLEM_CONTEXT;
-import static io.github.problem4j.spring.web.context.AttributeSupport.TRACE_ID;
-import static io.github.problem4j.spring.web.context.AttributeSupport.getRandomTraceId;
+import static io.github.problem4j.spring.web.context.AttributeSupport.PROBLEM_CONTEXT_ATTRIBUTE;
+import static io.github.problem4j.spring.web.context.AttributeSupport.TRACE_ID_ATTRIBUTE;
 
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.spring.web.context.ProblemContextSettings;
@@ -26,6 +25,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.UUID;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -79,7 +79,7 @@ public class ProblemContextMvcFilter extends OncePerRequestFilter {
    */
   protected ProblemContext buildProblemContext(
       HttpServletRequest request, HttpServletResponse response) {
-    return request.getAttribute(PROBLEM_CONTEXT) instanceof ProblemContext attribute
+    return request.getAttribute(PROBLEM_CONTEXT_ATTRIBUTE) instanceof ProblemContext attribute
         ? attribute
         : ProblemContext.create()
             .put(
@@ -95,7 +95,7 @@ public class ProblemContextMvcFilter extends OncePerRequestFilter {
    * @return an {@link Optional} containing the trace identifier if present
    */
   protected Optional<String> findTraceId(HttpServletRequest request, HttpServletResponse response) {
-    return Optional.ofNullable(request.getAttribute(TRACE_ID)).map(Object::toString);
+    return Optional.ofNullable(request.getAttribute(TRACE_ID_ATTRIBUTE)).map(Object::toString);
   }
 
   /**
@@ -127,7 +127,7 @@ public class ProblemContextMvcFilter extends OncePerRequestFilter {
    * @return a newly generated trace identifier
    */
   protected String createNewTraceId(HttpServletRequest request, HttpServletResponse response) {
-    return getRandomTraceId();
+    return "urn:uuid:" + UUID.randomUUID();
   }
 
   /**
@@ -139,8 +139,8 @@ public class ProblemContextMvcFilter extends OncePerRequestFilter {
    */
   protected void assignContextAttributes(
       HttpServletRequest request, HttpServletResponse response, ProblemContext context) {
-    request.setAttribute(PROBLEM_CONTEXT, context);
-    request.setAttribute(TRACE_ID, context.get("traceId"));
+    request.setAttribute(PROBLEM_CONTEXT_ATTRIBUTE, context);
+    request.setAttribute(TRACE_ID_ATTRIBUTE, context.get("traceId"));
   }
 
   /**

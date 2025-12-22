@@ -14,13 +14,13 @@
  */
 package io.github.problem4j.spring.webflux.context;
 
-import static io.github.problem4j.spring.web.context.AttributeSupport.PROBLEM_CONTEXT;
-import static io.github.problem4j.spring.web.context.AttributeSupport.TRACE_ID;
-import static io.github.problem4j.spring.web.context.AttributeSupport.getRandomTraceId;
+import static io.github.problem4j.spring.web.context.AttributeSupport.PROBLEM_CONTEXT_ATTRIBUTE;
+import static io.github.problem4j.spring.web.context.AttributeSupport.TRACE_ID_ATTRIBUTE;
 
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.spring.web.context.ProblemContextSettings;
 import java.util.Optional;
+import java.util.UUID;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
@@ -75,7 +75,7 @@ public class ProblemContextWebFluxFilter implements WebFilter {
    * @return an existing or newly created {@link ProblemContext}
    */
   protected ProblemContext buildProblemContext(ServerWebExchange exchange) {
-    return exchange.getAttribute(PROBLEM_CONTEXT) instanceof ProblemContext attribute
+    return exchange.getAttribute(PROBLEM_CONTEXT_ATTRIBUTE) instanceof ProblemContext attribute
         ? attribute
         : ProblemContext.create()
             .put("traceId", findTraceId(exchange).orElseGet(() -> initTraceId(exchange)));
@@ -88,7 +88,7 @@ public class ProblemContextWebFluxFilter implements WebFilter {
    * @return an {@link Optional} containing the trace ID if present
    */
   protected Optional<String> findTraceId(ServerWebExchange exchange) {
-    return Optional.ofNullable(exchange.getAttribute(TRACE_ID)).map(Object::toString);
+    return Optional.ofNullable(exchange.getAttribute(TRACE_ID_ATTRIBUTE)).map(Object::toString);
   }
 
   /**
@@ -119,12 +119,12 @@ public class ProblemContextWebFluxFilter implements WebFilter {
    * @return a newly generated trace ID
    */
   protected String createNewTraceId(ServerWebExchange exchange) {
-    return getRandomTraceId();
+    return "urn:uuid:" + UUID.randomUUID();
   }
 
   protected void assignContextAttributes(ServerWebExchange exchange, ProblemContext context) {
-    exchange.getAttributes().put(PROBLEM_CONTEXT, context);
-    exchange.getAttributes().put(TRACE_ID, context.get("traceId"));
+    exchange.getAttributes().put(PROBLEM_CONTEXT_ATTRIBUTE, context);
+    exchange.getAttributes().put(TRACE_ID_ATTRIBUTE, context.get("traceId"));
   }
 
   /**
@@ -161,9 +161,9 @@ public class ProblemContextWebFluxFilter implements WebFilter {
    * @return an updated {@link Context} containing the problem context and trace ID
    */
   protected Context contextWrite(Context ctx, ServerWebExchange exchange, ProblemContext context) {
-    ctx = ctx.put(PROBLEM_CONTEXT, context);
+    ctx = ctx.put(PROBLEM_CONTEXT_ATTRIBUTE, context);
     if (StringUtils.hasLength(context.get("traceId"))) {
-      ctx = ctx.put(TRACE_ID, context.get("traceId"));
+      ctx = ctx.put(TRACE_ID_ATTRIBUTE, context.get("traceId"));
     }
     return ctx;
   }

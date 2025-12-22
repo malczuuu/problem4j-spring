@@ -14,7 +14,7 @@
  */
 package io.github.problem4j.spring.webflux.error;
 
-import static io.github.problem4j.spring.web.context.AttributeSupport.PROBLEM_CONTEXT;
+import static io.github.problem4j.spring.web.context.AttributeSupport.PROBLEM_CONTEXT_ATTRIBUTE;
 import static io.github.problem4j.spring.web.util.ProblemSupport.resolveStatus;
 import static org.springframework.web.reactive.function.server.RequestPredicates.all;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
@@ -99,7 +99,7 @@ public class ProblemErrorWebExceptionHandler extends DefaultErrorWebExceptionHan
     Problem problem = Problem.builder().status(resolveStatus(response.statusCode())).build();
 
     Optional<ProblemContext> optionalContext =
-        request.attribute(PROBLEM_CONTEXT).map(context -> (ProblemContext) context);
+        request.attribute(PROBLEM_CONTEXT_ATTRIBUTE).map(context -> (ProblemContext) context);
     if (optionalContext.isPresent()) {
       ProblemContext context = optionalContext.get();
       problem = problemPostProcessor.process(context, problem);

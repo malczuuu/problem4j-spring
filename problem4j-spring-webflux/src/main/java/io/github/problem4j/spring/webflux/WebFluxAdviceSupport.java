@@ -14,7 +14,7 @@
  */
 package io.github.problem4j.spring.webflux;
 
-import static io.github.problem4j.spring.web.context.AttributeSupport.TRACE_ID;
+import static io.github.problem4j.spring.web.context.AttributeSupport.TRACE_ID_ATTRIBUTE;
 
 import org.slf4j.Logger;
 import org.springframework.web.server.ServerWebExchange;
@@ -27,7 +27,7 @@ class WebFluxAdviceSupport {
         "Unable to resolve problem response (method={}, path={}, traceId={}, message={}, originalException=[{} : {}])",
         exchange.getRequest().getMethod(),
         exchange.getRequest().getPath(),
-        exchange.getAttribute(TRACE_ID),
+        exchange.getAttribute(TRACE_ID_ATTRIBUTE),
         e.getMessage(),
         ex.getClass().getName(),
         ex.getMessage(),

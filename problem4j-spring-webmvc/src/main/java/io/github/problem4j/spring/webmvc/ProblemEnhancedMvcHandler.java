@@ -14,7 +14,7 @@
  */
 package io.github.problem4j.spring.webmvc;
 
-import static io.github.problem4j.spring.web.context.AttributeSupport.PROBLEM_CONTEXT;
+import static io.github.problem4j.spring.web.context.AttributeSupport.PROBLEM_CONTEXT_ATTRIBUTE;
 import static io.github.problem4j.spring.web.util.ProblemSupport.resolveStatus;
 import static io.github.problem4j.spring.webmvc.MvcAdviceSupport.logAdviceException;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
@@ -83,7 +83,7 @@ public class ProblemEnhancedMvcHandler extends ResponseEntityExceptionHandler {
   @Override
   protected ResponseEntity<Object> handleExceptionInternal(
       Exception ex, Object body, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-    ProblemContext context = (ProblemContext) request.getAttribute(PROBLEM_CONTEXT, SCOPE_REQUEST);
+    ProblemContext context = (ProblemContext) request.getAttribute(PROBLEM_CONTEXT_ATTRIBUTE, SCOPE_REQUEST);
     if (context == null) {
       context = ProblemContext.create();
     }
