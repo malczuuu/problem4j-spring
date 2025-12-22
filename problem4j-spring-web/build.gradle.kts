@@ -7,7 +7,7 @@ plugins {
 dependencies {
     // Main
     api(libs.problem4j.core)
-    api(libs.problem4j.jackson)
+    api(libs.problem4j.jackson2)
 
     compileOnly(platform(libs.spring.boot.dependencies))
     compileOnly(libs.spring.boot.autoconfigure)

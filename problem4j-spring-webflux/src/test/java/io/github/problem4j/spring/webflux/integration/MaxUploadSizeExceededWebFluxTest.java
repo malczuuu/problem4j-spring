@@ -1,0 +1,58 @@
+/*
+ * Copyright (c) 2025 Damian Malczewski
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * SPDX-License-Identifier: MIT
+ */
+package io.github.problem4j.spring.webflux.integration;
+
+import static io.github.problem4j.spring.web.util.ProblemSupport.MAX_EXTENSION;
+import static io.github.problem4j.spring.web.util.ProblemSupport.MAX_UPLOAD_SIZE_EXCEEDED_DETAIL;
+import static org.hamcrest.Matchers.notNullValue;
+
+import io.github.malczuuu.problem4j.core.Problem;
+import io.github.malczuuu.problem4j.core.ProblemStatus;
+import io.github.problem4j.spring.webflux.app.WebFluxTestApp;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.web.reactive.server.WebTestClient;
+
+@SpringBootTest(
+    classes = {WebFluxTestApp.class},
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureWebTestClient
+class MaxUploadSizeExceededWebFluxTest {
+
+  @Autowired private WebTestClient webTestClient;
+
+  @Test
+  void givenMaxUploadSizeExceeded_shouldReturnProblem() {
+    webTestClient
+        .post()
+        .uri("/max-upload-size-exceeded")
+        .exchange()
+        .expectStatus()
+        .isEqualTo(HttpStatus.PAYLOAD_TOO_LARGE)
+        .expectHeader()
+        .contentType(Problem.CONTENT_TYPE)
+        .expectBody(Problem.class)
+        .value(notNullValue())
+        .isEqualTo(
+            Problem.builder()
+                .status(ProblemStatus.CONTENT_TOO_LARGE)
+                .detail(MAX_UPLOAD_SIZE_EXCEEDED_DETAIL)
+                .extension(MAX_EXTENSION, 1)
+                .build());
+  }
+}
