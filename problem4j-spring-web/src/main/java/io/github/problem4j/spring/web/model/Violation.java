@@ -23,11 +23,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * Represents a validation violation with a specific field and its corresponding error message.
- *
- * <p>This class is immutable and thread-safe.
- */
+/** Represents a validation violation with a specific field and its corresponding error message. */
 @JsonInclude(NON_NULL)
 public class Violation implements Serializable {
 
