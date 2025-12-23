@@ -1,0 +1,296 @@
+/*
+ * Copyright (c) 2025 Damian Malczewski
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * SPDX-License-Identifier: MIT
+ */
+package io.github.problem4j.spring.webmvc.integration;
+
+import static io.github.problem4j.spring.web.util.ProblemSupport.ERRORS_EXTENSION;
+import static io.github.problem4j.spring.web.util.ProblemSupport.VALIDATION_FAILED_DETAIL;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.LIST;
+
+import io.github.problem4j.core.Problem;
+import io.github.problem4j.core.ProblemStatus;
+import io.github.problem4j.spring.webmvc.app.MvcTestApp;
+import java.util.List;
+import java.util.Map;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import tools.jackson.databind.json.JsonMapper;
+
+@SpringBootTest(
+    classes = {MvcTestApp.class},
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureTestRestTemplate
+class ValidateMethodArgumentFailingMvcTest {
+
+  private static final String VIOLATION_ERROR = "size must be between 5 and " + Integer.MAX_VALUE;
+
+  @Autowired private TestRestTemplate restTemplate;
+  @Autowired private JsonMapper jsonMapper;
+
+  @Test
+  void givenTooShortPathVariable_shouldReturnValidationProblem() {
+    ResponseEntity<String> response =
+        restTemplate.getForEntity("/validate-parameter/path-variable/v", String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
+
+    assertThat(problem)
+        .isEqualTo(
+            Problem.builder()
+                .status(ProblemStatus.BAD_REQUEST)
+                .detail(VALIDATION_FAILED_DETAIL)
+                .extension(
+                    ERRORS_EXTENSION, List.of(Map.of("field", "idVar", "error", VIOLATION_ERROR)))
+                .build());
+  }
+
+  @Test
+  void givenTooShortRequestParam_shouldReturnValidationProblem() {
+    ResponseEntity<String> response =
+        restTemplate.getForEntity("/validate-parameter/request-param?query=v", String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
+
+    assertThat(problem)
+        .isEqualTo(
+            Problem.builder()
+                .status(ProblemStatus.BAD_REQUEST)
+                .detail(VALIDATION_FAILED_DETAIL)
+                .extension(
+                    ERRORS_EXTENSION,
+                    List.of(Map.of("field", "queryParam", "error", VIOLATION_ERROR)))
+                .build());
+  }
+
+  @Test
+  void givenTooShortRequestHeader_shouldReturnValidationProblem() {
+    HttpHeaders headers = new HttpHeaders();
+    headers.set("X-Custom-Header", "v");
+
+    ResponseEntity<String> response =
+        restTemplate.exchange(
+            "/validate-parameter/request-header",
+            HttpMethod.GET,
+            new HttpEntity<>(headers),
+            String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
+
+    assertThat(problem)
+        .isEqualTo(
+            Problem.builder()
+                .status(ProblemStatus.BAD_REQUEST)
+                .detail(VALIDATION_FAILED_DETAIL)
+                .extension(
+                    ERRORS_EXTENSION,
+                    List.of(Map.of("field", "xCustomHeader", "error", VIOLATION_ERROR)))
+                .build());
+  }
+
+  @Test
+  void givenTooShortCookieValue_shouldReturnValidationProblem() {
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Cookie", "x_session=v");
+
+    ResponseEntity<String> response =
+        restTemplate.exchange(
+            "/validate-parameter/cookie-value",
+            HttpMethod.GET,
+            new HttpEntity<>(headers),
+            String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
+
+    assertThat(problem)
+        .isEqualTo(
+            Problem.builder()
+                .status(ProblemStatus.BAD_REQUEST)
+                .detail(VALIDATION_FAILED_DETAIL)
+                .extension(
+                    ERRORS_EXTENSION,
+                    List.of(Map.of("field", "xSession", "error", VIOLATION_ERROR)))
+                .build());
+  }
+
+  @Test
+  void givenValueViolatingAllConstraints_shouldReturnAllErrors() {
+    ResponseEntity<String> response =
+        restTemplate.getForEntity("/validate-parameter/multi-constraint?input=v", String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
+
+    assertThat(problem.getExtensionValue(ERRORS_EXTENSION)).asInstanceOf(LIST).hasSize(2);
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"vvvvv", "iiiii"})
+  void givenValueViolatingSingleConstraint_shouldReturnCorrectError(String input) {
+    ResponseEntity<String> response =
+        restTemplate.getForEntity(
+            "/validate-parameter/multi-constraint?input=" + input, String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
+
+    assertThat(problem.getExtensionValue(ERRORS_EXTENSION)).asInstanceOf(LIST).hasSize(1);
+  }
+
+  @Test
+  void givenFirstParamTooShort_shouldReturnValidationError() {
+    ResponseEntity<String> response =
+        restTemplate.getForEntity(
+            "/validate-parameter/two-arg?first=v&second=anything", String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
+
+    assertThat(problem.getExtensionValue(ERRORS_EXTENSION))
+        .asInstanceOf(LIST)
+        .hasSize(1)
+        .allSatisfy(e -> assertThat(((Map<?, ?>) e).get("field")).isEqualTo("firstParam"));
+  }
+
+  @Test
+  void givenSecondParamTooShort_shouldReturnValidationError() {
+    ResponseEntity<String> response =
+        restTemplate.getForEntity(
+            "/validate-parameter/three-arg?first=anything&second=v&third=anything", String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
+
+    assertThat(problem.getExtensionValue(ERRORS_EXTENSION))
+        .asInstanceOf(LIST)
+        .hasSize(1)
+        .allSatisfy(e -> assertThat(((Map<?, ?>) e).get("field")).isEqualTo("secondParam"));
+  }
+
+  @ParameterizedTest
+  @CsvSource({
+    "/validate-parameter/query-object/annotated,toolong1,-1",
+    "/validate-parameter/query-object/unannotated,toolong1,-1",
+    "/validate-parameter/query-record/annotated,toolong1,-1",
+    "/validate-parameter/query-record/unannotated,toolong1,-1"
+  })
+  void givenQuerySimpleObjectsWithViolations_shouldReturnValidationProblem(
+      String baseUrl, String text, String number) throws Exception {
+    ResponseEntity<String> response =
+        restTemplate.getForEntity(baseUrl + "?text=" + text + "&number=" + number, String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
+
+    assertThat(problem.getType()).isEqualTo(Problem.BLANK_TYPE);
+    assertThat(problem.getTitle()).isEqualTo(ProblemStatus.BAD_REQUEST.getTitle());
+    assertThat(problem.getStatus()).isEqualTo(ProblemStatus.BAD_REQUEST.getStatus());
+    assertThat(problem.getExtensionMembers()).containsKey(ERRORS_EXTENSION);
+    assertThat(problem.getExtensionValue(ERRORS_EXTENSION))
+        .asInstanceOf(LIST)
+        .containsExactlyInAnyOrder(
+            Map.of("field", "text", "error", "size must be between 1 and 5"),
+            Map.of("field", "number", "error", "must be greater than 0"));
+  }
+
+  @ParameterizedTest
+  @CsvSource({
+    "/validate-parameter/query-bind-object/annotated,toolong1,-1",
+    "/validate-parameter/query-bind-object/unannotated,toolong1,-1",
+    "/validate-parameter/query-bind-record/annotated,toolong1,-1",
+    "/validate-parameter/query-bind-record/unannotated,toolong1,-1"
+  })
+  void givenQueryBindObjectsWithViolations_shouldReturnValidationProblem(
+      String baseUrl, String text, String num) throws Exception {
+    ResponseEntity<String> response =
+        restTemplate.getForEntity(baseUrl + "?text=" + text + "&num=" + num, String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
+
+    assertThat(problem.getType()).isEqualTo(Problem.BLANK_TYPE);
+    assertThat(problem.getTitle()).isEqualTo(ProblemStatus.BAD_REQUEST.getTitle());
+    assertThat(problem.getStatus()).isEqualTo(ProblemStatus.BAD_REQUEST.getStatus());
+    assertThat(problem.getExtensionMembers()).containsKey(ERRORS_EXTENSION);
+    assertThat(problem.getExtensionValue(ERRORS_EXTENSION))
+        .asInstanceOf(LIST)
+        .containsExactlyInAnyOrder(
+            Map.of("field", "text", "error", "size must be between 1 and 5"),
+            Map.of("field", "num", "error", "must be greater than 0"));
+  }
+
+  // No methods for Object-based binding with multiple ctors as it's not supported by Spring. It
+  // works only for records, and it will use record's canonical ctor.
+
+  @ParameterizedTest
+  @CsvSource({
+    "/validate-parameter/query-bind-ctors-record/annotated,toolong1,-1",
+    "/validate-parameter/query-bind-ctors-record/unannotated,toolong1,-1"
+  })
+  void givenQueryBindObjectsWithMultipleCtorsWithViolations_shouldReturnValidationProblem(
+      String baseUrl, String text, String num) throws Exception {
+    ResponseEntity<String> response =
+        restTemplate.getForEntity(baseUrl + "?text=" + text + "&num=" + num, String.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
+
+    Problem problem = jsonMapper.readValue(response.getBody(), Problem.class);
+
+    assertThat(problem.getType()).isEqualTo(Problem.BLANK_TYPE);
+    assertThat(problem.getTitle()).isEqualTo(ProblemStatus.BAD_REQUEST.getTitle());
+    assertThat(problem.getStatus()).isEqualTo(ProblemStatus.BAD_REQUEST.getStatus());
+    assertThat(problem.getExtensionMembers()).containsKey(ERRORS_EXTENSION);
+    assertThat(problem.getExtensionValue(ERRORS_EXTENSION))
+        .asInstanceOf(LIST)
+        .containsExactlyInAnyOrder(
+            Map.of("field", "text", "error", "size must be between 1 and 5"),
+            Map.of("field", "num", "error", "must be greater than 0"));
+  }
+}

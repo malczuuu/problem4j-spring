@@ -1,0 +1,66 @@
+package io.github.problem4j.spring.web.parameter;
+
+import static io.github.problem4j.spring.web.util.ProblemSupport.IS_NOT_VALID_ERROR;
+
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+
+/** Default implementation of {@link BindingResultSupport}. */
+public class DefaultBindingResultSupport implements BindingResultSupport {
+
+  /**
+   * Builds a {@link Violation}s list from a Spring {@link BindingResult} (e.g. produced when
+   * binding a {@code @ModelAttribute} fails or when {@code @Valid} detects field / global errors).
+   * Field errors are translated into {@link Violation}s keyed by field name; global errors use
+   * {@code null} as the field name.
+   *
+   * @param result the binding/validation result to convert (must not be {@code null})
+   * @return list of violations extracted from the binding result
+   */
+  @Override
+  public List<Violation> fetchViolations(BindingResult result) {
+    List<Violation> errors = new ArrayList<>();
+    result.getFieldErrors().forEach(f -> errors.add(resolveFieldError(result, f)));
+    result.getGlobalErrors().forEach(g -> errors.add(resolveGlobalError(result, g)));
+    return errors;
+  }
+
+  /**
+   * Converts a {@link FieldError} from a {@link BindingResult} into a {@link Violation}. *
+   *
+   * <p>{@code isBindingFailure() == true} usually means that there was a failure in creation of
+   * object from values taken out of request. Most common one is validation error or type mismatch
+   * between {@code @ModelAttribute}-annotated argument and one of its values. Consider running
+   * {@code WebExchangeBindExceptionWebFluxTest} or {@code MethodArgumentNotValidExceptionMvcTest}
+   * to debug this feature.
+   *
+   * @param bindingResult the {@link BindingResult} containing the validation errors
+   * @param error the {@link FieldError} to convert
+   * @return a {@link Violation} representing the field error
+   */
+  protected Violation resolveFieldError(BindingResult bindingResult, FieldError error) {
+    if (error.isBindingFailure()) {
+      return new Violation(error.getField(), IS_NOT_VALID_ERROR);
+    } else {
+      return new Violation(error.getField(), error.getDefaultMessage());
+    }
+  }
+
+  /**
+   * Converts a global {@link ObjectError} from a {@link BindingResult} into a {@link Violation}.
+   *
+   * <p>A global error is not associated with a specific field, so the {@code field} property of the
+   * resulting {@link Violation} is set to {@code null}. The {@code message} is taken from the
+   * error's default message.
+   *
+   * @param bindingResult the {@link BindingResult} containing the validation errors
+   * @param error the {@link ObjectError} to convert
+   * @return a {@link Violation} representing the global error
+   */
+  protected Violation resolveGlobalError(BindingResult bindingResult, ObjectError error) {
+    return new Violation(null, error.getDefaultMessage());
+  }
+}

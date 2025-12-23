@@ -1,8 +1,8 @@
 [versions]
 nmcp = "1.3.0"
-problem4j-core = "1.2.5"
-problem4j-jackson = "1.2.5"
-problem4j-jackson3 = "1.2.5"
+problem4j-core = "1.3.0-RC1"
+problem4j-jackson2 = "1.3.0-RC1"
+problem4j-jackson3 = "1.3.0-RC1"
 spotless = "8.1.0"
 spring-boot = "4.0.1"
 
@@ -16,9 +16,9 @@ spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
 
 # direct versions
-problem4j-core = { module = "io.github.malczuuu.problem4j:problem4j-core", version.ref = "problem4j-core" }
-problem4j-jackson = { module = "io.github.malczuuu.problem4j:problem4j-jackson", version.ref = "problem4j-jackson" }
-problem4j-jackson3 = { module = "io.github.malczuuu.problem4j:problem4j-jackson3", version.ref = "problem4j-jackson3" }
+problem4j-core = { module = "io.github.problem4j:problem4j-core", version.ref = "problem4j-core" }
+problem4j-jackson2 = { module = "io.github.problem4j:problem4j-jackson2", version.ref = "problem4j-jackson2" }
+problem4j-jackson3 = { module = "io.github.problem4j:problem4j-jackson3", version.ref = "problem4j-jackson3" }
 
 # versions managed by spring-boot-dependencies
 spring-boot-autoconfigure = { module = "org.springframework.boot:spring-boot-autoconfigure" }

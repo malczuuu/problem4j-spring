@@ -20,7 +20,7 @@ dependencies {
 
     // for backwards compatibility with jackson-databind v2
     compileOnly(libs.jackson.databind)
-    compileOnly(libs.problem4j.jackson)
+    compileOnly(libs.problem4j.jackson2)
 
     annotationProcessor(platform(libs.spring.boot.dependencies))
     annotationProcessor(libs.spring.boot.configuration.processor)
