@@ -21,7 +21,7 @@ dependencies {
     implementation(platform("io.github.problem4j:problem4j-spring-bom:{version}"))
 
     implementation("io.github.problem4j:problem4j-core")
-    implementation("io.github.problem4j:problem4j-jackson")
+    implementation("io.github.problem4j:problem4j-jackson2")
     implementation("io.github.problem4j:problem4j-spring-web")
     implementation("io.github.problem4j:problem4j-spring-webmvc")
     implementation("io.github.problem4j:problem4j-spring-webflux")
@@ -52,7 +52,7 @@ Add the BOM to `<dependencyManagement>` with `import` scope, then declare module
 </dependency>
 <dependency>
     <groupId>io.github.problem4j</groupId>
-    <artifactId>problem4j-jackson</artifactId>
+    <artifactId>problem4j-jackson2</artifactId>
 </dependency>
 <dependency>
     <groupId>io.github.problem4j</groupId>
