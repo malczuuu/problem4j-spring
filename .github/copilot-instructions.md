@@ -54,9 +54,9 @@
   - `problem4j-spring-webmvc`: integration for Spring WebMVC.
   - `problem4j-spring-webflux`: integration for Spring WebFlux.
 - **Spring entry points:** 
-    - [`ProblemAutoConfiguration`](../problem4j-spring-web/src/main/java/io/github/malczuuu/problem4j/spring/web/ProblemAutoConfiguration.java)
-    - [`ProblemWebFluxAutoConfiguration`](../problem4j-spring-webflux/src/main/java/io/github/malczuuu/problem4j/spring/webflux/ProblemWebFluxAutoConfiguration.java)
-    - [`ProblemMvcAutoConfiguration`](../problem4j-spring-webmvc/src/main/java/io/github/malczuuu/problem4j/spring/webmvc/ProblemMvcAutoConfiguration.java)
+    - [`ProblemAutoConfiguration`](../problem4j-spring-web/src/main/java/io/github/problem4j/spring/web/ProblemAutoConfiguration.java)
+    - [`ProblemWebFluxAutoConfiguration`](../problem4j-spring-webflux/src/main/java/io/github/problem4j/spring/webflux/ProblemWebFluxAutoConfiguration.java)
+    - [`ProblemMvcAutoConfiguration`](../problem4j-spring-webmvc/src/main/java/io/github/problem4j/spring/webmvc/ProblemMvcAutoConfiguration.java)
 
 ## Coding Guidelines
 

@@ -13,8 +13,8 @@ least until Spring Boot 3 reaches its end of life or becomes irrelevant.
 
 | branch           | info                                       | latest                                                                                                                            |
 |------------------|--------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
-| `main`           | version `2.x` supporting Spring Boot `4.x` | [![Sonatype](https://img.shields.io/maven-central/v/io.github.malczuuu.problem4j/problem4j-spring-bom?filter=2.*)][maven-central] |
-| `release-v1.*.x` | version `1.x` supporting Spring Boot `3.x` | [![Sonatype](https://img.shields.io/maven-central/v/io.github.malczuuu.problem4j/problem4j-spring-bom?filter=1.*)][maven-central] |
+| `main`           | version `2.x` supporting Spring Boot `4.x` | [![Sonatype](https://img.shields.io/maven-central/v/io.github.problem4j/problem4j-spring-bom?filter=2.*)][maven-central] |
+| `release-v1.*.x` | version `1.x` supporting Spring Boot `3.x` | [![Sonatype](https://img.shields.io/maven-central/v/io.github.problem4j/problem4j-spring-bom?filter=1.*)][maven-central] |
 
 Bugfixes for `1.x` should be merged into the lowest applicable `1.x` release branch. From there, they are cascaded
 forward into newer version branches if applicable, so fixes propagate through the release line without being duplicated
@@ -35,8 +35,8 @@ issue is critical or a change can be backported with minimal effort.
 
 ## Maven Central
 
-[![Publish Release Status](https://github.com/malczuuu/problem4j-spring/actions/workflows/gradle-publish-release.yml/badge.svg)][gradle-publish-release]
-[![Sonatype](https://img.shields.io/maven-central/v/io.github.malczuuu.problem4j/problem4j-spring-bom)][maven-central]
+[![Publish Release Status](https://github.com/problem4j/problem4j-spring/actions/workflows/gradle-publish-release.yml/badge.svg)][gradle-publish-release]
+[![Sonatype](https://img.shields.io/maven-central/v/io.github.problem4j/problem4j-spring-bom)][maven-central]
 
 1. Keep Git tags with `vX.Y.Z-suffix` format. GitHub Actions job will only trigger on such tags and will remove `v`
    prefix.
@@ -65,8 +65,8 @@ Artifacts are published to Maven Central via Sonatype, using following Gradle ta
 
 This command uses `nmcp` Gradle plugin - [link](https://github.com/GradleUp/nmcp).
 
-[gradle-publish-release]: https://github.com/malczuuu/problem4j-spring/actions/workflows/gradle-publish-release.yml
+[gradle-publish-release]: https://github.com/problem4j/problem4j-spring/actions/workflows/gradle-publish-release.yml
 
 [gradle-publish-release.yml]: .github/workflows/gradle-publish-release.yml
 
-[maven-central]: https://central.sonatype.com/namespace/io.github.malczuuu.problem4j
+[maven-central]: https://central.sonatype.com/namespace/io.github.problem4j
