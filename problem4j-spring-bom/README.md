@@ -1,6 +1,6 @@
 # BOM of Problem4J
 
-[![Sonatype](https://img.shields.io/maven-central/v/io.github.malczuuu.problem4j/problem4j-spring-bom?filter=1.1.*)](https://central.sonatype.com/artifact/io.github.malczuuu.problem4j/problem4j-spring-bom)
+[![Sonatype](https://img.shields.io/maven-central/v/io.github.problem4j/problem4j-spring-bom?filter=1.1.*)](https://central.sonatype.com/artifact/io.github.problem4j/problem4j-spring-bom)
 
 Bill Of Materials (BOM) for the Spring integrations of **Problem4J**, a library implementing *RFC 7807 - Problem Details
 for HTTP APIs*.
@@ -18,13 +18,13 @@ Add the BOM to `implementation(platform(...))`, then declare modules without ver
 
 ```kotlin
 dependencies {
-    implementation(platform("io.github.malczuuu.problem4j:problem4j-spring-bom:{version}"))
+    implementation(platform("io.github.problem4j:problem4j-spring-bom:{version}"))
 
-    implementation("io.github.malczuuu.problem4j:problem4j-core")
-    implementation("io.github.malczuuu.problem4j:problem4j-jackson")
-    implementation("io.github.malczuuu.problem4j:problem4j-spring-web")
-    implementation("io.github.malczuuu.problem4j:problem4j-spring-webmvc")
-    implementation("io.github.malczuuu.problem4j:problem4j-spring-webflux")
+    implementation("io.github.problem4j:problem4j-core")
+    implementation("io.github.problem4j:problem4j-jackson")
+    implementation("io.github.problem4j:problem4j-spring-web")
+    implementation("io.github.problem4j:problem4j-spring-webmvc")
+    implementation("io.github.problem4j:problem4j-spring-webflux")
 }
 ```
 
@@ -36,7 +36,7 @@ Add the BOM to `<dependencyManagement>` with `import` scope, then declare module
 <dependencyManagement>
     <dependencies>
         <dependency>
-            <groupId>io.github.malczuuu.problem4j</groupId>
+            <groupId>io.github.problem4j</groupId>
             <artifactId>problem4j-spring-bom</artifactId>
             <version>{version}</version>
             <type>pom</type>
@@ -47,28 +47,28 @@ Add the BOM to `<dependencyManagement>` with `import` scope, then declare module
 
 <dependencies>
 <dependency>
-    <groupId>io.github.malczuuu.problem4j</groupId>
+    <groupId>io.github.problem4j</groupId>
     <artifactId>problem4j-core</artifactId>
 </dependency>
 <dependency>
-    <groupId>io.github.malczuuu.problem4j</groupId>
+    <groupId>io.github.problem4j</groupId>
     <artifactId>problem4j-jackson</artifactId>
 </dependency>
 <dependency>
-    <groupId>io.github.malczuuu.problem4j</groupId>
+    <groupId>io.github.problem4j</groupId>
     <artifactId>problem4j-spring-web</artifactId>
 </dependency>
 <dependency>
-    <groupId>io.github.malczuuu.problem4j</groupId>
+    <groupId>io.github.problem4j</groupId>
     <artifactId>problem4j-spring-webmvc</artifactId>
 </dependency>
 <dependency>
-    <groupId>io.github.malczuuu.problem4j</groupId>
+    <groupId>io.github.problem4j</groupId>
     <artifactId>problem4j-spring-webflux</artifactId>
 </dependency>
 </dependencies>
 ```
 
-[problem4j-core]: https://github.com/malczuuu/problem4j-core
+[problem4j-core]: https://github.com/problem4j/problem4j-core
 
-[problem4j-jackson]: https://github.com/malczuuu/problem4j-jackson
+[problem4j-jackson]: https://github.com/problem4j/problem4j-jackson

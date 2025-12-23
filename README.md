@@ -1,8 +1,8 @@
 # Problem4J Spring
 
-[![Build Status](https://github.com/malczuuu/problem4j-spring/actions/workflows/gradle-build.yml/badge.svg)](https://github.com/malczuuu/problem4j-spring/actions/workflows/gradle-build.yml)
-[![Sonatype](https://img.shields.io/maven-central/v/io.github.malczuuu.problem4j/problem4j-spring-bom?filter=1.1.*)][maven-central]
-[![License](https://img.shields.io/github/license/malczuuu/problem4j-spring)](https://github.com/malczuuu/problem4j-spring/blob/main/LICENSE)
+[![Build Status](https://github.com/problem4j/problem4j-spring/actions/workflows/gradle-build.yml/badge.svg)](https://github.com/problem4j/problem4j-spring/actions/workflows/gradle-build.yml)
+[![Sonatype](https://img.shields.io/maven-central/v/io.github.problem4j/problem4j-spring-bom?filter=1.1.*)][maven-central]
+[![License](https://img.shields.io/github/license/problem4j/problem4j-spring)](https://github.com/problem4j/problem4j-spring/blob/main/LICENSE)
 [![Spring Boot](https://img.shields.io/badge/v3,v4-6DB33F?label=Spring%20Boot)](https://spring.io/projects/spring-boot)
 
 Designing clear and consistent error responses in a REST API is often harder than it looks. Without a shared standard,
@@ -167,12 +167,12 @@ extension to it and does not bring it transitively.
    <dependencies>
        <!-- pick the one for your project -->
        <dependency>
-           <groupId>io.github.malczuuu.problem4j</groupId>
+           <groupId>io.github.problem4j</groupId>
            <artifactId>problem4j-spring-webflux</artifactId>
            <version>${version}</version>
        </dependency>
        <dependency>
-           <groupId>io.github.malczuuu.problem4j</groupId>
+           <groupId>io.github.problem4j</groupId>
            <artifactId>problem4j-spring-webmvc</artifactId>
            <version>${version}</version>
        </dependency>
@@ -182,8 +182,8 @@ extension to it and does not bring it transitively.
    ```groovy
    dependencies {
        // pick the one for your project
-       implementation("io.github.malczuuu.problem4j:problem4j-spring-webflux:${version}")
-       implementation("io.github.malczuuu.problem4j:problem4j-spring-webmvc:${version}")
+       implementation("io.github.problem4j:problem4j-spring-webflux:${version}")
+       implementation("io.github.problem4j:problem4j-spring-webmvc:${version}")
    }
    ```
 
@@ -194,8 +194,8 @@ least until Spring Boot 3 reaches its end of life or becomes irrelevant.
 
 | branch           | info                                       | latest                                                                                                                            |
 |------------------|--------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
-| `main`           | version `2.x` supporting Spring Boot `4.x` | [![Sonatype](https://img.shields.io/maven-central/v/io.github.malczuuu.problem4j/problem4j-spring-bom?filter=2.*)][maven-central] |
-| `release-v1.*.x` | version `1.x` supporting Spring Boot `3.x` | [![Sonatype](https://img.shields.io/maven-central/v/io.github.malczuuu.problem4j/problem4j-spring-bom?filter=1.*)][maven-central] |
+| `main`           | version `2.x` supporting Spring Boot `4.x` | [![Sonatype](https://img.shields.io/maven-central/v/io.github.problem4j/problem4j-spring-bom?filter=2.*)][maven-central] |
+| `release-v1.*.x` | version `1.x` supporting Spring Boot `3.x` | [![Sonatype](https://img.shields.io/maven-central/v/io.github.problem4j/problem4j-spring-bom?filter=1.*)][maven-central] |
 
 ## Problem4J Links
 
@@ -239,14 +239,14 @@ version. By default, the version is derived from git commit hash.
 
 </details>
 
-[maven-central]: https://central.sonatype.com/namespace/io.github.malczuuu.problem4j
+[maven-central]: https://central.sonatype.com/namespace/io.github.problem4j
 
-[problem4j-core]: https://github.com/malczuuu/problem4j-core
+[problem4j-core]: https://github.com/problem4j/problem4j-core
 
-[problem4j-jackson]: https://github.com/malczuuu/problem4j-jackson
+[problem4j-jackson]: https://github.com/problem4j/problem4j-jackson
 
-[problem4j-spring]: https://github.com/malczuuu/problem4j-spring
+[problem4j-spring]: https://github.com/problem4j/problem4j-spring
 
-[repository-wiki-pages]: https://github.com/malczuuu/problem4j-spring/wiki
+[repository-wiki-pages]: https://github.com/problem4j/problem4j-spring/wiki
 
 [rfc7807]: https://datatracker.ietf.org/doc/html/rfc7807

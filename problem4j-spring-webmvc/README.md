@@ -26,6 +26,6 @@ distinguishes between `Accept` header to display a formatted page or JSON with b
 - It can be overwritten further by declaring a custom `ErrorController` component.
 - Exclude [`ProblemErrorMvcConfiguration`][ProblemErrorMvcConfiguration] do disable this override.
 
-[ProblemErrorController]: src/main/java/io/github/malczuuu/problem4j/spring/webmvc/error/ProblemErrorController.java
+[ProblemErrorController]: src/main/java/io/github/problem4j/spring/webmvc/error/ProblemErrorController.java
 
-[ProblemErrorMvcConfiguration]: src/main/java/io/github/malczuuu/problem4j/spring/webmvc/error/ProblemErrorMvcConfiguration.java
+[ProblemErrorMvcConfiguration]: src/main/java/io/github/problem4j/spring/webmvc/error/ProblemErrorMvcConfiguration.java
