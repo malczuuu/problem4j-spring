@@ -1,6 +1,6 @@
 package io.github.problem4j.spring.web.parameter;
 
-import static io.github.problem4j.spring.web.util.ProblemSupport.IS_NOT_VALID_ERROR;
+import static io.github.problem4j.spring.web.ProblemSupport.IS_NOT_VALID_ERROR;
 
 import java.util.ArrayList;
 import java.util.List;

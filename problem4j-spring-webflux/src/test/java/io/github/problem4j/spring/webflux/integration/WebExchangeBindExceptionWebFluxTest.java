@@ -14,8 +14,8 @@
  */
 package io.github.problem4j.spring.webflux.integration;
 
-import static io.github.problem4j.spring.web.util.ProblemSupport.ERRORS_EXTENSION;
-import static io.github.problem4j.spring.web.util.ProblemSupport.VALIDATION_FAILED_DETAIL;
+import static io.github.problem4j.spring.web.ProblemSupport.ERRORS_EXTENSION;
+import static io.github.problem4j.spring.web.ProblemSupport.VALIDATION_FAILED_DETAIL;
 import static org.hamcrest.Matchers.notNullValue;
 
 import io.github.problem4j.core.Problem;

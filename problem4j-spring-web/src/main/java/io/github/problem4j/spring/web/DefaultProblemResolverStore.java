@@ -14,11 +14,9 @@
  */
 package io.github.problem4j.spring.web;
 
-import static io.github.problem4j.spring.web.util.HierarchyTraversalMode.SUPERCLASS;
+import static io.github.problem4j.spring.web.HierarchyTraversalMode.SUPERCLASS;
 
 import io.github.problem4j.spring.web.resolver.ProblemResolver;
-import io.github.problem4j.spring.web.util.ClassDistanceEvaluation;
-import io.github.problem4j.spring.web.util.GraphClassDistanceEvaluation;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;

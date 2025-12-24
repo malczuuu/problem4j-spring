@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemException;
 import io.github.problem4j.core.ProblemStatus;
-import io.github.problem4j.spring.web.processor.IdentityProblemPostProcessor;
+import io.github.problem4j.spring.web.IdentityProblemPostProcessor;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.BeforeEach;

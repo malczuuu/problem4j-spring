@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import io.github.problem4j.spring.web.format.IdentityProblemFormat;
 import io.github.problem4j.spring.web.resolver.AbstractProblemResolver;
 import io.github.problem4j.spring.web.resolver.ProblemResolver;
 import java.io.IOException;

@@ -14,14 +14,14 @@
  */
 package io.github.problem4j.spring.web.resolver;
 
-import static io.github.problem4j.spring.web.util.ProblemSupport.MISSING_REQUEST_PART_DETAIL;
-import static io.github.problem4j.spring.web.util.ProblemSupport.PARAM_EXTENSION;
+import static io.github.problem4j.spring.web.ProblemSupport.MISSING_REQUEST_PART_DETAIL;
+import static io.github.problem4j.spring.web.ProblemSupport.PARAM_EXTENSION;
 
 import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.core.ProblemStatus;
-import io.github.problem4j.spring.web.format.ProblemFormat;
+import io.github.problem4j.spring.web.ProblemFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
@@ -62,8 +62,8 @@ public class MissingServletRequestPartProblemResolver extends AbstractProblemRes
    * @param headers HTTP headers (unused)
    * @param status suggested status from caller (ignored; 400 enforced)
    * @return builder pre-populated with status, detail and parameter extension
-   * @see io.github.problem4j.spring.web.util.ProblemSupport#MISSING_REQUEST_PART_DETAIL
-   * @see io.github.problem4j.spring.web.util.ProblemSupport#PARAM_EXTENSION
+   * @see io.github.problem4j.spring.web.ProblemSupport#MISSING_REQUEST_PART_DETAIL
+   * @see io.github.problem4j.spring.web.ProblemSupport#PARAM_EXTENSION
    */
   @Override
   public ProblemBuilder resolveBuilder(

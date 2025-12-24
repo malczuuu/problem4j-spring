@@ -14,8 +14,8 @@
  */
 package io.github.problem4j.spring.webmvc;
 
-import static io.github.problem4j.spring.web.context.AttributeSupport.PROBLEM_CONTEXT_ATTRIBUTE;
-import static io.github.problem4j.spring.web.util.ProblemSupport.resolveStatus;
+import static io.github.problem4j.spring.web.AttributeSupport.PROBLEM_CONTEXT_ATTRIBUTE;
+import static io.github.problem4j.spring.web.ProblemSupport.resolveStatus;
 import static io.github.problem4j.spring.webmvc.MvcAdviceSupport.logAdviceException;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
@@ -24,10 +24,10 @@ import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.core.ProblemMapper;
 import io.github.problem4j.core.ProblemStatus;
+import io.github.problem4j.spring.web.ProblemPostProcessor;
 import io.github.problem4j.spring.web.ProblemResolverStore;
-import io.github.problem4j.spring.web.processor.ProblemPostProcessor;
+import io.github.problem4j.spring.web.ProblemSupport;
 import io.github.problem4j.spring.web.resolver.ProblemResolver;
-import io.github.problem4j.spring.web.util.ProblemSupport;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;

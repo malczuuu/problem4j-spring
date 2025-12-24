@@ -14,9 +14,9 @@
  */
 package io.github.problem4j.spring.webmvc.integration;
 
-import static io.github.problem4j.spring.web.util.ProblemSupport.ERRORS_EXTENSION;
-import static io.github.problem4j.spring.web.util.ProblemSupport.IS_NOT_VALID_ERROR;
-import static io.github.problem4j.spring.web.util.ProblemSupport.VALIDATION_FAILED_DETAIL;
+import static io.github.problem4j.spring.web.ProblemSupport.ERRORS_EXTENSION;
+import static io.github.problem4j.spring.web.ProblemSupport.IS_NOT_VALID_ERROR;
+import static io.github.problem4j.spring.web.ProblemSupport.VALIDATION_FAILED_DETAIL;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -14,19 +14,19 @@
  */
 package io.github.problem4j.spring.webflux.integration;
 
-import static io.github.problem4j.spring.web.util.ProblemSupport.ATTRIBUTE_EXTENSION;
-import static io.github.problem4j.spring.web.util.ProblemSupport.COOKIE_EXTENSION;
-import static io.github.problem4j.spring.web.util.ProblemSupport.HEADER_EXTENSION;
-import static io.github.problem4j.spring.web.util.ProblemSupport.KIND_EXTENSION;
-import static io.github.problem4j.spring.web.util.ProblemSupport.MISSING_COOKIE_DETAIL;
-import static io.github.problem4j.spring.web.util.ProblemSupport.MISSING_HEADER_DETAIL;
-import static io.github.problem4j.spring.web.util.ProblemSupport.MISSING_PATH_VARIABLE_DETAIL;
-import static io.github.problem4j.spring.web.util.ProblemSupport.MISSING_REQUEST_ATTRIBUTE_DETAIL;
-import static io.github.problem4j.spring.web.util.ProblemSupport.MISSING_REQUEST_PARAM_DETAIL;
-import static io.github.problem4j.spring.web.util.ProblemSupport.MISSING_REQUEST_PART_DETAIL;
-import static io.github.problem4j.spring.web.util.ProblemSupport.MISSING_SESSION_ATTRIBUTE_DETAIL;
-import static io.github.problem4j.spring.web.util.ProblemSupport.NAME_EXTENSION;
-import static io.github.problem4j.spring.web.util.ProblemSupport.PARAM_EXTENSION;
+import static io.github.problem4j.spring.web.ProblemSupport.ATTRIBUTE_EXTENSION;
+import static io.github.problem4j.spring.web.ProblemSupport.COOKIE_EXTENSION;
+import static io.github.problem4j.spring.web.ProblemSupport.HEADER_EXTENSION;
+import static io.github.problem4j.spring.web.ProblemSupport.KIND_EXTENSION;
+import static io.github.problem4j.spring.web.ProblemSupport.MISSING_COOKIE_DETAIL;
+import static io.github.problem4j.spring.web.ProblemSupport.MISSING_HEADER_DETAIL;
+import static io.github.problem4j.spring.web.ProblemSupport.MISSING_PATH_VARIABLE_DETAIL;
+import static io.github.problem4j.spring.web.ProblemSupport.MISSING_REQUEST_ATTRIBUTE_DETAIL;
+import static io.github.problem4j.spring.web.ProblemSupport.MISSING_REQUEST_PARAM_DETAIL;
+import static io.github.problem4j.spring.web.ProblemSupport.MISSING_REQUEST_PART_DETAIL;
+import static io.github.problem4j.spring.web.ProblemSupport.MISSING_SESSION_ATTRIBUTE_DETAIL;
+import static io.github.problem4j.spring.web.ProblemSupport.NAME_EXTENSION;
+import static io.github.problem4j.spring.web.ProblemSupport.PARAM_EXTENSION;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 

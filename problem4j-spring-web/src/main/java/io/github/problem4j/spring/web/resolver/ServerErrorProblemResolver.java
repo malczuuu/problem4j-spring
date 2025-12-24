@@ -14,14 +14,14 @@
  */
 package io.github.problem4j.spring.web.resolver;
 
-import static io.github.problem4j.spring.web.util.ProblemSupport.MISSING_PATH_VARIABLE_DETAIL;
-import static io.github.problem4j.spring.web.util.ProblemSupport.NAME_EXTENSION;
+import static io.github.problem4j.spring.web.ProblemSupport.MISSING_PATH_VARIABLE_DETAIL;
+import static io.github.problem4j.spring.web.ProblemSupport.NAME_EXTENSION;
 
 import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.core.ProblemStatus;
-import io.github.problem4j.spring.web.format.ProblemFormat;
+import io.github.problem4j.spring.web.ProblemFormat;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpHeaders;
@@ -64,8 +64,8 @@ public class ServerErrorProblemResolver extends AbstractProblemResolver {
    * @param headers HTTP headers (unused)
    * @param status suggested status from caller (ignored; derives from condition)
    * @return builder with BAD_REQUEST + path variable info or INTERNAL_SERVER_ERROR
-   * @see io.github.problem4j.spring.web.util.ProblemSupport#MISSING_PATH_VARIABLE_DETAIL
-   * @see io.github.problem4j.spring.web.util.ProblemSupport#NAME_EXTENSION
+   * @see io.github.problem4j.spring.web.ProblemSupport#MISSING_PATH_VARIABLE_DETAIL
+   * @see io.github.problem4j.spring.web.ProblemSupport#NAME_EXTENSION
    */
   @Override
   public ProblemBuilder resolveBuilder(

@@ -14,7 +14,7 @@
  */
 package io.github.problem4j.spring.webflux;
 
-import static io.github.problem4j.spring.web.context.AttributeSupport.TRACE_ID_ATTRIBUTE;
+import static io.github.problem4j.spring.web.AttributeSupport.TRACE_ID_ATTRIBUTE;
 
 import org.slf4j.Logger;
 import org.springframework.web.server.ServerWebExchange;

@@ -17,7 +17,7 @@ package io.github.problem4j.spring.webflux;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.problem4j.spring.web.DefaultProblemResolverStore;
-import io.github.problem4j.spring.web.processor.IdentityProblemPostProcessor;
+import io.github.problem4j.spring.web.IdentityProblemPostProcessor;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.BeforeEach;

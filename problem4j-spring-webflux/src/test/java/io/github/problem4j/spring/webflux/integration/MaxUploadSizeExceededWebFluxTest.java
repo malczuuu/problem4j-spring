@@ -14,8 +14,8 @@
  */
 package io.github.problem4j.spring.webflux.integration;
 
-import static io.github.problem4j.spring.web.util.ProblemSupport.MAX_EXTENSION;
-import static io.github.problem4j.spring.web.util.ProblemSupport.MAX_UPLOAD_SIZE_EXCEEDED_DETAIL;
+import static io.github.problem4j.spring.web.ProblemSupport.MAX_EXTENSION;
+import static io.github.problem4j.spring.web.ProblemSupport.MAX_UPLOAD_SIZE_EXCEEDED_DETAIL;
 import static org.hamcrest.Matchers.notNullValue;
 
 import io.github.problem4j.core.Problem;

@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.problem4j.core.ProblemMapper;
 import io.github.problem4j.spring.web.DefaultProblemResolverStore;
-import io.github.problem4j.spring.web.processor.IdentityProblemPostProcessor;
+import io.github.problem4j.spring.web.IdentityProblemPostProcessor;
 import jakarta.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Set;
