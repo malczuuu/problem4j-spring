@@ -14,7 +14,7 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
-    target-branch: release-v1.1.x
+    target-branch: release-v1.2.x
     open-pull-requests-limit: 10
     labels:
       - "target: maintenance"
@@ -40,7 +40,7 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
-    target-branch: release-v1.1.x
+    target-branch: release-v1.2.x
     open-pull-requests-limit: 10
     allow:
       - dependency-type: "direct"
