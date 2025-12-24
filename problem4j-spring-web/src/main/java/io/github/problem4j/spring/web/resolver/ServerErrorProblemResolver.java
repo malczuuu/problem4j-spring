@@ -21,6 +21,7 @@ import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.core.ProblemStatus;
+import io.github.problem4j.spring.web.IdentityProblemFormat;
 import io.github.problem4j.spring.web.ProblemFormat;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -43,6 +44,10 @@ import org.springframework.web.server.ServerErrorException;
  * problem.
  */
 public class ServerErrorProblemResolver extends AbstractProblemResolver {
+
+  public ServerErrorProblemResolver() {
+    this(new IdentityProblemFormat());
+  }
 
   public ServerErrorProblemResolver(ProblemFormat problemFormat) {
     super(ServerErrorException.class, problemFormat);

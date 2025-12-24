@@ -18,6 +18,7 @@ import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.core.ProblemStatus;
+import io.github.problem4j.spring.web.IdentityProblemFormat;
 import io.github.problem4j.spring.web.ProblemFormat;
 import org.springframework.core.codec.DecodingException;
 import org.springframework.http.HttpHeaders;
@@ -31,6 +32,10 @@ import org.springframework.http.HttpStatusCode;
  * response with {@code 400 Bad Request} status.
  */
 public class DecodingProblemResolver extends AbstractProblemResolver {
+
+  public DecodingProblemResolver() {
+    this(new IdentityProblemFormat());
+  }
 
   public DecodingProblemResolver(ProblemFormat problemFormat) {
     super(DecodingException.class, problemFormat);

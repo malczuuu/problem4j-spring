@@ -18,6 +18,7 @@ import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.core.ProblemStatus;
+import io.github.problem4j.spring.web.IdentityProblemFormat;
 import io.github.problem4j.spring.web.ProblemFormat;
 import io.github.problem4j.spring.web.resolver.AbstractProblemResolver;
 import org.springframework.http.HttpHeaders;
@@ -35,6 +36,10 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
  * indicate that the requested resource is not available.
  */
 public class NoResourceFoundProblemResolver extends AbstractProblemResolver {
+
+  public NoResourceFoundProblemResolver() {
+    this(new IdentityProblemFormat());
+  }
 
   public NoResourceFoundProblemResolver(ProblemFormat problemFormat) {
     super(NoResourceFoundException.class, problemFormat);

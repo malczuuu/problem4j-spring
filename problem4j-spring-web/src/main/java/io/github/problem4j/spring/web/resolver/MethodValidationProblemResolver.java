@@ -21,6 +21,7 @@ import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.core.ProblemStatus;
+import io.github.problem4j.spring.web.IdentityProblemFormat;
 import io.github.problem4j.spring.web.ProblemFormat;
 import io.github.problem4j.spring.web.parameter.DefaultMethodValidationResultSupport;
 import io.github.problem4j.spring.web.parameter.MethodValidationResultSupport;
@@ -51,6 +52,10 @@ import org.springframework.validation.method.MethodValidationException;
 public class MethodValidationProblemResolver extends AbstractProblemResolver {
 
   private final MethodValidationResultSupport methodValidationResultSupport;
+
+  public MethodValidationProblemResolver() {
+    this(new IdentityProblemFormat());
+  }
 
   public MethodValidationProblemResolver(ProblemFormat problemFormat) {
     this(problemFormat, new DefaultMethodValidationResultSupport());

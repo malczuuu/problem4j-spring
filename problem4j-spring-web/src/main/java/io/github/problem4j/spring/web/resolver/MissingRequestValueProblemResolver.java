@@ -39,6 +39,7 @@ import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.core.ProblemStatus;
+import io.github.problem4j.spring.web.IdentityProblemFormat;
 import io.github.problem4j.spring.web.ProblemFormat;
 import java.util.Locale;
 import org.springframework.http.HttpHeaders;
@@ -56,6 +57,10 @@ import org.springframework.web.server.MissingRequestValueException;
  * indicate that a required input value is missing.
  */
 public class MissingRequestValueProblemResolver extends AbstractProblemResolver {
+
+  public MissingRequestValueProblemResolver() {
+    this(new IdentityProblemFormat());
+  }
 
   public MissingRequestValueProblemResolver(ProblemFormat problemFormat) {
     super(MissingRequestValueException.class, problemFormat);

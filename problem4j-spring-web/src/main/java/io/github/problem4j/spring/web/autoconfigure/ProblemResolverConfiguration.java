@@ -16,6 +16,7 @@ package io.github.problem4j.spring.web.autoconfigure;
 
 import io.github.problem4j.spring.web.ProblemFormat;
 import io.github.problem4j.spring.web.parameter.BindingResultSupport;
+import io.github.problem4j.spring.web.parameter.MethodParameterSupport;
 import io.github.problem4j.spring.web.parameter.MethodValidationResultSupport;
 import io.github.problem4j.spring.web.resolver.BindProblemResolver;
 import io.github.problem4j.spring.web.resolver.ConstraintViolationProblemResolver;
@@ -254,8 +255,9 @@ class ProblemResolverConfiguration {
   static class ServerWebInputProblemConfiguration {
     @ConditionalOnMissingBean(ServerWebInputProblemResolver.class)
     @Bean
-    ServerWebInputProblemResolver serverWebInputProblemResolver(ProblemFormat problemFormat) {
-      return new ServerWebInputProblemResolver(problemFormat);
+    ServerWebInputProblemResolver serverWebInputProblemResolver(
+        ProblemFormat problemFormat, MethodParameterSupport methodParameterSupport) {
+      return new ServerWebInputProblemResolver(problemFormat, methodParameterSupport);
     }
   }
 

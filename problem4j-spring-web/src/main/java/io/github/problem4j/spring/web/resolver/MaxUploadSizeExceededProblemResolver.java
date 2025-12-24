@@ -21,6 +21,7 @@ import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.core.ProblemStatus;
+import io.github.problem4j.spring.web.IdentityProblemFormat;
 import io.github.problem4j.spring.web.ProblemFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -37,6 +38,10 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
  * to inform the client that the uploaded file exceeds the allowed size.
  */
 public class MaxUploadSizeExceededProblemResolver extends AbstractProblemResolver {
+
+  public MaxUploadSizeExceededProblemResolver() {
+    this(new IdentityProblemFormat());
+  }
 
   public MaxUploadSizeExceededProblemResolver(ProblemFormat problemFormat) {
     super(MaxUploadSizeExceededException.class, problemFormat);

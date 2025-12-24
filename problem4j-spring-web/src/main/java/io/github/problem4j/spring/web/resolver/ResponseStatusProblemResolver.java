@@ -19,6 +19,7 @@ import static io.github.problem4j.spring.web.ProblemSupport.resolveStatus;
 import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
+import io.github.problem4j.spring.web.IdentityProblemFormat;
 import io.github.problem4j.spring.web.ProblemFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -36,6 +37,10 @@ import org.springframework.web.server.ResponseStatusException;
  * with the specified status code, reason, and any additional details.
  */
 public class ResponseStatusProblemResolver extends AbstractProblemResolver {
+
+  public ResponseStatusProblemResolver() {
+    this(new IdentityProblemFormat());
+  }
 
   public ResponseStatusProblemResolver(ProblemFormat problemFormat) {
     super(ResponseStatusException.class, problemFormat);

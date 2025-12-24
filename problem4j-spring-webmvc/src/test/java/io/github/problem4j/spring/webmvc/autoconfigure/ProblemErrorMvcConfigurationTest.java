@@ -17,7 +17,7 @@ package io.github.problem4j.spring.webmvc.autoconfigure;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.problem4j.spring.webmvc.ProblemErrorController;
-import io.github.problem4j.spring.webmvc.app.MvcTestApp;
+import io.github.problem4j.spring.webmvc.app.WebMvcTestApp;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ import org.springframework.boot.webmvc.error.ErrorController;
 
 class ProblemErrorMvcConfigurationTest {
 
-  @SpringBootTest(classes = {MvcTestApp.class})
+  @SpringBootTest(classes = {WebMvcTestApp.class})
   @Nested
   class WithEnabled {
 
@@ -35,7 +35,7 @@ class ProblemErrorMvcConfigurationTest {
 
     @Autowired private ErrorController errorController;
 
-    @Autowired private ProblemMvcProperties properties;
+    @Autowired private ProblemWebMvcProperties properties;
 
     @Test
     void contextLoads() {
@@ -46,7 +46,7 @@ class ProblemErrorMvcConfigurationTest {
   }
 
   @SpringBootTest(
-      classes = {MvcTestApp.class},
+      classes = {WebMvcTestApp.class},
       properties = {"problem4j.webmvc.error-controller.enabled=false"})
   @Nested
   class WithDisabled {
@@ -56,7 +56,7 @@ class ProblemErrorMvcConfigurationTest {
 
     @Autowired private ErrorController errorController;
 
-    @Autowired private ProblemMvcProperties properties;
+    @Autowired private ProblemWebMvcProperties properties;
 
     @Test
     void contextLoads() {

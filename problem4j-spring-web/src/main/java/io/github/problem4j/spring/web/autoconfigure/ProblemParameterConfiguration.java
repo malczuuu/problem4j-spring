@@ -9,6 +9,7 @@ import io.github.problem4j.spring.web.parameter.MethodParameterSupport;
 import io.github.problem4j.spring.web.parameter.MethodValidationResultSupport;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.BindParam;
  * Configuration for parameter support components, such as method parameter name resolution and
  * binding / method validation result conversion.
  */
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.ANY)
 @Configuration(proxyBeanMethods = false)
 class ProblemParameterConfiguration {
 

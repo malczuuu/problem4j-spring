@@ -18,6 +18,7 @@ import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.core.ProblemStatus;
+import io.github.problem4j.spring.web.IdentityProblemFormat;
 import io.github.problem4j.spring.web.ProblemFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -34,6 +35,10 @@ import org.springframework.web.HttpMediaTypeNotSupportedException;
  * response to inform the client that the submitted content type is not supported.
  */
 public class HttpMediaTypeNotSupportedProblemResolver extends AbstractProblemResolver {
+
+  public HttpMediaTypeNotSupportedProblemResolver() {
+    this(new IdentityProblemFormat());
+  }
 
   public HttpMediaTypeNotSupportedProblemResolver(ProblemFormat problemFormat) {
     super(HttpMediaTypeNotSupportedException.class, problemFormat);

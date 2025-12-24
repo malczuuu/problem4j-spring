@@ -92,7 +92,7 @@ class CachingProblemResolverStoreTest {
 
   private static class DummyResolver extends AbstractProblemResolver {
     DummyResolver(Class<? extends Exception> clazz) {
-      super(clazz, new IdentityProblemFormat());
+      super(clazz);
     }
   }
 

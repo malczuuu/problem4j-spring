@@ -18,6 +18,7 @@ import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.core.ProblemStatus;
+import io.github.problem4j.spring.web.IdentityProblemFormat;
 import io.github.problem4j.spring.web.ProblemFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -31,6 +32,10 @@ import org.springframework.web.multipart.MultipartException;
  * file size limits or parsing errors.
  */
 public class MultipartProblemResolver extends AbstractProblemResolver {
+
+  public MultipartProblemResolver() {
+    this(new IdentityProblemFormat());
+  }
 
   public MultipartProblemResolver(ProblemFormat problemFormat) {
     super(MultipartException.class, problemFormat);
