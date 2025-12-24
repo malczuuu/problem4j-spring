@@ -19,42 +19,33 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemStatus;
-import io.github.problem4j.spring.webmvc.app.MvcTestApp;
-import java.util.List;
+import io.github.problem4j.spring.webmvc.app.WebMvcTestApp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 @SpringBootTest(
+    classes = {WebMvcTestApp.class},
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    classes = {MvcTestApp.class})
-class NotAcceptableMvcTest {
+    properties = {"spring.web.resources.add-mappings=true"})
+class NotFoundNoResourceFoundWebMvcTest {
 
   @Autowired private TestRestTemplate restTemplate;
   @Autowired private ObjectMapper objectMapper;
 
   @Test
-  void givenUnsupportedAcceptHeader_shouldReturnProblem() throws Exception {
-    HttpHeaders headers = new HttpHeaders();
-    headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-
-    HttpEntity<Void> request = new HttpEntity<>(headers);
-
+  void givenMissingStaticResource_shouldReturnProblem() throws Exception {
     ResponseEntity<String> response =
-        restTemplate.exchange("/not-acceptable", HttpMethod.GET, request, String.class);
+        restTemplate.getForEntity("/not-resource-found.html", String.class);
 
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_ACCEPTABLE);
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
     Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
 
-    assertThat(problem).isEqualTo(Problem.builder().status(ProblemStatus.NOT_ACCEPTABLE).build());
+    assertThat(problem).isEqualTo(Problem.builder().status(ProblemStatus.NOT_FOUND).build());
   }
 }

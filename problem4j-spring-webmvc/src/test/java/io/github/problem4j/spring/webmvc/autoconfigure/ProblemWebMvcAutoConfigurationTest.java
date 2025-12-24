@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.github.problem4j.spring.webmvc.ExceptionWebMvcAdvice;
 import io.github.problem4j.spring.webmvc.ProblemContextWebMvcFilter;
 import io.github.problem4j.spring.webmvc.ProblemExceptionWebMvcAdvice;
-import io.github.problem4j.spring.webmvc.app.MvcTestApp;
+import io.github.problem4j.spring.webmvc.app.WebMvcTestApp;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 class ProblemWebMvcAutoConfigurationTest {
 
-  @SpringBootTest(classes = {MvcTestApp.class})
+  @SpringBootTest(classes = {WebMvcTestApp.class})
   @Nested
   class WithEnabled {
 
@@ -54,7 +54,7 @@ class ProblemWebMvcAutoConfigurationTest {
   }
 
   @SpringBootTest(
-      classes = {MvcTestApp.class},
+      classes = {WebMvcTestApp.class},
       properties = {"problem4j.webmvc.enabled=false"})
   @Nested
   class WithDisabled {
@@ -81,7 +81,7 @@ class ProblemWebMvcAutoConfigurationTest {
     }
   }
 
-  @SpringBootTest(classes = {MvcTestApp.class})
+  @SpringBootTest(classes = {WebMvcTestApp.class})
   @Nested
   class WithExceptionAdviceEnabled {
 
@@ -98,7 +98,7 @@ class ProblemWebMvcAutoConfigurationTest {
   }
 
   @SpringBootTest(
-      classes = {MvcTestApp.class},
+      classes = {WebMvcTestApp.class},
       properties = {"problem4j.webmvc.exception-advice.enabled=false"})
   @Nested
   class WithExceptionAdviceDisabled {
@@ -115,7 +115,7 @@ class ProblemWebMvcAutoConfigurationTest {
     }
   }
 
-  @SpringBootTest(classes = {MvcTestApp.class})
+  @SpringBootTest(classes = {WebMvcTestApp.class})
   @Nested
   class WithProblemExceptionAdviceEnabled {
 
@@ -132,7 +132,7 @@ class ProblemWebMvcAutoConfigurationTest {
   }
 
   @SpringBootTest(
-      classes = {MvcTestApp.class},
+      classes = {WebMvcTestApp.class},
       properties = {"problem4j.webmvc.problem-exception-advice.enabled=false"})
   @Nested
   class WithProblemExceptionAdviceDisabled {
@@ -149,7 +149,7 @@ class ProblemWebMvcAutoConfigurationTest {
     }
   }
 
-  @SpringBootTest(classes = {MvcTestApp.class})
+  @SpringBootTest(classes = {WebMvcTestApp.class})
   @Nested
   class WithProblemContextFilterEnabled {
 
@@ -167,7 +167,7 @@ class ProblemWebMvcAutoConfigurationTest {
   }
 
   @SpringBootTest(
-      classes = {MvcTestApp.class},
+      classes = {WebMvcTestApp.class},
       properties = {"problem4j.webmvc.problem-context-filter.enabled=false"})
   @Nested
   class WithProblemContextFilterDisabled {
@@ -184,7 +184,7 @@ class ProblemWebMvcAutoConfigurationTest {
     }
   }
 
-  @SpringBootTest(classes = {MvcTestApp.class})
+  @SpringBootTest(classes = {WebMvcTestApp.class})
   @Nested
   class WithExceptionHandlerEnabled {
 
@@ -201,7 +201,7 @@ class ProblemWebMvcAutoConfigurationTest {
   }
 
   @SpringBootTest(
-      classes = {MvcTestApp.class},
+      classes = {WebMvcTestApp.class},
       properties = {"problem4j.webmvc.exception-handler.enabled=false"})
   @Nested
   class WithExceptionHandlerDisabled {

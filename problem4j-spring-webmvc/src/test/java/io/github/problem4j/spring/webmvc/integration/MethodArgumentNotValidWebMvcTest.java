@@ -14,12 +14,17 @@
  */
 package io.github.problem4j.spring.webmvc.integration;
 
+import static io.github.problem4j.spring.web.ProblemSupport.ERRORS_EXTENSION;
+import static io.github.problem4j.spring.web.ProblemSupport.IS_NOT_VALID_ERROR;
+import static io.github.problem4j.spring.web.ProblemSupport.VALIDATION_FAILED_DETAIL;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemStatus;
-import io.github.problem4j.spring.webmvc.app.MvcTestApp;
+import io.github.problem4j.spring.webmvc.app.WebMvcTestApp;
+import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,39 +33,31 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @SpringBootTest(
-    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    classes = {MvcTestApp.class})
-class ResponseStatusAnnotatedExceptionMvcTest {
+    classes = {WebMvcTestApp.class},
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class MethodArgumentNotValidWebMvcTest {
 
   @Autowired private TestRestTemplate restTemplate;
   @Autowired private ObjectMapper objectMapper;
 
   @Test
-  void givenSpringNativeResponseStatusAnnotation_shouldReturnProblemWithStatus() throws Exception {
+  void givenModelAttributeTypeMismatch_shouldReturnBadRequestProblem() throws Exception {
     ResponseEntity<String> response =
-        restTemplate.getForEntity(
-            "/response-status-annotated/forbidden-status-annotated", String.class);
+        restTemplate.getForEntity("/method-argument-not-valid?number=abc", String.class);
 
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
-    assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
-
-    Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
-
-    assertThat(problem).isEqualTo(Problem.builder().status(ProblemStatus.FORBIDDEN).build());
-  }
-
-  @Test
-  void givenSpringNativeResponseStatusAnnotationWithReason_shouldReturnProblem() throws Exception {
-    ResponseEntity<String> response =
-        restTemplate.getForEntity("/response-status-annotated/reason-annotated", String.class);
-
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(response.getHeaders().getContentType()).hasToString(Problem.CONTENT_TYPE);
 
     Problem problem = objectMapper.readValue(response.getBody(), Problem.class);
 
     assertThat(problem)
         .isEqualTo(
-            Problem.builder().status(ProblemStatus.FORBIDDEN).detail("this is reason").build());
+            Problem.builder()
+                .status(ProblemStatus.BAD_REQUEST)
+                .detail(VALIDATION_FAILED_DETAIL)
+                .extension(
+                    ERRORS_EXTENSION,
+                    List.of(Map.of("field", "number", "error", IS_NOT_VALID_ERROR)))
+                .build());
   }
 }

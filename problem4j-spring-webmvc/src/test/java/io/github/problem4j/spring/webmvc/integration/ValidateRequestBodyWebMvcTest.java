@@ -22,7 +22,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemStatus;
-import io.github.problem4j.spring.webmvc.app.MvcTestApp;
+import io.github.problem4j.spring.webmvc.app.WebMvcTestApp;
 import io.github.problem4j.spring.webmvc.app.model.AlwaysInvalidRequest;
 import io.github.problem4j.spring.webmvc.app.model.TestRequest;
 import java.util.HashMap;
@@ -42,9 +42,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 @SpringBootTest(
-    classes = {MvcTestApp.class},
+    classes = {WebMvcTestApp.class},
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class ValidateRequestBodyMvcTest {
+class ValidateRequestBodyWebMvcTest {
 
   @Autowired private TestRestTemplate restTemplate;
   @Autowired private ObjectMapper objectMapper;

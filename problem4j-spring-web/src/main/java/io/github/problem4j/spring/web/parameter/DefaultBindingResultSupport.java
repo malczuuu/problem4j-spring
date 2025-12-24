@@ -33,9 +33,7 @@ public class DefaultBindingResultSupport implements BindingResultSupport {
    *
    * <p>{@code isBindingFailure() == true} usually means that there was a failure in creation of
    * object from values taken out of request. Most common one is validation error or type mismatch
-   * between {@code @ModelAttribute}-annotated argument and one of its values. Consider running
-   * {@code WebExchangeBindExceptionWebFluxTest} or {@code MethodArgumentNotValidExceptionMvcTest}
-   * to debug this feature.
+   * between {@code @ModelAttribute}-annotated argument and one of its values.
    *
    * @param bindingResult the {@link BindingResult} containing the validation errors
    * @param error the {@link FieldError} to convert

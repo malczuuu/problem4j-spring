@@ -22,7 +22,7 @@ import static org.assertj.core.api.InstanceOfAssertFactories.LIST;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemStatus;
-import io.github.problem4j.spring.webmvc.app.MvcTestApp;
+import io.github.problem4j.spring.webmvc.app.WebMvcTestApp;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -38,10 +38,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @SpringBootTest(
-    classes = {MvcTestApp.class},
-    properties = "spring.validation.method.adapt-constraint-violations=true",
-    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class ValidateMethodArgumentFailingWithAdaptionMvcTest {
+    classes = {WebMvcTestApp.class},
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+    properties = {"spring.validation.method.adapt-constraint-violations=true"})
+class ValidateMethodArgumentFailingWithAdaptionWebMvcTest {
 
   private static final String VIOLATION_ERROR = "size must be between 5 and " + Integer.MAX_VALUE;
 

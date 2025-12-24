@@ -19,7 +19,7 @@ import java.util.Locale;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MvcTestApp {
+public class WebMvcTestApp {
 
   @PostConstruct
   public void postConstruct() {

@@ -18,7 +18,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.problem4j.core.Problem;
-import io.github.problem4j.spring.webmvc.app.MvcTestApp;
+import io.github.problem4j.spring.webmvc.app.WebMvcTestApp;
 import java.net.URI;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +31,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 @SpringBootTest(
+    classes = {WebMvcTestApp.class},
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    classes = {MvcTestApp.class},
     properties = {
       "problem4j.type-override=https://example.org/type/{problem.type}",
       "problem4j.instance-override=https://example.org/trace/{context.traceId}",
       "problem4j.tracing-header-name=X-Trace-Id"
     })
-class ProblemOverrideMvcTest {
+class ProblemOverrideWebMvcTest {
 
   @Autowired private TestRestTemplate restTemplate;
   @Autowired private ObjectMapper objectMapper;

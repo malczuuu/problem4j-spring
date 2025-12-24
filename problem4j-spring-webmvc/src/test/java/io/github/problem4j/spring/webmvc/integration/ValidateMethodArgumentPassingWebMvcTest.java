@@ -16,7 +16,7 @@ package io.github.problem4j.spring.webmvc.integration;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import io.github.problem4j.spring.webmvc.app.MvcTestApp;
+import io.github.problem4j.spring.webmvc.app.WebMvcTestApp;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -30,9 +30,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @SpringBootTest(
-    classes = {MvcTestApp.class},
+    classes = {WebMvcTestApp.class},
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class ValidateMethodArgumentPassingMvcTest {
+class ValidateMethodArgumentPassingWebMvcTest {
 
   @Autowired private TestRestTemplate restTemplate;
 
