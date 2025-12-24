@@ -18,6 +18,7 @@ import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.core.ProblemStatus;
+import io.github.problem4j.spring.web.IdentityProblemFormat;
 import io.github.problem4j.spring.web.ProblemFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -36,6 +37,10 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
  * <p>Always resolves to a {@link Problem} with status {@link ProblemStatus#METHOD_NOT_ALLOWED}.
  */
 public class HttpRequestMethodNotSupportedProblemResolver extends AbstractProblemResolver {
+
+  public HttpRequestMethodNotSupportedProblemResolver() {
+    this(new IdentityProblemFormat());
+  }
 
   public HttpRequestMethodNotSupportedProblemResolver(ProblemFormat problemFormat) {
     super(HttpRequestMethodNotSupportedException.class, problemFormat);

@@ -18,6 +18,7 @@ import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.core.ProblemStatus;
+import io.github.problem4j.spring.web.IdentityProblemFormat;
 import io.github.problem4j.spring.web.ProblemFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -36,6 +37,10 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
  * @see org.springframework.http.converter.HttpMessageConverter
  */
 public class HttpMessageNotReadableProblemResolver extends AbstractProblemResolver {
+
+  public HttpMessageNotReadableProblemResolver() {
+    this(new IdentityProblemFormat());
+  }
 
   public HttpMessageNotReadableProblemResolver(ProblemFormat problemFormat) {
     super(HttpMessageNotReadableException.class, problemFormat);

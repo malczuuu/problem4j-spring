@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
-class MvcAdviceSupport {
+class WebMvcAdviceSupport {
 
   static void logAdviceException(Logger log, Exception ex, WebRequest request, Exception e) {
     String method = "<unknown>";

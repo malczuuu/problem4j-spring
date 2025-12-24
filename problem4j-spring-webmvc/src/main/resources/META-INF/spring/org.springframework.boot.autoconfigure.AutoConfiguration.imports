@@ -1,1 +1,1 @@
-io.github.problem4j.spring.webmvc.autoconfigure.ProblemMvcAutoConfiguration
+io.github.problem4j.spring.webmvc.autoconfigure.ProblemWebMvcAutoConfiguration

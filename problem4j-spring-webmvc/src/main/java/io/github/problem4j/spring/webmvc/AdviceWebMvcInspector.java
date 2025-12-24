@@ -29,7 +29,7 @@ import org.springframework.web.context.request.WebRequest;
  *
  * <p>Typical use cases include logging, monitoring, or auditing error responses.
  */
-public interface AdviceMvcInspector {
+public interface AdviceWebMvcInspector {
 
   /**
    * Observe the details of a Problem response before it is sent to the client.

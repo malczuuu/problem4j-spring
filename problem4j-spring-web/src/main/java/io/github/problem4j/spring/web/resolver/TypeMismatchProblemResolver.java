@@ -22,6 +22,7 @@ import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.core.ProblemStatus;
+import io.github.problem4j.spring.web.IdentityProblemFormat;
 import io.github.problem4j.spring.web.ProblemFormat;
 import java.util.Locale;
 import org.springframework.beans.TypeMismatchException;
@@ -40,6 +41,10 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
  * indicate that the provided input has an invalid type.
  */
 public class TypeMismatchProblemResolver extends AbstractProblemResolver {
+
+  public TypeMismatchProblemResolver() {
+    this(new IdentityProblemFormat());
+  }
 
   public TypeMismatchProblemResolver(ProblemFormat problemFormat) {
     super(TypeMismatchException.class, problemFormat);

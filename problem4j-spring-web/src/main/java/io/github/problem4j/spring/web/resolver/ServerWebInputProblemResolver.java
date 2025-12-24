@@ -20,6 +20,7 @@ import static io.github.problem4j.spring.web.ProblemSupport.resolveStatus;
 import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
+import io.github.problem4j.spring.web.IdentityProblemFormat;
 import io.github.problem4j.spring.web.ProblemFormat;
 import io.github.problem4j.spring.web.parameter.DefaultMethodParameterSupport;
 import io.github.problem4j.spring.web.parameter.MethodParameterSupport;
@@ -44,6 +45,10 @@ public class ServerWebInputProblemResolver extends AbstractProblemResolver {
 
   private final TypeMismatchProblemResolver typeMismatchProblemResolver;
   private final MethodParameterSupport methodParameterSupport;
+
+  public ServerWebInputProblemResolver() {
+    this(new IdentityProblemFormat());
+  }
 
   public ServerWebInputProblemResolver(ProblemFormat problemFormat) {
     this(problemFormat, new DefaultMethodParameterSupport());

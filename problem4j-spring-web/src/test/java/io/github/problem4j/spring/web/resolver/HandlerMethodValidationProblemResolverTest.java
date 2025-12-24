@@ -19,7 +19,6 @@ import static org.mockito.Mockito.mock;
 
 import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemContext;
-import io.github.problem4j.spring.web.IdentityProblemFormat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
@@ -33,8 +32,7 @@ class HandlerMethodValidationProblemResolverTest {
 
   @BeforeEach
   void beforeEach() {
-    handlerMethodValidationProblemResolver =
-        new HandlerMethodValidationProblemResolver(new IdentityProblemFormat());
+    handlerMethodValidationProblemResolver = new HandlerMethodValidationProblemResolver();
   }
 
   @Test

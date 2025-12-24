@@ -127,7 +127,7 @@ public class ProblemAutoConfiguration {
      */
     @ConditionalOnMissingBean(ProblemModule.class)
     @Bean
-    ProblemModule problemModule() {
+    ProblemModule problemJacksonModule() {
       return new ProblemModule();
     }
   }

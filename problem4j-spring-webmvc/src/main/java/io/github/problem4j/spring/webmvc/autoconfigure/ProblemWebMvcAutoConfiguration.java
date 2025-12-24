@@ -18,11 +18,11 @@ import io.github.problem4j.core.ProblemMapper;
 import io.github.problem4j.spring.web.ProblemPostProcessor;
 import io.github.problem4j.spring.web.ProblemResolverStore;
 import io.github.problem4j.spring.web.autoconfigure.ProblemProperties;
-import io.github.problem4j.spring.webmvc.AdviceMvcInspector;
-import io.github.problem4j.spring.webmvc.ExceptionMvcAdvice;
-import io.github.problem4j.spring.webmvc.ProblemContextMvcFilter;
-import io.github.problem4j.spring.webmvc.ProblemEnhancedMvcHandler;
-import io.github.problem4j.spring.webmvc.ProblemExceptionMvcAdvice;
+import io.github.problem4j.spring.webmvc.AdviceWebMvcInspector;
+import io.github.problem4j.spring.webmvc.ExceptionWebMvcAdvice;
+import io.github.problem4j.spring.webmvc.ProblemContextWebMvcFilter;
+import io.github.problem4j.spring.webmvc.ProblemEnhancedWebMvcHandler;
+import io.github.problem4j.spring.webmvc.ProblemExceptionWebMvcAdvice;
 import java.util.List;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -56,15 +56,15 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  * </ul>
  */
 @AutoConfiguration
-@EnableConfigurationProperties({ProblemMvcProperties.class})
+@EnableConfigurationProperties({ProblemWebMvcProperties.class})
 @ConditionalOnProperty(name = "problem4j.webmvc.enabled", matchIfMissing = true)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @AutoConfigureBefore({ErrorMvcAutoConfiguration.class, WebMvcAutoConfiguration.class})
-@Import({ProblemErrorMvcConfiguration.class, ProblemResolverMvcConfiguration.class})
-public class ProblemMvcAutoConfiguration {
+@Import({ProblemErrorMvcConfiguration.class, ProblemResolverWebMvcConfiguration.class})
+public class ProblemWebMvcAutoConfiguration {
 
   /**
-   * Creates the default {@link ExceptionMvcAdvice} used for handling exceptions in WebMVC
+   * Creates the default {@link ExceptionWebMvcAdvice} used for handling exceptions in WebMVC
    * applications.
    *
    * <p>The advice intercepts thrown exceptions and resolves them to {@code Problem} objects
@@ -72,19 +72,19 @@ public class ProblemMvcAutoConfiguration {
    */
   @Order(Ordered.LOWEST_PRECEDENCE)
   @ConditionalOnProperty(name = "problem4j.webmvc.exception-advice.enabled", matchIfMissing = true)
-  @ConditionalOnMissingBean(ExceptionMvcAdvice.class)
+  @ConditionalOnMissingBean(ExceptionWebMvcAdvice.class)
   @Bean
-  ExceptionMvcAdvice exceptionMvcAdvice(
+  ExceptionWebMvcAdvice exceptionWebMvcAdvice(
       ProblemMapper problemMapper,
       ProblemResolverStore problemResolverStore,
       ProblemPostProcessor problemPostProcessor,
-      List<AdviceMvcInspector> adviceMvcInspectors) {
-    return new ExceptionMvcAdvice(
-        problemMapper, problemResolverStore, problemPostProcessor, adviceMvcInspectors);
+      List<AdviceWebMvcInspector> adviceWebMvcInspectors) {
+    return new ExceptionWebMvcAdvice(
+        problemMapper, problemResolverStore, problemPostProcessor, adviceWebMvcInspectors);
   }
 
   /**
-   * Creates the default {@link ProblemExceptionMvcAdvice}, responsible for handling
+   * Creates the default {@link ProblemExceptionWebMvcAdvice}, responsible for handling
    * Problem4J-specific exception types in WebMVC pipelines.
    *
    * <p>This advice focuses on translating {@code Problem}-domain exceptions into standardized
@@ -94,15 +94,16 @@ public class ProblemMvcAutoConfiguration {
   @ConditionalOnProperty(
       name = "problem4j.webmvc.problem-exception-advice.enabled",
       matchIfMissing = true)
-  @ConditionalOnMissingBean(ProblemExceptionMvcAdvice.class)
+  @ConditionalOnMissingBean(ProblemExceptionWebMvcAdvice.class)
   @Bean
-  ProblemExceptionMvcAdvice problemExceptionMvcAdvice(
-      ProblemPostProcessor problemPostProcessor, List<AdviceMvcInspector> adviceMvcInspectors) {
-    return new ProblemExceptionMvcAdvice(problemPostProcessor, adviceMvcInspectors);
+  ProblemExceptionWebMvcAdvice problemExceptionWebMvcAdvice(
+      ProblemPostProcessor problemPostProcessor,
+      List<AdviceWebMvcInspector> adviceWebMvcInspectors) {
+    return new ProblemExceptionWebMvcAdvice(problemPostProcessor, adviceWebMvcInspectors);
   }
 
   /**
-   * Nested configuration that registers the {@link ProblemContextMvcFilter} responsible for
+   * Nested configuration that registers the {@link ProblemContextWebMvcFilter} responsible for
    * preparing and propagating the Problem4J context across WebMVC request handling.
    */
   @ConditionalOnProperty(
@@ -113,13 +114,13 @@ public class ProblemMvcAutoConfiguration {
   static class ProblemContextMvcFilterConfiguration {
 
     /**
-     * Registers the default {@link ProblemContextMvcFilter}, which initializes and propagates
+     * Registers the default {@link ProblemContextWebMvcFilter}, which initializes and propagates
      * Problem4J contextual metadata throughout the request lifecycle.
      */
-    @ConditionalOnMissingBean(ProblemContextMvcFilter.class)
+    @ConditionalOnMissingBean(ProblemContextWebMvcFilter.class)
     @Bean
-    ProblemContextMvcFilter problemContextMvcFilter(ProblemProperties properties) {
-      return new ProblemContextMvcFilter(properties);
+    ProblemContextWebMvcFilter problemContextWebMvcFilter(ProblemProperties properties) {
+      return new ProblemContextWebMvcFilter(properties);
     }
   }
 
@@ -139,12 +140,12 @@ public class ProblemMvcAutoConfiguration {
     @Order(Ordered.LOWEST_PRECEDENCE - 10)
     @ConditionalOnMissingBean(ResponseEntityExceptionHandler.class)
     @Bean
-    ResponseEntityExceptionHandler responseEntityExceptionHandler(
+    ResponseEntityExceptionHandler problemEnhancedWebMvcHandler(
         ProblemResolverStore problemResolverStore,
         ProblemPostProcessor problemPostProcessor,
-        List<AdviceMvcInspector> adviceMvcInspectors) {
-      return new ProblemEnhancedMvcHandler(
-          problemResolverStore, problemPostProcessor, adviceMvcInspectors);
+        List<AdviceWebMvcInspector> adviceWebMvcInspectors) {
+      return new ProblemEnhancedWebMvcHandler(
+          problemResolverStore, problemPostProcessor, adviceWebMvcInspectors);
     }
   }
 }

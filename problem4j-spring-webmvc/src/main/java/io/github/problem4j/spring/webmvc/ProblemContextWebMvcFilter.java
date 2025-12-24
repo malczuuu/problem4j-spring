@@ -37,11 +37,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
  * and stores it in the {@link HttpServletRequest} attributes, response headers for downstream
  * access.
  */
-public class ProblemContextMvcFilter extends OncePerRequestFilter {
+public class ProblemContextWebMvcFilter extends OncePerRequestFilter {
 
   private final ProblemContextSettings settings;
 
-  public ProblemContextMvcFilter(ProblemContextSettings settings) {
+  public ProblemContextWebMvcFilter(ProblemContextSettings settings) {
     this.settings = settings;
   }
 

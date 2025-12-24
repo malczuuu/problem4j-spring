@@ -16,7 +16,7 @@ package io.github.problem4j.spring.webmvc;
 
 import static io.github.problem4j.spring.web.AttributeSupport.PROBLEM_CONTEXT_ATTRIBUTE;
 import static io.github.problem4j.spring.web.ProblemSupport.resolveStatus;
-import static io.github.problem4j.spring.webmvc.MvcAdviceSupport.logAdviceException;
+import static io.github.problem4j.spring.webmvc.WebMvcAdviceSupport.logAdviceException;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
 import io.github.problem4j.core.Problem;
@@ -54,22 +54,22 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  * @see io.github.problem4j.spring.web.resolver.ProblemResolver
  */
 @RestControllerAdvice
-public class ProblemEnhancedMvcHandler extends ResponseEntityExceptionHandler {
+public class ProblemEnhancedWebMvcHandler extends ResponseEntityExceptionHandler {
 
-  private static final Logger log = LoggerFactory.getLogger(ProblemEnhancedMvcHandler.class);
+  private static final Logger log = LoggerFactory.getLogger(ProblemEnhancedWebMvcHandler.class);
 
   private final ProblemResolverStore problemResolverStore;
   private final ProblemPostProcessor problemPostProcessor;
 
-  private final List<AdviceMvcInspector> adviceMvcInspectors;
+  private final List<AdviceWebMvcInspector> adviceWebMvcInspectors;
 
-  public ProblemEnhancedMvcHandler(
+  public ProblemEnhancedWebMvcHandler(
       ProblemResolverStore problemResolverStore,
       ProblemPostProcessor problemPostProcessor,
-      List<AdviceMvcInspector> adviceMvcInspectors) {
+      List<AdviceWebMvcInspector> adviceWebMvcInspectors) {
     this.problemResolverStore = problemResolverStore;
     this.problemPostProcessor = problemPostProcessor;
-    this.adviceMvcInspectors = adviceMvcInspectors;
+    this.adviceWebMvcInspectors = adviceWebMvcInspectors;
   }
 
   /**
@@ -103,7 +103,7 @@ public class ProblemEnhancedMvcHandler extends ResponseEntityExceptionHandler {
 
     status = resolveStatus(problem);
 
-    for (AdviceMvcInspector inspector : adviceMvcInspectors) {
+    for (AdviceWebMvcInspector inspector : adviceWebMvcInspectors) {
       inspector.inspect(context, problem, ex, headers, status, request);
     }
 

@@ -16,11 +16,12 @@ package io.github.problem4j.spring.webmvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.github.problem4j.core.Problem;
-import io.github.problem4j.core.ProblemException;
-import io.github.problem4j.core.ProblemStatus;
+import io.github.problem4j.core.ProblemMapper;
+import io.github.problem4j.spring.web.DefaultProblemResolverStore;
 import io.github.problem4j.spring.web.IdentityProblemPostProcessor;
+import jakarta.validation.ConstraintViolationException;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,9 +29,9 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.context.request.ServletWebRequest;
 
-class ProblemExceptionMvcAdviceTest {
+class ExceptionWebMvcAdviceTest {
 
-  private ProblemExceptionMvcAdvice advice;
+  private ExceptionWebMvcAdvice advice;
 
   private AtomicInteger hits;
 
@@ -38,7 +39,9 @@ class ProblemExceptionMvcAdviceTest {
   void beforeEach() {
     hits = new AtomicInteger(0);
     advice =
-        new ProblemExceptionMvcAdvice(
+        new ExceptionWebMvcAdvice(
+            ProblemMapper.create(),
+            new DefaultProblemResolverStore(List.of()),
             new IdentityProblemPostProcessor(),
             List.of((context, problem, ex, headers, status, exchange) -> hits.incrementAndGet()));
   }
@@ -48,8 +51,8 @@ class ProblemExceptionMvcAdviceTest {
     MockHttpServletRequest request = new MockHttpServletRequest("GET", "/test");
     MockHttpServletResponse response = new MockHttpServletResponse();
 
-    advice.handleProblemException(
-        new ProblemException(Problem.builder().status(ProblemStatus.BAD_REQUEST).build()),
+    advice.handleException(
+        new ConstraintViolationException("message", Set.of()),
         new ServletWebRequest(request, response));
 
     assertThat(hits.get()).isEqualTo(1);

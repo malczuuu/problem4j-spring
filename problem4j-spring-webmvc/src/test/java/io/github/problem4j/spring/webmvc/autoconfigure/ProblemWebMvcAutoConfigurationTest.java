@@ -16,9 +16,9 @@ package io.github.problem4j.spring.webmvc.autoconfigure;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.github.problem4j.spring.webmvc.ExceptionMvcAdvice;
-import io.github.problem4j.spring.webmvc.ProblemContextMvcFilter;
-import io.github.problem4j.spring.webmvc.ProblemExceptionMvcAdvice;
+import io.github.problem4j.spring.webmvc.ExceptionWebMvcAdvice;
+import io.github.problem4j.spring.webmvc.ProblemContextWebMvcFilter;
+import io.github.problem4j.spring.webmvc.ProblemExceptionWebMvcAdvice;
 import io.github.problem4j.spring.webmvc.app.MvcTestApp;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -26,28 +26,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-class ProblemMvcAutoConfigurationTest {
+class ProblemWebMvcAutoConfigurationTest {
 
   @SpringBootTest(classes = {MvcTestApp.class})
   @Nested
   class WithEnabled {
 
     @Autowired(required = false)
-    private ProblemMvcAutoConfiguration problemMvcAutoConfiguration;
+    private ProblemWebMvcAutoConfiguration problemWebMvcAutoConfiguration;
 
     @Autowired(required = false)
     private ProblemErrorMvcConfiguration problemErrorMvcConfiguration;
 
     @Autowired(required = false)
-    private ProblemResolverMvcConfiguration problemResolverMvcConfiguration;
+    private ProblemResolverWebMvcConfiguration problemResolverWebMvcConfiguration;
 
-    @Autowired private ProblemMvcProperties properties;
+    @Autowired private ProblemWebMvcProperties properties;
 
     @Test
     void contextLoads() {
-      assertThat(problemMvcAutoConfiguration).isNotNull();
+      assertThat(problemWebMvcAutoConfiguration).isNotNull();
       assertThat(problemErrorMvcConfiguration).isNotNull();
-      assertThat(problemResolverMvcConfiguration).isNotNull();
+      assertThat(problemResolverWebMvcConfiguration).isNotNull();
 
       assertThat(properties.isEnabled()).isTrue();
     }
@@ -60,22 +60,22 @@ class ProblemMvcAutoConfigurationTest {
   class WithDisabled {
 
     @Autowired(required = false)
-    private ProblemMvcAutoConfiguration problemMvcAutoConfiguration;
+    private ProblemWebMvcAutoConfiguration problemWebMvcAutoConfiguration;
 
     @Autowired(required = false)
     private ProblemErrorMvcConfiguration problemErrorMvcConfiguration;
 
     @Autowired(required = false)
-    private ProblemResolverMvcConfiguration problemResolverMvcConfiguration;
+    private ProblemResolverWebMvcConfiguration problemResolverWebMvcConfiguration;
 
     @Autowired(required = false)
-    private ProblemMvcProperties properties;
+    private ProblemWebMvcProperties properties;
 
     @Test
     void contextLoadsWithoutConfiguration() {
-      assertThat(problemMvcAutoConfiguration).isNull();
+      assertThat(problemWebMvcAutoConfiguration).isNull();
       assertThat(problemErrorMvcConfiguration).isNull();
-      assertThat(problemResolverMvcConfiguration).isNull();
+      assertThat(problemResolverWebMvcConfiguration).isNull();
 
       assertThat(properties).isNull();
     }
@@ -86,13 +86,13 @@ class ProblemMvcAutoConfigurationTest {
   class WithExceptionAdviceEnabled {
 
     @Autowired(required = false)
-    private ExceptionMvcAdvice exceptionMvcAdvice;
+    private ExceptionWebMvcAdvice exceptionWebMvcAdvice;
 
-    @Autowired private ProblemMvcProperties properties;
+    @Autowired private ProblemWebMvcProperties properties;
 
     @Test
     void contextLoadsWithoutExceptionAdvice() {
-      assertThat(exceptionMvcAdvice).isNotNull();
+      assertThat(exceptionWebMvcAdvice).isNotNull();
       assertThat(properties.getExceptionAdvice().isEnabled()).isTrue();
     }
   }
@@ -104,13 +104,13 @@ class ProblemMvcAutoConfigurationTest {
   class WithExceptionAdviceDisabled {
 
     @Autowired(required = false)
-    private ExceptionMvcAdvice exceptionMvcAdvice;
+    private ExceptionWebMvcAdvice exceptionWebMvcAdvice;
 
-    @Autowired private ProblemMvcProperties properties;
+    @Autowired private ProblemWebMvcProperties properties;
 
     @Test
     void contextLoadsWithoutExceptionAdvice() {
-      assertThat(exceptionMvcAdvice).isNull();
+      assertThat(exceptionWebMvcAdvice).isNull();
       assertThat(properties.getExceptionAdvice().isEnabled()).isFalse();
     }
   }
@@ -120,13 +120,13 @@ class ProblemMvcAutoConfigurationTest {
   class WithProblemExceptionAdviceEnabled {
 
     @Autowired(required = false)
-    private ProblemExceptionMvcAdvice problemExceptionMvcAdvice;
+    private ProblemExceptionWebMvcAdvice problemExceptionWebMvcAdvice;
 
-    @Autowired private ProblemMvcProperties properties;
+    @Autowired private ProblemWebMvcProperties properties;
 
     @Test
     void contextLoadsWithoutExceptionAdvice() {
-      assertThat(problemExceptionMvcAdvice).isNotNull();
+      assertThat(problemExceptionWebMvcAdvice).isNotNull();
       assertThat(properties.getProblemExceptionAdvice().isEnabled()).isTrue();
     }
   }
@@ -138,13 +138,13 @@ class ProblemMvcAutoConfigurationTest {
   class WithProblemExceptionAdviceDisabled {
 
     @Autowired(required = false)
-    private ProblemExceptionMvcAdvice problemExceptionMvcAdvice;
+    private ProblemExceptionWebMvcAdvice problemExceptionWebMvcAdvice;
 
-    @Autowired private ProblemMvcProperties properties;
+    @Autowired private ProblemWebMvcProperties properties;
 
     @Test
     void contextLoadsWithoutExceptionAdvice() {
-      assertThat(problemExceptionMvcAdvice).isNull();
+      assertThat(problemExceptionWebMvcAdvice).isNull();
       assertThat(properties.getProblemExceptionAdvice().isEnabled()).isFalse();
     }
   }
@@ -154,14 +154,14 @@ class ProblemMvcAutoConfigurationTest {
   class WithProblemContextFilterEnabled {
 
     @Autowired(required = false)
-    private ProblemContextMvcFilter problemContextMvcFilter;
+    private ProblemContextWebMvcFilter problemContextWebMvcFilter;
 
     @Autowired(required = false)
-    private ProblemMvcProperties properties;
+    private ProblemWebMvcProperties properties;
 
     @Test
     void contextLoadsWithoutExceptionAdvice() {
-      assertThat(problemContextMvcFilter).isNotNull();
+      assertThat(problemContextWebMvcFilter).isNotNull();
       assertThat(properties.getProblemContextFilter().isEnabled()).isTrue();
     }
   }
@@ -173,13 +173,13 @@ class ProblemMvcAutoConfigurationTest {
   class WithProblemContextFilterDisabled {
 
     @Autowired(required = false)
-    private ProblemContextMvcFilter problemContextMvcFilter;
+    private ProblemContextWebMvcFilter problemContextWebMvcFilter;
 
-    @Autowired private ProblemMvcProperties properties;
+    @Autowired private ProblemWebMvcProperties properties;
 
     @Test
     void contextLoadsWithoutExceptionAdvice() {
-      assertThat(problemContextMvcFilter).isNull();
+      assertThat(problemContextWebMvcFilter).isNull();
       assertThat(properties.getProblemContextFilter().isEnabled()).isFalse();
     }
   }
@@ -191,7 +191,7 @@ class ProblemMvcAutoConfigurationTest {
     @Autowired(required = false)
     private ResponseEntityExceptionHandler exceptionHandler;
 
-    @Autowired private ProblemMvcProperties properties;
+    @Autowired private ProblemWebMvcProperties properties;
 
     @Test
     void contextLoadsWithoutExceptionAdvice() {
@@ -209,7 +209,7 @@ class ProblemMvcAutoConfigurationTest {
     @Autowired(required = false)
     private ResponseEntityExceptionHandler exceptionHandler;
 
-    @Autowired private ProblemMvcProperties properties;
+    @Autowired private ProblemWebMvcProperties properties;
 
     @Test
     void contextLoadsWithoutExceptionAdvice() {

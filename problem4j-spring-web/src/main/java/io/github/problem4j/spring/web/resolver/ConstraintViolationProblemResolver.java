@@ -21,6 +21,7 @@ import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.core.ProblemStatus;
+import io.github.problem4j.spring.web.IdentityProblemFormat;
 import io.github.problem4j.spring.web.ProblemFormat;
 import io.github.problem4j.spring.web.parameter.Violation;
 import jakarta.validation.ConstraintViolation;
@@ -40,6 +41,10 @@ import org.springframework.http.HttpStatusCode;
  * failed to satisfy declared {@code @Valid} or {@code @Constraint} annotations.
  */
 public class ConstraintViolationProblemResolver extends AbstractProblemResolver {
+
+  public ConstraintViolationProblemResolver() {
+    this(new IdentityProblemFormat());
+  }
 
   public ConstraintViolationProblemResolver(ProblemFormat problemFormat) {
     super(ConstraintViolationException.class, problemFormat);

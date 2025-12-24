@@ -32,7 +32,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
  */
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @Configuration(proxyBeanMethods = false)
-class ProblemResolverMvcConfiguration {
+class ProblemResolverWebMvcConfiguration {
 
   @ConditionalOnClass(NoHandlerFoundException.class)
   @Configuration(proxyBeanMethods = false)

@@ -28,9 +28,9 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.server.ResponseStatusException;
 
-class ProblemEnhancedMvcHandlerTest {
+class ProblemEnhancedWebMvcHandlerTest {
 
-  private ProblemEnhancedMvcHandler advice;
+  private ProblemEnhancedWebMvcHandler advice;
 
   private AtomicInteger hits;
 
@@ -38,7 +38,7 @@ class ProblemEnhancedMvcHandlerTest {
   void beforeEach() {
     hits = new AtomicInteger(0);
     advice =
-        new ProblemEnhancedMvcHandler(
+        new ProblemEnhancedWebMvcHandler(
             new DefaultProblemResolverStore(List.of()),
             new IdentityProblemPostProcessor(),
             List.of((context, problem, ex, headers, status, exchange) -> hits.incrementAndGet()));

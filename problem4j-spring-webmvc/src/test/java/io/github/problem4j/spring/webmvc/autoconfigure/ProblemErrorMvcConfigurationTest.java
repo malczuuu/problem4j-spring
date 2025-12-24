@@ -35,7 +35,7 @@ class ProblemErrorMvcConfigurationTest {
 
     @Autowired private ErrorController errorController;
 
-    @Autowired private ProblemMvcProperties properties;
+    @Autowired private ProblemWebMvcProperties properties;
 
     @Test
     void contextLoads() {
@@ -56,7 +56,7 @@ class ProblemErrorMvcConfigurationTest {
 
     @Autowired private ErrorController errorController;
 
-    @Autowired private ProblemMvcProperties properties;
+    @Autowired private ProblemWebMvcProperties properties;
 
     @Test
     void contextLoads() {

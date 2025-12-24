@@ -31,6 +31,7 @@ import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.core.ProblemStatus;
+import io.github.problem4j.spring.web.IdentityProblemFormat;
 import io.github.problem4j.spring.web.ProblemFormat;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -63,6 +64,10 @@ public class ServletRequestBindingProblemResolver extends AbstractProblemResolve
 
   private static final Pattern MISSING_ATTRIBUTE_PATTERN =
       Pattern.compile("^Missing (session|request) attribute '([^']+)'");
+
+  public ServletRequestBindingProblemResolver() {
+    this(new IdentityProblemFormat());
+  }
 
   public ServletRequestBindingProblemResolver(ProblemFormat problemFormat) {
     super(ServletRequestBindingException.class, problemFormat);

@@ -20,6 +20,7 @@ import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.core.ProblemStatus;
+import io.github.problem4j.spring.web.IdentityProblemFormat;
 import io.github.problem4j.spring.web.ProblemFormat;
 import io.github.problem4j.spring.web.ProblemSupport;
 import io.github.problem4j.spring.web.parameter.BindingResultSupport;
@@ -51,6 +52,10 @@ import org.springframework.validation.BindException;
 public class BindProblemResolver extends AbstractProblemResolver {
 
   private final BindingResultSupport bindingResultSupport;
+
+  public BindProblemResolver() {
+    this(new IdentityProblemFormat());
+  }
 
   public BindProblemResolver(ProblemFormat problemFormat) {
     this(problemFormat, new DefaultBindingResultSupport());

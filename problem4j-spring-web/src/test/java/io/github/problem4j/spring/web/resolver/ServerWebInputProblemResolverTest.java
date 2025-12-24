@@ -20,7 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.core.ProblemStatus;
-import io.github.problem4j.spring.web.IdentityProblemFormat;
 import io.github.problem4j.spring.web.ProblemSupport;
 import java.lang.reflect.Method;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +37,7 @@ class ServerWebInputProblemResolverTest {
 
   @BeforeEach
   void beforeEach() {
-    serverWebInputMapping = new ServerWebInputProblemResolver(new IdentityProblemFormat());
+    serverWebInputMapping = new ServerWebInputProblemResolver();
   }
 
   @Test

@@ -21,6 +21,7 @@ import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.core.ProblemStatus;
+import io.github.problem4j.spring.web.IdentityProblemFormat;
 import io.github.problem4j.spring.web.ProblemFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -45,6 +46,10 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
  * @see org.springframework.web.bind.ServletRequestBindingException
  */
 public class MissingServletRequestPartProblemResolver extends AbstractProblemResolver {
+
+  public MissingServletRequestPartProblemResolver() {
+    this(new IdentityProblemFormat());
+  }
 
   public MissingServletRequestPartProblemResolver(ProblemFormat problemFormat) {
     super(MissingServletRequestPartException.class, problemFormat);
