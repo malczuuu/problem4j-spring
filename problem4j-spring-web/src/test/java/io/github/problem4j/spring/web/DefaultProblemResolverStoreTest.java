@@ -24,7 +24,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class AbstractProblemResolverStoreTest {
+class DefaultProblemResolverStoreTest {
 
   private static class MyBaseException extends Exception {}
 
@@ -47,7 +47,7 @@ class AbstractProblemResolverStoreTest {
     ProblemResolver baseResolver = new TestResolver(MyBaseException.class);
     ProblemResolver subResolver = new TestResolver(MySubException.class);
     ProblemResolver otherResolver = new TestResolver(OtherException.class);
-    store = new AbstractProblemResolverStore(List.of(baseResolver, subResolver, otherResolver)) {};
+    store = new DefaultProblemResolverStore(List.of(baseResolver, subResolver, otherResolver));
   }
 
   @Test
