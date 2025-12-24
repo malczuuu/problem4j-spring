@@ -1,6 +1,5 @@
 package io.github.problem4j.spring.web.autoconfigure;
 
-import io.github.problem4j.spring.web.parameter.BindParamAwareResultSupport;
 import io.github.problem4j.spring.web.parameter.BindingResultSupport;
 import io.github.problem4j.spring.web.parameter.DefaultBindingResultSupport;
 import io.github.problem4j.spring.web.parameter.DefaultMethodParameterSupport;
@@ -12,9 +11,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.validation.method.MethodValidationResult;
-import org.springframework.web.bind.annotation.BindParam;
 
 /**
  * Configuration for parameter support components, such as method parameter name resolution and
@@ -52,36 +49,14 @@ class ProblemParameterConfiguration {
     }
   }
 
-  @Order(0)
-  @ConditionalOnClass(BindParam.class)
-  @Configuration(proxyBeanMethods = false)
-  static class ProblemBeanParamAwareBindingConfiguration {
-
-    /**
-     * Provides a {@link BindingResultSupport} bean that handles {@code BindParam}-annotations.
-     *
-     * @return a new {@link BindParamAwareResultSupport}
-     */
-    @ConditionalOnMissingBean(BindingResultSupport.class)
-    @Bean
-    BindingResultSupport problemBindingResultSupport() {
-      return new BindParamAwareResultSupport();
-    }
-  }
-
-  @Order(1)
-  @Configuration(proxyBeanMethods = false)
-  static class ProblemDefaultBindingConfiguration {
-
-    /**
-     * Provides a default {@link BindingResultSupport} bean that uses field names for violations.
-     *
-     * @return a new {@link DefaultBindingResultSupport}
-     */
-    @ConditionalOnMissingBean(BindingResultSupport.class)
-    @Bean
-    BindingResultSupport problemBindingSupport() {
-      return new DefaultBindingResultSupport();
-    }
+  /**
+   * Provides a default {@link BindingResultSupport} bean that uses field names for violations.
+   *
+   * @return a new {@link DefaultBindingResultSupport}
+   */
+  @ConditionalOnMissingBean(BindingResultSupport.class)
+  @Bean
+  BindingResultSupport problemBindingSupport() {
+    return new DefaultBindingResultSupport();
   }
 }

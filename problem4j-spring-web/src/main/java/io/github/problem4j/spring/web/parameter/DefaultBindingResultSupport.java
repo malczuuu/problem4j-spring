@@ -2,11 +2,21 @@ package io.github.problem4j.spring.web.parameter;
 
 import static io.github.problem4j.spring.web.ProblemSupport.IS_NOT_VALID_ERROR;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Parameter;
+import java.lang.reflect.RecordComponent;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.BindParam;
 
 /** Default implementation of {@link BindingResultSupport}. */
 public class DefaultBindingResultSupport implements BindingResultSupport {
@@ -29,7 +39,10 @@ public class DefaultBindingResultSupport implements BindingResultSupport {
   }
 
   /**
-   * Converts a {@link FieldError} from a {@link BindingResult} into a {@link Violation}. *
+   * Converts a {@link FieldError} from a {@link BindingResult} into a {@link Violation}.
+   *
+   * <p>Resolves a field error into a Violation, taking into account {@link BindParam} annotations
+   * on the target object's constructor parameters.
    *
    * <p>{@code isBindingFailure() == true} usually means that there was a failure in creation of
    * object from values taken out of request. Most common one is validation error or type mismatch
@@ -40,10 +53,12 @@ public class DefaultBindingResultSupport implements BindingResultSupport {
    * @return a {@link Violation} representing the field error
    */
   protected Violation resolveFieldError(BindingResult bindingResult, FieldError error) {
+    Map<String, String> parametersMetadata = findParametersMetadata(bindingResult);
+    String field = parametersMetadata.getOrDefault(error.getField(), error.getField());
     if (error.isBindingFailure()) {
-      return new Violation(error.getField(), IS_NOT_VALID_ERROR);
+      return new Violation(field, IS_NOT_VALID_ERROR);
     } else {
-      return new Violation(error.getField(), error.getDefaultMessage());
+      return new Violation(field, error.getDefaultMessage());
     }
   }
 
@@ -60,5 +75,92 @@ public class DefaultBindingResultSupport implements BindingResultSupport {
    */
   protected Violation resolveGlobalError(BindingResult bindingResult, ObjectError error) {
     return new Violation(null, error.getDefaultMessage());
+  }
+
+  /**
+   * Reads metadata mapping for the target object of a BindingResult.
+   *
+   * @param bindingResult the BindingResult containing the target object
+   * @return an unmodifiable map of parameter names to their bound names, or empty map if target is
+   *     {@code null}
+   */
+  protected Map<String, String> findParametersMetadata(BindingResult bindingResult) {
+    if (bindingResult.getTarget() != null) {
+      Class<?> target = bindingResult.getTarget().getClass();
+      return computeConstructorMetadata(target);
+    }
+    return Map.of();
+  }
+
+  /**
+   * Computes constructor metadata for the given class.
+   *
+   * @param target the class to analyze
+   * @return an unmodifiable map of constructor parameter names to their bound names
+   */
+  protected Map<String, String> computeConstructorMetadata(Class<?> target) {
+    return findBindingConstructor(target)
+        .filter(c -> c.getParameters().length > 0)
+        .map(this::getConstructorParameterMetadata)
+        .orElseGet(Map::of);
+  }
+
+  /**
+   * Finds the constructor that most likely was used for binding for the given class.
+   *
+   * <p>For records, returns the canonical constructor. For non-records, returns the single declared
+   * constructor if only one exists.
+   *
+   * @param target the class to inspect
+   * @return an {@code Optional} containing the binding constructor if found
+   */
+  protected Optional<Constructor<?>> findBindingConstructor(Class<?> target) {
+    if (target.isRecord()) {
+      Class<?>[] mainArgs =
+          Arrays.stream(target.getRecordComponents())
+              .map(RecordComponent::getType)
+              .toArray(i -> new Class<?>[i]);
+      try {
+        return Optional.of(target.getDeclaredConstructor(mainArgs));
+      } catch (NoSuchMethodException e) {
+        return Optional.empty();
+      }
+    } else {
+      // Non records are required to have single constructor anyway, otherwise binding will fail
+      // and this code won't be called anyway
+      Constructor<?>[] ctors = target.getDeclaredConstructors();
+      if (ctors.length == 1) {
+        return Optional.of(ctors[0]);
+      }
+    }
+    return Optional.empty();
+  }
+
+  /**
+   * Extracts parameter metadata from the given constructor.
+   *
+   * <p>Each constructor parameter is added with its parameter name. {@link
+   * org.springframework.web.bind.annotation.BindParam} is taken into account if present.
+   *
+   * @param constructor the constructor to inspect
+   * @return an unmodifiable map of parameter names to their bound names
+   */
+  protected Map<String, String> getConstructorParameterMetadata(Constructor<?> constructor) {
+    Annotation[][] annotations = constructor.getParameterAnnotations();
+    Parameter[] parameters = constructor.getParameters();
+
+    Map<String, String> metadata = new HashMap<>();
+    for (int i = 0; i < parameters.length; i++) {
+      String rawParamName = parameters[i].getName();
+      metadata.put(rawParamName, rawParamName);
+
+      for (Annotation annotation : annotations[i]) {
+        if (annotation instanceof BindParam bindParam) {
+          String bindParamName = bindParam.value();
+          metadata.put(rawParamName, bindParamName);
+        }
+      }
+    }
+    return Collections.unmodifiableMap(metadata);
   }
 }
