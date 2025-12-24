@@ -101,7 +101,6 @@ public class ExampleException extends RuntimeException {
     this.fieldName = fieldName;
   }
 }
-
 ```
 
 It would produce following response with `application/problem+json`.
@@ -191,8 +190,8 @@ extension to it and does not bring it transitively.
 This repository maintains two major versions, supporting Spring Boot 3 and 4. The goal is to maintain both versions at
 least until Spring Boot 3 reaches its end of life or becomes irrelevant.
 
-| branch           | info                                       | latest                                                                                                                            |
-|------------------|--------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| branch           | info                                       | latest                                                                                                                   |
+|------------------|--------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
 | `main`           | version `2.x` supporting Spring Boot `4.x` | [![Sonatype](https://img.shields.io/maven-central/v/io.github.problem4j/problem4j-spring-bom?filter=2.*)][maven-central] |
 | `release-v1.*.x` | version `1.x` supporting Spring Boot `3.x` | [![Sonatype](https://img.shields.io/maven-central/v/io.github.problem4j/problem4j-spring-bom?filter=1.*)][maven-central] |
 
