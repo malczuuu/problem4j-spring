@@ -14,15 +14,15 @@
  */
 package io.github.problem4j.spring.web.resolver;
 
-import static io.github.problem4j.spring.web.util.ProblemSupport.KIND_EXTENSION;
-import static io.github.problem4j.spring.web.util.ProblemSupport.PROPERTY_EXTENSION;
-import static io.github.problem4j.spring.web.util.ProblemSupport.TYPE_MISMATCH_DETAIL;
+import static io.github.problem4j.spring.web.ProblemSupport.KIND_EXTENSION;
+import static io.github.problem4j.spring.web.ProblemSupport.PROPERTY_EXTENSION;
+import static io.github.problem4j.spring.web.ProblemSupport.TYPE_MISMATCH_DETAIL;
 
 import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.core.ProblemStatus;
-import io.github.problem4j.spring.web.format.ProblemFormat;
+import io.github.problem4j.spring.web.ProblemFormat;
 import java.util.Locale;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
@@ -66,7 +66,7 @@ public class TypeMismatchProblemResolver extends AbstractProblemResolver {
    * @param headers HTTP headers (unused)
    * @param status suggested status (ignored; BAD_REQUEST enforced)
    * @return builder populated with status, detail and relevant extensions
-   * @see io.github.problem4j.spring.web.util.ProblemSupport
+   * @see io.github.problem4j.spring.web.ProblemSupport
    */
   @Override
   public ProblemBuilder resolveBuilder(

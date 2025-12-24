@@ -14,9 +14,9 @@
  */
 package io.github.problem4j.spring.webflux.integration;
 
-import static io.github.problem4j.spring.web.util.ProblemSupport.KIND_EXTENSION;
-import static io.github.problem4j.spring.web.util.ProblemSupport.PROPERTY_EXTENSION;
-import static io.github.problem4j.spring.web.util.ProblemSupport.TYPE_MISMATCH_DETAIL;
+import static io.github.problem4j.spring.web.ProblemSupport.KIND_EXTENSION;
+import static io.github.problem4j.spring.web.ProblemSupport.PROPERTY_EXTENSION;
+import static io.github.problem4j.spring.web.ProblemSupport.TYPE_MISMATCH_DETAIL;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.problem4j.core.Problem;

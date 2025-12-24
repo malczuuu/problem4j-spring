@@ -14,14 +14,14 @@
  */
 package io.github.problem4j.spring.web.resolver;
 
-import static io.github.problem4j.spring.web.util.ProblemSupport.resolveStatus;
+import static io.github.problem4j.spring.web.ProblemSupport.resolveStatus;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.core.ProblemStatus;
-import io.github.problem4j.spring.web.format.IdentityProblemFormat;
-import io.github.problem4j.spring.web.util.ProblemSupport;
+import io.github.problem4j.spring.web.IdentityProblemFormat;
+import io.github.problem4j.spring.web.ProblemSupport;
 import java.lang.reflect.Method;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -14,8 +14,8 @@
  */
 package io.github.problem4j.spring.webmvc.integration;
 
-import static io.github.problem4j.spring.web.util.ProblemSupport.MISSING_REQUEST_PART_DETAIL;
-import static io.github.problem4j.spring.web.util.ProblemSupport.PARAM_EXTENSION;
+import static io.github.problem4j.spring.web.ProblemSupport.MISSING_REQUEST_PART_DETAIL;
+import static io.github.problem4j.spring.web.ProblemSupport.PARAM_EXTENSION;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.github.problem4j.core.Problem;

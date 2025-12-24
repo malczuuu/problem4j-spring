@@ -14,16 +14,16 @@
  */
 package io.github.problem4j.spring.web.resolver;
 
-import static io.github.problem4j.spring.web.util.ProblemSupport.VALIDATION_FAILED_DETAIL;
+import static io.github.problem4j.spring.web.ProblemSupport.VALIDATION_FAILED_DETAIL;
 
 import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
 import io.github.problem4j.core.ProblemStatus;
-import io.github.problem4j.spring.web.format.ProblemFormat;
+import io.github.problem4j.spring.web.ProblemFormat;
+import io.github.problem4j.spring.web.ProblemSupport;
 import io.github.problem4j.spring.web.parameter.BindingResultSupport;
 import io.github.problem4j.spring.web.parameter.DefaultBindingResultSupport;
-import io.github.problem4j.spring.web.util.ProblemSupport;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.validation.BindException;

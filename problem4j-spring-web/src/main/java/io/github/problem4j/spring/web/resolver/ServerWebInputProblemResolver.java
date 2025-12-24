@@ -14,13 +14,13 @@
  */
 package io.github.problem4j.spring.web.resolver;
 
-import static io.github.problem4j.spring.web.util.ProblemSupport.PROPERTY_EXTENSION;
-import static io.github.problem4j.spring.web.util.ProblemSupport.resolveStatus;
+import static io.github.problem4j.spring.web.ProblemSupport.PROPERTY_EXTENSION;
+import static io.github.problem4j.spring.web.ProblemSupport.resolveStatus;
 
 import io.github.problem4j.core.Problem;
 import io.github.problem4j.core.ProblemBuilder;
 import io.github.problem4j.core.ProblemContext;
-import io.github.problem4j.spring.web.format.ProblemFormat;
+import io.github.problem4j.spring.web.ProblemFormat;
 import io.github.problem4j.spring.web.parameter.DefaultMethodParameterSupport;
 import io.github.problem4j.spring.web.parameter.MethodParameterSupport;
 import java.util.Optional;
@@ -68,7 +68,7 @@ public class ServerWebInputProblemResolver extends AbstractProblemResolver {
    * @param headers HTTP headers (unused)
    * @param status suggested status from caller (ignored; status derived from exception)
    * @return builder representing the invalid input condition
-   * @see io.github.problem4j.spring.web.util.ProblemSupport#PROPERTY_EXTENSION
+   * @see io.github.problem4j.spring.web.ProblemSupport#PROPERTY_EXTENSION
    */
   @Override
   public ProblemBuilder resolveBuilder(
