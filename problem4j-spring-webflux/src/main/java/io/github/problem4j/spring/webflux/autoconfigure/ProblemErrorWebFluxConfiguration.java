@@ -63,7 +63,7 @@ class ProblemErrorWebFluxConfiguration {
    */
   @ConditionalOnMissingBean(ErrorAttributes.class)
   @Bean
-  ErrorAttributes errorAttributes() {
+  ErrorAttributes problemErrorAttributes() {
     return new DefaultErrorAttributes();
   }
 
@@ -77,7 +77,7 @@ class ProblemErrorWebFluxConfiguration {
   @Order(-2)
   @ConditionalOnMissingBean(ErrorWebExceptionHandler.class)
   @Bean
-  ErrorWebExceptionHandler errorWebExceptionHandler(
+  ErrorWebExceptionHandler problemErrorWebExceptionHandler(
       ProblemPostProcessor problemPostProcessor,
       ErrorAttributes errorAttributes,
       WebProperties webProperties,
