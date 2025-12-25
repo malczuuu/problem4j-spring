@@ -142,7 +142,7 @@ public class ProblemWebFluxAutoConfiguration {
     @Order(Ordered.LOWEST_PRECEDENCE - 10)
     @ConditionalOnMissingBean(ResponseEntityExceptionHandler.class)
     @Bean
-    ResponseEntityExceptionHandler responseEntityExceptionHandler(
+    ResponseEntityExceptionHandler problemEnhancedWebFluxHandler(
         ProblemResolverStore problemResolverStore,
         ProblemPostProcessor problemPostProcessor,
         List<AdviceWebFluxInspector> adviceWebFluxInspectors) {
