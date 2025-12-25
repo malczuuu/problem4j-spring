@@ -1,7 +1,7 @@
 # Problem4J Spring
 
 [![Build Status](https://github.com/problem4j/problem4j-spring/actions/workflows/gradle-build.yml/badge.svg)](https://github.com/problem4j/problem4j-spring/actions/workflows/gradle-build.yml)
-[![Sonatype](https://img.shields.io/maven-central/v/io.github.problem4j/problem4j-spring-bom?filter=1.1.*)][maven-central]
+[![Sonatype](https://img.shields.io/maven-central/v/io.github.problem4j/problem4j-spring-bom?filter=1.2.*)][maven-central]
 [![License](https://img.shields.io/github/license/problem4j/problem4j-spring)](https://github.com/problem4j/problem4j-spring/blob/main/LICENSE)
 [![Spring Boot](https://img.shields.io/badge/v3,v4-6DB33F?label=Spring%20Boot)](https://spring.io/projects/spring-boot)
 

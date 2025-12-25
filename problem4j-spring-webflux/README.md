@@ -12,6 +12,6 @@ RFC 7807 `Problem` objects, with exceptions that are specific to `spring-webflux
 - It can be overwritten further by declaring a custom `ErrorWebExceptionHandler` component.
 - Exclude [`ProblemErrorWebFluxConfiguration`][ProblemErrorWebFluxConfiguration] do disable this override.
 
-[ProblemErrorWebExceptionHandler]: src/main/java/io/github/problem4j/spring/webflux/error/ProblemErrorWebExceptionHandler.java
+[ProblemErrorWebExceptionHandler]: src/main/java/io/github/problem4j/spring/webflux/ProblemErrorWebExceptionHandler.java
 
-[ProblemErrorWebFluxConfiguration]: src/main/java/io/github/problem4j/spring/webflux/error/ProblemErrorWebFluxConfiguration.java
+[ProblemErrorWebFluxConfiguration]: src/main/java/io/github/problem4j/spring/webflux/autoconfigure/ProblemErrorWebFluxConfiguration.java
