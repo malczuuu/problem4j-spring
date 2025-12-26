@@ -52,8 +52,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  *
  * @see #handleExceptionInternal
  * @see io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webmvc} namespace.
  */
 @RestControllerAdvice
+@Deprecated(since = "1.1.8")
 public class ProblemEnhancedMvcHandler extends ResponseEntityExceptionHandler {
 
   private static final Logger log = LoggerFactory.getLogger(ProblemEnhancedMvcHandler.class);

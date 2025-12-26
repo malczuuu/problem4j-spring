@@ -25,7 +25,10 @@ package io.github.malczuuu.problem4j.spring.web.context;
  * </ul>
  *
  * Implementations provide access to values used for message interpolation or metadata enrichment.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "1.1.7")
 public interface ProblemContext {
 
   /**

@@ -34,7 +34,9 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
  * indicate that the request body is invalid or unreadable.
  *
  * @see org.springframework.http.converter.HttpMessageConverter
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "1.1.7")
 public class HttpMessageNotReadableProblemResolver extends AbstractProblemResolver {
 
   public HttpMessageNotReadableProblemResolver(ProblemFormat problemFormat) {

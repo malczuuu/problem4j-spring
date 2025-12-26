@@ -24,8 +24,9 @@ publishing {
             from(components["javaPlatform"])
 
             pom {
-                name = "Problem4J Spring BOM"
-                description = "BOM of Spring integration for library implementing RFC7807"
+                name = "[Deprecated] Problem4J Spring BOM"
+                description =
+                    "[Deprecated] BOM of Spring integration for library implementing RFC7807. Migrated to io.github.problem4j:problem4j-spring-bom namespace."
                 url = "https://github.com/malczuuu/${rootProject.name}"
                 inceptionYear = "2025"
                 licenses {
@@ -43,12 +44,12 @@ publishing {
                 }
                 issueManagement {
                     system = "GitHub Issues"
-                    url = "https://github.com/malczuuu/${rootProject.name}/issues"
+                    url = "https://github.com/problem4j/${rootProject.name}/issues"
                 }
                 scm {
-                    connection = "scm:git:https://github.com/malczuuu/${rootProject.name}.git"
-                    developerConnection = "scm:git:git@github.com:malczuuu/${rootProject.name}.git"
-                    url = "https://github.com/malczuuu/${rootProject.name}"
+                    connection = "scm:git:https://github.com/problem4j/${rootProject.name}.git"
+                    developerConnection = "scm:git:git@github.com:problem4j/${rootProject.name}.git"
+                    url = "https://github.com/problem4j/${rootProject.name}"
                 }
             }
         }

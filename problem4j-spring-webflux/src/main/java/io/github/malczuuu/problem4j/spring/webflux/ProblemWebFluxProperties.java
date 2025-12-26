@@ -21,8 +21,11 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
  * Configuration properties for Problem Details WebFlux integration.
  *
  * <p>These properties can be set under the {@code problem4j.webflux.*} prefix.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webflux} namespace.
  */
 @ConfigurationProperties(prefix = "problem4j.webflux")
+@Deprecated(since = "1.1.7")
 public class ProblemWebFluxProperties {
 
   private final boolean enabled;
@@ -139,7 +142,10 @@ public class ProblemWebFluxProperties {
    * Configuration group for {@link ExceptionWebFluxAdvice}.
    *
    * <p>Controlled by the property {@code problem4j.webflux.exception-advice.enabled}.
+   *
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webflux} namespace.
    */
+  @Deprecated
   public static class ExceptionAdvice {
 
     public static final boolean DEFAULT_ENABLED = true;
@@ -174,7 +180,10 @@ public class ProblemWebFluxProperties {
    * Configuration group for {@link ProblemExceptionWebFluxAdvice}.
    *
    * <p>Controlled by the property {@code problem4j.webflux.problem-exception-advice.enabled}.
+   *
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webflux} namespace.
    */
+  @Deprecated
   public static class ProblemExceptionAdvice {
 
     public static final boolean DEFAULT_ENABLED = true;
@@ -211,7 +220,9 @@ public class ProblemWebFluxProperties {
    * <p>Controlled by the property {@code problem4j.webflux.problem-context-filter.enabled}.
    *
    * @see io.github.malczuuu.problem4j.spring.webflux.context.ProblemContextWebFluxFilter
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webflux} namespace.
    */
+  @Deprecated
   public static class ProblemContextFilter {
 
     public static final boolean DEFAULT_ENABLED = true;
@@ -248,7 +259,10 @@ public class ProblemWebFluxProperties {
    * Configuration group for {@link ProblemEnhancedWebFluxHandler} override.
    *
    * <p>Controlled by the property {@code problem4j.webflux.exception-handler.enabled}.
+   *
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webflux} namespace.
    */
+  @Deprecated
   public static class ExceptionHandler {
 
     public static final boolean DEFAULT_ENABLED = true;
@@ -289,7 +303,9 @@ public class ProblemWebFluxProperties {
    * @see org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler
    * @see io.github.malczuuu.problem4j.spring.webflux.error.ProblemErrorWebExceptionHandler
    * @see io.github.malczuuu.problem4j.spring.webflux.error.ProblemErrorWebFluxConfiguration
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webflux} namespace.
    */
+  @Deprecated
   public static class ErrorWebExceptionHandler {
 
     public static final boolean DEFAULT_ENABLED = true;

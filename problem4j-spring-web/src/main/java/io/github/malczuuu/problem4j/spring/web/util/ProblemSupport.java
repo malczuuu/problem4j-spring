@@ -32,7 +32,10 @@ import org.springframework.http.HttpStatusCode;
  * </ul>
  *
  * Not intended for instantiation or external mutation.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "1.1.7")
 public final class ProblemSupport {
 
   // ---------------------------------------------------------------------------

@@ -21,6 +21,10 @@ import org.slf4j.Logger;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
+/**
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webmvc} namespace.
+ */
+@Deprecated(since = "1.1.8")
 class MvcAdviceSupport {
 
   static void logAdviceException(Logger log, Exception ex, WebRequest request, Exception e) {

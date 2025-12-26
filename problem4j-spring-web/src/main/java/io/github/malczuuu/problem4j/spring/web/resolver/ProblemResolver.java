@@ -25,7 +25,10 @@ import org.springframework.http.HttpStatusCode;
  * further extended or executed to create {@link Problem} response.
  *
  * <p>Implementations are supposed to be stateless.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "1.1.7")
 public interface ProblemResolver {
   /**
    * Returns the type of {@link Exception} this resolver supports.

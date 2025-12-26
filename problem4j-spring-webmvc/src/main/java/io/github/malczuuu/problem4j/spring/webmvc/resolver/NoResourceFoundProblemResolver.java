@@ -33,7 +33,10 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
  *
  * <p>The handler is responsible for returning an appropriate HTTP 404 (Not Found) response to
  * indicate that the requested resource is not available.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webmvc} namespace.
  */
+@Deprecated(since = "1.1.8")
 public class NoResourceFoundProblemResolver extends AbstractProblemResolver {
 
   public NoResourceFoundProblemResolver(ProblemFormat problemFormat) {

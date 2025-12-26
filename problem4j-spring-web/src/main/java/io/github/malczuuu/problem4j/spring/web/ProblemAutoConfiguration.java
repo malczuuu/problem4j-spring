@@ -40,6 +40,7 @@ import org.springframework.context.annotation.Import;
 @ConditionalOnProperty(name = "problem4j.enabled", matchIfMissing = true)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.ANY)
 @Import({ProblemResolverConfiguration.class})
+@Deprecated(since = "1.1.7")
 public class ProblemAutoConfiguration {
 
   /**
@@ -99,6 +100,7 @@ public class ProblemAutoConfiguration {
    * @param problemResolvers all available {@link ProblemResolver} declared as components
    * @return {@link DefaultProblemResolverStore}, wrapped in {@link CachingProblemResolverStore} if
    *     caching is enabled
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
    */
   @ConditionalOnMissingBean(ProblemResolverStore.class)
   @Bean
@@ -115,8 +117,12 @@ public class ProblemAutoConfiguration {
     return problemResolverStore;
   }
 
+  /**
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
+   */
   @ConditionalOnClass({ProblemModule.class, SimpleModule.class})
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class ProblemModuleConfiguration {
 
     /**

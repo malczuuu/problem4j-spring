@@ -35,7 +35,10 @@ import reactor.util.context.Context;
  * <p>The filter reads the trace ID from a configured HTTP header, generates one if missing, and
  * stores it in the {@link ServerWebExchange} attributes, response headers, and Reactor context for
  * downstream access.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webflux} namespace.
  */
+@Deprecated(since = "1.1.7")
 public class ProblemContextWebFluxFilter implements WebFilter {
 
   private final ProblemContextSettings settings;

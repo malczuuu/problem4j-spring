@@ -57,7 +57,10 @@ import org.springframework.util.StringUtils;
  * <p>This design allows dynamic, context-aware Problem generation, supports subclass inheritance,
  * and ensures that null or empty values do not appear in the output, making Problems concise and
  * meaningful.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "1.1.7")
 public class DefaultProblemMappingProcessor implements ProblemMappingProcessor {
 
   /**

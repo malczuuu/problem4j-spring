@@ -42,7 +42,9 @@ import org.springframework.validation.method.MethodValidationException;
  * return value).
  *
  * @see jakarta.validation.ConstraintViolationException
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "1.1.7")
 public class MethodValidationProblemResolver extends AbstractProblemResolver {
 
   private final ViolationResolver violationResolver;

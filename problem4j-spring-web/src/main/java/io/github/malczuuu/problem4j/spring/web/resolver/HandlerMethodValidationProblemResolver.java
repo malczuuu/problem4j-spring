@@ -33,7 +33,10 @@ import org.springframework.web.method.annotation.HandlerMethodValidationExceptio
  * parameter violations (via {@link ViolationResolver}). For 5xx statuses it returns only a basic
  * problem with the resolved status, avoiding leaking validation details when the server indicates
  * an internal failure.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "1.1.7")
 public class HandlerMethodValidationProblemResolver extends AbstractProblemResolver {
 
   private final ViolationResolver violationResolver;

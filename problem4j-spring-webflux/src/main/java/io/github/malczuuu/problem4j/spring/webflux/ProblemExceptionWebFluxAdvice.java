@@ -42,8 +42,11 @@ import reactor.core.publisher.Mono;
  * content type {@code application/problem+json}.
  *
  * <p>This is intended for application-level exceptions already represented as {@link Problem}.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webflux} namespace.
  */
 @RestControllerAdvice
+@Deprecated(since = "1.1.7")
 public class ProblemExceptionWebFluxAdvice {
 
   private static final Logger log = LoggerFactory.getLogger(ProblemExceptionWebFluxAdvice.class);

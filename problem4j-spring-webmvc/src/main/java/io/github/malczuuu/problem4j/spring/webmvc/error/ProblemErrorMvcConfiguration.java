@@ -34,11 +34,13 @@ import org.springframework.context.annotation.Configuration;
  * plain JSON errors.
  *
  * @see org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webmvc} namespace.
  */
 @ConditionalOnProperty(name = "problem4j.webmvc.error-controller.enabled", matchIfMissing = true)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @ConditionalOnClass(ErrorController.class)
 @Configuration(proxyBeanMethods = false)
+@Deprecated(since = "1.1.8")
 public class ProblemErrorMvcConfiguration {
 
   /**

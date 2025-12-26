@@ -42,7 +42,9 @@ import org.springframework.validation.BindException;
  * </ul>
  *
  * @see org.springframework.web.bind.MethodArgumentNotValidException
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "1.1.7")
 public class BindProblemResolver extends AbstractProblemResolver {
 
   private final ViolationResolver violationResolver;

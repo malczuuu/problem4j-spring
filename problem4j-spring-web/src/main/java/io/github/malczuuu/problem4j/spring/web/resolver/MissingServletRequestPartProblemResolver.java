@@ -43,7 +43,9 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
  *
  * @see jakarta.servlet.ServletException
  * @see org.springframework.web.bind.ServletRequestBindingException
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "1.1.7")
 public class MissingServletRequestPartProblemResolver extends AbstractProblemResolver {
 
   public MissingServletRequestPartProblemResolver(ProblemFormat problemFormat) {

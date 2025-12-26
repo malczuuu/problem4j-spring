@@ -25,7 +25,10 @@ package io.github.malczuuu.problem4j.spring.web.util;
  *
  * <p>Multiple modes can be combined to control the paths explored. If no modes are specified, both
  * are considered enabled by default.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "1.1.7")
 public enum HierarchyTraversalMode {
 
   /** Follow the superclass chain when calculating distance. */

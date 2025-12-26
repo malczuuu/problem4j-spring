@@ -29,13 +29,19 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
  * remain compatible previous versions.
  *
  * @see io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolverConfiguration
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webmvc} namespace.
  */
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @Configuration(proxyBeanMethods = false)
+@Deprecated(since = "1.1.8")
 public class ProblemResolverMvcConfiguration {
 
+  /**
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webmvc} namespace.
+   */
   @ConditionalOnClass(NoHandlerFoundException.class)
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class NoHandlerFoundProblemConfiguration {
     @ConditionalOnMissingBean(NoHandlerFoundProblemResolver.class)
     @Bean
@@ -45,8 +51,12 @@ public class ProblemResolverMvcConfiguration {
     }
   }
 
+  /**
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webmvc} namespace.
+   */
   @ConditionalOnClass(NoResourceFoundException.class)
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class NoResourceFoundProblemConfiguration {
     @ConditionalOnMissingBean(NoResourceFoundProblemResolver.class)
     @Bean

@@ -52,7 +52,9 @@ import org.springframework.validation.method.ParameterValidationResult;
  * <p><b>Use at your own risk.</b>
  *
  * @implNote This is an internal API and may change at any time.
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "1.1.7")
 public class ViolationResolver {
 
   /**

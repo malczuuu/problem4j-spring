@@ -24,7 +24,10 @@ package io.github.malczuuu.problem4j.spring.web.processor;
  *
  * <p>These settings allow applications to dynamically customize problem types and instances to
  * match organizational or tracing conventions.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "1.1.7")
 public interface PostProcessorSettings {
 
   /**

@@ -32,7 +32,10 @@ import org.springframework.web.HttpMediaTypeNotAcceptableException;
  *
  * <p>The handler is responsible for returning an appropriate HTTP 406 (Not Acceptable) response to
  * inform the client that the requested content type is not available.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "1.1.7")
 public class HttpMediaTypeNotAcceptableProblemResolver extends AbstractProblemResolver {
 
   public HttpMediaTypeNotAcceptableProblemResolver(ProblemFormat problemFormat) {

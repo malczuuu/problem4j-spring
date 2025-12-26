@@ -32,7 +32,10 @@ import org.springframework.web.bind.support.WebExchangeBindException;
  *
  * <p>The handler is responsible for returning an appropriate HTTP 400 (Bad Request) response, often
  * including details about which fields failed binding or validation.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "1.1.7")
 public class WebExchangeBindProblemResolver extends AbstractProblemResolver {
 
   private final ViolationResolver violationResolver;

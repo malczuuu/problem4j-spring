@@ -32,7 +32,10 @@ import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
  *
  * <p>The interface is intentionally minimal to allow flexible extension and composition of
  * post-processing behavior.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "1.1.7")
 public interface ProblemPostProcessor {
 
   /**

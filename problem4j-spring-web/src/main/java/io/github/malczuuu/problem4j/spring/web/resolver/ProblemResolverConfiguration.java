@@ -50,13 +50,20 @@ import org.springframework.web.server.ServerWebInputException;
  * <p>Each nested configuration class is annotated with {@link ConditionalOnClass} to ensure that
  * only resolvers for classes present on the classpath are created. This design allows the library
  * to remain compatible previous versions.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.ANY)
 @Configuration(proxyBeanMethods = false)
+@Deprecated(since = "1.1.7")
 public class ProblemResolverConfiguration {
 
+  /**
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
+   */
   @ConditionalOnClass(BindException.class)
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class BindProblemConfiguration {
     @ConditionalOnMissingBean(BindProblemResolver.class)
     @Bean
@@ -65,8 +72,12 @@ public class ProblemResolverConfiguration {
     }
   }
 
+  /**
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
+   */
   @ConditionalOnClass(ConstraintViolationException.class)
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class ConstraintViolationProblemConfiguration {
     @ConditionalOnMissingBean(ConstraintViolationProblemResolver.class)
     @Bean
@@ -76,8 +87,12 @@ public class ProblemResolverConfiguration {
     }
   }
 
+  /**
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
+   */
   @ConditionalOnClass(DecodingException.class)
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class DecodingProblemConfiguration {
     @ConditionalOnMissingBean(DecodingProblemResolver.class)
     @Bean
@@ -86,8 +101,12 @@ public class ProblemResolverConfiguration {
     }
   }
 
+  /**
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
+   */
   @ConditionalOnClass(ErrorResponseException.class)
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class ErrorResponseProblemConfiguration {
     @ConditionalOnMissingBean(ErrorResponseProblemResolver.class)
     @Bean
@@ -96,8 +115,12 @@ public class ProblemResolverConfiguration {
     }
   }
 
+  /**
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
+   */
   @ConditionalOnClass(HandlerMethodValidationException.class)
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class HandlerMethodValidationProblemConfiguration {
     @ConditionalOnMissingBean(HandlerMethodValidationProblemResolver.class)
     @Bean
@@ -107,8 +130,12 @@ public class ProblemResolverConfiguration {
     }
   }
 
+  /**
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
+   */
   @ConditionalOnClass(HttpMediaTypeNotAcceptableException.class)
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class HttpMediaTypeNotAcceptableProblemConfiguration {
     @ConditionalOnMissingBean(HttpMediaTypeNotAcceptableProblemResolver.class)
     @Bean
@@ -118,8 +145,12 @@ public class ProblemResolverConfiguration {
     }
   }
 
+  /**
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
+   */
   @ConditionalOnClass(HttpMediaTypeNotSupportedException.class)
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class HttpMediaTypeNotSupportedProblemConfiguration {
     @ConditionalOnMissingBean(HttpMediaTypeNotSupportedProblemResolver.class)
     @Bean
@@ -129,8 +160,12 @@ public class ProblemResolverConfiguration {
     }
   }
 
+  /**
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
+   */
   @ConditionalOnClass(HttpMessageNotReadableException.class)
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class HttpMessageNotReadableProblemConfiguration {
     @ConditionalOnMissingBean(HttpMessageNotReadableProblemResolver.class)
     @Bean
@@ -140,8 +175,12 @@ public class ProblemResolverConfiguration {
     }
   }
 
+  /**
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
+   */
   @ConditionalOnClass(HttpRequestMethodNotSupportedException.class)
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class HttpRequestMethodNotSupportedProblemConfiguration {
     @ConditionalOnMissingBean(HttpRequestMethodNotSupportedProblemResolver.class)
     @Bean
@@ -151,8 +190,12 @@ public class ProblemResolverConfiguration {
     }
   }
 
+  /**
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
+   */
   @ConditionalOnClass(MaxUploadSizeExceededException.class)
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class MaxUploadSizeExceededProblemConfiguration {
     @ConditionalOnMissingBean(MaxUploadSizeExceededProblemResolver.class)
     @Bean
@@ -162,8 +205,12 @@ public class ProblemResolverConfiguration {
     }
   }
 
+  /**
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
+   */
   @ConditionalOnClass(MethodValidationException.class)
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class MethodValidationProblemConfiguration {
     @ConditionalOnMissingBean(MethodValidationProblemResolver.class)
     @Bean
@@ -173,8 +220,12 @@ public class ProblemResolverConfiguration {
     }
   }
 
+  /**
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
+   */
   @ConditionalOnClass(MissingRequestValueException.class)
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class MissingRequestValueProblemConfiguration {
     @ConditionalOnMissingBean(MissingRequestValueProblemResolver.class)
     @Bean
@@ -184,8 +235,12 @@ public class ProblemResolverConfiguration {
     }
   }
 
+  /**
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
+   */
   @ConditionalOnClass(MissingServletRequestPartException.class)
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class MissingServletRequestPartProblemConfiguration {
     @ConditionalOnMissingBean(MissingServletRequestPartProblemResolver.class)
     @Bean
@@ -195,8 +250,12 @@ public class ProblemResolverConfiguration {
     }
   }
 
+  /**
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
+   */
   @ConditionalOnClass(MultipartException.class)
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class MultipartProblemConfiguration {
     @ConditionalOnMissingBean(MultipartProblemResolver.class)
     @Bean
@@ -205,8 +264,12 @@ public class ProblemResolverConfiguration {
     }
   }
 
+  /**
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
+   */
   @ConditionalOnClass(ResponseStatusException.class)
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class ResponseStatusProblemConfiguration {
     @ConditionalOnMissingBean(ResponseStatusProblemResolver.class)
     @Bean
@@ -216,8 +279,12 @@ public class ProblemResolverConfiguration {
     }
   }
 
+  /**
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
+   */
   @ConditionalOnClass(ServerErrorException.class)
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class ServerErrorProblemConfiguration {
     @ConditionalOnMissingBean(ServerErrorProblemResolver.class)
     @Bean
@@ -226,8 +293,12 @@ public class ProblemResolverConfiguration {
     }
   }
 
+  /**
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
+   */
   @ConditionalOnClass(ServerWebInputException.class)
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class ServerWebInputProblemConfiguration {
     @ConditionalOnMissingBean(ServerWebInputProblemResolver.class)
     @Bean
@@ -237,8 +308,12 @@ public class ProblemResolverConfiguration {
     }
   }
 
+  /**
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
+   */
   @ConditionalOnClass(ServletRequestBindingException.class)
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class ServletRequestBindingProblemConfiguration {
     @ConditionalOnMissingBean(ServletRequestBindingProblemResolver.class)
     @Bean
@@ -248,8 +323,12 @@ public class ProblemResolverConfiguration {
     }
   }
 
+  /**
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
+   */
   @ConditionalOnClass(TypeMismatchException.class)
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class TypeMismatchProblemConfiguration {
     @ConditionalOnMissingBean(TypeMismatchProblemResolver.class)
     @Bean
@@ -258,8 +337,12 @@ public class ProblemResolverConfiguration {
     }
   }
 
+  /**
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
+   */
   @ConditionalOnClass(WebExchangeBindException.class)
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class WebExchangeBindProblemConfiguration {
     @ConditionalOnMissingBean(WebExchangeBindProblemResolver.class)
     @Bean

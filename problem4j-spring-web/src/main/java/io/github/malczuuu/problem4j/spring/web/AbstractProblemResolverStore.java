@@ -33,7 +33,10 @@ import java.util.Optional;
  *
  * <p>Resolvers are matched to exceptions by assignability, preferring the most specific exception
  * type.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "1.1.7")
 public abstract class AbstractProblemResolverStore implements ProblemResolverStore {
 
   private final Map<Class<? extends Exception>, ProblemResolver> resolvers;

@@ -35,9 +35,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
  *
  * <p>It converts generic servlet errors into {@link Problem} responses with the appropriate HTTP
  * status and content type {@code application/problem+json}.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webmvc} namespace.
  */
 @Controller
 @RequestMapping("${server.error.path:${error.path:/error}}")
+@Deprecated(since = "1.1.8")
 public class ProblemErrorController extends AbstractErrorController {
 
   private final ProblemPostProcessor problemPostProcessor;

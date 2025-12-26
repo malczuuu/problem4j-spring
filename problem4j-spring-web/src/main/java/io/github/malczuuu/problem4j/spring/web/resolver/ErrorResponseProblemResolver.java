@@ -33,7 +33,9 @@ import org.springframework.web.ErrorResponseException;
  * processing fails and an {@code ErrorResponse} needs to be returned to the client.
  *
  * @see org.springframework.web.ErrorResponse
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "1.1.7")
 public class ErrorResponseProblemResolver extends AbstractProblemResolver {
 
   public ErrorResponseProblemResolver(ProblemFormat problemFormat) {

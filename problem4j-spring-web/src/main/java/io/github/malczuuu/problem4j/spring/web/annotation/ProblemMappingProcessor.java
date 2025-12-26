@@ -40,7 +40,9 @@ import java.util.regex.Pattern;
  * problem creation.
  *
  * @see io.github.malczuuu.problem4j.core.Problem
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "1.1.7")
 public interface ProblemMappingProcessor {
 
   Pattern PLACEHOLDER = Pattern.compile("\\{([^}]+)}");

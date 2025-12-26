@@ -23,7 +23,10 @@ import java.util.Optional;
  * <p>Implementations are responsible for locating the most specific resolver for a given {@code
  * Exception} class, typically by checking class assignability and caching results to improve
  * performance.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "1.1.7")
 public interface ProblemResolverStore {
 
   /**

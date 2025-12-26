@@ -14,6 +14,10 @@
  */
 package io.github.malczuuu.problem4j.spring.web.context;
 
+/**
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
+ */
+@Deprecated(since = "1.1.7")
 class ProblemContextBuilderImpl implements ProblemContextBuilder {
 
   private String traceId;

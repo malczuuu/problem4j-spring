@@ -38,7 +38,10 @@ import org.springframework.http.HttpStatusCode;
  *
  * <p>This exception indicates that method parameters, return values, or other validated elements
  * failed to satisfy declared {@code @Valid} or {@code @Constraint} annotations.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "1.1.7")
 public class ConstraintViolationProblemResolver extends AbstractProblemResolver {
 
   public ConstraintViolationProblemResolver(ProblemFormat problemFormat) {

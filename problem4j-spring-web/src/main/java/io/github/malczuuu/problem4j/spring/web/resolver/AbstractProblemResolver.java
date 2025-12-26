@@ -23,7 +23,12 @@ import io.github.malczuuu.problem4j.spring.web.format.ProblemFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 
-/** Convenience base class for {@link ProblemResolver}-s. */
+/**
+ * Convenience base class for {@link ProblemResolver}-s.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
+ */
+@Deprecated(since = "1.1.7")
 public abstract class AbstractProblemResolver implements ProblemResolver {
 
   private final Class<? extends Exception> clazz;

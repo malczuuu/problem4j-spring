@@ -23,8 +23,11 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
  * Configuration properties for Problem Details integration.
  *
  * <p>These properties can be set under the {@code problem4j.*} prefix.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
 @ConfigurationProperties(prefix = "problem4j")
+@Deprecated(since = "1.1.7")
 public class ProblemProperties implements ProblemContextSettings, PostProcessorSettings {
 
   private final boolean enabled;
@@ -170,7 +173,10 @@ public class ProblemProperties implements ProblemContextSettings, PostProcessorS
    * Caching configuration for ({@link CachingProblemResolverStore}).
    *
    * <p>Controls whether resolver lookup caching is enabled and its maximum size.
+   *
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
    */
+  @Deprecated
   public static class ResolverCaching {
 
     public static final boolean DEFAULT_ENABLED = false;

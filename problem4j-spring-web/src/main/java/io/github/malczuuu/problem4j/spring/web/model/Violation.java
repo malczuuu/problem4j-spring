@@ -27,8 +27,11 @@ import java.util.Objects;
  * Represents a validation violation with a specific field and its corresponding error message.
  *
  * <p>This class is immutable and thread-safe.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
 @JsonInclude(NON_NULL)
+@Deprecated(since = "1.1.7")
 public class Violation implements Serializable {
 
   @Serial private static final long serialVersionUID = 1L;

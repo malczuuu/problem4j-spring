@@ -58,7 +58,9 @@ import org.springframework.web.bind.ServletRequestBindingException;
  * @see MissingRequestCookieException
  * @see Problem
  * @see ProblemStatus#BAD_REQUEST
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "1.1.7")
 public class ServletRequestBindingProblemResolver extends AbstractProblemResolver {
 
   private static final Pattern MISSING_ATTRIBUTE_PATTERN =
