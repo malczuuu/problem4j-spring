@@ -52,8 +52,10 @@ import reactor.core.publisher.Mono;
  *
  * @see #handleExceptionInternal
  * @see io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolver
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webflux} namespace.
  */
 @RestControllerAdvice
+@Deprecated(since = "2.0.7")
 public class ProblemEnhancedWebFluxHandler extends ResponseEntityExceptionHandler {
 
   private static final Logger log = LoggerFactory.getLogger(ProblemEnhancedWebFluxHandler.class);

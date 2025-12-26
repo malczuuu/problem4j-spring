@@ -41,7 +41,10 @@ import org.springframework.web.server.ServerErrorException;
  * <p>The handler is responsible for returning an appropriate HTTP 5xx response (e.g., 500 Internal
  * Server Error) to inform the client that the request could not be processed due to a server-side
  * problem.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "2.0.7")
 public class ServerErrorProblemResolver extends AbstractProblemResolver {
 
   public ServerErrorProblemResolver(ProblemFormat problemFormat) {

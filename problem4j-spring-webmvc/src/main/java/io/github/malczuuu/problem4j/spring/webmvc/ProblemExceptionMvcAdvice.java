@@ -42,8 +42,11 @@ import org.springframework.web.context.request.WebRequest;
  * content type {@code application/problem+json}.
  *
  * <p>This is intended for application-level exceptions already represented as {@link Problem}.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webmvc} namespace.
  */
 @RestControllerAdvice
+@Deprecated(since = "2.0.7")
 public class ProblemExceptionMvcAdvice {
 
   private static final Logger log = LoggerFactory.getLogger(ProblemExceptionMvcAdvice.class);

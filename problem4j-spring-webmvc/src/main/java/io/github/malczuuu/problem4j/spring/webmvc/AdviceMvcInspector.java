@@ -28,7 +28,10 @@ import org.springframework.web.context.request.WebRequest;
  * exception, HTTP headers, status, and request information, without modifying the response.
  *
  * <p>Typical use cases include logging, monitoring, or auditing error responses.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webmvc} namespace.
  */
+@Deprecated(since = "2.0.7")
 public interface AdviceMvcInspector {
 
   /**

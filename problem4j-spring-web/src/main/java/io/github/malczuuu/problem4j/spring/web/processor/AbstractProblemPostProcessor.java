@@ -54,7 +54,10 @@ import org.springframework.util.StringUtils;
  * problem4j.type-override=https://errors.example.com/{problem.type}
  * problem4j.instance-override=/errors/{context.traceId}
  * }</pre>
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "2.0.7")
 public abstract class AbstractProblemPostProcessor implements ProblemPostProcessor {
 
   private final PostProcessorSettings settings;

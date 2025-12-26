@@ -22,7 +22,10 @@ package io.github.malczuuu.problem4j.spring.web.util;
  * considered, and the minimal distance is returned if multiple paths exist.
  *
  * <p>Methods allow specifying a maximum depth to avoid stack overflow, or use a default depth.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "2.0.7")
 public interface ClassDistanceEvaluation {
 
   int DEFAULT_MAX_DEPTH = 50;

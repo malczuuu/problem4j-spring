@@ -34,7 +34,10 @@ import org.springframework.web.server.ResponseStatusException;
  *
  * <p>The handler is responsible for translating the exception into the corresponding HTTP response
  * with the specified status code, reason, and any additional details.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "2.0.7")
 public class ResponseStatusProblemResolver extends AbstractProblemResolver {
 
   public ResponseStatusProblemResolver(ProblemFormat problemFormat) {

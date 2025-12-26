@@ -21,8 +21,11 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
  * Configuration properties for Problem Details WebMVC integration.
  *
  * <p>These properties can be set under the {@code problem4j.webmvc.*} prefix.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webmvc} namespace.
  */
 @ConfigurationProperties(prefix = "problem4j.webmvc")
+@Deprecated(since = "2.0.7")
 public class ProblemMvcProperties {
 
   private final boolean enabled;
@@ -136,7 +139,10 @@ public class ProblemMvcProperties {
    * Configuration group for {@link ExceptionMvcAdvice}.
    *
    * <p>Controlled by the property {@code problem4j.webmvc.exception-advice.enabled}.
+   *
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webmvc} namespace.
    */
+  @Deprecated
   public static class ExceptionAdvice {
 
     public static final boolean DEFAULT_ENABLED = true;
@@ -171,7 +177,10 @@ public class ProblemMvcProperties {
    * Configuration group for {@link ProblemExceptionMvcAdvice}.
    *
    * <p>Controlled by the property {@code problem4j.webmvc.problem-exception-advice.enabled}.
+   *
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webmvc} namespace.
    */
+  @Deprecated
   public static class ProblemExceptionAdvice {
 
     public static final boolean DEFAULT_ENABLED = true;
@@ -208,7 +217,9 @@ public class ProblemMvcProperties {
    * <p>Controlled by the property {@code problem4j.webmvc.problem-context-filter.enabled}.
    *
    * @see io.github.malczuuu.problem4j.spring.webmvc.context.ProblemContextMvcFilter
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webmvc} namespace.
    */
+  @Deprecated
   public static class ProblemContextFilter {
 
     public static final boolean DEFAULT_ENABLED = true;
@@ -245,7 +256,10 @@ public class ProblemMvcProperties {
    * Configuration group for {@link ProblemEnhancedMvcHandler} override.
    *
    * <p>Controlled by the property {@code problem4j.webmvc.exception-handler.enabled}.
+   *
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webmvc} namespace.
    */
+  @Deprecated
   public static class ExceptionHandler {
 
     public static final boolean DEFAULT_ENABLED = true;
@@ -286,7 +300,9 @@ public class ProblemMvcProperties {
    * @see org.springframework.boot.webmvc.error.ErrorController
    * @see io.github.malczuuu.problem4j.spring.webmvc.error.ProblemErrorController
    * @see io.github.malczuuu.problem4j.spring.webmvc.error.ProblemErrorMvcConfiguration
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webmvc} namespace.
    */
+  @Deprecated
   public static class ErrorController {
 
     public static final boolean DEFAULT_ENABLED = true;

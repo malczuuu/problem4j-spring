@@ -14,7 +14,12 @@
  */
 package io.github.malczuuu.problem4j.spring.web.format;
 
-/** Convenience implementation for {@link ProblemFormat} which doesn't transform input data. */
+/**
+ * Convenience implementation for {@link ProblemFormat} which doesn't transform input data.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
+ */
+@Deprecated(since = "2.0.7")
 public class IdentityProblemFormat implements ProblemFormat {
 
   /**

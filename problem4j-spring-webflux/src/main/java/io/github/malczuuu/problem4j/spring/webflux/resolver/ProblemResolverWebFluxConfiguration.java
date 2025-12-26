@@ -24,7 +24,9 @@ import org.springframework.context.annotation.Configuration;
  * remain compatible previous versions.
  *
  * @see io.github.malczuuu.problem4j.spring.web.resolver.ProblemResolverConfiguration
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webflux} namespace.
  */
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
 @Configuration(proxyBeanMethods = false)
+@Deprecated(since = "2.0.7")
 public class ProblemResolverWebFluxConfiguration {}

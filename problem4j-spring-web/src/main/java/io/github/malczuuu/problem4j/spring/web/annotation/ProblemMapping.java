@@ -69,7 +69,7 @@ import java.lang.annotation.Target;
  *     detail = "Invalid input for user {userId}, trace {context.traceId}",
  *     extensions = {"userId", "fieldName"}
  * )
- * public class ValidationException extends RuntimeException {
+ * @Deprecated public class ValidationException extends RuntimeException {
  *     private final String userId;
  *     private final String fieldName;
  *
@@ -86,10 +86,12 @@ import java.lang.annotation.Target;
  *
  * @see io.github.malczuuu.problem4j.core.Problem
  * @see io.github.malczuuu.problem4j.spring.web.context.ProblemContext#getTraceId()
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
+@Deprecated(since = "2.0.7")
 public @interface ProblemMapping {
 
   /**

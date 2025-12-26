@@ -18,7 +18,10 @@ package io.github.malczuuu.problem4j.spring.web.annotation;
  * Thrown when processing an annotated exception into a Problem fails. {@code @RestControllerAdvice}
  * or any other handlers can catch this and return a safe {@code 500 Problem}. No other exception is
  * supposed to be thrown from {@link ProblemMappingProcessor}.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "2.0.7")
 public class ProblemProcessingException extends RuntimeException {
 
   /** Creates a new exception with no detail message and no cause. */

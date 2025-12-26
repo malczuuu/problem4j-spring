@@ -38,7 +38,10 @@ import org.springframework.web.server.ServerWebInputException;
  *
  * <p>The handler is responsible for returning an appropriate HTTP 400 (Bad Request) response to
  * indicate that the client sent invalid or unreadable input.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "2.0.7")
 public class ServerWebInputProblemResolver extends AbstractProblemResolver {
 
   private final TypeMismatchProblemResolver typeMismatchProblemResolver;

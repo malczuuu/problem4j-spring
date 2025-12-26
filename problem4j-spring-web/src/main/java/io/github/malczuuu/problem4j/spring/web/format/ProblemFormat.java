@@ -20,7 +20,10 @@ package io.github.malczuuu.problem4j.spring.web.format;
  *
  * <p>Implementations can customize how details and property names are presented - for example, by
  * applying localization, case formatting, or message templating.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "2.0.7")
 public interface ProblemFormat {
 
   /** Format {@code detail} field of {@code Problem} model. */

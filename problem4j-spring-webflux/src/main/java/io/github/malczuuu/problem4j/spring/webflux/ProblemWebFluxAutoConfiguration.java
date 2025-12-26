@@ -52,6 +52,8 @@ import org.springframework.web.server.WebFilter;
  *   <li>{@link ConditionalOnMissingBean} ensures user-defined beans override defaults.
  *   <li>{@link ConditionalOnClass} ensures compatibility with optional framework classes.
  * </ul>
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webflux} namespace.
  */
 @AutoConfiguration
 @EnableConfigurationProperties({ProblemWebFluxProperties.class})
@@ -59,6 +61,7 @@ import org.springframework.web.server.WebFilter;
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
 @AutoConfigureBefore({ErrorWebFluxAutoConfiguration.class, WebFluxAutoConfiguration.class})
 @Import({ProblemErrorWebFluxConfiguration.class, ProblemResolverWebFluxConfiguration.class})
+@Deprecated(since = "2.0.7")
 public class ProblemWebFluxAutoConfiguration {
 
   /**
@@ -106,12 +109,15 @@ public class ProblemWebFluxAutoConfiguration {
   /**
    * Nested configuration that registers the {@link ProblemContextWebFluxFilter} responsible for
    * preparing and propagating the Problem4J context across WebFlux request handling.
+   *
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webflux} namespace.
    */
   @ConditionalOnProperty(
       name = "problem4j.webflux.problem-context-filter.enabled",
       matchIfMissing = true)
   @ConditionalOnClass(WebFilter.class)
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class ProblemContextWebFluxFilterConfiguration {
 
     /**
@@ -128,12 +134,15 @@ public class ProblemWebFluxAutoConfiguration {
   /**
    * Nested configuration that replaces the default WebFlux exception handler with a
    * Problem4j-enhanced implementation.
+   *
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webflux} namespace.
    */
   @ConditionalOnProperty(
       name = "problem4j.webflux.exception-handler.enabled",
       matchIfMissing = true)
   @ConditionalOnClass(ResponseEntityExceptionHandler.class)
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class ResponseEntityExceptionHandlerConfiguration {
 
     /**

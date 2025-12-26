@@ -19,6 +19,10 @@ import static io.github.malczuuu.problem4j.spring.web.context.ContextSupport.TRA
 import org.slf4j.Logger;
 import org.springframework.web.server.ServerWebExchange;
 
+/**
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webflux} namespace.
+ */
+@Deprecated(since = "2.0.7")
 class WebFluxAdviceSupport {
 
   static void logAdviceException(

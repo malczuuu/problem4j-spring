@@ -38,12 +38,14 @@ import org.springframework.web.reactive.result.view.ViewResolver;
  * ErrorWebFluxAutoConfiguration}.
  *
  * @see org.springframework.boot.webflux.autoconfigure.error.ErrorWebFluxAutoConfiguration
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webflux} namespace.
  */
 @ConditionalOnProperty(
     name = "problem4j.webflux.error-web-exception-handler.enabled",
     matchIfMissing = true)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
 @Configuration(proxyBeanMethods = false)
+@Deprecated(since = "2.0.7")
 public class ProblemErrorWebFluxConfiguration {
 
   private final WebProperties webProperties;

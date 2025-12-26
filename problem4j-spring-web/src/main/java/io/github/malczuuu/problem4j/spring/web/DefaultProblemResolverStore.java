@@ -24,7 +24,10 @@ import java.util.List;
  *
  * <p>Resolvers are matched to exceptions by assignability, preferring the most specific exception
  * type.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "2.0.7")
 public class DefaultProblemResolverStore extends AbstractProblemResolverStore {
 
   /**

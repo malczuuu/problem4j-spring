@@ -34,7 +34,10 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
  * response, often including the list of supported methods in the {@code Allow} header.
  *
  * <p>Always resolves to a {@link Problem} with status {@link ProblemStatus#METHOD_NOT_ALLOWED}.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "2.0.7")
 public class HttpRequestMethodNotSupportedProblemResolver extends AbstractProblemResolver {
 
   public HttpRequestMethodNotSupportedProblemResolver(ProblemFormat problemFormat) {

@@ -19,7 +19,10 @@ import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
 
 /**
  * Convenience implementation for {@link ProblemPostProcessor} which doesn't transform input data.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "2.0.7")
 public class IdentityProblemPostProcessor implements ProblemPostProcessor {
 
   /**

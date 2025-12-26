@@ -20,7 +20,10 @@ package io.github.malczuuu.problem4j.spring.web.context;
  * <p>Provides access to infrastructure configuration such as the HTTP header name that carries a
  * trace identifier. Implementations are typically backed by external configuration (e.g. Spring
  * Boot properties) and are expected to be thread-safe.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "2.0.7")
 public interface ProblemContextSettings {
 
   /**

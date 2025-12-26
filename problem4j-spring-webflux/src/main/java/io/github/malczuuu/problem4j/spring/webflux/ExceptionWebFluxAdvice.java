@@ -57,8 +57,11 @@ import reactor.core.publisher.Mono;
  * <p>Intended as a **generic fallback**, it ensures that unexpected exceptions still produce a
  * consistent {@code Problem} response. For more specific exception handling, use {@code
  * ProblemEnhancedWebFluxHandler}, {@code ProblemExceptionWebFluxAdvice}.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webflux} namespace.
  */
 @RestControllerAdvice
+@Deprecated(since = "2.0.7")
 public class ExceptionWebFluxAdvice {
 
   private static final Logger log = LoggerFactory.getLogger(ExceptionWebFluxAdvice.class);

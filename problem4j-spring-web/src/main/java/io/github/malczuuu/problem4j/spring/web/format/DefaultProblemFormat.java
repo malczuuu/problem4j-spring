@@ -30,7 +30,9 @@ import org.springframework.util.StringUtils;
  *
  * @see ProblemFormat
  * @see ProblemProperties.DetailFormat
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "2.0.7")
 public class DefaultProblemFormat implements ProblemFormat {
 
   private final String detailFormat;

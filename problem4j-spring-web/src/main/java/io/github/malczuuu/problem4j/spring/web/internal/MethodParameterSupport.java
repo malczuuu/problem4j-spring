@@ -37,7 +37,9 @@ import org.springframework.web.bind.annotation.SessionAttribute;
  * <p><b>Use at your own risk.</b>
  *
  * @implNote This is an internal API and may change at any time.
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "2.0.7")
 public final class MethodParameterSupport {
 
   /**

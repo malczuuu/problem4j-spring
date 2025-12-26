@@ -29,7 +29,10 @@ import org.springframework.web.multipart.MultipartException;
  *
  * <p>A {@link MultipartException} is thrown when a multipart request fails, e.g., due to exceeding
  * file size limits or parsing errors.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "2.0.7")
 public class MultipartProblemResolver extends AbstractProblemResolver {
 
   public MultipartProblemResolver(ProblemFormat problemFormat) {

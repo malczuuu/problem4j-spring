@@ -29,7 +29,10 @@ import org.springframework.web.server.ServerWebExchange;
  * response.
  *
  * <p>Typical use cases include logging, monitoring, or auditing error responses.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webflux} namespace.
  */
+@Deprecated(since = "2.0.7")
 public interface AdviceWebFluxInspector {
 
   /**

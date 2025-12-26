@@ -36,7 +36,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
  * <p>The filter reads the trace identifier from a configured HTTP header, generates one if missing,
  * and stores it in the {@link HttpServletRequest} attributes, response headers for downstream
  * access.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webmvc} namespace.
  */
+@Deprecated(since = "2.0.7")
 public class ProblemContextMvcFilter extends OncePerRequestFilter {
 
   private final ProblemContextSettings settings;

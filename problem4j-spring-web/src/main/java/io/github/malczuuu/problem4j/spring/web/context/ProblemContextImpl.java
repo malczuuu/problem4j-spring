@@ -16,6 +16,10 @@ package io.github.malczuuu.problem4j.spring.web.context;
 
 import java.util.Objects;
 
+/**
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
+ */
+@Deprecated(since = "2.0.7")
 class ProblemContextImpl implements ProblemContext {
 
   static final ProblemContext EMPTY = ProblemContext.builder().build();

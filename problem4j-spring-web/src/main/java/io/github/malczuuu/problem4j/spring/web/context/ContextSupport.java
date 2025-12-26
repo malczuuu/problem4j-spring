@@ -18,7 +18,10 @@ import java.util.UUID;
 
 /**
  * Utility class providing constants and helper methods for tracing support within the Problem4J.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "2.0.7")
 public final class ContextSupport {
 
   /** Request attribute key used to store a trace identifier. */

@@ -25,7 +25,10 @@ import java.util.function.Function;
  * {@link ProblemResolverStore} implementation that caches resolver lookups for better performance.
  *
  * <p>Results are stored in an internal cache to avoid repeated resolution.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "2.0.7")
 public class CachingProblemResolverStore implements ProblemResolverStore {
 
   private final ProblemResolverStore delegate;

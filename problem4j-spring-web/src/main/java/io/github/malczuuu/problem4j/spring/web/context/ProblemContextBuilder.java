@@ -14,7 +14,12 @@
  */
 package io.github.malczuuu.problem4j.spring.web.context;
 
-/** Builder for creating {@link ProblemContext} instances. */
+/**
+ * Builder for creating {@link ProblemContext} instances.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
+ */
+@Deprecated(since = "2.0.7")
 public interface ProblemContextBuilder {
 
   /**

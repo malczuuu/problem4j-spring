@@ -91,7 +91,7 @@ It would produce following response with `application/problem+json`.
     status = 400,
     detail = "{message}: {fieldName}",
     extensions = {"userId", "fieldName"})
-public class ExampleException extends RuntimeException {
+@Deprecated public class ExampleException extends RuntimeException {
 
   private final String userId;
   private final String fieldName;
@@ -122,10 +122,10 @@ It would produce following response with `application/problem+json`.
 
 ```java
 @Component
-public class ExampleExceptionResolver implements ProblemResolver {
+@Deprecated public class ExampleExceptionResolver implements ProblemResolver {
 
   @Override
-  public Class<? extends Exception> getExceptionClass() {
+  @Deprecated public class<? extends Exception> getExceptionClass() {
     return ExampleException.class;
   }
 

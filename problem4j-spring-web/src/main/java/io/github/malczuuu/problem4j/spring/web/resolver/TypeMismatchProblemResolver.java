@@ -38,7 +38,10 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
  *
  * <p>The handler is responsible for returning an appropriate HTTP 400 (Bad Request) response to
  * indicate that the provided input has an invalid type.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "2.0.7")
 public class TypeMismatchProblemResolver extends AbstractProblemResolver {
 
   public TypeMismatchProblemResolver(ProblemFormat problemFormat) {

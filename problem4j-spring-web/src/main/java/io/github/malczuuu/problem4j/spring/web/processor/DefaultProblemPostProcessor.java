@@ -50,7 +50,10 @@ import io.github.malczuuu.problem4j.spring.web.context.ProblemContext;
  * problem4j.type-override=https://errors.example.com/{problem.type}
  * problem4j.instance-override=/errors/{context.traceId}
  * }</pre>
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "2.0.7")
 public class DefaultProblemPostProcessor extends AbstractProblemPostProcessor {
 
   /** Creates a post-processor using the given override settings. */

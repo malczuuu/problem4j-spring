@@ -22,7 +22,10 @@ import java.util.Set;
  * Implementation of {@link ClassDistanceEvaluation} that calculates inheritance distance using a
  * recursive graph-based approach. Supports limiting the maximum depth to prevent stack overflow in
  * deep or complex hierarchies.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "2.0.7")
 public class GraphClassDistanceEvaluation implements ClassDistanceEvaluation {
 
   private final int defaultMaxDepth;

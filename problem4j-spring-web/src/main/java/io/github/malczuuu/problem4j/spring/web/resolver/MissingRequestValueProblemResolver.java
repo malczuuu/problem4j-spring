@@ -54,7 +54,10 @@ import org.springframework.web.server.MissingRequestValueException;
  *
  * <p>The handler is responsible for returning an appropriate HTTP 400 (Bad Request) response to
  * indicate that a required input value is missing.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-web} namespace.
  */
+@Deprecated(since = "2.0.7")
 public class MissingRequestValueProblemResolver extends AbstractProblemResolver {
 
   public MissingRequestValueProblemResolver(ProblemFormat problemFormat) {

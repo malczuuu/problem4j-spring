@@ -52,6 +52,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  *   <li>{@link ConditionalOnMissingBean} ensures user-defined beans override defaults.
  *   <li>{@link ConditionalOnClass} ensures compatibility with optional framework classes.
  * </ul>
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webmvc} namespace.
  */
 @AutoConfiguration
 @EnableConfigurationProperties({ProblemMvcProperties.class})
@@ -59,6 +61,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @AutoConfigureBefore({ErrorMvcAutoConfiguration.class, WebMvcAutoConfiguration.class})
 @Import({ProblemErrorMvcConfiguration.class, ProblemResolverMvcConfiguration.class})
+@Deprecated(since = "2.0.7")
 public class ProblemMvcAutoConfiguration {
 
   /**
@@ -102,12 +105,15 @@ public class ProblemMvcAutoConfiguration {
   /**
    * Nested configuration that registers the {@link ProblemContextMvcFilter} responsible for
    * preparing and propagating the Problem4J context across WebMVC request handling.
+   *
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webmvc} namespace.
    */
   @ConditionalOnProperty(
       name = "problem4j.webmvc.problem-context-filter.enabled",
       matchIfMissing = true)
   @ConditionalOnClass(OncePerRequestFilter.class)
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class ProblemContextMvcFilterConfiguration {
 
     /**
@@ -123,11 +129,14 @@ public class ProblemMvcAutoConfiguration {
 
   /**
    * Nested configuration that replaces the default WebMVC exception handler with a
-   * Problem4j-enhanced implementation.
+   * Problem4J-enhanced implementation.
+   *
+   * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webmvc} namespace.
    */
   @ConditionalOnProperty(name = "problem4j.webmvc.exception-handler.enabled", matchIfMissing = true)
   @ConditionalOnClass(ResponseEntityExceptionHandler.class)
   @Configuration(proxyBeanMethods = false)
+  @Deprecated
   public static class ResponseEntityExceptionHandlerConfiguration {
 
     /**

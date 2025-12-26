@@ -33,7 +33,10 @@ import org.springframework.web.servlet.NoHandlerFoundException;
  *
  * <p>The handler is responsible for returning an appropriate HTTP 404 (Not Found) response to
  * indicate that the requested resource or endpoint does not exist.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webmvc} namespace.
  */
+@Deprecated(since = "2.0.7")
 public class NoHandlerFoundProblemResolver extends AbstractProblemResolver {
 
   public NoHandlerFoundProblemResolver(ProblemFormat problemFormat) {

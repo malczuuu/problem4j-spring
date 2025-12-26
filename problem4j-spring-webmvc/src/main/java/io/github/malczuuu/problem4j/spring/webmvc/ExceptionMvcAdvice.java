@@ -58,8 +58,11 @@ import org.springframework.web.context.request.WebRequest;
  * <p>Intended as a **generic fallback**, it ensures that unexpected exceptions still produce a
  * consistent {@code Problem} response. For more specific exception handling, use {@code
  * ProblemEnhancedMvcHandler}, {@code ProblemExceptionMvcAdvice}.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webmvc} namespace.
  */
 @RestControllerAdvice
+@Deprecated(since = "2.0.7")
 public class ExceptionMvcAdvice {
 
   private static final Logger log = LoggerFactory.getLogger(ExceptionMvcAdvice.class);

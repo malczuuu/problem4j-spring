@@ -41,7 +41,10 @@ import reactor.core.publisher.Mono;
  *
  * <p>It replaces the response body with a {@link Problem} object while preserving the original HTTP
  * status and content type {@code application/problem+json}.
+ *
+ * @deprecated migrated to {@code io.github.problem4j:problem4j-spring-webflux} namespace.
  */
+@Deprecated(since = "2.0.7")
 public class ProblemErrorWebExceptionHandler extends DefaultErrorWebExceptionHandler {
 
   private final ProblemPostProcessor problemPostProcessor;
