@@ -31,6 +31,7 @@
     - Run `./gradlew spotlessCheck` to validate code style.
     - Run `./gradlew spotlessApply` to auto-format code.
     - Lint config in `build.gradle.kts`.
+    - For limiting failures and noise, prefer running `./gradlew spotlessApply build` instead of just `./gradlew build`.
 - **Clean:**
     - Run `./gradlew clean` to remove build artifacts.
 - **Validation:**
@@ -61,6 +62,8 @@
 ## Coding Guidelines
 
 - Do not add self-explaining comments. Use comments only for clarity/context.
+- Do not use wildcard imports.
+- Always rely on `spotlessApply` task from Gradle for code formatting.
 - Follow existing code patterns and naming conventions.
 - Use Gradle tasks for build, test, and lint. Do not attempt manual compilation or test running.
 
