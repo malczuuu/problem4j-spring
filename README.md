@@ -52,7 +52,7 @@ Problem4J is designed for robust, traceable, and fully configurable REST API err
 
 ## Usage
 
-Extensive usage manual explaining library features can be found on [repository wiki pages][repository-wiki-pages].
+Extensive usage manual explaining library features can be found on [GitHub Pages][github-pages].
 
 The primary ways to produce a `Problem` response are:
 
@@ -239,6 +239,8 @@ version. By default, the version is derived from git commit hash.
 
 </details>
 
+[github-pages]: https://problem4j.github.io
+
 [maven-central]: https://central.sonatype.com/namespace/io.github.problem4j
 
 [problem4j-core]: https://github.com/problem4j/problem4j-core
@@ -246,8 +248,6 @@ version. By default, the version is derived from git commit hash.
 [problem4j-jackson]: https://github.com/problem4j/problem4j-jackson
 
 [problem4j-spring]: https://github.com/problem4j/problem4j-spring
-
-[repository-wiki-pages]: https://github.com/problem4j/problem4j-spring/wiki
 
 [rfc7807]: https://datatracker.ietf.org/doc/html/rfc7807
 
