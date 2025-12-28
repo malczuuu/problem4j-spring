@@ -126,7 +126,7 @@ public class ProblemWebFluxAutoConfiguration {
 
   /**
    * Nested configuration that replaces the default WebFlux exception handler with a
-   * Problem4j-enhanced implementation.
+   * Problem4J-enhanced implementation.
    */
   @ConditionalOnProperty(
       name = "problem4j.webflux.exception-handler.enabled",

@@ -13,6 +13,8 @@ error messages.
 API errors using `Problem` objects. It helps you enforce a consistent error contract across your services, while staying
 flexible enough for custom exceptions and business-specific details.
 
+> Note that [RFC 7807][rfc7807] was later extended in [RFC 9457][rfc9457], however core concepts remain the same.
+
 ## Table of Contents
 
 - [Why bother with Problem4J](#why-bother-with-problem4j)
@@ -248,3 +250,5 @@ version. By default, the version is derived from git commit hash.
 [repository-wiki-pages]: https://github.com/problem4j/problem4j-spring/wiki
 
 [rfc7807]: https://datatracker.ietf.org/doc/html/rfc7807
+
+[rfc9457]: https://datatracker.ietf.org/doc/html/rfc9457

@@ -39,5 +39,5 @@ dependencies {
 // see buildSrc/src/main/kotlin/internal.convention-publishing.gradle.kts
 internalPublishing {
     displayName = "Problem4J Spring Web"
-    description = "Spring Web integration for library implementing RFC7807"
+    description = "Spring Web integration for library implementing RFC7807 (aka RFC9457)."
 }

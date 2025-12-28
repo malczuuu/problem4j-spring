@@ -37,13 +37,13 @@ spotless {
     kotlin {
         target("**/src/**/*.kt")
 
-        ktfmt("0.59").metaStyle()
+        ktfmt("0.60").metaStyle()
         endWithNewline()
         lineEndings = LineEnding.UNIX
     }
 
     kotlinGradle {
-        target("*.gradle.kts", "problem4j-*/*.kts", "buildSrc/*.kts", "buildSrc/src/**/*.kts")
+        target("*.gradle.kts", "problem4j-*/*.gradle.kts", "buildSrc/*.gradle.kts", "buildSrc/src/**/*.gradle.kts")
 
         ktlint("1.8.0").editorConfigOverride(mapOf("max_line_length" to "120"))
         endWithNewline()
