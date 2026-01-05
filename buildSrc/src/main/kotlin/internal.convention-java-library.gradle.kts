@@ -31,13 +31,6 @@ tasks.withType<Jar>().configureEach {
     }
 }
 
-// Disable doclint to avoid errors and warnings on missing JavaDoc comments.
-tasks.withType<Javadoc>().configureEach {
-    (options as StandardJavadocDocletOptions).apply {
-        addStringOption("Xdoclint:none", "-quiet")
-    }
-}
-
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 
