@@ -10,18 +10,27 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * SPDX-License-Identifier: MIT
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package io.github.problem4j.spring.web;
-
-import io.github.problem4j.core.ProblemContext;
 
 /**
  * Utility class providing constants and helper methods for tracing support within the Problem4J.
  */
 public final class AttributeSupport {
 
-  /** Request attribute key used to store a trace identifier. */
+  /**
+   * Request attribute key used to store a trace identifier.
+   *
+   * <p>This key is <b>not used in {@code ProblemContext}</b>; it is used exclusively as a request
+   * attribute (WebFlux or WebMVC) and is assigned by framework-specific filters.
+   */
   public static final String TRACE_ID_ATTRIBUTE = "io.github.problem4j.spring.web.traceId";
 
   /**
@@ -29,7 +38,7 @@ public final class AttributeSupport {
    * sharing contextual information (such as trace identifiers or additional diagnostic data)
    * between components involved in problem handling.
    */
-  public static final String PROBLEM_CONTEXT_ATTRIBUTE = ProblemContext.class.getName();
+  public static final String PROBLEM_CONTEXT_ATTRIBUTE = "io.github.problem4j.core.ProblemContext";
 
   private AttributeSupport() {}
 }

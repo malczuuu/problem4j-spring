@@ -10,7 +10,13 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * SPDX-License-Identifier: MIT
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package io.github.problem4j.spring.web.resolver;
 
@@ -43,14 +49,27 @@ public class WebExchangeBindProblemResolver extends AbstractProblemResolver {
 
   private final BindingResultSupport bindingResultSupport;
 
+  /** Creates a new {@code WebExchangeBindProblemResolver} with default problem format. */
   public WebExchangeBindProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
+  /**
+   * Creates a new {@code WebExchangeBindProblemResolver} with the specified problem format.
+   *
+   * @param problemFormat the problem format to use
+   */
   public WebExchangeBindProblemResolver(ProblemFormat problemFormat) {
     this(problemFormat, new DefaultBindingResultSupport());
   }
 
+  /**
+   * Creates a new {@code WebExchangeBindProblemResolver} with the specified problem format and
+   * binding result support.
+   *
+   * @param problemFormat the problem format to use
+   * @param bindingResultSupport the support for extracting bind results
+   */
   public WebExchangeBindProblemResolver(
       ProblemFormat problemFormat, BindingResultSupport bindingResultSupport) {
     super(WebExchangeBindException.class, problemFormat);

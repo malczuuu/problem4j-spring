@@ -10,7 +10,13 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * SPDX-License-Identifier: MIT
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package io.github.problem4j.spring.web.resolver;
 
@@ -46,14 +52,27 @@ public class ServerWebInputProblemResolver extends AbstractProblemResolver {
   private final TypeMismatchProblemResolver typeMismatchProblemResolver;
   private final MethodParameterSupport methodParameterSupport;
 
+  /** Creates a new {@code ServerWebInputProblemResolver} with default problem format. */
   public ServerWebInputProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
+  /**
+   * Creates a new {@code ServerWebInputProblemResolver} with the specified problem format.
+   *
+   * @param problemFormat the problem format to use
+   */
   public ServerWebInputProblemResolver(ProblemFormat problemFormat) {
     this(problemFormat, new DefaultMethodParameterSupport());
   }
 
+  /**
+   * Creates a new {@code ServerWebInputProblemResolver} with the specified problem format and
+   * method parameter support.
+   *
+   * @param problemFormat the problem format to use
+   * @param methodParameterSupport the support for extracting parameter names
+   */
   public ServerWebInputProblemResolver(
       ProblemFormat problemFormat, MethodParameterSupport methodParameterSupport) {
     super(ServerWebInputException.class, problemFormat);

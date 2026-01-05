@@ -10,7 +10,13 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * SPDX-License-Identifier: MIT
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package io.github.problem4j.spring.web;
 
@@ -25,6 +31,7 @@ package io.github.problem4j.spring.web;
  */
 public interface ClassDistanceEvaluation {
 
+  /** Default maximum depth for class distance evaluation. */
   int DEFAULT_MAX_DEPTH = 50;
 
   /**
@@ -57,6 +64,8 @@ public interface ClassDistanceEvaluation {
    *
    * <p>This limit helps prevent stack overflow when traversing deep or complex class/interface
    * hierarchies.
+   *
+   * @return the default maximum depth
    */
   default int getDefaultMaxDepth() {
     return DEFAULT_MAX_DEPTH;

@@ -10,7 +10,13 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * SPDX-License-Identifier: MIT
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package io.github.problem4j.spring.webmvc.autoconfigure;
 
@@ -147,7 +153,10 @@ public class ProblemWebMvcProperties {
    */
   public static class ExceptionAdvice {
 
+    /** Default enabled flag for {@code ExceptionWebMvcAdvice}. */
     public static final boolean DEFAULT_ENABLED = true;
+
+    /** Default enabled value string for {@code ExceptionWebMvcAdvice}. */
     public static final String DEFAULT_ENABLED_VALUE = "true";
 
     private static ExceptionAdvice createDefault() {
@@ -186,7 +195,10 @@ public class ProblemWebMvcProperties {
    */
   public static class ProblemExceptionAdvice {
 
+    /** Default enabled flag for {@code ProblemExceptionWebMvcAdvice}. */
     public static final boolean DEFAULT_ENABLED = true;
+
+    /** Default enabled value string for {@code ProblemExceptionWebMvcAdvice}. */
     public static final String DEFAULT_ENABLED_VALUE = "true";
 
     private static ProblemExceptionAdvice createDefault() {
@@ -225,7 +237,10 @@ public class ProblemWebMvcProperties {
    */
   public static class ProblemContextFilter {
 
+    /** Default enabled flag for {@code ProblemContextMvcFilter}. */
     public static final boolean DEFAULT_ENABLED = true;
+
+    /** Default enabled value string for {@code ProblemContextMvcFilter}. */
     public static final String DEFAULT_ENABLED_VALUE = "true";
 
     private static ProblemContextFilter createDefault() {
@@ -264,7 +279,10 @@ public class ProblemWebMvcProperties {
    */
   public static class ExceptionHandler {
 
+    /** Default enabled flag for {@code ExceptionHandler}. */
     public static final boolean DEFAULT_ENABLED = true;
+
+    /** Default enabled value string for {@code ExceptionHandler}. */
     public static final String DEFAULT_ENABLED_VALUE = "true";
 
     private static ExceptionHandler createDefault() {
@@ -307,7 +325,10 @@ public class ProblemWebMvcProperties {
    */
   public static class ErrorController {
 
+    /** Default enabled flag for {@code ErrorController}. */
     public static final boolean DEFAULT_ENABLED = true;
+
+    /** Default enabled value string for {@code ErrorController}. */
     public static final String DEFAULT_ENABLED_VALUE = "true";
 
     private static ErrorController createDefault() {

@@ -10,7 +10,13 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * SPDX-License-Identifier: MIT
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package io.github.problem4j.spring.webmvc.resolver;
 
@@ -37,10 +43,16 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
  */
 public class NoResourceFoundProblemResolver extends AbstractProblemResolver {
 
+  /** Creates a new {@code NoResourceFoundProblemResolver} with default problem format. */
   public NoResourceFoundProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
+  /**
+   * Creates a new {@code NoResourceFoundProblemResolver} with the specified problem format.
+   *
+   * @param problemFormat the problem format to use
+   */
   public NoResourceFoundProblemResolver(ProblemFormat problemFormat) {
     super(NoResourceFoundException.class, problemFormat);
   }

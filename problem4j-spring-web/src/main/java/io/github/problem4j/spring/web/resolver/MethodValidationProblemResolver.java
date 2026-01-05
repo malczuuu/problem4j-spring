@@ -10,7 +10,13 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * SPDX-License-Identifier: MIT
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package io.github.problem4j.spring.web.resolver;
 
@@ -53,14 +59,27 @@ public class MethodValidationProblemResolver extends AbstractProblemResolver {
 
   private final MethodValidationResultSupport methodValidationResultSupport;
 
+  /** Creates a new {@code MethodValidationProblemResolver} with default problem format. */
   public MethodValidationProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
+  /**
+   * Creates a new {@code MethodValidationProblemResolver} with the specified problem format.
+   *
+   * @param problemFormat the problem format to use
+   */
   public MethodValidationProblemResolver(ProblemFormat problemFormat) {
     this(problemFormat, new DefaultMethodValidationResultSupport());
   }
 
+  /**
+   * Creates a new {@code MethodValidationProblemResolver} with the specified problem format and
+   * method validation result support.
+   *
+   * @param problemFormat the problem format to use
+   * @param methodValidationResultSupport the support for extracting validation results
+   */
   public MethodValidationProblemResolver(
       ProblemFormat problemFormat, MethodValidationResultSupport methodValidationResultSupport) {
     super(MethodValidationException.class, problemFormat);

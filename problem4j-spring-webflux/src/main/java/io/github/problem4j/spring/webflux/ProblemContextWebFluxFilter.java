@@ -10,7 +10,13 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- * SPDX-License-Identifier: MIT
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package io.github.problem4j.spring.webflux;
 
@@ -40,6 +46,11 @@ public class ProblemContextWebFluxFilter implements WebFilter {
 
   private final ProblemContextSettings settings;
 
+  /**
+   * Constructs a new {@code ProblemContextWebFluxFilter}.
+   *
+   * @param settings the context settings to use
+   */
   public ProblemContextWebFluxFilter(ProblemContextSettings settings) {
     this.settings = settings;
   }
@@ -122,6 +133,12 @@ public class ProblemContextWebFluxFilter implements WebFilter {
     return "urn:uuid:" + UUID.randomUUID();
   }
 
+  /**
+   * Assigns the context and trace ID attributes to the exchange.
+   *
+   * @param exchange the current server exchange
+   * @param context the problem context to assign
+   */
   protected void assignContextAttributes(ServerWebExchange exchange, ProblemContext context) {
     exchange.getAttributes().put(PROBLEM_CONTEXT_ATTRIBUTE, context);
     exchange.getAttributes().put(TRACE_ID_ATTRIBUTE, context.get("traceId"));
