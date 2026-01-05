@@ -20,14 +20,17 @@
  */
 package io.github.problem4j.spring.web;
 
-import io.github.problem4j.core.ProblemContext;
-
 /**
  * Utility class providing constants and helper methods for tracing support within the Problem4J.
  */
 public final class AttributeSupport {
 
-  /** Request attribute key used to store a trace identifier. */
+  /**
+   * Request attribute key used to store a trace identifier.
+   *
+   * <p>This key is <b>not used in {@code ProblemContext}</b>; it is used exclusively as a request
+   * attribute (WebFlux or WebMVC) and is assigned by framework-specific filters.
+   */
   public static final String TRACE_ID_ATTRIBUTE = "io.github.problem4j.spring.web.traceId";
 
   /**
@@ -35,7 +38,7 @@ public final class AttributeSupport {
    * sharing contextual information (such as trace identifiers or additional diagnostic data)
    * between components involved in problem handling.
    */
-  public static final String PROBLEM_CONTEXT_ATTRIBUTE = ProblemContext.class.getName();
+  public static final String PROBLEM_CONTEXT_ATTRIBUTE = "io.github.problem4j.core.ProblemContext";
 
   private AttributeSupport() {}
 }
