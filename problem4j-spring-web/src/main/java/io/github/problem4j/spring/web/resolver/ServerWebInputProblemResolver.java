@@ -52,14 +52,27 @@ public class ServerWebInputProblemResolver extends AbstractProblemResolver {
   private final TypeMismatchProblemResolver typeMismatchProblemResolver;
   private final MethodParameterSupport methodParameterSupport;
 
+  /** Creates a new {@code ServerWebInputProblemResolver} with default problem format. */
   public ServerWebInputProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
+  /**
+   * Creates a new {@code ServerWebInputProblemResolver} with the specified problem format.
+   *
+   * @param problemFormat the problem format to use
+   */
   public ServerWebInputProblemResolver(ProblemFormat problemFormat) {
     this(problemFormat, new DefaultMethodParameterSupport());
   }
 
+  /**
+   * Creates a new {@code ServerWebInputProblemResolver} with the specified problem format and
+   * method parameter support.
+   *
+   * @param problemFormat the problem format to use
+   * @param methodParameterSupport the support for extracting parameter names
+   */
   public ServerWebInputProblemResolver(
       ProblemFormat problemFormat, MethodParameterSupport methodParameterSupport) {
     super(ServerWebInputException.class, problemFormat);

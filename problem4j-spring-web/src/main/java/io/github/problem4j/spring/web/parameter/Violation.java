@@ -35,11 +35,14 @@ public class Violation implements Serializable {
 
   @Serial private static final long serialVersionUID = 1L;
 
+  /** The field name associated with the violation. */
   private final String field;
+
+  /** The error message for the violation. */
   private final String error;
 
   /**
-   * Creates a new violation.
+   * Creates a new {@code Violation}.
    *
    * @param field the name of the field that caused the violation
    * @param error the description of the error

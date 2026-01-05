@@ -23,6 +23,7 @@ package io.github.problem4j.spring.web.parameter;
 import java.util.Optional;
 import org.springframework.core.MethodParameter;
 
+/** Marker interface for method parameter support in problem4j-spring-web. */
 public interface MethodParameterSupport {
 
   /**

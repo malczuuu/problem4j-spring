@@ -44,10 +44,16 @@ import org.springframework.web.server.ResponseStatusException;
  */
 public class ResponseStatusProblemResolver extends AbstractProblemResolver {
 
+  /** Creates a new {@code ResponseStatusProblemResolver} with default problem format. */
   public ResponseStatusProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
+  /**
+   * Creates a new {@code ResponseStatusProblemResolver} with the specified problem format.
+   *
+   * @param problemFormat the problem format to use
+   */
   public ResponseStatusProblemResolver(ProblemFormat problemFormat) {
     super(ResponseStatusException.class, problemFormat);
   }

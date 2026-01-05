@@ -46,15 +46,35 @@ public final class ProblemSupport {
   // Problem.detail across various resolvers. Each corresponds to a specific
   // failure/validation scenario detected by Spring MVC / WebFlux or internal logic.
   // ---------------------------------------------------------------------------
+
+  /** Detail message for missing request parameter errors. */
   public static final String MISSING_REQUEST_PARAM_DETAIL = "Missing request param";
+
+  /** Detail message for missing request part errors. */
   public static final String MISSING_REQUEST_PART_DETAIL = "Missing request part";
+
+  /** Detail message for missing header errors. */
   public static final String MISSING_HEADER_DETAIL = "Missing header";
+
+  /** Detail message for missing path variable errors. */
   public static final String MISSING_PATH_VARIABLE_DETAIL = "Missing path variable";
+
+  /** Detail message for missing cookie errors. */
   public static final String MISSING_COOKIE_DETAIL = "Missing cookie";
+
+  /** Detail message for missing request attribute errors. */
   public static final String MISSING_REQUEST_ATTRIBUTE_DETAIL = "Missing request attribute";
+
+  /** Detail message for missing session attribute errors. */
   public static final String MISSING_SESSION_ATTRIBUTE_DETAIL = "Missing session attribute";
+
+  /** Detail message for type mismatch errors. */
   public static final String TYPE_MISMATCH_DETAIL = "Type mismatch";
+
+  /** Detail message for validation failed errors. */
   public static final String VALIDATION_FAILED_DETAIL = "Validation failed";
+
+  /** Detail message for max upload size exceeded errors. */
   public static final String MAX_UPLOAD_SIZE_EXCEEDED_DETAIL = "Max upload size exceeded";
 
   // ---------------------------------------------------------------------------
@@ -62,31 +82,65 @@ public final class ProblemSupport {
   // classify missing-value scenarios. Resolvers map these labels to the above detail templates
   // and complementary metadata extensions.
   // ---------------------------------------------------------------------------
+
+  /** Label for query parameter source. */
   public static final String QUERY_PARAMETER_LABEL = "query parameter";
+
+  /** Label for request part source. */
   public static final String REQUEST_PART_LABEL = "request part";
+
+  /** Label for header source. */
   public static final String HEADER_LABEL = "header";
+
+  /** Label for path parameter source. */
   public static final String PATH_PARAMETER_LABEL = "path parameter";
+
+  /** Label for cookie source. */
   public static final String COOKIE_LABEL = "cookie";
+
+  /** Label for request attribute source. */
   public static final String REQUEST_ATTRIBUTE_LABEL = "request attribute";
+
+  /** Label for session attribute source. */
   public static final String SESSION_ATTRIBUTE_LABEL = "session attribute";
 
   // ---------------------------------------------------------------------------
   // Extension keys injected into Problem.extension(...) to expose structured metadata to clients.
   // Naming is intentionally short & stable for JSON footprint and public contract clarity.
   // ---------------------------------------------------------------------------
+
+  /** Extension key for parameter metadata. */
   public static final String PARAM_EXTENSION = "param";
+
+  /** Extension key for kind metadata. */
   public static final String KIND_EXTENSION = "kind";
+
+  /** Extension key for header metadata. */
   public static final String HEADER_EXTENSION = "header";
+
+  /** Extension key for attribute metadata. */
   public static final String ATTRIBUTE_EXTENSION = "attribute";
+
+  /** Extension key for name metadata. */
   public static final String NAME_EXTENSION = "name";
+
+  /** Extension key for cookie metadata. */
   public static final String COOKIE_EXTENSION = "cookie";
+
+  /** Extension key for property metadata. */
   public static final String PROPERTY_EXTENSION = "property";
+
+  /** Extension key for errors metadata. */
   public static final String ERRORS_EXTENSION = "errors";
+
+  /** Extension key for max metadata. */
   public static final String MAX_EXTENSION = "max";
 
   // ---------------------------------------------------------------------------
   // Generic fragments reused inside violations or fallback messages.
   // ---------------------------------------------------------------------------
+
+  /** Generic error message for invalid values. */
   public static final String IS_NOT_VALID_ERROR = "is not valid";
 
   /**

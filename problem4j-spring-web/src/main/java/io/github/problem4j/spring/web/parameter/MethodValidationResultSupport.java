@@ -20,11 +20,13 @@
  */
 package io.github.problem4j.spring.web.parameter;
 
-import io.github.problem4j.core.ProblemBuilder;
 import java.util.List;
 import org.springframework.validation.method.MethodValidationResult;
 
-/** Support for converting Spring {@link MethodValidationResult}s into {@link ProblemBuilder}s. */
+/**
+ * Support for converting Spring {@link MethodValidationResult}s into a {@link List} containing
+ * {@link Violation} objects.
+ */
 public interface MethodValidationResultSupport {
 
   /**

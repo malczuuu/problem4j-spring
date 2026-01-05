@@ -51,10 +51,16 @@ import org.springframework.web.server.ServerErrorException;
  */
 public class ServerErrorProblemResolver extends AbstractProblemResolver {
 
+  /** Creates a new {@code ServerErrorProblemResolver} with default problem format. */
   public ServerErrorProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
+  /**
+   * Creates a new {@code ServerErrorProblemResolver} with the specified problem format.
+   *
+   * @param problemFormat the problem format to use
+   */
   public ServerErrorProblemResolver(ProblemFormat problemFormat) {
     super(ServerErrorException.class, problemFormat);
   }

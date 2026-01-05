@@ -153,7 +153,10 @@ public class ProblemWebMvcProperties {
    */
   public static class ExceptionAdvice {
 
+    /** Default enabled flag for {@code ExceptionWebMvcAdvice}. */
     public static final boolean DEFAULT_ENABLED = true;
+
+    /** Default enabled value string for {@code ExceptionWebMvcAdvice}. */
     public static final String DEFAULT_ENABLED_VALUE = "true";
 
     private static ExceptionAdvice createDefault() {
@@ -192,7 +195,10 @@ public class ProblemWebMvcProperties {
    */
   public static class ProblemExceptionAdvice {
 
+    /** Default enabled flag for {@code ProblemExceptionWebMvcAdvice}. */
     public static final boolean DEFAULT_ENABLED = true;
+
+    /** Default enabled value string for {@code ProblemExceptionWebMvcAdvice}. */
     public static final String DEFAULT_ENABLED_VALUE = "true";
 
     private static ProblemExceptionAdvice createDefault() {
@@ -231,7 +237,10 @@ public class ProblemWebMvcProperties {
    */
   public static class ProblemContextFilter {
 
+    /** Default enabled flag for {@code ProblemContextMvcFilter}. */
     public static final boolean DEFAULT_ENABLED = true;
+
+    /** Default enabled value string for {@code ProblemContextMvcFilter}. */
     public static final String DEFAULT_ENABLED_VALUE = "true";
 
     private static ProblemContextFilter createDefault() {
@@ -270,7 +279,10 @@ public class ProblemWebMvcProperties {
    */
   public static class ExceptionHandler {
 
+    /** Default enabled flag for {@code ExceptionHandler}. */
     public static final boolean DEFAULT_ENABLED = true;
+
+    /** Default enabled value string for {@code ExceptionHandler}. */
     public static final String DEFAULT_ENABLED_VALUE = "true";
 
     private static ExceptionHandler createDefault() {
@@ -313,7 +325,10 @@ public class ProblemWebMvcProperties {
    */
   public static class ErrorController {
 
+    /** Default enabled flag for {@code ErrorController}. */
     public static final boolean DEFAULT_ENABLED = true;
+
+    /** Default enabled value string for {@code ErrorController}. */
     public static final String DEFAULT_ENABLED_VALUE = "true";
 
     private static ErrorController createDefault() {

@@ -75,6 +75,14 @@ public class ExceptionWebFluxAdvice {
 
   private final List<AdviceWebFluxInspector> adviceWebFluxInspectors;
 
+  /**
+   * Constructs a new {@code ExceptionWebFluxAdvice}.
+   *
+   * @param problemMapper the problem mapper to use
+   * @param problemResolverStore the resolver store for mapping exceptions
+   * @param problemPostProcessor the post-processor for problems
+   * @param adviceWebFluxInspectors the inspectors to apply to advice
+   */
   public ExceptionWebFluxAdvice(
       ProblemMapper problemMapper,
       ProblemResolverStore problemResolverStore,
@@ -89,6 +97,10 @@ public class ExceptionWebFluxAdvice {
   /**
    * Generic fallback handler converting any uncaught exception into a {@code Problem} response.
    * Chooses a resolver, @ProblemMapping, @ResponseStatus, or defaults to INTERNAL_SERVER_ERROR.
+   *
+   * @param ex the exception to handle
+   * @param exchange the current server web exchange
+   * @return a {@link Mono} emitting the response entity with a {@link Problem} body
    */
   @ExceptionHandler(Exception.class)
   public Mono<ResponseEntity<Problem>> handleException(Exception ex, ServerWebExchange exchange) {

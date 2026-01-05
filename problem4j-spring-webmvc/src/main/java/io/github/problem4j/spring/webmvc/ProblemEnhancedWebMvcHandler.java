@@ -69,6 +69,13 @@ public class ProblemEnhancedWebMvcHandler extends ResponseEntityExceptionHandler
 
   private final List<AdviceWebMvcInspector> adviceWebMvcInspectors;
 
+  /**
+   * Creates a new {@code ProblemEnhancedWebMvcHandler}.
+   *
+   * @param problemResolverStore the resolver store
+   * @param problemPostProcessor the post-processor
+   * @param adviceWebMvcInspectors the inspectors
+   */
   public ProblemEnhancedWebMvcHandler(
       ProblemResolverStore problemResolverStore,
       ProblemPostProcessor problemPostProcessor,

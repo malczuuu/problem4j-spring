@@ -156,7 +156,10 @@ public class ProblemWebFluxProperties {
    */
   public static class ExceptionAdvice {
 
+    /** Default enabled value for {@code ExceptionAdvice} configuration group. */
     public static final boolean DEFAULT_ENABLED = true;
+
+    /** Default enabled value as a string for {@code ExceptionAdvice} configuration group. */
     public static final String DEFAULT_ENABLED_VALUE = "true";
 
     private static ExceptionAdvice createDefault() {
@@ -195,7 +198,10 @@ public class ProblemWebFluxProperties {
    */
   public static class ProblemExceptionAdvice {
 
+    /** Default enabled value for {@code ProblemExceptionAdvice} configuration group. */
     public static final boolean DEFAULT_ENABLED = true;
+
+    /** Default enabled value as a string for {@code ProblemExceptionAdvice} configuration group. */
     public static final String DEFAULT_ENABLED_VALUE = "true";
 
     private static ProblemExceptionAdvice createDefault() {
@@ -234,7 +240,10 @@ public class ProblemWebFluxProperties {
    */
   public static class ProblemContextFilter {
 
+    /** Default enabled value for {@code ProblemContextFilter} configuration group. */
     public static final boolean DEFAULT_ENABLED = true;
+
+    /** Default enabled value as a string for {@code ProblemContextFilter} configuration group. */
     public static final String DEFAULT_ENABLED_VALUE = "true";
 
     private static ProblemContextFilter createDefault() {
@@ -273,7 +282,10 @@ public class ProblemWebFluxProperties {
    */
   public static class ExceptionHandler {
 
+    /** Default enabled value for {@code ExceptionHandler} configuration group. */
     public static final boolean DEFAULT_ENABLED = true;
+
+    /** Default enabled value as a string for {@code ExceptionHandler} configuration group. */
     public static final String DEFAULT_ENABLED_VALUE = "true";
 
     private static ExceptionHandler createDefault() {
@@ -316,7 +328,12 @@ public class ProblemWebFluxProperties {
    */
   public static class ErrorWebExceptionHandler {
 
+    /** Default enabled value for {@code ErrorWebExceptionHandler} configuration group. */
     public static final boolean DEFAULT_ENABLED = true;
+
+    /**
+     * Default enabled value as a string for {@code ErrorWebExceptionHandler} configuration group.
+     */
     public static final String DEFAULT_ENABLED_VALUE = "true";
 
     private static ErrorWebExceptionHandler createDefault() {

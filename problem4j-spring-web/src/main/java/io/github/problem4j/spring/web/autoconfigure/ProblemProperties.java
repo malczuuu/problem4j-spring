@@ -42,12 +42,14 @@ public class ProblemProperties implements ProblemContextSettings, PostProcessorS
   private final ResolverCaching resolverCaching;
 
   /**
-   * Creates a new instance.
+   * Constructs a new {@code ProblemProperties}.
    *
    * @param enabled whether problem handling is enabled
    * @param detailFormat format for the "detail" field (one of {@link DetailFormat#LOWERCASE},
    *     {@link DetailFormat#CAPITALIZED}, {@link DetailFormat#UPPERCASE})
    * @param tracingHeaderName name of the HTTP header carrying a trace ID (nullable)
+   * @param typeOverride template for overriding the "type" field; may contain "{context.traceId}"
+   *     placeholder (nullable)
    * @param instanceOverride template for overriding the "instance" field; may contain
    *     "{context.traceId}" placeholder (nullable)
    * @param resolverCaching caching for resolver lookups ({@code CachingProblemResolverStore});
@@ -166,10 +168,16 @@ public class ProblemProperties implements ProblemContextSettings, PostProcessorS
    */
   public static class ResolverCaching {
 
+    /** Default enabled flag for resolver caching. */
     public static final boolean DEFAULT_ENABLED = false;
+
+    /** Default enabled value string for resolver caching. */
     public static final String DEFAULT_ENABLED_VALUE = "false";
 
+    /** Default maximum cache size for resolver caching. */
     public static final int DEFAULT_MAX_CACHE_SIZE = -1;
+
+    /** Default maximum cache size value string for resolver caching. */
     public static final String DEFAULT_MAX_CACHE_SIZE_VALUE = "-1";
 
     private static ResolverCaching createDefault() {

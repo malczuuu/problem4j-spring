@@ -76,6 +76,14 @@ public class ExceptionWebMvcAdvice {
 
   private final List<AdviceWebMvcInspector> adviceWebMvcInspectors;
 
+  /**
+   * Creates a new {@code ExceptionWebMvcAdvice}.
+   *
+   * @param problemMapper the problem mapper
+   * @param problemResolverStore the resolver store
+   * @param problemPostProcessor the post-processor
+   * @param adviceWebMvcInspectors the inspectors to invoke after handling
+   */
   public ExceptionWebMvcAdvice(
       ProblemMapper problemMapper,
       ProblemResolverStore problemResolverStore,
@@ -90,6 +98,10 @@ public class ExceptionWebMvcAdvice {
   /**
    * Generic fallback handler that converts any uncaught exception into a {@code Problem} response.
    * Chooses a resolver, @ProblemMapping, @ResponseStatus, or defaults to INTERNAL_SERVER_ERROR.
+   *
+   * @param ex the uncaught exception
+   * @param request the web request
+   * @return a {@link ResponseEntity} containing the Problem response
    */
   @ExceptionHandler(Exception.class)
   public ResponseEntity<Object> handleException(Exception ex, WebRequest request) {

@@ -27,6 +27,14 @@ import org.springframework.web.server.ServerWebExchange;
 
 class WebFluxAdviceSupport {
 
+  /**
+   * Logs exception that occurred while processing exception occurred within controller advices.
+   *
+   * @param log logger name configured to appropriate controller advice class name
+   * @param ex exception that occurred within controller
+   * @param exchange exchange that was being handled while that exception occurred
+   * @param e exception that occurred while processing exception {@code ex}
+   */
   static void logAdviceException(
       Logger log, Exception ex, ServerWebExchange exchange, Exception e) {
     log.warn(

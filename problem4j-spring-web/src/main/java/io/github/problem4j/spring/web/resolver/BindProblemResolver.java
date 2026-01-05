@@ -59,14 +59,30 @@ public class BindProblemResolver extends AbstractProblemResolver {
 
   private final BindingResultSupport bindingResultSupport;
 
+  /**
+   * Constructs a new {@code BindProblemResolver} with the default problem format and binding result
+   * support.
+   */
   public BindProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
+  /**
+   * Constructs a new {@code BindProblemResolver} with the specified problem format.
+   *
+   * @param problemFormat the problem format to use
+   */
   public BindProblemResolver(ProblemFormat problemFormat) {
     this(problemFormat, new DefaultBindingResultSupport());
   }
 
+  /**
+   * Constructs a new {@code BindProblemResolver} with the specified problem format and binding
+   * result support.
+   *
+   * @param problemFormat the problem format to use
+   * @param bindingResultSupport the binding result support to use
+   */
   public BindProblemResolver(
       ProblemFormat problemFormat, BindingResultSupport bindingResultSupport) {
     super(BindException.class, problemFormat);

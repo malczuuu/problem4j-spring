@@ -53,8 +53,9 @@ public class ProblemErrorWebExceptionHandler extends DefaultErrorWebExceptionHan
   private final ProblemPostProcessor problemPostProcessor;
 
   /**
-   * Creates a new {@code ProblemErrorWebExceptionHandler}.
+   * Constructs a new {@code ProblemErrorWebExceptionHandler}.
    *
+   * @param problemPostProcessor the post-processor for problems
    * @param errorAttributes the error attributes used to obtain error details
    * @param resources configuration for static resources
    * @param errorProperties configuration for error handling

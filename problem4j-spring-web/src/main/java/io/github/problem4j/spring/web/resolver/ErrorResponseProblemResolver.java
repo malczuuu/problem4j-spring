@@ -43,10 +43,16 @@ import org.springframework.web.ErrorResponseException;
  */
 public class ErrorResponseProblemResolver extends AbstractProblemResolver {
 
+  /** Creates a new {@code ErrorResponseProblemResolver} with default problem format. */
   public ErrorResponseProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
+  /**
+   * Creates a new {@code ErrorResponseProblemResolver} with the specified problem format.
+   *
+   * @param problemFormat the problem format to use
+   */
   public ErrorResponseProblemResolver(ProblemFormat problemFormat) {
     super(ErrorResponseException.class, problemFormat);
   }

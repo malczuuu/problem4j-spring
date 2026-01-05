@@ -46,6 +46,11 @@ public class ProblemContextWebFluxFilter implements WebFilter {
 
   private final ProblemContextSettings settings;
 
+  /**
+   * Constructs a new {@code ProblemContextWebFluxFilter}.
+   *
+   * @param settings the context settings to use
+   */
   public ProblemContextWebFluxFilter(ProblemContextSettings settings) {
     this.settings = settings;
   }
@@ -128,6 +133,12 @@ public class ProblemContextWebFluxFilter implements WebFilter {
     return "urn:uuid:" + UUID.randomUUID();
   }
 
+  /**
+   * Assigns the context and trace ID attributes to the exchange.
+   *
+   * @param exchange the current server exchange
+   * @param context the problem context to assign
+   */
   protected void assignContextAttributes(ServerWebExchange exchange, ProblemContext context) {
     exchange.getAttributes().put(PROBLEM_CONTEXT_ATTRIBUTE, context);
     exchange.getAttributes().put(TRACE_ID_ATTRIBUTE, context.get("traceId"));

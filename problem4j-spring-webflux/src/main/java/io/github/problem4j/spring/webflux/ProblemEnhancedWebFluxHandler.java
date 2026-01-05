@@ -69,6 +69,13 @@ public class ProblemEnhancedWebFluxHandler extends ResponseEntityExceptionHandle
 
   private final List<AdviceWebFluxInspector> adviceWebFluxInspectors;
 
+  /**
+   * Constructs a new {@code ProblemEnhancedWebFluxHandler}.
+   *
+   * @param problemResolverStore the resolver store for mapping exceptions
+   * @param problemPostProcessor the post-processor for problems
+   * @param adviceWebFluxInspectors the inspectors to apply to advice
+   */
   public ProblemEnhancedWebFluxHandler(
       ProblemResolverStore problemResolverStore,
       ProblemPostProcessor problemPostProcessor,

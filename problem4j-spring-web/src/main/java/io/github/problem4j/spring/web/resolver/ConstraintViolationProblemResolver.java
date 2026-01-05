@@ -48,10 +48,18 @@ import org.springframework.http.HttpStatusCode;
  */
 public class ConstraintViolationProblemResolver extends AbstractProblemResolver {
 
+  /**
+   * Constructs a new {@code ConstraintViolationProblemResolver} with the default problem format.
+   */
   public ConstraintViolationProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
+  /**
+   * Constructs a new {@code ConstraintViolationProblemResolver} with the specified problem format.
+   *
+   * @param problemFormat the problem format to use
+   */
   public ConstraintViolationProblemResolver(ProblemFormat problemFormat) {
     super(ConstraintViolationException.class, problemFormat);
   }

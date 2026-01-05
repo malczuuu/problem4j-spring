@@ -31,6 +31,7 @@ package io.github.problem4j.spring.web;
  */
 public interface ClassDistanceEvaluation {
 
+  /** Default maximum depth for class distance evaluation. */
   int DEFAULT_MAX_DEPTH = 50;
 
   /**
@@ -63,6 +64,8 @@ public interface ClassDistanceEvaluation {
    *
    * <p>This limit helps prevent stack overflow when traversing deep or complex class/interface
    * hierarchies.
+   *
+   * @return the default maximum depth
    */
   default int getDefaultMaxDepth() {
     return DEFAULT_MAX_DEPTH;

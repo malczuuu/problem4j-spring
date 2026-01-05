@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+/** Default implementation of {@link MethodParameterSupport}. */
 public class DefaultMethodParameterSupport implements MethodParameterSupport {
 
   /**

@@ -49,14 +49,27 @@ public class WebExchangeBindProblemResolver extends AbstractProblemResolver {
 
   private final BindingResultSupport bindingResultSupport;
 
+  /** Creates a new {@code WebExchangeBindProblemResolver} with default problem format. */
   public WebExchangeBindProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
+  /**
+   * Creates a new {@code WebExchangeBindProblemResolver} with the specified problem format.
+   *
+   * @param problemFormat the problem format to use
+   */
   public WebExchangeBindProblemResolver(ProblemFormat problemFormat) {
     this(problemFormat, new DefaultBindingResultSupport());
   }
 
+  /**
+   * Creates a new {@code WebExchangeBindProblemResolver} with the specified problem format and
+   * binding result support.
+   *
+   * @param problemFormat the problem format to use
+   * @param bindingResultSupport the support for extracting bind results
+   */
   public WebExchangeBindProblemResolver(
       ProblemFormat problemFormat, BindingResultSupport bindingResultSupport) {
     super(WebExchangeBindException.class, problemFormat);

@@ -48,8 +48,7 @@ import org.springframework.web.reactive.result.method.annotation.ResponseEntityE
 import org.springframework.web.server.WebFilter;
 
 /**
- * Spring autoconfiguration for problem-based exception handling in {@code spring-webflux}
- * applications.
+ * Spring Boot autoconfiguration for Problem4J integration with Spring WebFlux web environment.
  *
  * <p>This class wires all necessary beans for producing standardized {@code Problem} responses from
  * Spring WebFlux controllers. It includes:

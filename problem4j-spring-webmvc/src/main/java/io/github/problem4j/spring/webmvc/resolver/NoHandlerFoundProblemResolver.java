@@ -43,10 +43,16 @@ import org.springframework.web.servlet.NoHandlerFoundException;
  */
 public class NoHandlerFoundProblemResolver extends AbstractProblemResolver {
 
+  /** Creates a new {@code NoHandlerFoundProblemResolver} with default problem format. */
   public NoHandlerFoundProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
+  /**
+   * Creates a new {@code NoHandlerFoundProblemResolver} with the specified problem format.
+   *
+   * @param problemFormat the problem format to use
+   */
   public NoHandlerFoundProblemResolver(ProblemFormat problemFormat) {
     super(NoHandlerFoundException.class, problemFormat);
   }

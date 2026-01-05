@@ -29,6 +29,11 @@ package io.github.problem4j.spring.web;
  */
 public interface ProblemFormat {
 
-  /** Format {@code detail} field of {@code Problem} model. */
+  /**
+   * Format {@code detail} field of {@code Problem} model.
+   *
+   * @param detail the detail string to format
+   * @return the formatted detail string
+   */
   String formatDetail(String detail);
 }

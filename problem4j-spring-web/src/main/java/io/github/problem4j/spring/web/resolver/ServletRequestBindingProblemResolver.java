@@ -71,10 +71,16 @@ public class ServletRequestBindingProblemResolver extends AbstractProblemResolve
   private static final Pattern MISSING_ATTRIBUTE_PATTERN =
       Pattern.compile("^Missing (session|request) attribute '([^']+)'");
 
+  /** Creates a new {@code ServletRequestBindingProblemResolver} with default problem format. */
   public ServletRequestBindingProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
+  /**
+   * Creates a new {@code ServletRequestBindingProblemResolver} with the specified problem format.
+   *
+   * @param problemFormat the problem format to use
+   */
   public ServletRequestBindingProblemResolver(ProblemFormat problemFormat) {
     super(ServletRequestBindingException.class, problemFormat);
   }

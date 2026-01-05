@@ -39,10 +39,16 @@ import org.springframework.http.HttpStatusCode;
  */
 public class DecodingProblemResolver extends AbstractProblemResolver {
 
+  /** Constructs a new {@code DecodingProblemResolver} with the default problem format. */
   public DecodingProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
+  /**
+   * Constructs a new {@code DecodingProblemResolver} with the specified problem format.
+   *
+   * @param problemFormat the problem format to use
+   */
   public DecodingProblemResolver(ProblemFormat problemFormat) {
     super(DecodingException.class, problemFormat);
   }

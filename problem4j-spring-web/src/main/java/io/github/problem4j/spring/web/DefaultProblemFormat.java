@@ -41,6 +41,11 @@ public class DefaultProblemFormat implements ProblemFormat {
 
   private final String detailFormat;
 
+  /**
+   * Constructs a new {@code DefaultProblemFormat}.
+   *
+   * @param detailFormat the detail format string to use
+   */
   public DefaultProblemFormat(String detailFormat) {
     this.detailFormat = detailFormat;
   }

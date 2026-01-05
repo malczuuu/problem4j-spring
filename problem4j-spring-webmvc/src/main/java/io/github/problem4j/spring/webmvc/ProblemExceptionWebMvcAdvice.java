@@ -58,6 +58,12 @@ public class ProblemExceptionWebMvcAdvice {
 
   private final List<AdviceWebMvcInspector> adviceWebMvcInspectors;
 
+  /**
+   * Creates a new {@code ProblemExceptionWebMvcAdvice}.
+   *
+   * @param problemPostProcessor the post-processor
+   * @param adviceWebMvcInspectors the list of inspectors
+   */
   public ProblemExceptionWebMvcAdvice(
       ProblemPostProcessor problemPostProcessor,
       List<AdviceWebMvcInspector> adviceWebMvcInspectors) {
@@ -69,6 +75,10 @@ public class ProblemExceptionWebMvcAdvice {
    * Converts a {@link ProblemException} into a {@code Problem} response. The contained {@code
    * Problem} is post-processed, headers set to application/problem+json, and status resolved from
    * the problem's status code.
+   *
+   * @param ex the ProblemException to handle
+   * @param request the web request
+   * @return a ResponseEntity containing the Problem
    */
   @ExceptionHandler(ProblemException.class)
   public ResponseEntity<Problem> handleProblemException(ProblemException ex, WebRequest request) {

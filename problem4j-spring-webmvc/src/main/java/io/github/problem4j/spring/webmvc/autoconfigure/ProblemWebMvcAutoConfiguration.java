@@ -48,8 +48,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
- * Spring Boot autoconfiguration for problem-based exception handling in {@code spring-webmvc}
- * applications.
+ * Spring Boot autoconfiguration for Problem4J integration with Spring WebMVC web environment.
  *
  * <p>This class wires all necessary beans for producing standardized {@code Problem} responses from
  * Spring MVC controllers. It includes:

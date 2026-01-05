@@ -48,14 +48,31 @@ public class HandlerMethodValidationProblemResolver extends AbstractProblemResol
 
   private final MethodValidationResultSupport methodValidationResultSupport;
 
+  /**
+   * Creates a new {@code HandlerMethodValidationProblemResolver} with the default problem format
+   * and default method validation result support.
+   */
   public HandlerMethodValidationProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
+  /**
+   * Creates a new {@code HandlerMethodValidationProblemResolver} with the specified problem format
+   * and default method validation result support.
+   *
+   * @param problemFormat the problem format to use
+   */
   public HandlerMethodValidationProblemResolver(ProblemFormat problemFormat) {
     this(problemFormat, new DefaultMethodValidationResultSupport());
   }
 
+  /**
+   * Creates a new {@code HandlerMethodValidationProblemResolver} with the specified problem format
+   * and method validation result support.
+   *
+   * @param problemFormat the problem format to use
+   * @param methodValidationResultSupport the support for extracting validation results
+   */
   public HandlerMethodValidationProblemResolver(
       ProblemFormat problemFormat, MethodValidationResultSupport methodValidationResultSupport) {
     super(HandlerMethodValidationException.class, problemFormat);

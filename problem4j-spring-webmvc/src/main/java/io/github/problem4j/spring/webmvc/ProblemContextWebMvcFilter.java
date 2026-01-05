@@ -47,6 +47,11 @@ public class ProblemContextWebMvcFilter extends OncePerRequestFilter {
 
   private final ProblemContextSettings settings;
 
+  /**
+   * Creates a new {@code ProblemContextWebMvcFilter}.
+   *
+   * @param settings the context settings to use
+   */
   public ProblemContextWebMvcFilter(ProblemContextSettings settings) {
     this.settings = settings;
   }

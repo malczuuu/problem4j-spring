@@ -42,6 +42,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+/**
+ * Spring Boot autoconfiguration for Problem4J integration.
+ *
+ * <p>This class wires all necessary beans for producing standardized {@code Problem} responses from
+ * Spring controllers. It includes:
+ *
+ * <p>Beans are conditional:
+ *
+ * <ul>
+ *   <li>{@link ConditionalOnMissingBean} ensures user-defined beans override defaults.
+ *   <li>{@link ConditionalOnClass} ensures compatibility with optional framework classes.
+ * </ul>
+ */
 @AutoConfiguration
 @EnableConfigurationProperties({ProblemProperties.class})
 @ConditionalOnProperty(name = "problem4j.enabled", matchIfMissing = true)

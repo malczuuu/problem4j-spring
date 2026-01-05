@@ -58,6 +58,12 @@ public class ProblemExceptionWebFluxAdvice {
 
   private final List<AdviceWebFluxInspector> adviceWebFluxInspectors;
 
+  /**
+   * Constructs a new {@code ProblemExceptionWebFluxAdvice}.
+   *
+   * @param problemPostProcessor the post-processor for problems
+   * @param adviceWebFluxInspectors the inspectors to apply to advice
+   */
   public ProblemExceptionWebFluxAdvice(
       ProblemPostProcessor problemPostProcessor,
       List<AdviceWebFluxInspector> adviceWebFluxInspectors) {
@@ -68,6 +74,10 @@ public class ProblemExceptionWebFluxAdvice {
   /**
    * Converts a {@link ProblemException} into a {@code Problem} response: processes the embedded
    * {@link Problem}, sets content type, resolves status, and applies inspectors.
+   *
+   * @param ex the ProblemException to handle
+   * @param exchange the current server web exchange
+   * @return a {@link Mono} emitting the response entity with a {@link Problem} body
    */
   @ExceptionHandler(ProblemException.class)
   public Mono<ResponseEntity<Problem>> handleProblemException(

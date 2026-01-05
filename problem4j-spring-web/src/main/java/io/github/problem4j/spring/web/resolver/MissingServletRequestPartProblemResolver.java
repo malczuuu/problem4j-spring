@@ -53,10 +53,17 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
  */
 public class MissingServletRequestPartProblemResolver extends AbstractProblemResolver {
 
+  /** Creates a new {@code MissingServletRequestPartProblemResolver} with default problem format. */
   public MissingServletRequestPartProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
+  /**
+   * Creates a new {@code MissingServletRequestPartProblemResolver} with the specified problem
+   * format.
+   *
+   * @param problemFormat the problem format to use
+   */
   public MissingServletRequestPartProblemResolver(ProblemFormat problemFormat) {
     super(MissingServletRequestPartException.class, problemFormat);
   }

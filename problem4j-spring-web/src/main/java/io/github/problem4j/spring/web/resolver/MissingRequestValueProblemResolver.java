@@ -64,10 +64,16 @@ import org.springframework.web.server.MissingRequestValueException;
  */
 public class MissingRequestValueProblemResolver extends AbstractProblemResolver {
 
+  /** Creates a new {@code MissingRequestValueProblemResolver} with default problem format. */
   public MissingRequestValueProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
+  /**
+   * Creates a new {@code MissingRequestValueProblemResolver} with the specified problem format.
+   *
+   * @param problemFormat the problem format to use
+   */
   public MissingRequestValueProblemResolver(ProblemFormat problemFormat) {
     super(MissingRequestValueException.class, problemFormat);
   }

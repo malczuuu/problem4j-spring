@@ -67,7 +67,11 @@ public class DefaultProblemPostProcessor implements ProblemPostProcessor {
 
   private final PostProcessorSettings settings;
 
-  /** Creates a post-processor using the given override settings. */
+  /**
+   * Constructs a new {@code DefaultProblemPostProcessor}.
+   *
+   * @param settings the post-processor settings to use
+   */
   public DefaultProblemPostProcessor(PostProcessorSettings settings) {
     this.settings = settings;
   }
@@ -96,7 +100,14 @@ public class DefaultProblemPostProcessor implements ProblemPostProcessor {
     return builder != null ? builder.build() : problem;
   }
 
-  /** Applies a {@code type} override based on the configured template. */
+  /**
+   * Applies a {@code type} override based on the configured template.
+   *
+   * @param context the problem context
+   * @param problem the original problem
+   * @param builder the problem builder to update, or null to create a new one
+   * @return the updated or original builder
+   */
   protected ProblemBuilder overrideProblemType(
       ProblemContext context, Problem problem, ProblemBuilder builder) {
     if (!StringUtils.hasLength(settings.getTypeOverride())) {
@@ -119,7 +130,13 @@ public class DefaultProblemPostProcessor implements ProblemPostProcessor {
     return builder;
   }
 
-  /** Determines whether the {@code type} can be overridden. */
+  /**
+   * Determines whether the {@code type} can be overridden.
+   *
+   * @param requiresProblemType whether the template requires a problem type
+   * @param hasProblemType whether the problem has a type
+   * @return true if override is allowed
+   */
   protected boolean canOverride(boolean requiresProblemType, boolean hasProblemType) {
     return !requiresProblemType || hasProblemType;
   }
@@ -130,10 +147,9 @@ public class DefaultProblemPostProcessor implements ProblemPostProcessor {
    * in form of {@link String#replace(CharSequence, CharSequence)}, and then removing all remaining
    * unknown variables.
    *
-   * <p>Note that it does not override {@link Problem#BLANK_TYPE} values.
-   *
-   * <p>If the algorithm discovers remaining placeholders that are unresolved, overriding is aborted
-   * and original value is restored.
+   * @param context the problem context
+   * @param problem the original problem
+   * @return an optional containing the new type if override is possible
    */
   protected Optional<String> overrideType(ProblemContext context, Problem problem) {
     if (!problem.isTypeNonBlank() || !StringUtils.hasLength(settings.getTypeOverride())) {
@@ -151,7 +167,14 @@ public class DefaultProblemPostProcessor implements ProblemPostProcessor {
     return Optional.of(resolved).filter(StringUtils::hasLength);
   }
 
-  /** Applies an {@code instance} override based on the configured template. */
+  /**
+   * Applies an {@code instance} override based on the configured template.
+   *
+   * @param context the problem context
+   * @param problem the original problem
+   * @param builder the problem builder to update, or null to create a new one
+   * @return the updated or original builder
+   */
   protected ProblemBuilder overrideProblemInstance(
       ProblemContext context, Problem problem, ProblemBuilder builder) {
     if (!StringUtils.hasLength(settings.getInstanceOverride())) {
@@ -177,7 +200,15 @@ public class DefaultProblemPostProcessor implements ProblemPostProcessor {
     return builder;
   }
 
-  /** Determines whether the {@code instance} can be overridden. */
+  /**
+   * Determines whether the {@code instance} can be overridden.
+   *
+   * @param needsProblemInstance whether the template requires a problem instance
+   * @param hasProblemInstance whether the problem has an instance
+   * @param needsTraceId whether the template requires a trace ID
+   * @param hasTraceId whether the context has a trace ID
+   * @return true if override is allowed
+   */
   protected boolean canOverride(
       boolean needsProblemInstance,
       boolean hasProblemInstance,
@@ -194,6 +225,10 @@ public class DefaultProblemPostProcessor implements ProblemPostProcessor {
    *
    * <p>If the algorithm discovers remaining placeholders that are unresolved, overriding is aborted
    * and original value is restored.
+   *
+   * @param context the problem context
+   * @param problem the original problem
+   * @return the new instance string
    */
   protected String overrideInstance(ProblemContext context, Problem problem) {
     if (!StringUtils.hasLength(settings.getInstanceOverride())) {
@@ -214,7 +249,12 @@ public class DefaultProblemPostProcessor implements ProblemPostProcessor {
     return template;
   }
 
-  /** Converts the given value to a string or returns an empty string if {@code null}. */
+  /**
+   * Converts the given value to a string or returns an empty string if {@code null}.
+   *
+   * @param value the value to convert
+   * @return the string representation or empty string
+   */
   protected String stringOrEmpty(Object value) {
     return value != null ? value.toString() : "";
   }
@@ -223,12 +263,19 @@ public class DefaultProblemPostProcessor implements ProblemPostProcessor {
    * Because this implementation does not try to resolve dynamic fields, it does not reuse the code
    * from {@code ProblemMapper}. Instead, we rely on simple substring replacement, and then removing
    * all remaining unknown variables.
+   *
+   * @param value the string to check
+   * @return true if unresolved placeholders remain
    */
   protected boolean hasRemainingUnknownPlaceholders(String value) {
     return PLACEHOLDER.matcher(value).find();
   }
 
-  /** Returns the post-processor configuration settings. */
+  /**
+   * Returns the post-processor configuration settings.
+   *
+   * @return the post-processor settings
+   */
   protected PostProcessorSettings getSettings() {
     return settings;
   }

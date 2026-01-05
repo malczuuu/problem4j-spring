@@ -42,10 +42,17 @@ import org.springframework.web.HttpMediaTypeNotSupportedException;
  */
 public class HttpMediaTypeNotSupportedProblemResolver extends AbstractProblemResolver {
 
+  /** Creates a new {@code HttpMediaTypeNotSupportedProblemResolver} with default problem format. */
   public HttpMediaTypeNotSupportedProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
+  /**
+   * Creates a new {@code HttpMediaTypeNotSupportedProblemResolver} with the specified problem
+   * format.
+   *
+   * @param problemFormat the problem format to use
+   */
   public HttpMediaTypeNotSupportedProblemResolver(ProblemFormat problemFormat) {
     super(HttpMediaTypeNotSupportedException.class, problemFormat);
   }

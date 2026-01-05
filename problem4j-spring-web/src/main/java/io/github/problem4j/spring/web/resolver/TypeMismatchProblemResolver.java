@@ -48,10 +48,16 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
  */
 public class TypeMismatchProblemResolver extends AbstractProblemResolver {
 
+  /** Creates a new {@code TypeMismatchProblemResolver} with default problem format. */
   public TypeMismatchProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
+  /**
+   * Creates a new {@code TypeMismatchProblemResolver} with the specified problem format.
+   *
+   * @param problemFormat the problem format to use
+   */
   public TypeMismatchProblemResolver(ProblemFormat problemFormat) {
     super(TypeMismatchException.class, problemFormat);
   }

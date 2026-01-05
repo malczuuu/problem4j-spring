@@ -43,10 +43,16 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
  */
 public class NoResourceFoundProblemResolver extends AbstractProblemResolver {
 
+  /** Creates a new {@code NoResourceFoundProblemResolver} with default problem format. */
   public NoResourceFoundProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
+  /**
+   * Creates a new {@code NoResourceFoundProblemResolver} with the specified problem format.
+   *
+   * @param problemFormat the problem format to use
+   */
   public NoResourceFoundProblemResolver(ProblemFormat problemFormat) {
     super(NoResourceFoundException.class, problemFormat);
   }

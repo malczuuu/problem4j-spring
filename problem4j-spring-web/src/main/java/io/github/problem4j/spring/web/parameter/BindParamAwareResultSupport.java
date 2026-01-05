@@ -41,6 +41,7 @@ import org.springframework.web.bind.annotation.BindParam;
  */
 public class BindParamAwareResultSupport extends DefaultBindingResultSupport {
 
+  /** Constructs a new {@code BindParamAwareResultSupport}. */
   public BindParamAwareResultSupport() {
     super();
   }

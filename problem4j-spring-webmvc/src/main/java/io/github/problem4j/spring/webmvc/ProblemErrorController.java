@@ -51,6 +51,7 @@ public class ProblemErrorController extends AbstractErrorController {
   /**
    * Creates a new {@code ProblemErrorController}.
    *
+   * @param problemPostProcessor the post-processor to use
    * @param errorAttributes the error attributes used to obtain error information
    */
   public ProblemErrorController(

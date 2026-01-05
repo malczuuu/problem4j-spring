@@ -29,6 +29,14 @@ import org.springframework.web.context.request.WebRequest;
 
 class WebMvcAdviceSupport {
 
+  /**
+   * Logs exception that occurred while processing exception occurred within controller advices.
+   *
+   * @param log logger name configured to appropriate controller advice class name
+   * @param ex exception that occurred within controller
+   * @param request request that was being handled while that exception occurred
+   * @param e exception that occurred while processing exception {@code ex}
+   */
   static void logAdviceException(Logger log, Exception ex, WebRequest request, Exception e) {
     String method = "<unknown>";
     String endpoint = "<unknown>";
