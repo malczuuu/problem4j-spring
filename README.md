@@ -22,6 +22,7 @@ flexible enough for custom exceptions and business-specific details.
 - [Usage](#usage)
 - [Maven Dependency](#maven-dependency)
 - [Repository](#repository)
+- [Project Status](#project-status)
 - [Problem4J Links](#problem4j-links)
 - [Building from source](#building-from-source)
 
@@ -198,8 +199,21 @@ least until Spring Boot 3 reaches its end of life or becomes irrelevant.
 | `main`           | version `2.x` supporting Spring Boot `4.x` | [![Sonatype](https://img.shields.io/maven-central/v/io.github.problem4j/problem4j-spring-bom?filter=2.*)][maven-central] |
 | `release-v1.*.x` | version `1.x` supporting Spring Boot `3.x` | [![Sonatype](https://img.shields.io/maven-central/v/io.github.problem4j/problem4j-spring-bom?filter=1.*)][maven-central] |
 
+## Project Status
+
+[![Status: Feature Complete](https://img.shields.io/badge/feature%20complete-darkblue?label=status)](#project-status)
+
+**Problem4J Spring** is considered *feature complete*. Only **bug fixes** will be added. New features may be included
+only if there is a strong justification for them; otherwise, future projects are expected to build on this one as a
+dependency.
+
+> There are still some aspects from Spring Framework that are not covered at the moment (such as Spring Security for
+> example). It's possible however that instead of libraries, an example project will be created that showcases how to
+> set `Problem` handling in that modules without external dependency.
+
 ## Problem4J Links
 
+- [`problem4j.github.io`](https://problem4j.github.io) - Full documentation of all projects from Problem4J family.
 - [`problem4j-core`][problem4j-core] - Core library defining `Problem` model and `ProblemException`.
 - [`problem4j-jackson`][problem4j-jackson] - Jackson module for serializing and deserializing `Problem` objects.
 - [`problem4j-spring`][problem4j-spring] - Spring modules extending `ResponseEntityExceptionHandler` for handling
