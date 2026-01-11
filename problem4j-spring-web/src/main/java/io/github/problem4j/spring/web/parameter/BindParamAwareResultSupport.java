@@ -41,7 +41,7 @@ import org.springframework.web.bind.annotation.BindParam;
  */
 public class BindParamAwareResultSupport extends DefaultBindingResultSupport {
 
-  /** Constructs a new {@code BindParamAwareResultSupport}. */
+  /** Constructs a new {@link BindParamAwareResultSupport}. */
   public BindParamAwareResultSupport() {
     super();
   }
@@ -96,7 +96,7 @@ public class BindParamAwareResultSupport extends DefaultBindingResultSupport {
    * constructor if only one exists.
    *
    * @param target the class to inspect
-   * @return an {@code Optional} containing the binding constructor if found
+   * @return an {@link Optional} containing the binding constructor if found
    */
   private Optional<Constructor<?>> findBindingConstructor(Class<?> target) {
     if (target.isRecord()) {

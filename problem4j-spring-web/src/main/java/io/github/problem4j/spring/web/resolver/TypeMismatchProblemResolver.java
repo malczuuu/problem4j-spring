@@ -48,13 +48,13 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
  */
 public class TypeMismatchProblemResolver extends AbstractProblemResolver {
 
-  /** Creates a new {@code TypeMismatchProblemResolver} with default problem format. */
+  /** Creates a new {@link TypeMismatchProblemResolver} with default problem format. */
   public TypeMismatchProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
   /**
-   * Creates a new {@code TypeMismatchProblemResolver} with the specified problem format.
+   * Creates a new {@link TypeMismatchProblemResolver} with the specified problem format.
    *
    * @param problemFormat the problem format to use
    */
@@ -74,8 +74,8 @@ public class TypeMismatchProblemResolver extends AbstractProblemResolver {
    *       simple form
    * </ul>
    *
-   * <p>Older Spring versions may not populate {@code propertyName} for {@code
-   * MethodArgumentTypeMismatchException}; in that case this resolver falls back to {@code
+   * <p>Older Spring versions may not populate {@code propertyName} for {@link
+   * MethodArgumentTypeMismatchException}; in that case this resolver falls back to {@link
    * MethodArgumentTypeMismatchException#getName()}.
    *
    * @param context problem context (unused)

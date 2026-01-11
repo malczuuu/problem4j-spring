@@ -45,13 +45,13 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
  */
 public class MaxUploadSizeExceededProblemResolver extends AbstractProblemResolver {
 
-  /** Creates a new {@code MaxUploadSizeExceededProblemResolver} with default problem format. */
+  /** Creates a new {@link MaxUploadSizeExceededProblemResolver} with default problem format. */
   public MaxUploadSizeExceededProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
   /**
-   * Creates a new {@code MaxUploadSizeExceededProblemResolver} with the specified problem format.
+   * Creates a new {@link MaxUploadSizeExceededProblemResolver} with the specified problem format.
    *
    * @param problemFormat the problem format to use
    */

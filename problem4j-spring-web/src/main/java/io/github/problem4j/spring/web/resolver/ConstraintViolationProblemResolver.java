@@ -45,18 +45,20 @@ import org.springframework.http.HttpStatusCode;
  *
  * <p>This exception indicates that method parameters, return values, or other validated elements
  * failed to satisfy declared {@code @Valid} or {@code @Constraint} annotations.
+ *
+ * @see org.springframework.validation.method.MethodValidationException
  */
 public class ConstraintViolationProblemResolver extends AbstractProblemResolver {
 
   /**
-   * Constructs a new {@code ConstraintViolationProblemResolver} with the default problem format.
+   * Constructs a new {@link ConstraintViolationProblemResolver} with the default problem format.
    */
   public ConstraintViolationProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
   /**
-   * Constructs a new {@code ConstraintViolationProblemResolver} with the specified problem format.
+   * Constructs a new {@link ConstraintViolationProblemResolver} with the specified problem format.
    *
    * @param problemFormat the problem format to use
    */

@@ -49,7 +49,7 @@ public class HandlerMethodValidationProblemResolver extends AbstractProblemResol
   private final MethodValidationResultSupport methodValidationResultSupport;
 
   /**
-   * Creates a new {@code HandlerMethodValidationProblemResolver} with the default problem format
+   * Creates a new {@link HandlerMethodValidationProblemResolver} with the default problem format
    * and default method validation result support.
    */
   public HandlerMethodValidationProblemResolver() {
@@ -57,7 +57,7 @@ public class HandlerMethodValidationProblemResolver extends AbstractProblemResol
   }
 
   /**
-   * Creates a new {@code HandlerMethodValidationProblemResolver} with the specified problem format
+   * Creates a new {@link HandlerMethodValidationProblemResolver} with the specified problem format
    * and default method validation result support.
    *
    * @param problemFormat the problem format to use
@@ -67,7 +67,7 @@ public class HandlerMethodValidationProblemResolver extends AbstractProblemResol
   }
 
   /**
-   * Creates a new {@code HandlerMethodValidationProblemResolver} with the specified problem format
+   * Creates a new {@link HandlerMethodValidationProblemResolver} with the specified problem format
    * and method validation result support.
    *
    * @param problemFormat the problem format to use

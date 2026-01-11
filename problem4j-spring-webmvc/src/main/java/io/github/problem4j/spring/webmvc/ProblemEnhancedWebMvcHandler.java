@@ -45,8 +45,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 /**
  * Handles Spring framework exceptions using registered {@code ProblemResolver}s.
  *
- * <p>This class extends {@link ResponseEntityExceptionHandler} and overrides {@code
- * handleExceptionInternal} to replace the response body with a {@link Problem} object.
+ * <p>This class extends {@link ResponseEntityExceptionHandler} and overrides {@link
+ * #handleExceptionInternal} to replace the response body with a {@link Problem} object.
  *
  * <p>Behavior:
  *
@@ -56,7 +56,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  *   <li>Falls back to {@link ProblemStatus#INTERNAL_SERVER_ERROR} if mapping fails.
  * </ul>
  *
- * @see #handleExceptionInternal
  * @see io.github.problem4j.spring.web.resolver.ProblemResolver
  */
 @RestControllerAdvice
@@ -70,7 +69,7 @@ public class ProblemEnhancedWebMvcHandler extends ResponseEntityExceptionHandler
   private final List<AdviceWebMvcInspector> adviceWebMvcInspectors;
 
   /**
-   * Creates a new {@code ProblemEnhancedWebMvcHandler}.
+   * Creates a new {@link ProblemEnhancedWebMvcHandler}.
    *
    * @param problemResolverStore the resolver store
    * @param problemPostProcessor the post-processor

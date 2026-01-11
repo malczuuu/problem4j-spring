@@ -59,13 +59,13 @@ public class MethodValidationProblemResolver extends AbstractProblemResolver {
 
   private final MethodValidationResultSupport methodValidationResultSupport;
 
-  /** Creates a new {@code MethodValidationProblemResolver} with default problem format. */
+  /** Creates a new {@link MethodValidationProblemResolver} with default problem format. */
   public MethodValidationProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
   /**
-   * Creates a new {@code MethodValidationProblemResolver} with the specified problem format.
+   * Creates a new {@link MethodValidationProblemResolver} with the specified problem format.
    *
    * @param problemFormat the problem format to use
    */
@@ -74,7 +74,7 @@ public class MethodValidationProblemResolver extends AbstractProblemResolver {
   }
 
   /**
-   * Creates a new {@code MethodValidationProblemResolver} with the specified problem format and
+   * Creates a new {@link MethodValidationProblemResolver} with the specified problem format and
    * method validation result support.
    *
    * @param problemFormat the problem format to use
@@ -87,17 +87,16 @@ public class MethodValidationProblemResolver extends AbstractProblemResolver {
   }
 
   /**
-   * Converts the {@link MethodValidationException} into a {@link ProblemBuilder} with status {@code
-   * BAD_REQUEST} and an {@code errors} extension describing each parameter or return value
-   * violation. Other parameters ({@code context}, {@code headers}, {@code status}) are ignored for
-   * status selection; 400 is enforced.
+   * Converts the {@link MethodValidationException} into a {@link ProblemBuilder} with status {@link
+   * ProblemStatus#BAD_REQUEST} and an {@code errors} extension describing each parameter or return
+   * value violation. Other parameters ({@code context}, {@code headers}, {@code status}) are
+   * ignored for status selection; 400 is enforced.
    *
    * @param context problem context (unused)
    * @param ex the thrown {@link MethodValidationException}
    * @param headers HTTP headers (unused)
    * @param status suggested status (ignored; BAD_REQUEST enforced)
    * @return builder pre-populated with validation details and BAD_REQUEST status
-   * @see ProblemStatus#BAD_REQUEST
    */
   @Override
   public ProblemBuilder resolveBuilder(

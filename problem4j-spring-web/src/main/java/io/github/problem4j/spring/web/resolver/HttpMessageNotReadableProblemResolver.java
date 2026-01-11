@@ -44,13 +44,13 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
  */
 public class HttpMessageNotReadableProblemResolver extends AbstractProblemResolver {
 
-  /** Creates a new {@code HttpMessageNotReadableProblemResolver} with default problem format. */
+  /** Creates a new {@link HttpMessageNotReadableProblemResolver} with default problem format. */
   public HttpMessageNotReadableProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
   /**
-   * Creates a new {@code HttpMessageNotReadableProblemResolver} with the specified problem format.
+   * Creates a new {@link HttpMessageNotReadableProblemResolver} with the specified problem format.
    *
    * @param problemFormat the problem format to use
    */

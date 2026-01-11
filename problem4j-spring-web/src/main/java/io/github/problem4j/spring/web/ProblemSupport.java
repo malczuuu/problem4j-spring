@@ -146,7 +146,7 @@ public final class ProblemSupport {
   /**
    * Resolves a {@link Problem} to a corresponding {@link HttpStatus}.
    *
-   * <p>If the problem's status value is not a valid HTTP status code, {@code
+   * <p>If the problem's status value is not a valid HTTP status code, {@link
    * HttpStatus#INTERNAL_SERVER_ERROR} is returned as a fallback.
    *
    * @param problem the {@link Problem} instance containing the status code
@@ -165,8 +165,8 @@ public final class ProblemSupport {
   /**
    * Resolves an {@link HttpStatusCode} to a corresponding {@link ProblemStatus}.
    *
-   * <p>If the status code is {@code null} or not recognized, {@code INTERNAL_SERVER_ERROR} is
-   * returned as a fallback.
+   * <p>If the status code is {@code null} or not recognized, {@link
+   * ProblemStatus#INTERNAL_SERVER_ERROR} is returned as a fallback.
    *
    * @param status the {@link HttpStatusCode} to resolve
    * @return the corresponding {@link ProblemStatus}, or {@link ProblemStatus#INTERNAL_SERVER_ERROR}

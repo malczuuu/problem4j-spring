@@ -54,6 +54,8 @@ import org.springframework.context.annotation.Import;
  *   <li>{@link ConditionalOnMissingBean} ensures user-defined beans override defaults.
  *   <li>{@link ConditionalOnClass} ensures compatibility with optional framework classes.
  * </ul>
+ *
+ * @see io.github.problem4j.core.Problem
  */
 @AutoConfiguration
 @EnableConfigurationProperties({ProblemProperties.class})

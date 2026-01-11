@@ -42,7 +42,7 @@ public class Violation implements Serializable {
   private final String error;
 
   /**
-   * Creates a new {@code Violation}.
+   * Creates a new {@link Violation}.
    *
    * @param field the name of the field that caused the violation
    * @param error the description of the error

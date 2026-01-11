@@ -140,8 +140,8 @@ public class ProblemWebFluxProperties {
    * ErrorWebExceptionHandler}.
    *
    * @return the configuration for the overwritten error handler
-   * @see org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler
    * @see io.github.problem4j.spring.webflux.ProblemErrorWebExceptionHandler
+   * @see org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler
    */
   public ErrorWebExceptionHandler getErrorWebExceptionHandler() {
     return errorWebExceptionHandler;
@@ -347,8 +347,8 @@ public class ProblemWebFluxProperties {
      *
      * @param enabled whether the {@code ErrorWebExceptionHandler} should be replaced with {@code
      *     ProblemErrorWebExceptionHandler}
-     * @see org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler
      * @see io.github.problem4j.spring.webflux.ProblemErrorWebExceptionHandler
+     * @see org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler
      */
     public ErrorWebExceptionHandler(@DefaultValue(DEFAULT_ENABLED_VALUE) boolean enabled) {
       this.enabled = enabled;

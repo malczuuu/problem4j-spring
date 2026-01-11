@@ -78,7 +78,7 @@ class ProblemParameterConfiguration {
   static class ProblemBeanParamAwareBindingConfiguration {
 
     /**
-     * Provides a {@link BindingResultSupport} bean that handles {@code BindParam}-annotations.
+     * Provides a {@link BindingResultSupport} bean that handles {@link BindParam}-annotations.
      *
      * @return a new {@link BindParamAwareResultSupport}
      */

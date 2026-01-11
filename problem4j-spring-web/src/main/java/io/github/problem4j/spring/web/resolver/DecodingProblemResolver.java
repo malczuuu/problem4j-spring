@@ -32,20 +32,20 @@ import org.springframework.http.HttpStatusCode;
 
 /**
  * Thrown when the request body cannot be decoded (e.g. malformed JSON or invalid * content type).
- * Maps such errors to a {@code Problem} with {@code 400 Bad Request} status.
+ * Maps such errors to a {@link Problem} with {@code 400 Bad Request} status.
  *
- * <p>Maps decoding failures (e.g. malformed JSON or invalid request bodies) to a {@code Problem}
+ * <p>Maps decoding failures (e.g. malformed JSON or invalid request bodies) to a {@link Problem}
  * response with {@code 400 Bad Request} status.
  */
 public class DecodingProblemResolver extends AbstractProblemResolver {
 
-  /** Constructs a new {@code DecodingProblemResolver} with the default problem format. */
+  /** Constructs a new {@link DecodingProblemResolver} with the default problem format. */
   public DecodingProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
   /**
-   * Constructs a new {@code DecodingProblemResolver} with the specified problem format.
+   * Constructs a new {@link DecodingProblemResolver} with the specified problem format.
    *
    * @param problemFormat the problem format to use
    */
@@ -54,7 +54,8 @@ public class DecodingProblemResolver extends AbstractProblemResolver {
   }
 
   /**
-   * Builds a {@link ProblemBuilder} for {@link DecodingException} with {@code BAD_REQUEST} status.
+   * Builds a {@link ProblemBuilder} for {@link DecodingException} with {@link
+   * ProblemStatus#BAD_REQUEST} status.
    */
   @Override
   public ProblemBuilder resolveBuilder(

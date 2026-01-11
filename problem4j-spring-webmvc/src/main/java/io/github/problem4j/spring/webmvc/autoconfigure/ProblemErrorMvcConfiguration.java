@@ -40,6 +40,7 @@ import org.springframework.context.annotation.Configuration;
  * with {@link ProblemErrorController}, which renders {@code Problem} objects instead of HTML or
  * plain JSON errors.
  *
+ * @see io.github.problem4j.core.Problem
  * @see org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration
  */
 @ConditionalOnProperty(name = "problem4j.webmvc.error-controller.enabled", matchIfMissing = true)

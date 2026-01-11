@@ -32,7 +32,7 @@ public interface MethodValidationResultSupport {
   /**
    * Builds a {@link Violation}s list from a {@link MethodValidationResult} produced by method /
    * parameter validation (e.g. {@code @Validated} on a controller). Each parameter violation is
-   * mapped to a {@code Violation} whose name is the resolved method parameter name and message is
+   * mapped to a {@link Violation} whose name is the resolved method parameter name and message is
    * the constraint message.
    *
    * @param result aggregated method validation result (must not be {@code null})

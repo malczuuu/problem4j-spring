@@ -45,14 +45,14 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 public class HttpRequestMethodNotSupportedProblemResolver extends AbstractProblemResolver {
 
   /**
-   * Creates a new {@code HttpRequestMethodNotSupportedProblemResolver} with default problem format.
+   * Creates a new {@link HttpRequestMethodNotSupportedProblemResolver} with default problem format.
    */
   public HttpRequestMethodNotSupportedProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
   /**
-   * Creates a new {@code HttpRequestMethodNotSupportedProblemResolver} with the specified problem
+   * Creates a new {@link HttpRequestMethodNotSupportedProblemResolver} with the specified problem
    * format.
    *
    * @param problemFormat the problem format to use

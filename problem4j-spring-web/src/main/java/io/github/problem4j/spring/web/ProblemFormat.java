@@ -26,6 +26,8 @@ package io.github.problem4j.spring.web;
  *
  * <p>Implementations can customize how details and property names are presented - for example, by
  * applying localization, case formatting, or message templating.
+ *
+ * @see io.github.problem4j.core.Problem
  */
 public interface ProblemFormat {
 
@@ -34,6 +36,7 @@ public interface ProblemFormat {
    *
    * @param detail the detail string to format
    * @return the formatted detail string
+   * @see io.github.problem4j.core.Problem
    */
   String formatDetail(String detail);
 }

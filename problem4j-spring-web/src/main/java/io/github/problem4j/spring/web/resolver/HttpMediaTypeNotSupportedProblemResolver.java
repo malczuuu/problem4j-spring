@@ -42,13 +42,13 @@ import org.springframework.web.HttpMediaTypeNotSupportedException;
  */
 public class HttpMediaTypeNotSupportedProblemResolver extends AbstractProblemResolver {
 
-  /** Creates a new {@code HttpMediaTypeNotSupportedProblemResolver} with default problem format. */
+  /** Creates a new {@link HttpMediaTypeNotSupportedProblemResolver} with default problem format. */
   public HttpMediaTypeNotSupportedProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
   /**
-   * Creates a new {@code HttpMediaTypeNotSupportedProblemResolver} with the specified problem
+   * Creates a new {@link HttpMediaTypeNotSupportedProblemResolver} with the specified problem
    * format.
    *
    * @param problemFormat the problem format to use
@@ -59,7 +59,7 @@ public class HttpMediaTypeNotSupportedProblemResolver extends AbstractProblemRes
 
   /**
    * Returns a {@link ProblemBuilder} with status {@link ProblemStatus#UNSUPPORTED_MEDIA_TYPE} (HTTP
-   * 415). Other parameters are ignored because the status is mandated by the semantics of {@code
+   * 415). Other parameters are ignored because the status is mandated by the semantics of {@link
    * HttpMediaTypeNotSupportedException}.
    *
    * @param context problem context (unused)
@@ -67,7 +67,6 @@ public class HttpMediaTypeNotSupportedProblemResolver extends AbstractProblemRes
    * @param headers HTTP headers (unused)
    * @param status suggested status from caller (ignored; 415 enforced)
    * @return builder pre-populated with 415 status
-   * @see HttpMediaTypeNotSupportedException
    */
   @Override
   public ProblemBuilder resolveBuilder(
