@@ -30,6 +30,8 @@ public final class AttributeSupport {
    *
    * <p>This key is <b>not used in {@code ProblemContext}</b>; it is used exclusively as a request
    * attribute (WebFlux or WebMVC) and is assigned by framework-specific filters.
+   *
+   * @see io.github.problem4j.core.ProblemContext
    */
   public static final String TRACE_ID_ATTRIBUTE = "io.github.problem4j.spring.web.traceId";
 

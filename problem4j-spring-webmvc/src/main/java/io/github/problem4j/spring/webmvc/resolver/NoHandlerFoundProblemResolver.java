@@ -43,13 +43,13 @@ import org.springframework.web.servlet.NoHandlerFoundException;
  */
 public class NoHandlerFoundProblemResolver extends AbstractProblemResolver {
 
-  /** Creates a new {@code NoHandlerFoundProblemResolver} with default problem format. */
+  /** Creates a new {@link NoHandlerFoundProblemResolver} with default problem format. */
   public NoHandlerFoundProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
   /**
-   * Creates a new {@code NoHandlerFoundProblemResolver} with the specified problem format.
+   * Creates a new {@link NoHandlerFoundProblemResolver} with the specified problem format.
    *
    * @param problemFormat the problem format to use
    */
@@ -60,7 +60,7 @@ public class NoHandlerFoundProblemResolver extends AbstractProblemResolver {
   /**
    * Returns a {@link ProblemBuilder} with {@link ProblemStatus#NOT_FOUND} (HTTP 404) indicating no
    * controller handler matched the incoming request (URL + HTTP method). Other parameters ({@code
-   * context}, {@code headers}, {@code status}) are ignored because the semantics of {@code
+   * context}, {@code headers}, {@code status}) are ignored because the semantics of {@link
    * NoHandlerFoundException} unambiguously map to 404.
    *
    * @param context problem context (unused)

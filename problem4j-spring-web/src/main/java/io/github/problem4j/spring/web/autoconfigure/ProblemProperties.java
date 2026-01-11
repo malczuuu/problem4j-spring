@@ -42,18 +42,19 @@ public class ProblemProperties implements ProblemContextSettings, PostProcessorS
   private final ResolverCaching resolverCaching;
 
   /**
-   * Constructs a new {@code ProblemProperties}.
+   * Constructs a new {@link ProblemProperties}.
    *
    * @param enabled whether problem handling is enabled
-   * @param detailFormat format for the "detail" field (one of {@link DetailFormat#LOWERCASE},
+   * @param detailFormat format for the {@code detail} field (one of {@link DetailFormat#LOWERCASE},
    *     {@link DetailFormat#CAPITALIZED}, {@link DetailFormat#UPPERCASE})
    * @param tracingHeaderName name of the HTTP header carrying a trace ID (nullable)
-   * @param typeOverride template for overriding the "type" field; may contain "{context.traceId}"
-   *     placeholder (nullable)
-   * @param instanceOverride template for overriding the "instance" field; may contain
-   *     "{context.traceId}" placeholder (nullable)
+   * @param typeOverride template for overriding the {@code type} field; may contain {@code
+   *     {context.traceId}} placeholder (nullable)
+   * @param instanceOverride template for overriding the {@code instance} field; may contain {@code
+   *     {context.traceId}} placeholder (nullable)
    * @param resolverCaching caching for resolver lookups ({@code CachingProblemResolverStore});
    *     defaults to {@link ResolverCaching#createDefault()}
+   * @see io.github.problem4j.spring.web.CachingProblemResolverStore
    */
   public ProblemProperties(
       @DefaultValue("true") boolean enabled,
@@ -99,6 +100,7 @@ public class ProblemProperties implements ProblemContextSettings, PostProcessorS
    * <p>If no header name is configured, this method may return {@code null}.
    *
    * @return the tracing header name, or {@code null} if not set
+   * @see io.github.problem4j.core.Problem
    */
   @Override
   public String getTracingHeaderName() {
@@ -123,6 +125,7 @@ public class ProblemProperties implements ProblemContextSettings, PostProcessorS
    * original problem type will be preserved.
    *
    * @return the configured type override string, or {@code null} if not set
+   * @see io.github.problem4j.core.ProblemContext
    */
   @Override
   public String getTypeOverride() {
@@ -146,6 +149,8 @@ public class ProblemProperties implements ProblemContextSettings, PostProcessorS
    * configuration, along with {@link #tracingHeaderName}, enables this feature.
    *
    * @return the configured instance override string, or {@code null} if not set
+   * @see io.github.problem4j.core.ProblemContext
+   * @see io.github.problem4j.core.ProblemException
    */
   @Override
   public String getInstanceOverride() {
@@ -165,6 +170,8 @@ public class ProblemProperties implements ProblemContextSettings, PostProcessorS
    * Caching configuration for ({@code CachingProblemResolverStore}).
    *
    * <p>Controls whether resolver lookup caching is enabled and its maximum size.
+   *
+   * @see io.github.problem4j.spring.web.CachingProblemResolverStore
    */
   public static class ResolverCaching {
 

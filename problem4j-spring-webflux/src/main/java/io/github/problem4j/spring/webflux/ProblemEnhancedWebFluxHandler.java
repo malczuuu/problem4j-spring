@@ -45,7 +45,7 @@ import reactor.core.publisher.Mono;
 /**
  * Handles Spring framework exceptions using registered {@code ProblemResolver}s.
  *
- * <p>This class extends {@link ResponseEntityExceptionHandler} and overrides {@code
+ * <p>This class extends {@link ResponseEntityExceptionHandler} and overrides {@link
  * #handleExceptionInternal} to replace the response body with a {@link Problem} object.
  *
  * <p>Behavior:

@@ -54,30 +54,28 @@ import org.springframework.web.bind.ServletRequestBindingException;
  * An {@link ProblemResolver} implementation that maps {@link ServletRequestBindingException} and
  * its common subtypes to {@link Problem} representations.
  *
- * <p>Each supported exception type is mapped to a {@code Problem} with {@code 400 Bad Request}
+ * <p>Each supported exception type is mapped to a {@link Problem} with {@code 400 Bad Request}
  * status and a human-readable detail message. Additional metadata about the missing element (such
  * as parameter name, header name, or attribute name) is added as extensions.
  *
- * @see ServletRequestBindingException
  * @see MissingPathVariableException
- * @see MissingServletRequestParameterException
- * @see MissingRequestHeaderException
  * @see MissingRequestCookieException
- * @see Problem
- * @see ProblemStatus#BAD_REQUEST
+ * @see MissingRequestHeaderException
+ * @see MissingServletRequestParameterException
+ * @see ServletRequestBindingException
  */
 public class ServletRequestBindingProblemResolver extends AbstractProblemResolver {
 
   private static final Pattern MISSING_ATTRIBUTE_PATTERN =
       Pattern.compile("^Missing (session|request) attribute '([^']+)'");
 
-  /** Creates a new {@code ServletRequestBindingProblemResolver} with default problem format. */
+  /** Creates a new {@link ServletRequestBindingProblemResolver} with default problem format. */
   public ServletRequestBindingProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
   /**
-   * Creates a new {@code ServletRequestBindingProblemResolver} with the specified problem format.
+   * Creates a new {@link ServletRequestBindingProblemResolver} with the specified problem format.
    *
    * @param problemFormat the problem format to use
    */
@@ -111,6 +109,7 @@ public class ServletRequestBindingProblemResolver extends AbstractProblemResolve
    * @param headers HTTP headers (unused)
    * @param status suggested status (ignored; always BAD_REQUEST)
    * @return builder populated with status, detail, and extensions
+   * @see io.github.problem4j.spring.web.ProblemSupport
    */
   @Override
   public ProblemBuilder resolveBuilder(

@@ -79,6 +79,8 @@ import org.springframework.web.server.ServerWebInputException;
  * <p>Each nested configuration class is annotated with {@link ConditionalOnClass} to ensure that
  * only resolvers for classes present on the classpath are created. This design allows the library
  * to remain compatible previous versions.
+ *
+ * @see io.github.problem4j.spring.web.resolver.ProblemResolver
  */
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.ANY)
 @Configuration(proxyBeanMethods = false)

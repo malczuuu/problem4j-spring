@@ -26,7 +26,7 @@ import java.util.Optional;
 /**
  * Registry that provides access to {@link ProblemResolver} instances based on exception types.
  *
- * <p>Implementations are responsible for locating the most specific resolver for a given {@code
+ * <p>Implementations are responsible for locating the most specific resolver for a given {@link
  * Exception} class, typically by checking class assignability and caching results to improve
  * performance.
  */

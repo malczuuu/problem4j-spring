@@ -72,13 +72,13 @@ public class ProblemExceptionWebMvcAdvice {
   }
 
   /**
-   * Converts a {@link ProblemException} into a {@code Problem} response. The contained {@code
+   * Converts a {@link ProblemException} into a {@code Problem} response. The contained {@link
    * Problem} is post-processed, headers set to application/problem+json, and status resolved from
    * the problem's status code.
    *
    * @param ex the ProblemException to handle
    * @param request the web request
-   * @return a ResponseEntity containing the Problem
+   * @return a {@link ResponseEntity} containing the {@link Problem}
    */
   @ExceptionHandler(ProblemException.class)
   public ResponseEntity<Problem> handleProblemException(ProblemException ex, WebRequest request) {

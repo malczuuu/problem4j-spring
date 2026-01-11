@@ -42,7 +42,7 @@ public class DefaultProblemFormat implements ProblemFormat {
   private final String detailFormat;
 
   /**
-   * Constructs a new {@code DefaultProblemFormat}.
+   * Constructs a new {@link DefaultProblemFormat}.
    *
    * @param detailFormat the detail format string to use
    */

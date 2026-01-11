@@ -49,13 +49,13 @@ public class WebExchangeBindProblemResolver extends AbstractProblemResolver {
 
   private final BindingResultSupport bindingResultSupport;
 
-  /** Creates a new {@code WebExchangeBindProblemResolver} with default problem format. */
+  /** Creates a new {@link WebExchangeBindProblemResolver} with default problem format. */
   public WebExchangeBindProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
   /**
-   * Creates a new {@code WebExchangeBindProblemResolver} with the specified problem format.
+   * Creates a new {@link WebExchangeBindProblemResolver} with the specified problem format.
    *
    * @param problemFormat the problem format to use
    */
@@ -64,7 +64,7 @@ public class WebExchangeBindProblemResolver extends AbstractProblemResolver {
   }
 
   /**
-   * Creates a new {@code WebExchangeBindProblemResolver} with the specified problem format and
+   * Creates a new {@link WebExchangeBindProblemResolver} with the specified problem format and
    * binding result support.
    *
    * @param problemFormat the problem format to use
@@ -77,7 +77,7 @@ public class WebExchangeBindProblemResolver extends AbstractProblemResolver {
   }
 
   /**
-   * Converts the {@link WebExchangeBindException} into a {@link ProblemBuilder} with status {@code
+   * Converts the {@link WebExchangeBindException} into a {@link ProblemBuilder} with status {@link
    * ProblemStatus#BAD_REQUEST} and an {@code errors} extension listing field/global validation
    * violations extracted from its {@code BindingResult}.
    *
@@ -86,6 +86,7 @@ public class WebExchangeBindProblemResolver extends AbstractProblemResolver {
    * @param headers HTTP headers (unused)
    * @param status suggested status (ignored; BAD_REQUEST enforced)
    * @return builder populated with validation detail and violations
+   * @see org.springframework.validation.BindingResult
    */
   @Override
   public ProblemBuilder resolveBuilder(

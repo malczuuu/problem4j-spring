@@ -51,13 +51,13 @@ import org.springframework.web.server.ServerErrorException;
  */
 public class ServerErrorProblemResolver extends AbstractProblemResolver {
 
-  /** Creates a new {@code ServerErrorProblemResolver} with default problem format. */
+  /** Creates a new {@link ServerErrorProblemResolver} with default problem format. */
   public ServerErrorProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
   /**
-   * Creates a new {@code ServerErrorProblemResolver} with the specified problem format.
+   * Creates a new {@link ServerErrorProblemResolver} with the specified problem format.
    *
    * @param problemFormat the problem format to use
    */
@@ -68,7 +68,7 @@ public class ServerErrorProblemResolver extends AbstractProblemResolver {
   /**
    * Resolves a {@link ServerErrorException} into a {@link ProblemBuilder}.
    *
-   * <p>Special case: Spring WebFlux's {@code PathVariableMethodArgumentResolver} raises {@code
+   * <p>Special case: Spring WebFlux's {@code PathVariableMethodArgumentResolver} raises {@link
    * ServerErrorException} (instead of a missing-value exception) when a required {@code
    * PathVariable} is absent. In that scenario this method returns a BAD_REQUEST problem with a
    * standardized detail ({@code ProblemSupport#MISSING_PATH_VARIABLE_DETAIL}) and an extension
@@ -83,6 +83,7 @@ public class ServerErrorProblemResolver extends AbstractProblemResolver {
    * @return builder with BAD_REQUEST + path variable info or INTERNAL_SERVER_ERROR
    * @see io.github.problem4j.spring.web.ProblemSupport#MISSING_PATH_VARIABLE_DETAIL
    * @see io.github.problem4j.spring.web.ProblemSupport#NAME_EXTENSION
+   * @see org.springframework.web.bind.annotation.PathVariable
    */
   @Override
   public ProblemBuilder resolveBuilder(

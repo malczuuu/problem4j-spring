@@ -39,13 +39,13 @@ import org.springframework.web.multipart.MultipartException;
  */
 public class MultipartProblemResolver extends AbstractProblemResolver {
 
-  /** Creates a new {@code MultipartProblemResolver} with default problem format. */
+  /** Creates a new {@link MultipartProblemResolver} with default problem format. */
   public MultipartProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
   /**
-   * Creates a new {@code MultipartProblemResolver} with the specified problem format.
+   * Creates a new {@link MultipartProblemResolver} with the specified problem format.
    *
    * @param problemFormat the problem format to use
    */

@@ -53,7 +53,7 @@ public class ProblemErrorWebExceptionHandler extends DefaultErrorWebExceptionHan
   private final ProblemPostProcessor problemPostProcessor;
 
   /**
-   * Constructs a new {@code ProblemErrorWebExceptionHandler}.
+   * Constructs a new {@link ProblemErrorWebExceptionHandler}.
    *
    * @param problemPostProcessor the post-processor for problems
    * @param errorAttributes the error attributes used to obtain error details
@@ -72,7 +72,7 @@ public class ProblemErrorWebExceptionHandler extends DefaultErrorWebExceptionHan
   }
 
   /**
-   * Returns a routing function that handles all requests and delegates to {@code
+   * Returns a routing function that handles all requests and delegates to {@link
    * #renderErrorResponse(ServerRequest)}.
    *
    * @param errorAttributes the error attributes used to resolve errors

@@ -64,13 +64,13 @@ import org.springframework.web.server.MissingRequestValueException;
  */
 public class MissingRequestValueProblemResolver extends AbstractProblemResolver {
 
-  /** Creates a new {@code MissingRequestValueProblemResolver} with default problem format. */
+  /** Creates a new {@link MissingRequestValueProblemResolver} with default problem format. */
   public MissingRequestValueProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
   /**
-   * Creates a new {@code MissingRequestValueProblemResolver} with the specified problem format.
+   * Creates a new {@link MissingRequestValueProblemResolver} with the specified problem format.
    *
    * @param problemFormat the problem format to use
    */
@@ -80,7 +80,7 @@ public class MissingRequestValueProblemResolver extends AbstractProblemResolver 
 
   /**
    * Builds a {@link ProblemBuilder} for a {@link MissingRequestValueException}. Chooses a specific
-   * detail message and sets identifying extensions based on {@code
+   * detail message and sets identifying extensions based on {@link
    * MissingRequestValueException#getLabel()}. Falls back to a bare BAD_REQUEST if the label is
    * {@code null}.
    *
@@ -89,7 +89,6 @@ public class MissingRequestValueProblemResolver extends AbstractProblemResolver 
    * @param headers HTTP headers (unused)
    * @param status suggested status (ignored; BAD_REQUEST enforced)
    * @return builder populated with status, detail, and relevant extensions
-   * @see MissingRequestValueException#getLabel()
    */
   @Override
   public ProblemBuilder resolveBuilder(

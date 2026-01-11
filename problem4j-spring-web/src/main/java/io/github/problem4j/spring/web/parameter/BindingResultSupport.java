@@ -23,7 +23,7 @@ package io.github.problem4j.spring.web.parameter;
 import java.util.List;
 import org.springframework.validation.BindingResult;
 
-/** Support for converting Spring {@link BindingResult}s into {@code ProblemBuilder}s. */
+/** Support for converting Spring {@link BindingResult}s into {@link Violation}s list. */
 public interface BindingResultSupport {
 
   /**

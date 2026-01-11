@@ -39,28 +39,30 @@ import org.springframework.validation.BindException;
  * Due to {@link BindException} being subclassed by {@code MethodArgumentNotValidException}, this
  * implementation also covers that exceptions.
  *
- * <p>Quite obvious message, but worth to note that the only reason {@code BindResolver} is kept is
- * due to backwards compatibility as {@code problem4j} doesn't use any fields from that subclass at
+ * <p>Quite obvious message, but worth to note that the only reason {@link BindProblemResolver} is
+ * kept is due to backwards compatibility as Problem4J doesn't use any fields from that subclass at
  * the moment.
  *
  * <p>These exceptions indicate that incoming request parameters or bodies could not be bound to
  * target objects or did not pass validation constraints.
  *
  * <ul>
- *   <li>{@code BindException} - thrown for binding or validation errors on form or query
+ *   <li>{@link BindException} - thrown for binding or validation errors on form or query
  *       parameters.
  *   <li>{@code MethodArgumentNotValidException} - thrown for validation failures on
  *       {@code @RequestBody} or {@code @ModelAttribute} method arguments.
  * </ul>
  *
  * @see org.springframework.web.bind.MethodArgumentNotValidException
+ * @see org.springframework.web.bind.annotation.ModelAttribute
+ * @see org.springframework.web.bind.annotation.RequestBody
  */
 public class BindProblemResolver extends AbstractProblemResolver {
 
   private final BindingResultSupport bindingResultSupport;
 
   /**
-   * Constructs a new {@code BindProblemResolver} with the default problem format and binding result
+   * Constructs a new {@link BindProblemResolver} with the default problem format and binding result
    * support.
    */
   public BindProblemResolver() {
@@ -68,7 +70,7 @@ public class BindProblemResolver extends AbstractProblemResolver {
   }
 
   /**
-   * Constructs a new {@code BindProblemResolver} with the specified problem format.
+   * Constructs a new {@link BindProblemResolver} with the specified problem format.
    *
    * @param problemFormat the problem format to use
    */
@@ -77,7 +79,7 @@ public class BindProblemResolver extends AbstractProblemResolver {
   }
 
   /**
-   * Constructs a new {@code BindProblemResolver} with the specified problem format and binding
+   * Constructs a new {@link BindProblemResolver} with the specified problem format and binding
    * result support.
    *
    * @param problemFormat the problem format to use
@@ -90,7 +92,7 @@ public class BindProblemResolver extends AbstractProblemResolver {
   }
 
   /**
-   * Resolves a {@link BindException} (or subclass) to a {@link ProblemBuilder} with {@code
+   * Resolves a {@link BindException} (or subclass) to a {@link ProblemBuilder} with {@link
    * ProblemStatus#BAD_REQUEST} and an {@code errors} extension listing field/global validation
    * violations produced by the underlying {@link BindException#getBindingResult()}.
    *

@@ -52,13 +52,13 @@ public class ServerWebInputProblemResolver extends AbstractProblemResolver {
   private final TypeMismatchProblemResolver typeMismatchProblemResolver;
   private final MethodParameterSupport methodParameterSupport;
 
-  /** Creates a new {@code ServerWebInputProblemResolver} with default problem format. */
+  /** Creates a new {@link ServerWebInputProblemResolver} with default problem format. */
   public ServerWebInputProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
   /**
-   * Creates a new {@code ServerWebInputProblemResolver} with the specified problem format.
+   * Creates a new {@link ServerWebInputProblemResolver} with the specified problem format.
    *
    * @param problemFormat the problem format to use
    */
@@ -67,7 +67,7 @@ public class ServerWebInputProblemResolver extends AbstractProblemResolver {
   }
 
   /**
-   * Creates a new {@code ServerWebInputProblemResolver} with the specified problem format and
+   * Creates a new {@link ServerWebInputProblemResolver} with the specified problem format and
    * method parameter support.
    *
    * @param problemFormat the problem format to use
@@ -82,8 +82,8 @@ public class ServerWebInputProblemResolver extends AbstractProblemResolver {
 
   /**
    * Resolves a {@link ServerWebInputException} into a {@link ProblemBuilder}. If the root cause is
-   * a {@link TypeMismatchException}, delegates to {@code TypeMismatchResolver} and, when missing,
-   * attempts to append the offending property/parameter name as the {@code
+   * a {@link TypeMismatchException}, delegates to {@link TypeMismatchProblemResolver} and, when
+   * missing, attempts to append the offending property/parameter name as the {@code
    * ProblemSupport#PROPERTY_EXTENSION}. Otherwise, returns a builder whose status reflects the
    * exception's embedded HTTP status code.
    *

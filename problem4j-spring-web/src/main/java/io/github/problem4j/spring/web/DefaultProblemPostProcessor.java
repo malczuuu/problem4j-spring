@@ -68,7 +68,7 @@ public class DefaultProblemPostProcessor implements ProblemPostProcessor {
   private final PostProcessorSettings settings;
 
   /**
-   * Constructs a new {@code DefaultProblemPostProcessor}.
+   * Constructs a new {@link DefaultProblemPostProcessor}.
    *
    * @param settings the post-processor settings to use
    */
@@ -79,7 +79,7 @@ public class DefaultProblemPostProcessor implements ProblemPostProcessor {
   /**
    * Applies configured overrides to {@code type} and/or {@code instance}.
    *
-   * <p>About {@code about:blank}: when the original type is {@code null} or {@code
+   * <p>About {@code about:blank}: when the original type is {@code null} or {@link
    * Problem#BLANK_TYPE}, the placeholder {@code {problem.type}} resolves to an empty string
    * (templates naturally collapse). If the template is exactly {@code {problem.type}}, the original
    * {@code about:blank} value is preserved instead of becoming empty.
@@ -143,13 +143,14 @@ public class DefaultProblemPostProcessor implements ProblemPostProcessor {
 
   /**
    * Because this implementation does not try to resolve dynamic fields, it does not reuse the code
-   * from {@code DefaultProblemMappingProcessor}. Instead, we rely on simple substring replacement
-   * in form of {@link String#replace(CharSequence, CharSequence)}, and then removing all remaining
-   * unknown variables.
+   * from {@code ProblemPostProcessor}. Instead, we rely on simple substring replacement in form of
+   * {@link String#replace(CharSequence, CharSequence)}, and then removing all remaining unknown
+   * variables.
    *
    * @param context the problem context
    * @param problem the original problem
    * @return an optional containing the new type if override is possible
+   * @see io.github.problem4j.spring.web.ProblemPostProcessor
    */
   protected Optional<String> overrideType(ProblemContext context, Problem problem) {
     if (!problem.isTypeNonBlank() || !StringUtils.hasLength(settings.getTypeOverride())) {
@@ -219,9 +220,9 @@ public class DefaultProblemPostProcessor implements ProblemPostProcessor {
 
   /**
    * Because this implementation does not try to resolve dynamic fields, it does not reuse the code
-   * from {@code DefaultProblemMappingProcessor}. Instead, we rely on simple substring replacement
-   * in form of {@link String#replace(CharSequence, CharSequence)}, and then removing all remaining
-   * unknown variables.
+   * from {@code ProblemPostProcessor}. Instead, we rely on simple substring replacement in form of
+   * {@link String#replace(CharSequence, CharSequence)}, and then removing all remaining unknown
+   * variables.
    *
    * <p>If the algorithm discovers remaining placeholders that are unresolved, overriding is aborted
    * and original value is restored.
@@ -229,6 +230,7 @@ public class DefaultProblemPostProcessor implements ProblemPostProcessor {
    * @param context the problem context
    * @param problem the original problem
    * @return the new instance string
+   * @see io.github.problem4j.spring.web.ProblemPostProcessor
    */
   protected String overrideInstance(ProblemContext context, Problem problem) {
     if (!StringUtils.hasLength(settings.getInstanceOverride())) {
@@ -266,6 +268,7 @@ public class DefaultProblemPostProcessor implements ProblemPostProcessor {
    *
    * @param value the string to check
    * @return true if unresolved placeholders remain
+   * @see io.github.problem4j.core.ProblemMapper
    */
   protected boolean hasRemainingUnknownPlaceholders(String value) {
     return PLACEHOLDER.matcher(value).find();

@@ -62,8 +62,8 @@ import org.springframework.web.context.request.WebRequest;
  * </ul>
  *
  * <p>Intended as a **generic fallback**, it ensures that unexpected exceptions still produce a
- * consistent {@code Problem} response. For more specific exception handling, use {@code
- * ProblemEnhancedMvcHandler}, {@code ProblemExceptionMvcAdvice}.
+ * consistent {@link Problem} response. For more specific exception handling, use {@link
+ * ProblemEnhancedWebMvcHandler}, {@link ProblemExceptionWebMvcAdvice}.
  */
 @RestControllerAdvice
 public class ExceptionWebMvcAdvice {
@@ -77,7 +77,7 @@ public class ExceptionWebMvcAdvice {
   private final List<AdviceWebMvcInspector> adviceWebMvcInspectors;
 
   /**
-   * Creates a new {@code ExceptionWebMvcAdvice}.
+   * Creates a new {@link ExceptionWebMvcAdvice}.
    *
    * @param problemMapper the problem mapper
    * @param problemResolverStore the resolver store

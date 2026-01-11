@@ -47,7 +47,7 @@ public class ProblemContextWebFluxFilter implements WebFilter {
   private final ProblemContextSettings settings;
 
   /**
-   * Constructs a new {@code ProblemContextWebFluxFilter}.
+   * Constructs a new {@link ProblemContextWebFluxFilter}.
    *
    * @param settings the context settings to use
    */

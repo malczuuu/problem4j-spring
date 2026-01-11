@@ -65,9 +65,9 @@ public abstract class AbstractProblemResolver implements ProblemResolver {
   }
 
   /**
-   * Default implementation that returns a builder with status {@code INTERNAL_SERVER_ERROR}.
-   * Subclasses should override to populate fields like {@code type}, {@code title}, {@code detail},
-   * and extensions.
+   * Default implementation that returns a builder with status {@link
+   * ProblemStatus#INTERNAL_SERVER_ERROR}. Subclasses should override to populate fields like {@code
+   * type}, {@code title}, {@code detail}, and extensions.
    */
   @Override
   public ProblemBuilder resolveBuilder(

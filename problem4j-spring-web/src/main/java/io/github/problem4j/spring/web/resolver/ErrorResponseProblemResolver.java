@@ -43,13 +43,13 @@ import org.springframework.web.ErrorResponseException;
  */
 public class ErrorResponseProblemResolver extends AbstractProblemResolver {
 
-  /** Creates a new {@code ErrorResponseProblemResolver} with default problem format. */
+  /** Creates a new {@link ErrorResponseProblemResolver} with default problem format. */
   public ErrorResponseProblemResolver() {
     this(new IdentityProblemFormat());
   }
 
   /**
-   * Creates a new {@code ErrorResponseProblemResolver} with the specified problem format.
+   * Creates a new {@link ErrorResponseProblemResolver} with the specified problem format.
    *
    * @param problemFormat the problem format to use
    */
@@ -59,8 +59,9 @@ public class ErrorResponseProblemResolver extends AbstractProblemResolver {
 
   /**
    * Converts the given {@link ErrorResponseException} into a {@link ProblemBuilder} by copying its
-   * body fields (type, title, detail, instance) and status code. Any additional properties present
-   * in the underlying {@code ErrorResponse} are added as extensions.
+   * body fields ({@code type}, {@code title}, {@code detail}, {@code instance}) and status code.
+   * Any additional properties present in the underlying {@code ErrorResponse} are added as
+   * extensions.
    *
    * <p>The provided {@code status} parameter is ignored in favor of the status contained in the
    * exception. {@code headers} and {@code context} are currently not used but are part of the SPI.
@@ -70,6 +71,7 @@ public class ErrorResponseProblemResolver extends AbstractProblemResolver {
    * @param headers HTTP response headers (unused)
    * @param status suggested status from caller (ignored)
    * @return a builder representing the problem described by the exception
+   * @see org.springframework.web.ErrorResponse
    */
   @Override
   public ProblemBuilder resolveBuilder(
