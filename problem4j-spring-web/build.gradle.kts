@@ -13,7 +13,7 @@ dependencies {
     compileOnly(libs.spring.boot.autoconfigure)
     compileOnly(libs.spring.web)
 
-    compileOnly(libs.jackson.databind)
+    compileOnly(libs.jackson2.databind)
     compileOnly(libs.jakarta.servlet.api)
     compileOnly(libs.jakarta.validation.api)
 
