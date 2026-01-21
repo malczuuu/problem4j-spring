@@ -1,7 +1,7 @@
 import com.diffplug.spotless.LineEnding
 
 plugins {
-    id("internal.convention-common")
+    id("internal.common-convention")
     alias(libs.plugins.nmcp).apply(false)
     alias(libs.plugins.nmcp.aggregation)
     alias(libs.plugins.spotless)
