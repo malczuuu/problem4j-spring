@@ -1,7 +1,7 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
 plugins {
-    id("internal.convention-common")
+    id("internal.common-convention")
     id("java-library")
 }
 

@@ -3,7 +3,7 @@ import internal.findDevelopers
 import internal.findLicenses
 
 plugins {
-    id("internal.convention-common")
+    id("internal.common-convention")
     id("maven-publish")
     id("signing")
 }

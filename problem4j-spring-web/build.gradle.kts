@@ -1,6 +1,6 @@
 plugins {
-    id("internal.convention-java-library")
-    id("internal.convention-publishing")
+    id("internal.java-library-convention")
+    id("internal.publishing-convention")
     alias(libs.plugins.nmcp)
 }
 
@@ -19,7 +19,7 @@ dependencies {
     compileOnly(libs.jakarta.validation.api)
 
     // for backwards compatibility with jackson-databind v2
-    compileOnly(libs.jackson.databind)
+    compileOnly(libs.jackson2.databind)
     compileOnly(libs.problem4j.jackson2)
 
     annotationProcessor(platform(libs.spring.boot.dependencies))

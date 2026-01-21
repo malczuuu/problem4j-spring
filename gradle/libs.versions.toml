@@ -35,7 +35,7 @@ spring-boot-starter-webflux-test = { module = "org.springframework.boot:spring-b
 spring-boot-starter-webmvc = { module = "org.springframework.boot:spring-boot-starter-webmvc" }
 spring-boot-starter-webmvc-test = { module = "org.springframework.boot:spring-boot-starter-webmvc-test" }
 spring-web = { module = "org.springframework:spring-web" }
-jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
+jackson2-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
 jackson3-dataformat-xml = { module = "tools.jackson.dataformat:jackson-dataformat-xml" }
 jakarta-servlet-api = { module = "jakarta.servlet:jakarta.servlet-api" }
 jakarta-validation-api = { module = "jakarta.validation:jakarta.validation-api" }

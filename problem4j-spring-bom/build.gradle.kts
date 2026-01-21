@@ -1,6 +1,6 @@
 plugins {
-    id("internal.convention-java-platform")
-    id("internal.convention-publishing")
+    id("internal.java-platform-convention")
+    id("internal.publishing-convention")
     alias(libs.plugins.nmcp)
 }
 

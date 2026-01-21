@@ -1,12 +1,8 @@
-import internal.findSnapshotVersion
-
 group = property("internal.group") as String
 
-// In order to avoid hardcoding snapshot versions, version is derived from the current Git commit hash.
-// For CI/CD add -Pversion={releaseVersion} parameter to match Git tag.
-if (version == Project.DEFAULT_VERSION) {
-    version = findSnapshotVersion()
-}
+//
+// Not assigning version as it is assigned in CI/CD using -Pversion=X.Y.Z parameter.
+//
 
 repositories {
     mavenCentral()

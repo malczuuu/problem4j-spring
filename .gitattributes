@@ -5,11 +5,18 @@
 # --- Java source files ---
 *.java     text diff=java
 
+# --- Kotlin source files ---
+*.kt       text diff=kotlin
+
+# --- Groovy source files ---
+*.groovy     text
+*.gsh        text
+
 # --- Gradle files ---
-*.gradle   text
-*.gradle.kts text
-gradlew    text eol=lf
-gradlew.bat text eol=crlf
+*.gradle     text diff=groovy
+*.gradle.kts text diff=kotlin
+gradlew      text eol=lf
+gradlew.bat  text eol=crlf
 
 # --- Configuration / properties ---
 *.xml      text
