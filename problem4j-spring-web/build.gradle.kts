@@ -30,7 +30,7 @@ dependencies {
     testRuntimeOnly(libs.junit.platform.launcher)
 }
 
-// see buildSrc/src/main/kotlin/internal.convention-publishing.gradle.kts
+// see buildSrc/src/main/kotlin/internal.publishing-convention.gradle.kts
 internalPublishing {
     displayName = "Problem4J Spring Web"
     description = "Spring Web integration for library implementing RFC7807 (aka RFC9457)."

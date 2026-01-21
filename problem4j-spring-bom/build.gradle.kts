@@ -14,7 +14,7 @@ dependencies {
     }
 }
 
-// see buildSrc/src/main/kotlin/internal.convention-publishing.gradle.kts
+// see buildSrc/src/main/kotlin/internal.publishing-convention.gradle.kts
 internalPublishing {
     displayName = "Problem4J Spring BOM"
     description = "BOM of Spring integration for library implementing RFC7807 (aka RFC9457)."
