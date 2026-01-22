@@ -64,9 +64,8 @@ class DefaultMethodValidationResultSupportTest {
 
     assertThat(violations).hasSize(2);
     assertThat(violations.get(0)).isEqualTo(new Violation("p1", "must not be null"));
-
-    assertThat(violations.get(1).getField()).isNull();
-    assertThat(violations.get(1).getError()).isEqualTo("size must be between 3 and 10");
+    assertThat(violations.get(1))
+        .isEqualTo(new Violation("second", "size must be between 3 and 10"));
   }
 
   static class SampleValidatedMethods {
