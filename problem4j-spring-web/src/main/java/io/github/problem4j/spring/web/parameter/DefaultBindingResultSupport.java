@@ -159,8 +159,8 @@ public class DefaultBindingResultSupport implements BindingResultSupport {
   /**
    * Extracts parameter metadata from the given constructor.
    *
-   * <p>Each constructor parameter is added with its parameter name. {@link
-   * org.springframework.web.bind.annotation.BindParam} is taken into account if present.
+   * <p>Each constructor parameter is added with its parameter name. {@link BindParam} is taken into
+   * account if present.
    *
    * @param constructor the constructor to inspect
    * @return an unmodifiable map of parameter names to their bound names
