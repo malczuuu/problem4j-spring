@@ -8,7 +8,7 @@ repositories {
     mavenCentral()
 }
 
-// Utility to clean up old jars as they can clutter due to versioning by Git commit hashes.
+// Utility to clean up old jars as they can clutter.
 // Usage:
 //   ./gradlew cleanLibs
 tasks.register<Delete>("cleanLibs") {
