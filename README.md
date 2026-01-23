@@ -246,7 +246,7 @@ task. **Note** that **building will fail** if code is not properly formatted.
 ```
 
 To publish the built artifacts to local Maven repository, run following command, replacing `XXXX` with the desired
-version. By default, the version is derived from git commit hash.
+version. By default, the version is `unspecified` (Gradle's default).
 
 ```bash
 ./gradlew -Pversion=XXXX publishToMavenLocal
